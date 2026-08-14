@@ -1,0 +1,19 @@
+[package]
+name = "philoxenia_contracts_tests"
+version = "0.1.0"
+edition = "2024_07"
+
+[dependencies]
+philoxenia_contracts = { path = "../" }
+snforge_std = "0.48.0"
+openzeppelin = "2.0.0"
+starknet = "2.12.2"
+
+[scripts]
+test = "snforge test"
+
+[tool.scarb]
+allow-prebuilt-plugins = ["snforge_std"]
+
+[tool.snforge]
+exit_first = true

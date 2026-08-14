@@ -1,0 +1,14 @@
+[profile.dev.cairo]
+unstable-add-statements-code-locations-debug-info = true
+unstable-add-statements-functions-debug-info = true
+
+[profile.release.cairo]
+unstable-add-statements-code-locations-debug-info = false
+unstable-add-statements-functions-debug-info = false
+
+[sncast.default]
+url = "http://127.0.0.1:5050"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+account = "philoxenia"
+wait-timeout = 300
+wait-retries = 5

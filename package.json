@@ -1,0 +1,21 @@
+{
+  "name": "philoxenia",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @philoxenia/api\" \"npm run dev -w @philoxenia/web\"",
+    "dev:web": "npm run dev -w @philoxenia/web",
+    "dev:api": "npm run dev -w @philoxenia/api",
+    "build": "npm run build -w @philoxenia/shared && npm run build -w @philoxenia/api && npm run build -w @philoxenia/web",
+    "test": "npm run test -w @philoxenia/api && npm run test:contracts",
+    "test:contracts": "cd contracts && scarb test",
+    "lint": "npm run lint -w @philoxenia/web && npm run lint -w @philoxenia/api",
+    "typecheck": "npm run typecheck -w @philoxenia/web && npm run typecheck -w @philoxenia/api && npm run typecheck -w @philoxenia/shared"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
