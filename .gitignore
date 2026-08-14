@@ -13,3 +13,4 @@ contracts/target/
 contracts/.snfoundry_cache/
 snfoundry_trace/
 target/
+.vercel
