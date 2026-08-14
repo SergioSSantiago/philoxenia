@@ -29,7 +29,7 @@ Configurar en **ambos** proyectos (web + api) donde aplique:
 | `ALCHEMY_API_KEY` | web | tu key de Alchemy |
 | `DATABASE_URL` | api | connection string de Neon |
 | `JWT_SECRET` | api | string aleatorio largo |
-| `CORS_ORIGIN` | api | `https://philoxenia.vercel.app` |
+| `CORS_ORIGIN` | api | `https://philoxenia-iota.vercel.app` |
 | `NEXT_PUBLIC_API_URL` | web | `https://philoxenia-api.vercel.app` |
 | `NEXT_PUBLIC_STARKNET_CHAIN` | web | `mainnet` |
 | `NEXT_PUBLIC_STRK20_PRIVACY` | web | `true` |

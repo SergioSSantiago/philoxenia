@@ -58,7 +58,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 
 | App | URL |
 |-----|-----|
-| Web | https://philoxenia.vercel.app |
+| Web | https://philoxenia-iota.vercel.app |
 | API | https://philoxenia-api.vercel.app |
 
 Repo: https://github.com/SergioSSantiago/philoxenia · Guía: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
