@@ -2,6 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "installCommand": "npm install",
-  "buildCommand": "npm run build -w @philoxenia/shared && npm run build -w @philoxenia/api && npm run db:migrate -w @philoxenia/api",
+  "buildCommand": "npm run build -w @philoxenia/shared && npm run build -w @philoxenia/api",
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }
