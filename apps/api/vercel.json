@@ -1,5 +1,4 @@
 {
   "installCommand": "npm install",
-  "buildCommand": "npm run build -w @philoxenia/shared",
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }
