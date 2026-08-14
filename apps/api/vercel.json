@@ -1,7 +1,5 @@
 {
-  "version": 2,
   "installCommand": "npm install",
-  "buildCommand": "npm run build -w @philoxenia/shared && npm run build -w @philoxenia/api",
-  "builds": [{ "src": "api/index.ts", "use": "@vercel/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "api/index.ts" }]
+  "buildCommand": "npm run build -w @philoxenia/shared",
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }

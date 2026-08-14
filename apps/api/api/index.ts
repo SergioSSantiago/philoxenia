@@ -1,21 +1,24 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { buildApp } from "../dist/app.js";
+import { buildApp } from "../src/app.js";
 
-let appPromise: ReturnType<typeof buildApp> | null = null;
+let init: Promise<void> | null = null;
+let server: Awaited<ReturnType<typeof buildApp>>["server"] | null = null;
 
-async function getApp() {
-  if (!appPromise) {
-    appPromise = buildApp();
+async function ensureReady() {
+  if (!init) {
+    init = (async () => {
+      const app = await buildApp();
+      await app.ready();
+      server = app.server;
+    })();
   }
-  const app = await appPromise;
-  await app.ready();
-  return app;
+  await init;
 }
 
 export default async function handler(
   req: IncomingMessage,
   res: ServerResponse
 ) {
-  const app = await getApp();
-  app.server.emit("request", req, res);
+  await ensureReady();
+  server!.emit("request", req, res);
 }
