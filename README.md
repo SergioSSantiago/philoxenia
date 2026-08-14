@@ -52,21 +52,36 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 - Docker (for PostgreSQL)
 - Scarb 2.12+ and Starknet Foundry (for contracts)
 
-### Install
+## Deploy (producción — Vercel)
+
+**Producción en Vercel + GitHub — no localhost.**
+
+| App | URL |
+|-----|-----|
+| Web | https://philoxenia.vercel.app |
+| API | https://philoxenia-api.vercel.app |
+
+Repo: https://github.com/SergioSSantiago/philoxenia · Guía: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
+
+### Install (desarrollo local opcional)
 
 ```bash
-git clone <repo-url> philoxenia
+git clone https://github.com/SergioSSantiago/philoxenia
 cd philoxenia
-cp .env.example .env
 npm install
 ```
 
-### Database
+Pega `ALCHEMY_API_KEY` en `.env` (raíz) y en el dashboard de Vercel (proyecto web).
+
+### Database (producción)
+
+Neon Postgres vía Vercel Integration — ver [docs/deployment-vercel.md](./docs/deployment-vercel.md).
+
+### Database (local opcional)
 
 ```bash
 docker compose up -d
 npm run db:migrate -w @philoxenia/api
-npm run db:seed -w @philoxenia/api   # optional demo data
 ```
 
 ### Development
@@ -95,7 +110,7 @@ scarb test
 
 ## Environment variables
 
-See [.env.example](./.env.example).
+See `.env` at the repo root (not committed). Paste your Alchemy key into `ALCHEMY_API_KEY` only — the mainnet RPC URL is built automatically.
 
 Key variables:
 
@@ -126,7 +141,7 @@ Settlement: Host 712.5 STRK, Connector 37.5 STRK, Philoxenia 0 STRK.
 Registered for the [STRK20 Private Sprint](https://github.com/starkience/strk20-hackathon). Progress tracked in [`strk20.json`](./strk20.json).
 
 - Mainnet pool: `0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a`
-- Mainnet RPC: set `ALCHEMY_API_KEY` in `.env` (see `.env.example`) — **never commit the key**
+- Mainnet RPC: set `ALCHEMY_API_KEY` in `.env` — **never commit that file**
 - STRK20 skill installed: `.agents/skills/strk20-privacy-integration/`
 
 ## License

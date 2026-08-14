@@ -1,0 +1,5 @@
+{
+  "installCommand": "cd ../.. && npm install",
+  "buildCommand": "cd ../.. && npm run build -w @philoxenia/shared && npm run build -w @philoxenia/web",
+  "framework": "nextjs"
+}

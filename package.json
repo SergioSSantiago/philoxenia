@@ -6,9 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev -w @philoxenia/api\" \"npm run dev -w @philoxenia/web\"",
-    "dev:web": "npm run dev -w @philoxenia/web",
-    "dev:api": "npm run dev -w @philoxenia/api",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:web": "dotenv -e .env -- npm run dev -w @philoxenia/web",
+    "dev:api": "dotenv -e .env -- npm run dev -w @philoxenia/api",
     "build": "npm run build -w @philoxenia/shared && npm run build -w @philoxenia/api && npm run build -w @philoxenia/web",
     "test": "npm run test -w @philoxenia/api && npm run test:contracts",
     "test:contracts": "cd contracts && scarb test",
@@ -16,6 +16,7 @@
     "typecheck": "npm run typecheck -w @philoxenia/web && npm run typecheck -w @philoxenia/api && npm run typecheck -w @philoxenia/shared"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "dotenv-cli": "^8.0.0"
   }
 }

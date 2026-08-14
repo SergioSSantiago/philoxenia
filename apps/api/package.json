@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "vercel-build": "npm run build && npm run db:migrate",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
@@ -20,6 +21,7 @@
     "@fastify/cors": "^10.0.2",
     "@fastify/jwt": "^9.0.4",
     "@fastify/multipart": "^9.0.3",
+    "@vercel/node": "^5.1.14",
     "drizzle-orm": "^0.39.3",
     "fastify": "^5.2.1",
     "postgres": "^3.4.5",
