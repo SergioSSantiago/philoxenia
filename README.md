@@ -121,6 +121,14 @@ Settlement: Host 712.5 STRK, Connector 37.5 STRK, Philoxenia 0 STRK.
 - [CONTRIBUTING.md](./CONTRIBUTING.md)
 - [docs/](./docs/)
 
+## STRK20 Private Sprint
+
+Registered for the [STRK20 Private Sprint](https://github.com/starkience/strk20-hackathon). Progress tracked in [`strk20.json`](./strk20.json).
+
+- Mainnet pool: `0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a`
+- Mainnet RPC: set `ALCHEMY_API_KEY` in `.env` (see `.env.example`) — **never commit the key**
+- STRK20 skill installed: `.agents/skills/strk20-privacy-integration/`
+
 ## License
 
 MIT — see [LICENSE](./LICENSE)

@@ -19,7 +19,8 @@ From the [official overview](https://docs.starknet.io/build/starknet-privacy/ove
 - Private asset transfers on Starknet — sender, receiver, and amounts hidden from outside observers
 - Validity enforced with client-side zero-knowledge proofs (Stwo / Cairo)
 - Compliance layer allows selective disclosure for authorized auditors
-- Privacy pool contract live on mainnet (address in official docs)
+- Privacy pool contract live on mainnet: [`0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a`](https://voyager.online/contract/0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a)
+- Sprint tracking: [`strk20.json`](../strk20.json) at repo root (mainnet pool txs, contracts, demo)
 - SDK open source in `starkware-libs/starknet-privacy`
 
 Philoxenia does **not** implement the STRK20 protocol itself. It integrates at the **wallet layer**.
