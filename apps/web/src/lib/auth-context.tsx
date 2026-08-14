@@ -6,20 +6,33 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
 import { useAccount, useConnect, useDisconnect } from "@starknet-react/core";
 import type { User } from "@philoxenia/shared";
+import { buildPhiloxeniaAuthTypedData } from "@philoxenia/shared";
 import { api } from "./api";
+import { openReadyForSignRequest } from "./ready-mobile";
+import { snip12ChainId } from "./starknet-config";
+import { pickReadyConnector } from "./wallet-connectors";
+import { formatWalletError } from "./wallet-errors";
 
 interface AuthContextValue {
   user: User | null;
   token: string | null;
   isLoading: boolean;
+  /** True once a fresh auth challenge is cached for the connected wallet. */
+  challengeReady: boolean;
+  signInOpen: boolean;
+  openSignIn: () => void;
+  closeSignIn: () => void;
   connectWallet: () => Promise<void>;
   disconnect: () => void;
   signIn: (displayName?: string) => Promise<void>;
+  refreshUser: () => Promise<User>;
+  updateDisplayName: (displayName: string) => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -27,31 +40,122 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 const TOKEN_KEY = "philoxenia_token";
 const USER_KEY = "philoxenia_user";
 
+function persistSession(token: string, user: User) {
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { address, account } = useAccount();
-  const { connect, connectors } = useConnect();
+  const { connectAsync, connectors } = useConnect();
   const { disconnect: disconnectWallet } = useDisconnect();
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [signInOpen, setSignInOpen] = useState(false);
+  const [challengeReady, setChallengeReady] = useState(false);
+  const challengeRef = useRef<{
+    message: string;
+    nonce: string;
+    expiresAt: string;
+    walletAddress: string;
+  } | null>(null);
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem(TOKEN_KEY);
-    const storedUser = localStorage.getItem(USER_KEY);
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-      api.setToken(storedToken);
-    }
-    setIsLoading(false);
+  const openSignIn = useCallback(() => setSignInOpen(true), []);
+  const closeSignIn = useCallback(() => setSignInOpen(false), []);
+
+  const applyUser = useCallback((next: User) => {
+    setUser(next);
+    localStorage.setItem(USER_KEY, JSON.stringify(next));
   }, []);
 
-  const connectWallet = useCallback(async () => {
-    const connector = connectors[0];
-    if (connector) {
-      await connect({ connector });
+  useEffect(() => {
+    try {
+      const storedToken = localStorage.getItem(TOKEN_KEY);
+      const storedUser = localStorage.getItem(USER_KEY);
+      if (storedToken && storedUser) {
+        const parsed = JSON.parse(storedUser) as User;
+        if (
+          !parsed?.id ||
+          !parsed?.walletAddress ||
+          typeof parsed.displayName !== "string"
+        ) {
+          throw new Error("Invalid stored user");
+        }
+        setToken(storedToken);
+        setUser(parsed);
+        api.setToken(storedToken);
+        api.get<User>("/auth/me").then(applyUser).catch(() => {
+          localStorage.removeItem(TOKEN_KEY);
+          localStorage.removeItem(USER_KEY);
+          setToken(null);
+          setUser(null);
+          api.setToken(null);
+        });
+      }
+    } catch {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      setToken(null);
+      setUser(null);
+      api.setToken(null);
+    } finally {
+      setIsLoading(false);
     }
-  }, [connect, connectors]);
+  }, [applyUser]);
+
+  const connectWallet = useCallback(async () => {
+    const connector = pickReadyConnector(connectors);
+    if (!connector) return;
+    await connectAsync({ connector });
+  }, [connectAsync, connectors]);
+
+  const refreshUser = useCallback(async () => {
+    const fresh = await api.get<User>("/auth/me");
+    applyUser(fresh);
+    return fresh;
+  }, [applyUser]);
+
+  const updateDisplayName = useCallback(
+    async (displayName: string) => {
+      const updated = await api.patch<User>("/users/me", {
+        displayName: displayName.trim(),
+      });
+      applyUser(updated);
+      return updated;
+    },
+    [applyUser]
+  );
+
+  useEffect(() => {
+    if (!address) {
+      challengeRef.current = null;
+      setChallengeReady(false);
+      return;
+    }
+    let cancelled = false;
+    setChallengeReady(false);
+    api
+      .post<{ message: string; nonce: string; expiresAt: string }>(
+        "/auth/challenge",
+        { walletAddress: address }
+      )
+      .then((challenge) => {
+        if (!cancelled) {
+          challengeRef.current = { ...challenge, walletAddress: address };
+          setChallengeReady(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          challengeRef.current = null;
+          setChallengeReady(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
 
   const signIn = useCallback(
     async (displayName?: string) => {
@@ -59,27 +163,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error("Wallet not connected");
       }
 
-      const challenge = await api.post<{
-        message: string;
-        nonce: string;
-        expiresAt: string;
-      }>("/auth/challenge", { walletAddress: address });
+      const cached = challengeRef.current;
+      const freshEnough =
+        cached &&
+        cached.walletAddress === address &&
+        Date.parse(cached.expiresAt) - Date.now() > 8_000;
 
-      const typedData = {
-        domain: { name: "Philoxenia", chainId: "SN_SEPOLIA", version: "1" },
-        primaryType: "Authentication",
-        types: {
-          StarkNetDomain: [
-            { name: "name", type: "felt" },
-            { name: "chainId", type: "felt" },
-            { name: "version", type: "felt" },
-          ],
-          Authentication: [{ name: "message", type: "felt" }],
-        },
-        message: { message: challenge.message },
-      };
+      // Prefer a prefetched challenge so Sign in can call the wallet in the
+      // same user gesture (required for iOS to reopen Ready).
+      const challenge = freshEnough
+        ? cached
+        : await api.post<{
+            message: string;
+            nonce: string;
+            expiresAt: string;
+          }>("/auth/challenge", { walletAddress: address });
+      challengeRef.current = null;
+      setChallengeReady(false);
 
-      const signature = await account.signMessage(typedData);
+      const typedData = buildPhiloxeniaAuthTypedData({
+        nonce: challenge.nonce,
+        chainId: snip12ChainId,
+      });
+
+      let signature: Awaited<
+        ReturnType<NonNullable<typeof account>["signMessage"]>
+      >;
+      try {
+        // On mobile WC, starknetkit opens argent://app/wc/request. After an
+        // await (challenge fetch), iOS may block that — reopen explicitly.
+        openReadyForSignRequest();
+        const signPromise = account.signMessage(typedData);
+        const retry = window.setTimeout(() => openReadyForSignRequest(), 500);
+        try {
+          signature = await signPromise;
+        } finally {
+          window.clearTimeout(retry);
+        }
+      } catch (err) {
+        throw new Error(formatWalletError(err));
+      }
 
       const sigArray = Array.isArray(signature)
         ? signature.map(String)
@@ -97,8 +220,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(session.token);
       setUser(session.user);
       api.setToken(session.token);
-      localStorage.setItem(TOKEN_KEY, session.token);
-      localStorage.setItem(USER_KEY, JSON.stringify(session.user));
+      persistSession(session.token, session.user);
+      setSignInOpen(false);
     },
     [address, account]
   );
@@ -110,6 +233,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     api.setToken(null);
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    setSignInOpen(true);
   }, [disconnectWallet]);
 
   const value = useMemo(
@@ -117,11 +241,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       token,
       isLoading,
+      challengeReady,
+      signInOpen,
+      openSignIn,
+      closeSignIn,
       connectWallet,
       disconnect,
       signIn,
+      refreshUser,
+      updateDisplayName,
     }),
-    [user, token, isLoading, connectWallet, disconnect, signIn]
+    [
+      user,
+      token,
+      isLoading,
+      challengeReady,
+      signInOpen,
+      openSignIn,
+      closeSignIn,
+      connectWallet,
+      disconnect,
+      signIn,
+      refreshUser,
+      updateDisplayName,
+    ]
   );
 
   return (

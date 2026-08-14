@@ -1,10 +1,14 @@
+<p align="center">
+  <img src="apps/web/public/philoxenia-mark.png" alt="Philoxenia" width="72" height="72" />
+</p>
+
 # Security
 
 Security model for the Philoxenia MVP. This document describes intended controls and known gaps.
 
 ## Authentication
 
-- **Wallet-based auth** — Users prove control of a Starknet address by signing a short-lived challenge (`Philoxenia authentication\nNonce: …`). No password or custodial keys.
+- **Wallet-based auth** — Users prove control of a Starknet address with a SNIP-12 typed-data signature (`Authentication { nonce }`, domain name `Philoxenia`). No password or custodial keys. Ready X **desktop extension** only; smartphone login is blocked (Ready mobile sign-in unreliable).
 - **JWT sessions** — API issues 7-day JWTs after signature verification. Protect `JWT_SECRET` in production.
 - **Nonce replay protection** — Auth nonces expire after 5 minutes and are marked used after verification.
 
@@ -37,7 +41,7 @@ Authorization logic lives in `apps/api/src/lib/authorization.ts` and is enforced
 | `create_booking` not called before `fund_booking` | Public payment path may fail on-chain | Wire owner relayer or open `create_booking` to authorized callers |
 | No settle/refund UI | Funds may remain in escrow | Implement guest settle + host refund flows |
 | Off-chain data at API operator | Operator can read all metadata | Self-host; encrypt at rest; future E2E options |
-| User search by display name / wallet | Minor enumeration | Rate-limit; restrict in production |
+| User search by wallet address | Minor enumeration | Rate-limit; display names are not searchable |
 | STRK20 private path vs escrow state | Escrow may not reflect private transfer | Integrate anonymizer or unified funding flow |
 
 ## Operational security

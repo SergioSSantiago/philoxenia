@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="apps/web/public/philoxenia-mark.png" alt="Philoxenia" width="72" height="72" />
+</p>
+
 # Authors
 
 **Sergio Sapiña Santiago** — project author and maintainer

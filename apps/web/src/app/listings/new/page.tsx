@@ -27,7 +27,7 @@ export default function CreateListingPage() {
   });
 
   useEffect(() => {
-    if (!token) router.replace("/auth");
+    if (!token) router.replace("/home");
   }, [token, router]);
 
   async function handleSubmit(e: React.FormEvent) {

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="apps/web/public/philoxenia-mark.png" alt="Philoxenia" width="72" height="72" />
+</p>
+
 # Contributing
 
 Thank you for contributing to Philoxenia.
@@ -7,17 +11,19 @@ Thank you for contributing to Philoxenia.
 - Node.js 20+
 - Docker (PostgreSQL)
 - Scarb 2.12+ and Starknet Foundry (contracts)
+- Ready X for wallet testing
 
 ## Setup
 
 ```bash
 git clone <repo-url> philoxenia
 cd philoxenia
-cp .env.example .env
 npm install
 docker compose up -d
 npm run db:migrate -w @philoxenia/api
 ```
+
+Create a `.env` at the repo root (never commit it). Variables: [docs/development.md](./docs/development.md).
 
 Optional demo data:
 
@@ -74,7 +80,7 @@ docs/              Detailed documentation
 
 ## Documentation
 
-When changing behavior, update the relevant file under `docs/` or the root `ARCHITECTURE.md`, `PRIVACY.md`, or `SECURITY.md`.
+When changing behavior, update the relevant file under `docs/` or the root `ARCHITECTURE.md`, `PRIVACY.md`, or `SECURITY.md`. Brand and header rules live in [docs/brand.md](./docs/brand.md).
 
 ## License
 

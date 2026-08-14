@@ -9,14 +9,12 @@ import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import { createPaymentProvider } from "@/lib/payments/strk20-payment-provider";
 import { privacyLabel } from "@/lib/payments/payment-provider";
+import {
+  STRK20_PRIVACY_ENABLED,
+  tokenAddressForAsset,
+} from "@/lib/tokens";
 
-const ESCROW =
-  process.env.NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS ?? "";
-const STRK_TOKEN =
-  process.env.NEXT_PUBLIC_STRK_TOKEN_ADDRESS ??
-  "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d1ab4b5195650d67ce8d3";
-const DAI_TOKEN = process.env.NEXT_PUBLIC_DAI_TOKEN_ADDRESS ?? "";
-const PRIVACY_ENABLED = process.env.NEXT_PUBLIC_STRK20_PRIVACY !== "false";
+const ESCROW = process.env.NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS ?? "";
 
 export default function BookingDetailPage() {
   const params = useParams<{ id: string }>();
@@ -32,7 +30,7 @@ export default function BookingDetailPage() {
 
   useEffect(() => {
     if (!token) {
-      router.replace("/auth");
+      router.replace("/home");
       return;
     }
     api
@@ -55,8 +53,7 @@ export default function BookingDetailPage() {
     setError("");
 
     try {
-      const tokenAddress =
-        booking.paymentAsset === "DAI" ? DAI_TOKEN : STRK_TOKEN;
+      const tokenAddress = tokenAddressForAsset(booking.paymentAsset);
 
       if (!tokenAddress) {
         throw new Error(`${booking.paymentAsset} token address not configured`);
@@ -66,7 +63,7 @@ export default function BookingDetailPage() {
         booking.paymentAsset,
         account,
         tokenAddress,
-        PRIVACY_ENABLED
+        STRK20_PRIVACY_ENABLED
       );
 
       const onChainBookingId = BigInt(
@@ -191,7 +188,11 @@ export default function BookingDetailPage() {
 
         {isGuest && booking.status === "pending" && (
           <Button onClick={payBooking} disabled={paying || !account}>
-            {paying ? "Processing…" : "Pay privately"}
+            {paying
+              ? "Processing…"
+              : booking.paymentAsset === "STRK" && STRK20_PRIVACY_ENABLED
+                ? "Pay with STRK (privacy)"
+                : `Pay with ${booking.paymentAsset}`}
           </Button>
         )}
 

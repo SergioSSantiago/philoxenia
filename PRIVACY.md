@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="apps/web/public/philoxenia-mark.png" alt="Philoxenia" width="72" height="72" />
+</p>
+
 # Privacy
 
 Philoxenia targets **selective payment privacy** via STRK20 (Starknet Privacy) where wallets support it. It does **not** claim full-stack anonymity.

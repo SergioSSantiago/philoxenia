@@ -1,11 +1,33 @@
 import { randomBytes } from "node:crypto";
 import { eq, and, gt, isNull, desc } from "drizzle-orm";
-import { validateAndParseAddress } from "starknet";
+import { RpcProvider, validateAndParseAddress } from "starknet";
+import {
+  buildPhiloxeniaAuthTypedData,
+  getStarknetMainnetRpcUrl,
+  getStarknetSepoliaRpcUrl,
+  resolveSnip12ChainId,
+} from "@philoxenia/shared";
 import { db, schema } from "../db/index.js";
 import { normalizeWalletAddress } from "../lib/utils.js";
 
 const APP_NAME = "Philoxenia";
 const CHALLENGE_TTL_MS = 5 * 60 * 1000;
+
+function getRpcProvider() {
+  const chainId = resolveSnip12ChainId(process.env.STARKNET_CHAIN);
+  const nodeUrl =
+    chainId === "SN_MAIN"
+      ? getStarknetMainnetRpcUrl({
+          alchemyApiKey: process.env.ALCHEMY_API_KEY,
+          explicitUrl: process.env.STARKNET_RPC_URL,
+        })
+      : getStarknetSepoliaRpcUrl({
+          alchemyApiKey: process.env.ALCHEMY_API_KEY,
+          explicitUrl: process.env.STARKNET_SEPOLIA_RPC_URL,
+        });
+
+  return new RpcProvider({ nodeUrl });
+}
 
 function buildAuthMessage(nonce: string): string {
   return `${APP_NAME} authentication\nNonce: ${nonce}\nThis request will not trigger a blockchain transaction.`;
@@ -52,8 +74,6 @@ export async function verifyAuthSignature(
     throw new Error("Invalid or expired authentication challenge");
   }
 
-  const message = buildAuthMessage(nonceRecord.nonce);
-
   try {
     validateAndParseAddress(normalized);
   } catch {
@@ -64,9 +84,23 @@ export async function verifyAuthSignature(
     throw new Error("Invalid signature");
   }
 
-  // MVP: challenge nonce is single-use; signature presence validated.
-  // Production should verify via starknet.js verifyMessage against wallet SNIP-12 format.
-  void message;
+  const chainId = resolveSnip12ChainId(process.env.STARKNET_CHAIN);
+  const typedData = buildPhiloxeniaAuthTypedData({
+    nonce: nonceRecord.nonce,
+    chainId,
+  });
+
+  const provider = getRpcProvider();
+
+  const isValid = await provider.verifyMessageInStarknet(
+    typedData,
+    signature,
+    normalized
+  );
+
+  if (!isValid) {
+    throw new Error("Invalid signature");
+  }
 
   await db
     .update(schema.authNonces)

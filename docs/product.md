@@ -1,8 +1,14 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Product
 
 Philoxenia is private peer-to-peer hospitality on Starknet.
 
 **Tagline:** Trust who you trust. Pay trustless.
+
+The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](./brand.md).
 
 ## Problem
 
@@ -22,6 +28,17 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - No public marketplace, followers, or open search
 - No protocol token or NFTs
 - No custodial wallets or internal balances
+
+## How you sign in
+
+- Wallet: **Ready X** browser extension on **desktop**. Braavos is not offered.
+- There is no `/auth` page. Connect is a modal on `/home`.
+- Disconnect returns to `/home` and shows the same modal.
+- Display name is optional at sign-in and editable later in `/profile`. Friends add you by **wallet address only**.
+
+### Smartphone — blocked
+
+**Mobile is not a supported client right now.** Login with Ready on a phone is blocked: WalletConnect may open the app for “connect”, but the follow-up **login signature** (`signMessage` / SNIP-12) often never surfaces an approve UI in Ready (deep-link / Ready X vs Ready Mobile mismatch; Safari often cannot re-open the wallet for the second request). Product work continues on **desktop web** until Ready provides a reliable mobile approve path for dapp sign-in.
 
 ## Roles
 
@@ -54,8 +71,9 @@ Example: 750 STRK total, 5% connector → 712.5 host + 37.5 connector.
 
 **Implemented (off-chain + UI):**
 
-- Wallet authentication
-- Friend requests and friendships
+- Wallet authentication (Ready X extension on desktop, SNIP-12) — **not smartphone**
+- Friend requests and friendships (search by wallet address)
+- Profile: display name + STRK/DAI balances
 - Private listings (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution
@@ -70,6 +88,7 @@ Example: 750 STRK total, 5% connector → 712.5 host + 37.5 connector.
 
 ## Related docs
 
+- [brand.md](./brand.md)
 - [social-graph.md](./social-graph.md)
 - [listings.md](./listings.md)
 - [invitations.md](./invitations.md)

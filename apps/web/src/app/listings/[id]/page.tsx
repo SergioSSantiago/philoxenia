@@ -4,20 +4,21 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import type { Listing } from "@philoxenia/shared";
 import { Shell, Button, Card } from "@/components/ui";
+import { UserBadge } from "@/components/user-badge";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 
 export default function ListingPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [listing, setListing] = useState<Listing | null>(null);
   const [shareUrl, setShareUrl] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!token) {
-      router.replace("/auth");
+      router.replace("/home");
       return;
     }
 
@@ -53,26 +54,33 @@ export default function ListingPage() {
   }
 
   const photo = listing.photos[0];
+  const isHost = user?.id === listing.hostId;
 
   return (
     <Shell wide>
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
         <div className="aspect-[4/3] overflow-hidden rounded-2xl bg-accent-soft/40">
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={photo} alt={listing.title} className="h-full w-full object-cover" />
+            <img
+              src={photo}
+              alt={listing.title}
+              className="h-full w-full object-cover"
+            />
           ) : null}
         </div>
 
         <div>
-          <h1 className="text-4xl">{listing.title}</h1>
-          <p className="mt-2 text-muted">{listing.location}</p>
-
           {listing.host && (
-            <p className="mt-4 text-sm">
-              Host: <span className="font-medium">{listing.host.displayName}</span>
-            </p>
+            <UserBadge
+              user={listing.host}
+              role={isHost ? "Your listing" : "Host"}
+              showWallet={!isHost}
+            />
           )}
+
+          <h1 className="mt-6 text-3xl sm:text-4xl">{listing.title}</h1>
+          <p className="mt-2 text-muted">{listing.location}</p>
 
           <p className="mt-6 text-2xl">
             {listing.pricePerNight} {listing.paymentAsset}
@@ -80,7 +88,8 @@ export default function ListingPage() {
           </p>
 
           <p className="mt-4 rounded-xl bg-accent-soft/60 px-4 py-3 text-sm">
-            Connector reward: {listing.connectorRewardPercent}%
+            Connector reward: {listing.connectorRewardPercent}% ·{" "}
+            {listing.paymentAsset} only
           </p>
 
           <p className="mt-8 text-muted leading-relaxed">{listing.description}</p>
@@ -89,18 +98,30 @@ export default function ListingPage() {
             {listing.minStay}–{listing.maxStay} nights · {listing.cancellationTerms}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button onClick={() => router.push(`/bookings/new?listing=${listing.id}`)}>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button
+              className="w-full sm:w-auto"
+              onClick={() => router.push(`/bookings/new?listing=${listing.id}`)}
+            >
               Book
             </Button>
-            <Button variant="secondary" onClick={shareListing}>
+            <Button
+              variant="secondary"
+              className="w-full sm:w-auto"
+              onClick={shareListing}
+            >
               Share listing
             </Button>
           </div>
 
           {shareUrl && (
             <Card className="mt-4 text-sm">
-              <p className="text-muted">Invitation link copied:</p>
+              <p className="text-muted">
+                Invitation link copied — shared as{" "}
+                <span className="font-medium text-foreground">
+                  {user?.displayName}
+                </span>
+              </p>
               <p className="mt-1 break-all font-mono text-xs">{shareUrl}</p>
             </Card>
           )}

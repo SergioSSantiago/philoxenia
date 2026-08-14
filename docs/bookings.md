@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Bookings
 
 Bookings coordinate stay metadata off-chain and payment on-chain via escrow.

@@ -47,16 +47,36 @@ export async function getUserById(userId: string) {
   return user ? toUserResponse(user) : null;
 }
 
+export async function updateUserDisplayName(userId: string, displayName: string) {
+  const name = displayName.trim();
+  if (name.length < 1 || name.length > 64) {
+    throw new Error("Display name must be 1–64 characters");
+  }
+
+  const [updated] = await db
+    .update(schema.users)
+    .set({ displayName: name })
+    .where(eq(schema.users.id, userId))
+    .returning();
+
+  if (!updated) {
+    throw new Error("User not found");
+  }
+
+  return toUserResponse(updated);
+}
+
 export async function searchUsers(query: string, currentUserId: string) {
-  const trimmed = query.trim();
-  if (trimmed.length < 2) return [];
+  let normalized = query.trim().toLowerCase().replace(/\s/g, "");
+  if (!normalized) return [];
+  if (!normalized.startsWith("0x")) {
+    normalized = `0x${normalized}`;
+  }
+  if (normalized.length < 6) return [];
 
   const results = await db.query.users.findMany({
     where: and(
-      or(
-        ilike(schema.users.displayName, `%${trimmed}%`),
-        ilike(schema.users.walletAddress, `%${trimmed.toLowerCase()}%`)
-      ),
+      ilike(schema.users.walletAddress, `%${normalized}%`),
       ne(schema.users.id, currentUserId)
     ),
     limit: 20,

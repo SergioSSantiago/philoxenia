@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Development
 
-Local development setup for Philoxenia.
+Local development setup for Philoxenia. Production is Vercel — see [deployment-vercel.md](./deployment-vercel.md).
 
 ## Prerequisites
 
@@ -16,7 +20,6 @@ Local development setup for Philoxenia.
 ```bash
 git clone <repo-url> philoxenia
 cd philoxenia
-cp .env.example .env
 npm install
 ```
 
@@ -57,16 +60,18 @@ npm run dev:web    # http://localhost:3000
 
 ## Environment
 
-Copy `.env.example` to `.env`. Minimum for local dev:
+Copy values into `.env` at the repo root (never commit it). Minimum for local dev:
 
 ```env
 DATABASE_URL=postgresql://philoxenia:philoxenia@localhost:5432/philoxenia
 JWT_SECRET=dev-secret-change-me
 CORS_ORIGIN=http://localhost:3000
 NEXT_PUBLIC_API_URL=http://localhost:4000
-NEXT_PUBLIC_STARKNET_CHAIN=sepolia
-NEXT_PUBLIC_RPC_URL=https://starknet-sepolia.public.blastapi.io/rpc/v0_8
+NEXT_PUBLIC_STARKNET_CHAIN=mainnet
+ALCHEMY_API_KEY=
 ```
+
+Leave `ALCHEMY_API_KEY` empty only if a public RPC fallback is acceptable. Production must set it on **both** Vercel projects (web and api).
 
 Escrow address can remain empty for off-chain-only testing. Payment buttons require a deployed escrow.
 
@@ -118,10 +123,16 @@ npm run db:generate -w @philoxenia/api   # if script exists
 ## Web development notes
 
 - App Router under `apps/web/src/app/`
-- Wallet providers in `apps/web/src/components/providers.tsx`
+- Wallet providers in `apps/web/src/components/providers.tsx` (Ready X only)
 - Auth context persists JWT in localStorage
+- Sign-in UI: `apps/web/src/components/auth-modal.tsx` on `/home`
+- Brand lockup: `apps/web/src/components/brand-lockup.tsx` → `/`
 
-Connect a Starknet wallet (Sepolia) for auth and payment testing.
+Connect with the [Ready X](https://www.ready.co/) **browser extension** on desktop (Starknet mainnet) for auth and payment testing.
+
+### Smartphone testing — do not expect login to work
+
+Mobile sign-in is **blocked / unsupported**. Ready may open for WalletConnect “connect”, but the second-step login signature often never prompts in the wallet. Develop and QA on desktop only until this is resolved.
 
 ## Common issues
 
@@ -130,9 +141,11 @@ Connect a Starknet wallet (Sepolia) for auth and payment testing.
 | API connection refused | Check `docker compose ps`; verify `DATABASE_URL` |
 | CORS errors | Match `CORS_ORIGIN` to web URL |
 | Payment fails | Set `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS`; ensure on-chain booking exists |
-| Wallet auth fails | Use Sepolia account; check RPC URL |
+| Wallet auth fails (desktop) | Use Ready X extension on Starknet mainnet; set `ALCHEMY_API_KEY`; check chain id `SN_MAIN` |
+| Wallet auth fails (phone) | Expected — smartphone login is blocked; use desktop Ready X |
 
 ## Related
 
+- [brand.md](./brand.md)
 - [deployment.md](./deployment.md)
 - [../CONTRIBUTING.md](../CONTRIBUTING.md)

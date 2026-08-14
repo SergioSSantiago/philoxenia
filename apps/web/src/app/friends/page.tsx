@@ -3,8 +3,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { User, FriendRequest } from "@philoxenia/shared";
-import { Shell, SectionTitle, Button, Card, EmptyState } from "@/components/ui";
+import {
+  Shell,
+  SectionTitle,
+  Button,
+  Card,
+  EmptyState,
+  TextInput,
+} from "@/components/ui";
 import { UserRow } from "@/components/cards";
+import { WalletAddress } from "@/components/wallet-address";
+import { WalletBalances } from "@/components/wallet-balances";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 
@@ -14,13 +23,20 @@ interface FriendsData {
   pendingOutgoing: FriendRequest[];
 }
 
+function normalizeWalletQuery(raw: string): string {
+  let q = raw.trim().toLowerCase().replace(/\s/g, "");
+  if (q && !q.startsWith("0x")) q = `0x${q}`;
+  return q;
+}
+
 export default function FriendsPage() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [data, setData] = useState<FriendsData | null>(null);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<User[]>([]);
   const [showAdd, setShowAdd] = useState(false);
+  const [searchError, setSearchError] = useState("");
 
   async function load() {
     const friends = await api.get<FriendsData>("/friends");
@@ -29,18 +45,27 @@ export default function FriendsPage() {
 
   useEffect(() => {
     if (!token) {
-      router.replace("/auth");
+      router.replace("/home");
       return;
     }
     load();
   }, [token, router]);
 
   async function search() {
-    if (query.length < 2) return;
+    setSearchError("");
+    const normalized = normalizeWalletQuery(query);
+    if (normalized.length < 6) {
+      setSearchError("Enter at least 4 characters of a wallet address (with 0x).");
+      setResults([]);
+      return;
+    }
     const users = await api.get<User[]>(
-      `/friends/search?q=${encodeURIComponent(query)}`
+      `/friends/search?q=${encodeURIComponent(normalized)}`
     );
     setResults(users);
+    if (users.length === 0) {
+      setSearchError("No user found with that wallet address.");
+    }
   }
 
   async function sendRequest(toUserId: string) {
@@ -48,6 +73,7 @@ export default function FriendsPage() {
     await load();
     setResults([]);
     setQuery("");
+    setShowAdd(false);
   }
 
   if (!data) {
@@ -60,36 +86,79 @@ export default function FriendsPage() {
 
   return (
     <Shell>
-      <SectionTitle title="Friends" subtitle="Your trust network" />
+      <SectionTitle
+        title="Friends"
+        subtitle="Add people by wallet address only — display names are not searchable."
+      />
+
+      {user && (
+        <Card className="mb-6">
+          <p className="text-sm font-medium text-foreground">Your wallet</p>
+          <p className="mt-1 text-sm text-muted">
+            Share this so friends can add you.
+          </p>
+          <div className="mt-3 space-y-4">
+            <WalletAddress address={user.walletAddress} />
+            <WalletBalances compact />
+          </div>
+        </Card>
+      )}
 
       <Card className="mb-8">
         {!showAdd ? (
-          <Button onClick={() => setShowAdd(true)}>Add friend</Button>
+          <Button className="w-full sm:w-auto" onClick={() => setShowAdd(true)}>
+            Add friend by wallet
+          </Button>
         ) : (
           <div>
             <h3 className="text-lg">Add someone you trust</h3>
             <p className="mt-2 text-sm text-muted leading-relaxed">
-              Philoxenia uses your network of friends as a trust layer. Only
-              add people you genuinely know and trust. Your network helps
-              reduce fraudulent users and listings.
+              Paste their Starknet wallet address. Philoxenia uses your network
+              as a trust layer — only add people you genuinely know.
             </p>
-            <div className="mt-4 flex gap-2">
-              <input
-                className="flex-1 rounded-xl border border-border bg-background px-4 py-2.5"
-                placeholder="Search by name or wallet"
+            <div className="mt-4 space-y-3">
+              <TextInput
+                className="font-mono text-sm"
+                placeholder="0x… wallet address"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && search()}
+                inputMode="text"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
               />
-              <Button onClick={search}>Search</Button>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Button className="w-full sm:w-auto" onClick={search}>
+                  Search
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full sm:w-auto"
+                  onClick={() => {
+                    setShowAdd(false);
+                    setQuery("");
+                    setResults([]);
+                    setSearchError("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
+            {searchError && (
+              <p className="mt-3 text-sm text-muted">{searchError}</p>
+            )}
             <div className="mt-4 space-y-2">
-              {results.map((user) => (
+              {results.map((found) => (
                 <UserRow
-                  key={user.id}
-                  user={user}
+                  key={found.id}
+                  user={found}
                   action={
-                    <Button onClick={() => sendRequest(user.id)}>
+                    <Button
+                      className="w-full sm:w-auto"
+                      onClick={() => sendRequest(found.id)}
+                    >
                       Add friend
                     </Button>
                   }
@@ -109,23 +178,21 @@ export default function FriendsPage() {
                 key={r.id}
                 user={r.fromUser!}
                 action={
-                  <div className="flex gap-2">
+                  <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                     <Button
                       variant="secondary"
+                      className="w-full sm:w-auto"
                       onClick={() =>
-                        api
-                          .post(`/friends/accept/${r.id}`)
-                          .then(load)
+                        api.post(`/friends/accept/${r.id}`).then(load)
                       }
                     >
                       Accept
                     </Button>
                     <Button
                       variant="ghost"
+                      className="w-full sm:w-auto"
                       onClick={() =>
-                        api
-                          .post(`/friends/reject/${r.id}`)
-                          .then(load)
+                        api.post(`/friends/reject/${r.id}`).then(load)
                       }
                     >
                       Reject
@@ -151,6 +218,7 @@ export default function FriendsPage() {
                 action={
                   <Button
                     variant="ghost"
+                    className="w-full sm:w-auto"
                     onClick={() =>
                       api.delete(`/friends/${friend.id}`).then(load)
                     }

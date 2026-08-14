@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Security (detailed)
 
 Expanded security notes for API, contracts, and deployment.
@@ -17,8 +21,8 @@ Expanded security notes for API, contracts, and deployment.
 ### Authentication flow
 
 1. `POST /auth/challenge` — server generates nonce, stores with expiry
-2. Client signs message with Starknet wallet (off-chain)
-3. `POST /auth/verify` — server verifies via `typedData.verifyMessage`, issues JWT
+2. Client signs SNIP-12 typed data (`Authentication { nonce }`) in Ready X
+3. `POST /auth/verify` — server verifies via RPC `verifyMessageInStarknet`, issues JWT
 
 Nonces are single-use and expire in 5 minutes.
 
@@ -59,8 +63,10 @@ Document and secure the owner key; consider multisig for production.
 ## Frontend security
 
 - No private keys in frontend code
+- Ready X only (desktop browser extension). Smartphone login is blocked / unsupported until Ready mobile signing works reliably.
 - Escrow/token addresses from env vars (public)
 - Wallet prompts user for all signatures
+- Sign-in UI is a modal on `/home`; `/auth` redirects there
 
 ## Database
 

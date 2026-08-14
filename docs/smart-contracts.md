@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Smart contracts
 
 Philoxenia's on-chain surface is a single escrow contract for booking settlement.

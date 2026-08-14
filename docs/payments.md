@@ -1,10 +1,14 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Payments
 
 Philoxenia supports STRK and DAI payments with optional STRK20 privacy for STRK.
 
 ## Principles
 
-- **Non-custodial** — funds move via the user's Starknet wallet; Philoxenia holds no balances.
+- **Non-custodial** — funds move via the guest's Ready X wallet; Philoxenia holds no balances.
 - **0% protocol fee** — entire guest payment splits between host and connector only.
 - **Honest privacy labeling** — payments are marked `private` only when the wallet privacy API succeeds; otherwise `public`.
 

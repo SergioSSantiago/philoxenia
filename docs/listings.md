@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Listings
 
 Hosts create **private listings** visible only to themselves and their friends.
@@ -42,28 +46,9 @@ Any authorized viewer (host or friend) can create a share link. See [invitations
 
 ## Booking prerequisites
 
-To book a listing, the guest must:
+To book, the guest must be able to view the listing (friend of the host). Connector attribution comes from a `share_introductions` row (the friend who shared the invite).
 
-1. Be able to view it (friend of host), **and**
-2. Have a valid connector introduction for that listing (unless they are a direct friend who books without going through a share — connector resolution still requires an introduction record for non-friend paths; direct friends booking still needs connector from introduction or the booking will fail with "No valid connector found")
-
-**Note:** Direct friends of the host can view listings but booking requires a `share_introductions` record linking them as guest with a connector who is friends with the host. In practice, a friend booking directly may need a share flow or seed data. This is an MVP edge case.
-
-Actually let me re-read resolveConnectorForBooking - it requires share_introductions. So even friends need an introduction? Let me check createBooking again...
-
-```javascript
-const connectorId = await resolveConnectorForBooking(
-  guestId,
-  listing.id,
-  listing.hostId
-);
-
-if (!connectorId) {
-  throw new Error("No valid connector found for this booking");
-}
-```
-
-And resolveConnectorForBooking only looks at share_introductions. So direct friends who discover via network listings cannot book unless they have a share introduction. That's an MVP limitation I should document honestly.
+**MVP limitation:** Direct friends who only saw the listing on the network feed still need an introduction record to book. Without it, booking fails with "No valid connector found." Use a share link (or seed data) until that path is opened.
 
 ## Implementation status
 

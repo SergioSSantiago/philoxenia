@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
 import { Providers } from "@/components/providers";
 import "./globals.css";
@@ -14,10 +14,20 @@ const sourceSans = Source_Sans_3({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   title: "Philoxenia — Trust who you trust. Pay trustless.",
   description:
     "A private peer-to-peer hospitality network. Discover places through people you trust.",
+  icons: {
+    icon: "/philoxenia-mark.png",
+    apple: "/philoxenia-mark.png",
+  },
 };
 
 export default function RootLayout({

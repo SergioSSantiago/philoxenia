@@ -18,5 +18,8 @@
   "devDependencies": {
     "concurrently": "^9.1.2",
     "dotenv-cli": "^8.0.0"
+  },
+  "overrides": {
+    "starknet": "8.9.2"
   }
 }

@@ -20,7 +20,7 @@ function NewBookingForm() {
 
   useEffect(() => {
     if (!token) {
-      router.replace("/auth");
+      router.replace("/home");
       return;
     }
     if (!listingId) {

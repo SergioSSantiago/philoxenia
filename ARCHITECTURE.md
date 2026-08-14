@@ -1,6 +1,14 @@
+<p align="center">
+  <img src="apps/web/public/philoxenia-mark.png" alt="Philoxenia" width="72" height="72" />
+</p>
+
 # Architecture
 
 Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **not** a public marketplace.
+
+The brand mark (sleeping head on joined hands) sits in the header and always goes to `/`. Sign-in is a Ready X modal on `/home`, not a dedicated auth page.
+
+**Supported client:** desktop browser + Ready X extension. **Smartphone is blocked** — mobile Ready login does not complete the signature step reliably (see [docs/product.md](./docs/product.md)).
 
 ## System overview
 
@@ -9,7 +17,7 @@ Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **n
 │  Next.js (web)  │ ────────────────► │  Fastify (api)  │ ───────────► │ PostgreSQL │
 └────────┬────────┘                   └─────────────────┘              └────────────┘
          │
-         │ wallet (starknet-react / starknet.js)
+         │ wallet (Ready X — starknet-react / starknetkit / starknet.js)
          ▼
 ┌─────────────────┐
 │ Starknet wallet │ ──► BookingEscrow + ERC20 / STRK20 (where supported)
@@ -18,7 +26,7 @@ Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **n
 
 | Layer | Responsibility |
 |-------|----------------|
-| **Web** (`apps/web`) | Auth UI, social graph, listings, invitations, bookings, wallet payments |
+| **Web** (`apps/web`) | Landing, Ready X auth modal, social graph, listings, invitations, bookings, wallet payments |
 | **API** (`apps/api`) | Off-chain state, authorization, JWT sessions |
 | **Shared** (`packages/shared`) | TypeScript types shared by web and API |
 | **Contracts** (`contracts/`) | On-chain escrow and settlement |
@@ -47,8 +55,10 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 
 | Component | Status |
 |-----------|--------|
-| Wallet auth (Starknet signed message) | Implemented |
+| Wallet auth (Ready X extension, SNIP-12) — desktop | Implemented |
+| Wallet auth on smartphone | **Blocked** — Ready connect/sign deep-link unreliable |
 | Friends, listings, shares, bookings API | Implemented |
+| Profile (display name) + wallet-only friend search | Implemented |
 | `BookingEscrow` Cairo contract + unit tests | Implemented |
 | Public ERC20 payment path (approve + `fund_booking`) | Implemented in web |
 | STRK20 wallet API detection + fallback | Implemented in web |
@@ -66,6 +76,7 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 
 ## Further reading
 
+- [docs/brand.md](./docs/brand.md) — logo and header
 - [docs/architecture.md](./docs/architecture.md) — detailed component breakdown
 - [docs/smart-contracts.md](./docs/smart-contracts.md) — escrow interface and lifecycle
 - [docs/product.md](./docs/product.md) — user-facing flows

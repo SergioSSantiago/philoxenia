@@ -1,5 +1,16 @@
 export type PaymentAsset = "STRK" | "DAI";
 
+export {
+  buildPhiloxeniaAuthTypedData,
+  resolveSnip12ChainId,
+  type Snip12ChainId,
+} from "./auth-typed-data.js";
+export {
+  getStarknetMainnetRpcUrl,
+  getStarknetSepoliaRpcUrl,
+  publicMainnetRpcFallback,
+} from "./starknet-rpc.js";
+
 export type BookingStatus =
   | "pending"
   | "funded"

@@ -19,7 +19,7 @@ export default function ConnectorPage() {
 
   useEffect(() => {
     if (!token) {
-      router.replace("/auth");
+      router.replace("/home");
       return;
     }
     api.get<ConnectorEarnings>("/connector/earnings").then(setData);

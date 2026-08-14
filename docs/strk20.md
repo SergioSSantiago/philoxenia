@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # STRK20 (Starknet Privacy)
 
 Philoxenia uses STRK20 **where supported** for optional private STRK payments. This document references official sources only — do not treat Philoxenia-specific code as a substitute for upstream docs.

@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="./public/philoxenia-mark.png" alt="Philoxenia" width="72" height="72" />
+</p>
 
-## Getting Started
+# @philoxenia/web
 
-First, run the development server:
+Next.js 15 app for Philoxenia. Brand lockup (name + sleeping-head cameo) lives in `src/components/brand-lockup.tsx` and always links to `/`.
+
+## Production
+
+https://philoxenia-iota.vercel.app
+
+## Scripts (from repo root)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev:web
+npm run build -w @philoxenia/web
+npm run typecheck -w @philoxenia/web
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Auth
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Sign-in is a modal on `/home` (Ready X **desktop extension**). `/auth` redirects to `/home`. Disconnect returns to `/home` with the same modal.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Smartphone — blocked
 
-## Learn More
+Mobile login is **not supported**. WalletConnect may open Ready for connect, but the login signature approve sheet often never appears (Ready X / Ready Mobile deep-link gap; iOS gesture limits). Use desktop Ready X only.
 
-To learn more about Next.js, take a look at the following resources:
+## Layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Route | Purpose |
+|-------|---------|
+| `/` | Landing. Header brand → here |
+| `/home` | App home + connect modal if signed out |
+| `/profile` | Display name, balances, disconnect |
+| `/friends` | Friends; search by wallet address only |
+| `/listings/*`, `/bookings/*`, `/connector` | Hosted stays, payments, earnings |
+| `/invite/[token]` | Connector invitation |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [docs/architecture.md](../../docs/architecture.md) and [docs/brand.md](../../docs/brand.md).

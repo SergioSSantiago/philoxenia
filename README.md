@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="apps/web/public/philoxenia-mark.png" alt="Philoxenia — a sleeping head resting on joined hands" width="96" height="96" />
+</p>
+
 # Philoxenia
 
 **Trust who you trust. Pay trustless.**
@@ -8,6 +12,8 @@ Built with [Cursor](https://cursor.com) AI-assisted development (disclosed, not 
 
 Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **not** a public accommodation marketplace. Listings are visible only to hosts, their friends, and guests introduced through a valid share flow.
 
+The brand mark is a cameo of a sleeping head on joined hands — rest, trust, hospitality. It sits next to the name in the app header and links to `/`. See [docs/brand.md](./docs/brand.md).
+
 ## What it is
 
 - A social trust network for private hospitality
@@ -15,21 +21,23 @@ Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **n
 - Trustless settlement via Cairo smart contracts
 - STRK20 private payments where wallet support exists
 - 0% protocol commission
+- Ready X for wallet connect on **desktop** (browser extension)
 
 ## What it is not
 
 - Not Airbnb on blockchain
 - No public marketplace, followers, NFTs, or protocol token
 - No custodial wallets or internal balances
+- No Braavos or other wallet connectors
 
 ## Architecture
 
 ```
 Frontend (Next.js) → Backend (Fastify) → PostgreSQL
-Frontend (Next.js) → Starknet wallet → BookingEscrow + ERC20/STRK20
+Frontend (Next.js) → Ready X → BookingEscrow + ERC20/STRK20
 ```
 
-Off-chain: friendships, listings, invitations, booking metadata  
+Off-chain: friendships, listings, invitations, booking metadata
 On-chain: payment escrow and settlement only
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
@@ -41,7 +49,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 | Frontend | Next.js 15, React, TypeScript, Tailwind CSS |
 | Backend | Fastify, Drizzle ORM, PostgreSQL |
 | Contracts | Cairo 2.12, Scarb, Starknet Foundry |
-| Wallet | starknet-react, starknet.js |
+| Wallet | Ready X via `@starknet-react/core`, `starknetkit`, starknet.js v8 |
 | Privacy | STRK20 via Starknet Wallet API |
 
 ## Quick start
@@ -51,6 +59,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 - Node.js 20+
 - Docker (for PostgreSQL)
 - Scarb 2.12+ and Starknet Foundry (for contracts)
+- [Ready X](https://www.ready.co/) browser extension (desktop)
 
 ## Deploy (producción — Vercel)
 
@@ -71,7 +80,7 @@ cd philoxenia
 npm install
 ```
 
-Pega `ALCHEMY_API_KEY` en `.env` (raíz) y en el dashboard de Vercel (proyecto web).
+Pega `ALCHEMY_API_KEY` en `.env` (raíz) y en el dashboard de Vercel (proyecto web **y** api).
 
 ### Database (producción)
 
@@ -108,6 +117,16 @@ scarb build
 scarb test
 ```
 
+## Sign-in
+
+There is no `/auth` page. The header brand goes to `/` (landing). Connect / disconnect opens a **Ready X** modal on `/home`.
+
+**Supported today: desktop web with the Ready X browser extension.** Friends find each other by **wallet address only**. Display names are editable in Profile and are not searchable.
+
+### Known limitation — smartphone blocked
+
+**Phone / mobile Safari (and Chrome on Android) login does not work reliably.** After WalletConnect opens Ready, the second step — the SNIP-12 login signature — often never shows an approve sheet in the wallet (Ready X vs Ready Mobile deep-link mismatch, and iOS blocking programmatic re-open of the app). Until that is fixed upstream or with a supported Ready mobile path, **Philoxenia is desktop-only for sign-in and payments.** Do not treat smartphone as a supported client.
+
 ## Environment variables
 
 See `.env` at the repo root (not committed). Paste your Alchemy key into `ALCHEMY_API_KEY` only — the mainnet RPC URL is built automatically.
@@ -117,24 +136,26 @@ Key variables:
 - `DATABASE_URL` — PostgreSQL connection
 - `JWT_SECRET` — API session signing
 - `NEXT_PUBLIC_API_URL` — frontend → backend
+- `NEXT_PUBLIC_STARKNET_CHAIN` — `mainnet` in production
 - `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — deployed escrow
 - `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 path (default true)
 
 ## Acceptance scenario
 
-Bob lists an apartment in Florence (150 STRK/night, 5% connector reward).  
-Alice (Bob's friend) shares the listing with Carlos.  
-Carlos creates an account, requests friendship with Bob, Bob accepts.  
-Carlos books 5 nights (750 STRK total).  
+Bob lists an apartment in Florence (150 STRK/night, 5% connector reward).
+Alice (Bob's friend) shares the listing with Carlos.
+Carlos creates an account, requests friendship with Bob, Bob accepts.
+Carlos books 5 nights (750 STRK total).
 Settlement: Host 712.5 STRK, Connector 37.5 STRK, Philoxenia 0 STRK.
 
 ## Documentation
 
+- [docs/](./docs/) — full docs index
+- [docs/brand.md](./docs/brand.md) — logo and header
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [PRIVACY.md](./PRIVACY.md)
 - [SECURITY.md](./SECURITY.md)
 - [CONTRIBUTING.md](./CONTRIBUTING.md)
-- [docs/](./docs/)
 
 ## STRK20 Private Sprint
 

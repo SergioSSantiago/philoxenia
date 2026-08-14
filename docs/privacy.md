@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Privacy (detailed)
 
 Philoxenia's privacy model across discovery, data storage, and payments.
@@ -20,7 +24,7 @@ This is the strongest privacy guarantee in the MVP.
 
 - Friendships stored in PostgreSQL
 - API operator can read all relationships
-- User search exposes display names and wallet addresses to authenticated users
+- User search is by wallet address only (display names are not indexed for search)
 
 **Mitigation:** Self-host the API and database.
 

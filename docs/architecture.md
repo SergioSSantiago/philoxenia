@@ -1,6 +1,12 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Architecture (detailed)
 
 Component-level architecture for the Philoxenia monorepo.
+
+The header brand (name + sleeping-head cameo) always links to `/`. See [brand.md](./brand.md).
 
 ## Monorepo layout
 
@@ -40,17 +46,20 @@ philoxenia/
 ## Web (`apps/web`)
 
 - **Framework:** Next.js 15 (App Router), React, Tailwind CSS
-- **Wallet:** `@starknet-react/core` with starknet.js
-- **State:** React context for auth (`auth-context.tsx`)
+- **Wallet:** Ready X only on **desktop** (`@starknet-react/core` injected `argentX`). **Smartphone login is blocked** (Ready WalletConnect connect/sign deep-link does not complete reliably).
+- **State:** React context for auth (`auth-context.tsx`); JWT in localStorage
 - **API client:** `lib/api.ts` (Bearer JWT)
+- **Brand:** `components/brand-lockup.tsx` → `/`
 
 ### Key pages
 
 | Route | Purpose |
 |-------|---------|
-| `/auth` | Wallet connect + sign-in |
-| `/home` | Dashboard: friends, network listings, bookings |
-| `/friends` | Friend management |
+| `/` | Landing. Header brand links here |
+| `/home` | App home. If signed out, Ready X connect modal |
+| `/auth` | Legacy redirect to `/home` |
+| `/profile` | Display name, STRK/DAI balances, disconnect |
+| `/friends` | Friends; search by wallet address only |
 | `/my-listings`, `/listings/new` | Host listing CRUD |
 | `/listings/[id]` | Listing detail (authorized viewers) |
 | `/invite/[token]` | Invitation landing |
@@ -79,7 +88,7 @@ Guest confirms (API)        ──► POST /bookings/:id/fund ──► funded s
 
 ## Environment configuration
 
-See `.env.example`. Critical variables:
+See `.env` (not committed). Critical variables:
 
 - `DATABASE_URL`, `JWT_SECRET` — API
 - `NEXT_PUBLIC_API_URL` — web → API

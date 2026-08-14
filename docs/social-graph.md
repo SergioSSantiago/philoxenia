@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
+</p>
+
 # Social graph
 
 Friendships are **entirely off-chain**. They gate listing visibility and sharing permissions.
@@ -5,6 +9,7 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 ## Model
 
 - Users are identified by Starknet wallet address (normalized) and a display name.
+- Display names are shown to friends but **are not searchable**. Add someone by wallet address only.
 - Friendships are **mutual** — created when a friend request is accepted.
 - Stored as ordered pairs `(userAId, userBId)` to prevent duplicates.
 
@@ -23,7 +28,8 @@ Users cannot send duplicate pending requests to the same person or request thems
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/friends` | Friends + pending incoming/outgoing |
-| GET | `/friends/search?q=` | Search by display name or wallet (min 2 chars) |
+| GET | `/friends/search?q=` | Search by **wallet address only** (min 2 chars) |
+| PATCH | `/users/me` | Update display name (1–64 chars) |
 | POST | `/friends/request` | Send request `{ toUserId }` |
 | POST | `/friends/accept/:id` | Accept incoming request |
 | POST | `/friends/reject/:id` | Reject incoming request |
@@ -58,7 +64,7 @@ When a guest opens an invite but is not yet friends with the host:
 | Feature | Status |
 |---------|--------|
 | Friend requests + friendships | Implemented |
-| Search users | Implemented |
+| Search users | Implemented (wallet address only) |
 | On-chain social graph | Not planned for MVP |
 | Block lists / privacy controls | Not implemented |
 

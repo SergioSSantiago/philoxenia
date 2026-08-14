@@ -1,5 +1,6 @@
 import type { Listing, Booking, User } from "@philoxenia/shared";
 import Link from "next/link";
+import { WalletAddress } from "@/components/wallet-address";
 
 export function ListingCard({ listing }: { listing: Listing }) {
   const photo = listing.photos[0];
@@ -7,7 +8,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
   return (
     <Link
       href={`/listings/${listing.id}`}
-      className="group block overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition hover:shadow-md"
+      className="group block overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition hover:shadow-md touch-manipulation"
     >
       <div className="aspect-[4/3] bg-accent-soft/40">
         {photo ? (
@@ -33,7 +34,14 @@ export function ListingCard({ listing }: { listing: Listing }) {
           <span className="text-muted"> / night</span>
         </p>
         {listing.host && (
-          <p className="mt-2 text-xs text-muted">Host: {listing.host.displayName}</p>
+          <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">
+            <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent">
+              Host
+            </span>
+            <span className="text-sm font-medium text-foreground">
+              {listing.host.displayName}
+            </span>
+          </div>
         )}
       </div>
     </Link>
@@ -44,10 +52,10 @@ export function BookingCard({ booking }: { booking: Booking }) {
   return (
     <Link
       href={`/bookings/${booking.id}`}
-      className="block rounded-xl border border-border bg-surface p-5 transition hover:shadow-sm"
+      className="block rounded-xl border border-border bg-surface p-5 transition hover:shadow-sm touch-manipulation"
     >
       <div className="flex items-start justify-between gap-4">
-        <div>
+        <div className="min-w-0">
           <h3 className="text-lg">
             {booking.listing?.title ?? "Booking"}
           </h3>
@@ -60,7 +68,7 @@ export function BookingCard({ booking }: { booking: Booking }) {
             nights
           </p>
         </div>
-        <span className="rounded-full bg-accent-soft px-3 py-1 text-xs capitalize text-accent">
+        <span className="shrink-0 rounded-full bg-accent-soft px-3 py-1 text-xs capitalize text-accent">
           {booking.status}
         </span>
       </div>
@@ -76,14 +84,20 @@ export function UserRow({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
-      <div>
-        <p className="font-medium">{user.displayName}</p>
-        <p className="text-xs text-muted font-mono">
-          {user.walletAddress.slice(0, 10)}…{user.walletAddress.slice(-6)}
-        </p>
+    <div className="rounded-xl border border-border px-4 py-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <p className="font-medium text-foreground">{user.displayName}</p>
+          <div className="mt-2">
+            <WalletAddress address={user.walletAddress} compact />
+          </div>
+        </div>
+        {action && (
+          <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
+            {action}
+          </div>
+        )}
       </div>
-      {action}
     </div>
   );
 }

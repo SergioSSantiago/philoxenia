@@ -66,6 +66,30 @@ export async function registerRoutes(app: FastifyInstance) {
     }
   );
 
+  app.patch(
+    "/users/me",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const body = z
+        .object({
+          displayName: z.string().min(1).max(64),
+        })
+        .parse(request.body);
+
+      try {
+        const user = await social.updateUserDisplayName(
+          request.user.userId,
+          body.displayName
+        );
+        return reply.send(user);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Failed to update profile";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
   app.get("/home", { preHandler: [authenticate] }, async (request) => {
     return social.getHomeData(request.user.userId);
   });

@@ -15,7 +15,7 @@ export default function BookingsPage() {
 
   useEffect(() => {
     if (!token) {
-      router.replace("/auth");
+      router.replace("/home");
       return;
     }
     api.get<Booking[]>("/bookings").then(setBookings);

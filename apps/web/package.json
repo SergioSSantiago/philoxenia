@@ -14,9 +14,11 @@
     "@starknet-react/chains": "^5.0.3",
     "@starknet-react/core": "^5.0.3",
     "next": "15.5.23",
+    "qrcode.react": "^4.2.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "starknet": "^7.6.4"
+    "starknet": "^8.9.2",
+    "starknetkit": "^3.4.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -26,6 +28,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.23",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

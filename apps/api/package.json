@@ -14,18 +14,19 @@
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
+    "db:migrate:prod": "tsx --env-file=../../.env.production.api src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
-    "@philoxenia/shared": "*",
     "@fastify/cors": "^10.0.2",
     "@fastify/jwt": "^9.0.4",
     "@fastify/multipart": "^9.0.3",
+    "@philoxenia/shared": "*",
     "@vercel/node": "^5.1.14",
     "drizzle-orm": "^0.39.3",
     "fastify": "^5.2.1",
     "postgres": "^3.4.5",
-    "starknet": "^7.6.4",
+    "starknet": "^8.9.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {
