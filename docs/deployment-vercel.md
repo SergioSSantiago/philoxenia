@@ -10,7 +10,7 @@ https://github.com/SergioSSantiago/philoxenia
 
 | Servicio | URL |
 |----------|-----|
-| Web | https://philoxenia.vercel.app |
+| Web | https://philoxenia-iota.vercel.app |
 | API | https://philoxenia-api.vercel.app |
 
 ## Proyectos Vercel (monorepo)
