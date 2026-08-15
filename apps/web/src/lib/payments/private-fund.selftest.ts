@@ -1,9 +1,10 @@
 /**
- * Unit checks for private fund: never silent-public, anonymizer calldata shape.
+ * Unit checks for private fund: wallet-felt encoding + anonymizer calldata shape.
  * Run: npx tsx apps/web/src/lib/payments/private-fund.selftest.ts
  */
 import { CallData, cairo } from "starknet";
 import assert from "node:assert/strict";
+import { toWalletCalldata, toWalletFelt } from "./private-escrow-fund";
 
 const ESCROW =
   "0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3";
@@ -30,12 +31,25 @@ const compiled = CallData.compile({
   connector_reward_bps: 0,
 });
 
-const calldata = [...compiled, "${openNoteIds[0]}"];
+// Decimal strings from CallData.compile must be rejected by the wallet path.
+assert.ok(
+  compiled.some((v) => typeof v === "string" && !String(v).startsWith("0x")),
+  "CallData.compile should produce decimal strings (why we re-encode)"
+);
+
+const calldata = toWalletCalldata([...compiled, "${openNoteIds[0]}"]);
 
 assert.equal(calldata[calldata.length - 1], "${openNoteIds[0]}");
 assert.ok(calldata.length >= 10, "expected full privacy_invoke args");
-assert.equal(BigInt(String(calldata[0])), BigInt(ESCROW));
-assert.equal(BigInt(String(calldata[1])), BigInt(TOKEN));
+assert.equal(BigInt(calldata[0]), BigInt(ESCROW));
+assert.equal(BigInt(calldata[1]), BigInt(TOKEN));
+for (const item of calldata) {
+  if (item.startsWith("${")) continue;
+  assert.match(item, /^0x[0-9a-f]+$/i, `felt must be 0x-hex: ${item}`);
+}
+
+assert.equal(toWalletFelt("1000"), "0x3e8");
+assert.equal(toWalletFelt("${openNoteIds[0]}"), "${openNoteIds[0]}");
 
 const actions = [
   { type: "transfer", token: TOKEN, amount: "OPEN", recipient: GUEST },
@@ -48,5 +62,6 @@ assert.ok(!actions.some((a) => a.type === "withdraw"));
 
 console.log("private-fund.selftest OK", {
   invokeCalldataLen: calldata.length,
+  sampleFelt: calldata[0],
   actions: actions.map((a) => a.type),
 });

@@ -50,10 +50,11 @@ export type FundPrivacyPreference = "private" | "public";
 /**
  * STRK20 privacy provider (WalletAccountV6).
  *
- * fundBooking preference:
- * 1. Team anonymizer (`NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS`) if set
- * 2. Else shadow-account path (private balance → escrow) when wallet STRK20-capable
- * 3. Else public ERC-20
+ * fundBooking (when Private selected):
+ * 1. Team anonymizer (`NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS`) — OPEN + invoke
+ * 2. Optional shadow fallback only if `NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1`
+ *    (Ready currently lacks shadow commitment)
+ * 3. Never silent public fallback
  *
  * @see https://strk20-by-example.org/starknet-wallet-api/private-defi
  * @see STRK20_INTEGRATION_PLAN.md
@@ -217,26 +218,37 @@ export class Strk20PaymentProvider implements PaymentProvider {
         };
       } catch (err) {
         privateErrors.push(
-          err instanceof Error ? err.message : "anonymizer failed"
+          `anonymizer: ${err instanceof Error ? err.message : "failed"}`
         );
       }
     }
 
-    // Still private: shadow-account path if anonymizer is unavailable/fails.
-    try {
-      const { transaction_hash } = await fundBookingViaShadowAccount(
-        session.account,
-        params
-      );
-      return {
-        status: "pending",
-        txHash: transaction_hash,
-        privacyMode: "private",
-      };
-    } catch (err) {
-      privateErrors.push(
-        err instanceof Error ? err.message : "shadow account failed"
-      );
+    // Ready currently rejects wallet_strk20ShadowAccountCommitment — do not
+    // call it after anonymizer failure (second confusing error). Re-enable when
+    // wallets expose shadow accounts.
+    if (process.env.NEXT_PUBLIC_STRK20_SHADOW_FALLBACK === "1") {
+      try {
+        const { transaction_hash } = await fundBookingViaShadowAccount(
+          session.account,
+          params
+        );
+        return {
+          status: "pending",
+          txHash: transaction_hash,
+          privacyMode: "private",
+        };
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        if (
+          /wallet_strk20ShadowAccountCommitment|Unknown request type/i.test(msg)
+        ) {
+          privateErrors.push(
+            "shadow: Ready does not support shadow accounts yet"
+          );
+        } else {
+          privateErrors.push(`shadow: ${msg}`);
+        }
+      }
     }
 
     throw new Error(

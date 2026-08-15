@@ -26,9 +26,27 @@ function parseAmount(amount: string): bigint {
   return BigInt(whole + padded);
 }
 
+/**
+ * Wallet API FELTs must be 0x-hex. CallData.compile returns decimal strings,
+ * which Ready rejects as INVALID_REQUEST_PAYLOAD.
+ */
+export function toWalletFelt(value: string | number | bigint): string {
+  if (typeof value === "string" && value.startsWith("${")) return value;
+  return `0x${BigInt(value).toString(16)}`;
+}
+
+export function toWalletCalldata(
+  items: ReadonlyArray<string | number | bigint>
+): string[] {
+  return items.map(toWalletFelt);
+}
+
 function toUint256Parts(value: bigint): { low: string; high: string } {
   const u = uint256.bnToUint256(value);
-  return { low: u.low.toString(), high: u.high.toString() };
+  return {
+    low: toWalletFelt(u.low.toString()),
+    high: toWalletFelt(u.high.toString()),
+  };
 }
 
 let cachedClassHash: string | null = null;
@@ -78,34 +96,40 @@ function escrowFundCalls(params: FundBookingParams, amount: bigint): Call[] {
     {
       contractAddress: params.tokenAddress,
       entrypoint: "approve",
-      calldata: [params.escrowAddress, low, high],
+      calldata: [toWalletFelt(params.escrowAddress), low, high],
     },
     {
       contractAddress: params.escrowAddress,
       entrypoint: "create_booking",
-      calldata: CallData.compile({
-        booking_id: cairo.uint256(bookingId),
-        listing_id: cairo.uint256(listingId),
-        host: params.hostAddress,
-        guest: params.guestAddress,
-        connector,
-        total_amount: cairo.uint256(amount),
-        connector_reward_bps: rewardBps,
-      }),
+      calldata: toWalletCalldata(
+        CallData.compile({
+          booking_id: cairo.uint256(bookingId),
+          listing_id: cairo.uint256(listingId),
+          host: params.hostAddress,
+          guest: params.guestAddress,
+          connector,
+          total_amount: cairo.uint256(amount),
+          connector_reward_bps: rewardBps,
+        })
+      ),
     },
     {
       contractAddress: params.escrowAddress,
       entrypoint: "fund_booking",
-      calldata: CallData.compile({
-        booking_id: cairo.uint256(bookingId),
-      }),
+      calldata: toWalletCalldata(
+        CallData.compile({
+          booking_id: cairo.uint256(bookingId),
+        })
+      ),
     },
     {
       contractAddress: params.escrowAddress,
       entrypoint: "settle_booking",
-      calldata: CallData.compile({
-        booking_id: cairo.uint256(bookingId),
-      }),
+      calldata: toWalletCalldata(
+        CallData.compile({
+          booking_id: cairo.uint256(bookingId),
+        })
+      ),
     },
   ];
 }
@@ -125,15 +149,15 @@ export async function fundBookingViaShadowAccount(
   const actions: STRK20_ACTION[] = [
     {
       type: "withdraw",
-      token: params.tokenAddress,
+      token: toWalletFelt(params.tokenAddress),
       amount: hexAmount,
-      recipient: shadow,
+      recipient: toWalletFelt(shadow),
     },
     {
       type: "transfer",
-      token: params.tokenAddress,
+      token: toWalletFelt(params.tokenAddress),
       amount: "OPEN",
-      recipient: params.guestAddress,
+      recipient: toWalletFelt(params.guestAddress),
     },
     {
       type: "shadow_account_invoke",
@@ -173,14 +197,14 @@ export async function fundBookingViaAnonymizer(
   const actions: STRK20_ACTION[] = [
     {
       type: "transfer",
-      token: params.tokenAddress,
+      token: toWalletFelt(params.tokenAddress),
       amount: "OPEN",
-      recipient: params.guestAddress,
+      recipient: toWalletFelt(params.guestAddress),
     },
     {
       type: "invoke",
-      contract: anonymizer,
-      calldata: [
+      contract: toWalletFelt(anonymizer),
+      calldata: toWalletCalldata([
         ...CallData.compile({
           escrow: params.escrowAddress,
           token: params.tokenAddress,
@@ -193,7 +217,7 @@ export async function fundBookingViaAnonymizer(
           connector_reward_bps: rewardBps,
         }),
         "${openNoteIds[0]}",
-      ],
+      ]),
     },
   ];
 
