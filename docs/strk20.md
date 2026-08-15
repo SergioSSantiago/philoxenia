@@ -98,7 +98,7 @@ For production-grade private escrow, follow upstream guidance:
 
 1. Review [Private DeFi End to End](https://strk20-by-example.org/) and [Escrow anonymizer](https://strk20-by-example.org/) patterns
 2. Either adapt `BookingEscrow` to work through an anonymizer, or use wallet API open-note flows
-3. Wire settle/refund through privacy-aware paths
+3. Prefer private settlement splits when wallet APIs support them
 
 ## Related
 

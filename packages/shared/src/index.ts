@@ -117,6 +117,7 @@ export interface Booking {
   escrowBookingId: string | null;
   fundTxHash: string | null;
   settleTxHash: string | null;
+  refundTxHash: string | null;
   createdAt: string;
   listing?: Listing;
   host?: User;

@@ -579,6 +579,7 @@ function mapBooking(
     escrowBookingId: booking.escrowBookingId,
     fundTxHash: booking.fundTxHash,
     settleTxHash: booking.settleTxHash,
+    refundTxHash: booking.refundTxHash,
     createdAt: booking.createdAt.toISOString(),
     listing: relations?.listing
       ? mapListing(relations.listing)
@@ -676,6 +677,64 @@ export async function updateBookingPayment(
   });
 
   return getBookingById(bookingId, guestId);
+}
+
+/** Guest records on-chain settlement (host + connector + protocol paid). */
+export async function settleBooking(
+  bookingId: string,
+  guestId: string,
+  data: { settleTxHash: string }
+) {
+  const booking = await db.query.bookings.findFirst({
+    where: eq(schema.bookings.id, bookingId),
+  });
+
+  if (!booking || booking.guestId !== guestId) {
+    throw new Error("Booking not found");
+  }
+
+  if (booking.status !== "funded") {
+    throw new Error("Booking cannot be settled in current state");
+  }
+
+  await db
+    .update(schema.bookings)
+    .set({
+      status: "completed",
+      settleTxHash: data.settleTxHash,
+    })
+    .where(eq(schema.bookings.id, bookingId));
+
+  return getBookingById(bookingId, guestId);
+}
+
+/** Host records on-chain refund (full amount returned to guest). */
+export async function refundBooking(
+  bookingId: string,
+  hostId: string,
+  data: { refundTxHash: string }
+) {
+  const booking = await db.query.bookings.findFirst({
+    where: eq(schema.bookings.id, bookingId),
+  });
+
+  if (!booking || booking.hostId !== hostId) {
+    throw new Error("Booking not found");
+  }
+
+  if (booking.status !== "funded") {
+    throw new Error("Booking cannot be refunded in current state");
+  }
+
+  await db
+    .update(schema.bookings)
+    .set({
+      status: "refunded",
+      refundTxHash: data.refundTxHash,
+    })
+    .where(eq(schema.bookings.id, bookingId));
+
+  return getBookingById(bookingId, hostId);
 }
 
 export async function getBookingById(bookingId: string, userId: string) {

@@ -9,10 +9,10 @@ Bookings coordinate stay metadata off-chain and payment on-chain via escrow.
 ## Lifecycle
 
 ```
-pending ──fund──► funded ──[future: settle]──► completed
+pending ──fund──► funded ──settle──► completed
    │                  │
    └── cancel ──► cancelled
-                      └──[future: refund]──► refunded
+                      └──refund──► refunded
 ```
 
 | Status | Meaning |
@@ -20,11 +20,9 @@ pending ──fund──► funded ──[future: settle]──► completed
 | `pending` | Created; awaiting guest payment |
 | `funded` | Guest submitted payment tx hash |
 | `confirmed` | Reserved for post-settlement confirmation |
-| `completed` | Stay settled on-chain |
-| `cancelled` | Cancelled before funding |
-| `refunded` | Escrow returned to guest |
-
-**MVP note:** `confirmed`, `completed`, `cancelled`, and `refunded` statuses exist in schema but settle/refund/cancel flows are not wired in API or UI.
+| `completed` | Guest settled on-chain; host / connector / treasury paid |
+| `cancelled` | Cancelled before funding (API not wired yet) |
+| `refunded` | Host refunded on-chain; full amount returned to guest |
 
 ## Creating a booking
 
@@ -80,15 +78,45 @@ Guest pays via wallet on `/bookings/[id]`, then confirms:
 
 Updates booking to `funded` and inserts a `payments` row.
 
+## Settlement
+
+Guest (or contract owner) calls `settle_booking` on-chain, then confirms:
+
+**POST `/bookings/:id/settle`** (guest only)
+
+```json
+{
+  "settleTxHash": "0x…"
+}
+```
+
+Updates booking to `completed`. Pays host, connector (if any), and protocol treasury.
+
+## Refund
+
+Host (or contract owner) calls `refund_booking` on-chain, then confirms:
+
+**POST `/bookings/:id/refund`** (host only)
+
+```json
+{
+  "refundTxHash": "0x…"
+}
+```
+
+Updates booking to `refunded`. Returns full `total_amount` to the guest.
+
 ## On-chain booking ID
 
 The web derives an on-chain ID from the UUID:
 
 ```typescript
-BigInt(booking.id.replace(/-/g, "").slice(0, 16), 16).toString()
+BigInt(`0x${booking.id.replace(/-/g, "").slice(0, 16)}`).toString()
 ```
 
-This ID must match a `create_booking` call on `BookingEscrow` before `fund_booking` succeeds. The web payment multicall runs `create_booking` + `approve` + `fund_booking` in one Ready X transaction (guest is allowed to create their own booking on-chain).
+This ID is stored as `escrowBookingId` after funding. Settle and refund reuse it.
+
+The web payment multicall runs `create_booking` + `approve` + `fund_booking` in one Ready X transaction (guest is allowed to create their own booking on-chain).
 
 ## Reading bookings
 
@@ -96,21 +124,6 @@ This ID must match a `create_booking` call on `BookingEscrow` before `fund_booki
 |--------|------|--------|
 | GET | `/bookings` | Guest or host bookings for current user |
 | GET | `/bookings/:id` | Guest, host, or connector |
-
-## Settlement (contract only)
-
-On-chain `settle_booking`:
-
-- Caller: guest or contract owner
-- Transfers `host_amount` to host, `connector_amount` to connector
-- No UI or API endpoint yet
-
-## Refund (contract only)
-
-On-chain `refund_booking`:
-
-- Caller: host or contract owner
-- Returns full `total_amount` to guest
 
 ## Implementation status
 
@@ -120,8 +133,10 @@ On-chain `refund_booking`:
 | Date overlap check | Implemented |
 | Fund confirmation (API) | Implemented |
 | Pay button (web) | Implemented |
-| On-chain create before fund | **Not wired** |
-| Settle / refund (UI + API) | **Not implemented** |
+| On-chain create before fund | Implemented (multicall) |
+| Settle (UI + API) | Implemented |
+| Refund (UI + API) | Implemented |
+| Cancel before fund | Not implemented |
 
 ## Related
 

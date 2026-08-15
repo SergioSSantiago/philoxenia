@@ -90,10 +90,10 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution
 - Payment initiation (public ERC20 or STRK20 when wallet supports it)
+- Settle (guest) and refund (host) via Ready X + API confirmation
 
 **Requires further integration:**
 
-- Settle and refund flows in the app
 - Full STRK20 escrow path
 
 **On-chain (mainnet):** `BookingEscrow` at `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` — see [deploy-escrow.md](./deploy-escrow.md).

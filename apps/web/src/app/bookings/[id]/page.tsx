@@ -10,6 +10,11 @@ import { api } from "@/lib/api";
 import { createPaymentProvider } from "@/lib/payments/strk20-payment-provider";
 import { privacyLabel } from "@/lib/payments/payment-provider";
 import {
+  onChainIdFromUuid,
+  refundEscrowBooking,
+  settleEscrowBooking,
+} from "@/lib/payments/escrow-actions";
+import {
   STRK20_PRIVACY_ENABLED,
   tokenAddressForAsset,
 } from "@/lib/tokens";
@@ -22,7 +27,7 @@ export default function BookingDetailPage() {
   const { token, user } = useAuth();
   const { account, address } = useAccount();
   const [booking, setBooking] = useState<Booking | null>(null);
-  const [paying, setPaying] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [privacyMode, setPrivacyMode] = useState<"private" | "public">(
     "public"
@@ -39,20 +44,26 @@ export default function BookingDetailPage() {
       .catch(() => setError("Booking not found"));
   }, [token, params.id, router]);
 
+  function requireEscrow() {
+    if (!ESCROW) {
+      throw new Error(
+        "Escrow contract not configured. Deploy contracts locally and set NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS."
+      );
+    }
+  }
+
+  function resolveOnChainBookingId(b: Booking): string {
+    return b.escrowBookingId ?? onChainIdFromUuid(b.id);
+  }
+
   async function payBooking() {
     if (!booking || !account || !address) return;
 
-    if (!ESCROW) {
-      setError(
-        "Escrow contract not configured. Deploy contracts locally and set NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS."
-      );
-      return;
-    }
-
-    setPaying(true);
+    setBusy(true);
     setError("");
 
     try {
+      requireEscrow();
       const tokenAddress = tokenAddressForAsset(booking.paymentAsset);
 
       if (!tokenAddress) {
@@ -66,12 +77,8 @@ export default function BookingDetailPage() {
         STRK20_PRIVACY_ENABLED
       );
 
-      const onChainBookingId = BigInt(
-        `0x${booking.id.replace(/-/g, "").slice(0, 16)}`
-      ).toString();
-      const onChainListingId = BigInt(
-        `0x${booking.listingId.replace(/-/g, "").slice(0, 16)}`
-      ).toString();
+      const onChainBookingId = onChainIdFromUuid(booking.id);
+      const onChainListingId = onChainIdFromUuid(booking.listingId);
 
       if (!booking.host?.walletAddress) {
         throw new Error("Host wallet address missing on booking");
@@ -107,7 +114,59 @@ export default function BookingDetailPage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Payment failed");
     } finally {
-      setPaying(false);
+      setBusy(false);
+    }
+  }
+
+  async function settleBooking() {
+    if (!booking || !account) return;
+
+    setBusy(true);
+    setError("");
+
+    try {
+      requireEscrow();
+      const onChainBookingId = resolveOnChainBookingId(booking);
+      const settleTxHash = await settleEscrowBooking(
+        account,
+        ESCROW,
+        onChainBookingId
+      );
+      const updated = await api.post<Booking>(
+        `/bookings/${booking.id}/settle`,
+        { settleTxHash }
+      );
+      setBooking(updated);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Settle failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function refundBooking() {
+    if (!booking || !account) return;
+
+    setBusy(true);
+    setError("");
+
+    try {
+      requireEscrow();
+      const onChainBookingId = resolveOnChainBookingId(booking);
+      const refundTxHash = await refundEscrowBooking(
+        account,
+        ESCROW,
+        onChainBookingId
+      );
+      const updated = await api.post<Booking>(
+        `/bookings/${booking.id}/refund`,
+        { refundTxHash }
+      );
+      setBooking(updated);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Refund failed");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -128,6 +187,7 @@ export default function BookingDetailPage() {
   }
 
   const isGuest = user?.id === booking.guestId;
+  const isHost = user?.id === booking.hostId;
 
   return (
     <Shell>
@@ -202,21 +262,43 @@ export default function BookingDetailPage() {
             {privacyLabel(
               booking.status === "pending" ? privacyMode : "public"
             )}
-            {booking.fundTxHash && (
-              <span className="block mt-1 font-mono text-xs text-muted break-all">
-                Tx: {booking.fundTxHash}
-              </span>
-            )}
+            <span className="block mt-1 font-mono text-xs text-muted break-all">
+              Fund tx: {booking.fundTxHash}
+            </span>
+          </p>
+        )}
+
+        {booking.settleTxHash && (
+          <p className="text-sm font-mono text-xs text-muted break-all">
+            Settle tx: {booking.settleTxHash}
+          </p>
+        )}
+
+        {booking.refundTxHash && (
+          <p className="text-sm font-mono text-xs text-muted break-all">
+            Refund tx: {booking.refundTxHash}
           </p>
         )}
 
         {isGuest && booking.status === "pending" && (
-          <Button onClick={payBooking} disabled={paying || !account}>
-            {paying
+          <Button onClick={payBooking} disabled={busy || !account}>
+            {busy
               ? "Processing…"
               : booking.paymentAsset === "STRK" && STRK20_PRIVACY_ENABLED
                 ? "Pay with STRK (privacy)"
                 : `Pay with ${booking.paymentAsset}`}
+          </Button>
+        )}
+
+        {isGuest && booking.status === "funded" && (
+          <Button onClick={settleBooking} disabled={busy || !account}>
+            {busy ? "Settling…" : "Settle booking"}
+          </Button>
+        )}
+
+        {isHost && booking.status === "funded" && (
+          <Button onClick={refundBooking} disabled={busy || !account}>
+            {busy ? "Refunding…" : "Refund guest"}
           </Button>
         )}
 

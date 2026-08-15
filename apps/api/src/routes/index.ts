@@ -362,6 +362,54 @@ export async function registerRoutes(app: FastifyInstance) {
     }
   );
 
+  app.post(
+    "/bookings/:id/settle",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+      const body = z
+        .object({ settleTxHash: z.string().min(1) })
+        .parse(request.body);
+
+      try {
+        return await social.settleBooking(
+          params.id,
+          request.user.userId,
+          body
+        );
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Settle failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    "/bookings/:id/refund",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+      const body = z
+        .object({ refundTxHash: z.string().min(1) })
+        .parse(request.body);
+
+      try {
+        return await social.refundBooking(
+          params.id,
+          request.user.userId,
+          body
+        );
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Refund failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
   app.get(
     "/connector/earnings",
     { preHandler: [authenticate] },

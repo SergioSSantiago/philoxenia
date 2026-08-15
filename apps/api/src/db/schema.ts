@@ -205,6 +205,7 @@ export const bookings = pgTable("bookings", {
   escrowBookingId: text("escrow_booking_id"),
   fundTxHash: text("fund_tx_hash"),
   settleTxHash: text("settle_tx_hash"),
+  refundTxHash: text("refund_tx_hash"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

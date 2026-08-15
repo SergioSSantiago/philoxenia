@@ -81,9 +81,10 @@ Single production contract: `BookingEscrow` (`src/booking_escrow.cairo`).
 
 ```
 Guest creates booking (API) ──► pending status in PostgreSQL
-Guest clicks Pay (Web)      ──► wallet executes transfer
+Guest clicks Pay (Web)      ──► create_booking + approve + fund_booking
 Guest confirms (API)        ──► POST /bookings/:id/fund ──► funded status
-[Future] Guest settles      ──► settle_booking on-chain ──► completed
+Guest settles (Web)         ──► settle_booking on-chain ──► POST /settle ──► completed
+Host refunds (Web)          ──► refund_booking on-chain ──► POST /refund ──► refunded
 ```
 
 ## Environment configuration

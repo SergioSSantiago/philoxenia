@@ -79,7 +79,6 @@ After wallet execution, guest calls **POST `/bookings/:id/fund`**. The API inser
 |-----|--------|
 | No on-chain tx verification | API trusts client-reported hash |
 | STRK20 private transfer ≠ `fund_booking` | Escrow state may not update on private path |
-| No settle/refund in app | Funds remain in escrow after funding |
 
 ## Related
 
