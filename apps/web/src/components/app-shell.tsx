@@ -4,15 +4,16 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
+import { NotificationBell } from "@/components/notification-bell";
 import { useAuth } from "@/lib/auth-context";
 
 const NAV = [
   { href: "/home", label: "Home" },
   { href: "/friends", label: "Friends" },
+  { href: "/messages", label: "Messages" },
   { href: "/listings/new", label: "List your place" },
   { href: "/bookings", label: "Bookings" },
   { href: "/connector", label: "Earnings" },
-  { href: "/profile", label: "Profile" },
 ] as const;
 
 function NavLink({
@@ -101,12 +102,15 @@ export function Shell({
 
           <div className="flex items-center gap-2">
             {user ? (
-              <Link
-                href="/profile"
-                className="hidden max-w-[10rem] truncate rounded-full border border-border bg-background px-3 py-2 text-sm text-foreground sm:inline-block"
-              >
-                {user.displayName}
-              </Link>
+              <>
+                <NotificationBell />
+                <Link
+                  href="/profile"
+                  className="hidden max-w-[10rem] truncate rounded-full border border-border bg-background px-3 py-2 text-sm text-foreground sm:inline-block"
+                >
+                  {user.displayName}
+                </Link>
+              </>
             ) : (
               <button
                 type="button"

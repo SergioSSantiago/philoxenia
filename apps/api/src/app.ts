@@ -10,11 +10,16 @@ function parseCorsOrigins(): string[] | true {
 }
 
 export async function buildApp() {
-  const app = Fastify({ logger: process.env.NODE_ENV !== "production" });
+  const app = Fastify({
+    logger: process.env.NODE_ENV !== "production",
+    bodyLimit: 8 * 1024 * 1024,
+  });
 
   await app.register(cors, {
     origin: parseCorsOrigins(),
     credentials: true,
+    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   });
 
   await app.register(jwt, {

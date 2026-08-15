@@ -14,6 +14,7 @@ export {
   PROTOCOL_FEE_PERCENT_OF_CONNECTOR,
   percentToBps,
 } from "./fees.js";
+export { formatTokenAmount, formatDaiPrice } from "./format.js";
 
 export type BookingStatus =
   | "pending"
@@ -44,6 +45,53 @@ export interface FriendRequest {
   toUser?: User;
 }
 
+export type NotificationType =
+  | "friend_request"
+  | "friend_accepted"
+  | "friend_rejected"
+  | "friend_cancelled"
+  | "message"
+  | "transfer"
+  | "booking";
+
+export interface AppNotification {
+  id: string;
+  userId: string;
+  type: NotificationType | string;
+  title: string;
+  body: string;
+  href: string | null;
+  readAt: string | null;
+  createdAt: string;
+}
+
+export type MessageKind = "text" | "transfer" | "booking";
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  recipientId: string;
+  kind: MessageKind;
+  body: string;
+  asset: PaymentAsset | null;
+  amount: string | null;
+  txHash: string | null;
+  bookingId: string | null;
+  createdAt: string;
+  sender?: User;
+  recipient?: User;
+}
+
+export interface ChatThread {
+  friend: User;
+  lastMessage: ChatMessage | null;
+}
+
+export interface ChatConversation {
+  friend: User;
+  messages: ChatMessage[];
+}
+
 export interface Friendship {
   id: string;
   userAId: string;
@@ -59,13 +107,28 @@ export interface ListingAvailability {
   endDate: string;
 }
 
+export interface ListingAvailableDay {
+  id: string;
+  listingId: string;
+  /** YYYY-MM-DD night */
+  day: string;
+  pricePerNight: string;
+  /** True when a paid booking already occupies this night */
+  booked?: boolean;
+}
+
 export interface Listing {
   id: string;
   hostId: string;
   title: string;
   description: string;
   location: string;
+  /** WGS84 latitude when set via map picker. */
+  locationLat: string | null;
+  /** WGS84 longitude when set via map picker. */
+  locationLng: string | null;
   pricePerNight: string;
+  /** Unit of account for pricing is DAI; guests may pay in DAI or STRK. */
   paymentAsset: PaymentAsset;
   minStay: number;
   maxStay: number;
@@ -76,13 +139,24 @@ export interface Listing {
   updatedAt: string;
   host?: User;
   availability?: ListingAvailability[];
+  /** Per-night inventory with prices (preferred). */
+  availableDays?: ListingAvailableDay[];
+  /** Paid bookings that occupy dates (funded / confirmed / completed). */
+  bookedRanges?: {
+    bookingId: string;
+    checkIn: string;
+    checkOut: string;
+    nights: string[];
+    status: BookingStatus;
+  }[];
 }
 
 export interface ListingShare {
   id: string;
   listingId: string;
   hostId: string;
-  connectorId: string;
+  /** Null when the host shared (shareable link, no connector reward). */
+  connectorId: string | null;
   token: string;
   status: ShareStatus;
   expiresAt: string | null;
@@ -102,7 +176,14 @@ export interface Booking {
   checkIn: string;
   checkOut: string;
   nights: number;
+  /** Explicit nights paid for (YYYY-MM-DD); may be non-contiguous. */
+  selectedNights?: string[];
+  /** Amount funded on-chain in `paymentAsset` (STRK after FX). */
   totalPrice: string;
+  /** Listing total in DAI before FX. */
+  totalPriceDai: string | null;
+  /** STRK per 1 DAI at fund time. */
+  fxRate: string | null;
   /** Listing connector reward %, applied only when a connector is present. */
   connectorRewardPercent: number;
   /** Net amount paid to the connector after protocol take. */
@@ -123,6 +204,37 @@ export interface Booking {
   host?: User;
   guest?: User;
   connector?: User;
+}
+
+export interface BookingQuote {
+  listingId: string;
+  hostId: string;
+  checkIn: string;
+  checkOut: string;
+  selectedNights: string[];
+  nights: number;
+  pricePerNightDai: string;
+  totalPriceDai: string;
+  totalPriceStrk: string;
+  /** On-chain escrow asset the guest pays with (STRK or DAI). */
+  paymentAsset: PaymentAsset;
+  displayAsset: PaymentAsset;
+  fxRate: string;
+  fxUsdPerStrk: number | null;
+  fxUsdPerDai: number | null;
+  fxSource: string;
+  fxFetchedAt: string;
+  connectorId: string | null;
+  connectorWallet: string | null;
+  hasConnector: boolean;
+  connectorRewardPercent: number;
+  connectorRewardAmount: string;
+  protocolFeeAmount: string;
+  protocolFeePercent: number;
+  hostAmount: string;
+  totalPrice: string;
+  nightBreakdown: { day: string; pricePerNight: string }[];
+  note: string;
 }
 
 export interface Payment {
@@ -151,10 +263,14 @@ export interface CreateListingInput {
   title: string;
   description: string;
   location: string;
+  locationLat?: number | null;
+  locationLng?: number | null;
   pricePerNight: string;
-  paymentAsset: PaymentAsset;
-  minStay: number;
-  maxStay: number;
+  /** Optional listing default; pricing is DAI-denominated. Guests choose STRK or DAI when booking. */
+  paymentAsset?: PaymentAsset;
+  /** Optional; derived from availability when omitted. */
+  minStay?: number;
+  maxStay?: number;
   cancellationTerms: string;
   connectorRewardPercent: number;
   photos: string[];
@@ -165,18 +281,30 @@ export interface CreateBookingInput {
   listingId: string;
   checkIn: string;
   checkOut: string;
+  /** Guest-chosen settlement asset. */
+  paymentAsset?: PaymentAsset;
 }
 
 export interface InviteResolution {
   shareId: string;
   listingId: string;
   hostId: string;
-  connectorId: string;
+  /** Null when the host shared the link (no connector reward). */
+  connectorId: string | null;
+  hasConnector: boolean;
   host: User;
-  connector: User;
+  connector: User | null;
   canViewListing: boolean;
   friendshipRequired: boolean;
   friendshipPending: boolean;
+}
+
+export interface NetworkStats {
+  users: number;
+  countries: number;
+  transferredDai: string;
+  transferredStrk: string;
+  updatedAt: string;
 }
 
 export type PaymentCapability =

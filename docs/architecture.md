@@ -35,13 +35,24 @@ philoxenia/
 | `users` | Wallet address + display name |
 | `friend_requests` | Pending/accepted/rejected requests |
 | `friendships` | Bidirectional friend pairs (ordered UUID pair) |
-| `listings` | Host listings with pricing and connector reward |
-| `listing_availability` | Optional date ranges |
-| `listing_shares` | Opaque invite tokens |
+| `listings` | Host listings with DAI pricing, geo, connector reward |
+| `listing_availability` | Optional date ranges (legacy window) |
+| `listing_available_days` | Per-night inventory + per-night DAI price |
+| `listing_shares` | Opaque invite tokens (optional connector) |
 | `share_introductions` | Guest ↔ connector ↔ listing attribution |
-| `bookings` | Stay metadata, amounts, status, tx hashes |
+| `bookings` | Stay metadata, selected nights, FX, amounts, status, tx hashes |
 | `payments` | Payment records with privacy mode |
+| `notifications` | In-app notifications |
+| `direct_messages` | Friend chat + optional peer transfers |
 | `auth_nonces` | Wallet auth challenge nonces |
+
+### Public endpoints (no auth)
+
+| Route | Purpose |
+|-------|---------|
+| `GET /health` | Liveness |
+| `GET /rates/strk-dai` | Live STRK per DAI (CoinGecko) |
+| `GET /stats/network` | Landing totals: users, countries, DAI/STRK booked |
 
 ## Web (`apps/web`)
 
@@ -49,21 +60,22 @@ philoxenia/
 - **Wallet:** Ready X only on **desktop** (`@starknet-react/core` injected `argentX`). **Smartphone login is blocked** (Ready WalletConnect connect/sign deep-link does not complete reliably).
 - **State:** React context for auth (`auth-context.tsx`); JWT in localStorage
 - **API client:** `lib/api.ts` (Bearer JWT)
-- **Brand:** `components/brand-lockup.tsx` → `/`
+- **Brand:** `components/brand-lockup.tsx` → `/`; landing hero shows live `LandingNetworkStats`
 
 ### Key pages
 
 | Route | Purpose |
 |-------|---------|
-| `/` | Landing. Header brand links here |
+| `/` | Landing. Brand-first hero + live network stats; header brand links here |
 | `/home` | App home. If signed out, Ready X connect modal |
 | `/auth` | Legacy redirect to `/home` |
 | `/profile` | Display name, STRK/DAI balances, disconnect |
 | `/friends` | Friends; search by wallet address only |
-| `/my-listings`, `/listings/new` | Host listing CRUD |
+| `/messages`, `/messages/[friendId]` | Chat + voluntary peer DAI/STRK |
+| `/my-listings`, `/listings/new` | Host listing CRUD + map + availability calendar |
 | `/listings/[id]` | Listing detail (authorized viewers) |
 | `/invite/[token]` | Invitation landing |
-| `/bookings`, `/bookings/new`, `/bookings/[id]` | Booking flow + payment |
+| `/bookings`, `/bookings/new`, `/bookings/[id]` | Book nights (non-contiguous OK); pay STRK or DAI |
 | `/connector` | Connector earnings |
 
 ## Shared types (`packages/shared`)

@@ -50,23 +50,23 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 
 ## Core flow (acceptance scenario)
 
-1. Bob lists an apartment in Florence (150 STRK/night, 5% connector reward).
+1. Bob lists an apartment in Florence (**DAI**/night, 5% connector reward) and opens nights on the calendar.
 2. Alice (Bob's friend) shares the listing with Carlos via invite link.
 3. Carlos creates an account, requests friendship with Bob, Bob accepts.
-4. Carlos books 5 nights (750 STRK total).
-5. Carlos funds the booking via wallet.
-6. On settlement: Host 712.5 STRK, Connector 33.75 STRK, Philoxenia 3.75 STRK.
+4. Carlos selects nights (need not be consecutive) and pays in **STRK** (live FX) or **DAI** (1:1).
+5. Pay = fund + settle in one tx → host (+ connector) receive immediately; booking is `completed`.
+6. Cancel is social (Messages + voluntary peer return); nights are freed when marked cancelled.
 
 ## Fee model
 
 | Party | Fee |
-|-------|-----|
+|-------|------|
 | Direct host↔guest (no connector) | **0%** protocol |
 | Connector | Host-configured **% of booking total** (0–100%) |
 | Philoxenia | **10% of the connector reward** (not of the booking total) |
 | Host | Remainder after connector reward |
 
-Example with connector (750 STRK total, 5% connector reward):
+Example with connector (750 total, 5% connector reward) — amounts in the asset the guest paid:
 
 | Party | Amount |
 |-------|--------|

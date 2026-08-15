@@ -90,6 +90,8 @@ export const listings = pgTable("listings", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   location: text("location").notNull(),
+  locationLat: numeric("location_lat", { precision: 10, scale: 7 }),
+  locationLng: numeric("location_lng", { precision: 10, scale: 7 }),
   pricePerNight: numeric("price_per_night", { precision: 78, scale: 18 }).notNull(),
   paymentAsset: paymentAssetEnum("payment_asset").notNull(),
   minStay: integer("min_stay").notNull(),
@@ -114,6 +116,29 @@ export const listingAvailability = pgTable("listing_availability", {
   endDate: timestamp("end_date", { withTimezone: true }).notNull(),
 });
 
+/** Bookable nights with optional per-night DAI price (defaults to listing price). */
+export const listingAvailableDays = pgTable(
+  "listing_available_days",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    listingId: uuid("listing_id")
+      .notNull()
+      .references(() => listings.id, { onDelete: "cascade" }),
+    /** Calendar night (UTC date YYYY-MM-DD stored as timestamptz noon). */
+    day: timestamp("day", { withTimezone: true }).notNull(),
+    pricePerNight: numeric("price_per_night", {
+      precision: 78,
+      scale: 18,
+    }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("listing_available_days_listing_day_idx").on(
+      table.listingId,
+      table.day
+    ),
+  ]
+);
+
 export const listingShares = pgTable(
   "listing_shares",
   {
@@ -124,9 +149,9 @@ export const listingShares = pgTable(
     hostId: uuid("host_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    connectorId: uuid("connector_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+    connectorId: uuid("connector_id").references(() => users.id, {
+      onDelete: "cascade",
+    }),
     token: text("token").notNull(),
     status: shareStatusEnum("status").notNull().default("active"),
     expiresAt: timestamp("expires_at", { withTimezone: true }),
@@ -147,9 +172,10 @@ export const shareIntroductions = pgTable(
     guestId: uuid("guest_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    connectorId: uuid("connector_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+    /** Null when the host shared (no connector reward). */
+    connectorId: uuid("connector_id").references(() => users.id, {
+      onDelete: "cascade",
+    }),
     hostId: uuid("host_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -186,6 +212,8 @@ export const bookings = pgTable("bookings", {
   checkIn: timestamp("check_in", { withTimezone: true }).notNull(),
   checkOut: timestamp("check_out", { withTimezone: true }).notNull(),
   nights: integer("nights").notNull(),
+  /** Explicit stay nights (YYYY-MM-DD); may be non-contiguous. */
+  selectedNights: text("selected_nights").array().notNull().default([]),
   totalPrice: numeric("total_price", { precision: 78, scale: 18 }).notNull(),
   connectorRewardPercent: integer("connector_reward_percent").notNull(),
   connectorRewardAmount: numeric("connector_reward_amount", {
@@ -201,6 +229,10 @@ export const bookings = pgTable("bookings", {
   protocolFeePercent: integer("protocol_fee_percent").notNull().default(0),
   hostAmount: numeric("host_amount", { precision: 78, scale: 18 }).notNull(),
   paymentAsset: paymentAssetEnum("payment_asset").notNull(),
+  /** Listing-currency total (DAI) before FX. */
+  totalPriceDai: numeric("total_price_dai", { precision: 78, scale: 18 }),
+  /** STRK per 1 DAI at fund time (null when paid in DAI 1:1). */
+  fxRate: numeric("fx_rate", { precision: 78, scale: 18 }),
   status: bookingStatusEnum("status").notNull().default("pending"),
   escrowBookingId: text("escrow_booking_id"),
   fundTxHash: text("fund_tx_hash"),
@@ -239,4 +271,61 @@ export const authNonces = pgTable(
       .notNull(),
   },
   (table) => [index("auth_nonces_wallet_idx").on(table.walletAddress)]
+);
+
+export const notifications = pgTable(
+  "notifications",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").notNull(),
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    href: text("href"),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    index("notifications_user_idx").on(table.userId),
+    index("notifications_user_unread_idx").on(table.userId, table.readAt),
+  ]
+);
+
+export const messageKindEnum = pgEnum("message_kind", [
+  "text",
+  "transfer",
+  "booking",
+]);
+
+/** Direct messages between friends (text, peer transfers, booking notices). */
+export const directMessages = pgTable(
+  "direct_messages",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    senderId: uuid("sender_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    recipientId: uuid("recipient_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    kind: messageKindEnum("kind").notNull().default("text"),
+    body: text("body").notNull(),
+    asset: paymentAssetEnum("asset"),
+    amount: numeric("amount", { precision: 78, scale: 18 }),
+    txHash: text("tx_hash"),
+    bookingId: uuid("booking_id").references(() => bookings.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    index("direct_messages_pair_idx").on(table.senderId, table.recipientId),
+    index("direct_messages_recipient_idx").on(table.recipientId),
+  ]
 );

@@ -21,7 +21,24 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 | `accepted` | Becomes a friendship |
 | `rejected` | Closed; sender may request again later |
 
-Users cannot send duplicate pending requests to the same person or request themselves.
+Users cannot send duplicate pending requests to the same person or request themselves. The sender can **cancel** a pending request (`POST /friends/cancel/:id`). Incoming Accept/Reject update both parties via notifications.
+
+## Notifications
+
+In-app notifications (polled ~2.5s while the tab is visible) for friend request lifecycle:
+
+| Type | Recipient |
+|------|-----------|
+| `friend_request` | Target user |
+| `friend_accepted` | Original sender |
+| `friend_rejected` | Original sender |
+| `friend_cancelled` | Target user |
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/notifications` | List + unread count |
+| POST | `/notifications/:id/read` | Mark one read |
+| POST | `/notifications/read-all` | Mark all read |
 
 ## API endpoints
 
@@ -33,7 +50,9 @@ Users cannot send duplicate pending requests to the same person or request thems
 | POST | `/friends/request` | Send request `{ toUserId }` |
 | POST | `/friends/accept/:id` | Accept incoming request |
 | POST | `/friends/reject/:id` | Reject incoming request |
-| DELETE | `/friends/:id` | Remove friendship |
+| POST | `/friends/cancel/:id` | Cancel outgoing pending request |
+| POST | `/friends/remove/:id` | Remove friendship |
+| DELETE | `/friends/:id` | Remove friendship (legacy) |
 
 ## Authorization rules
 
@@ -44,7 +63,7 @@ Defined in `apps/api/src/lib/authorization.ts`:
 | View listing | Host, or friend of host |
 | Share listing | Host, or friend of host |
 | Book listing | Must be able to view listing |
-| Connector for booking | Recorded introduction where connector is still friend of host |
+| Connector for booking | Last invite opened for that listing; null if host shared or connector no longer friend of host |
 
 ## Discovery
 
@@ -55,9 +74,9 @@ Defined in `apps/api/src/lib/authorization.ts`:
 
 When a guest opens an invite but is not yet friends with the host:
 
-1. A `share_introductions` row links guest → connector → listing.
+1. A `share_introductions` row links guest → listing (connector if a friend shared; null if the host shared).
 2. Guest must send (and host must accept) a friend request before viewing/booking.
-3. After friendship, the connector attribution persists for booking reward calculation.
+3. After friendship, attribution from the last opened link persists for booking reward calculation.
 
 ## Implementation status
 
@@ -72,3 +91,4 @@ When a guest opens an invite but is not yet friends with the host:
 
 - [listings.md](./listings.md) — visibility rules
 - [invitations.md](./invitations.md) — connector flow
+- [messages.md](./messages.md) — friend chat + peer transfers

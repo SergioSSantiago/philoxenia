@@ -2,6 +2,7 @@
 
 import { Component, type ReactNode } from "react";
 import { useAccount, useBalance } from "@starknet-react/core";
+import { useAuth } from "@/lib/auth-context";
 import {
   DAI_TOKEN_ADDRESS,
   STRK20_PRIVACY_ENABLED,
@@ -36,20 +37,28 @@ function BalanceRow({
 
 function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
   const { address, isConnected } = useAccount();
+  const { user, connectWallet } = useAuth();
+
+  // Public ERC20 balances only need an address. Prefer the live Ready
+  // connection; fall back to the Philoxenia session wallet (JWT can outlive
+  // the connector when autoConnect is off or the extension slept).
+  const balanceAddress = (address ?? user?.walletAddress) as
+    | `0x${string}`
+    | undefined;
 
   const strk = useBalance({
-    address,
+    address: balanceAddress,
     token: STRK_TOKEN_ADDRESS as `0x${string}`,
-    enabled: isConnected && Boolean(address),
+    enabled: Boolean(balanceAddress),
   });
 
   const dai = useBalance({
-    address,
+    address: balanceAddress,
     token: DAI_TOKEN_ADDRESS as `0x${string}`,
-    enabled: isConnected && Boolean(address),
+    enabled: Boolean(balanceAddress),
   });
 
-  if (!isConnected || !address) {
+  if (!balanceAddress) {
     return (
       <p className="text-sm text-muted">
         Connect your wallet to see STRK and DAI balances.
@@ -58,13 +67,9 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
   }
 
   const strkAmount =
-    strk.data && !strk.error
-      ? `${strk.data.formatted} ${strk.data.symbol}`
-      : undefined;
+    strk.data && !strk.error ? strk.data.formatted : undefined;
   const daiAmount =
-    dai.data && !dai.error
-      ? `${dai.data.formatted} ${dai.data.symbol}`
-      : undefined;
+    dai.data && !dai.error ? dai.data.formatted : undefined;
 
   return (
     <div className={compact ? "space-y-2" : "space-y-3"}>
@@ -95,6 +100,19 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         loading={dai.isLoading}
         error={Boolean(dai.error)}
       />
+      {!isConnected && user && (
+        <p className="text-xs text-muted">
+          Showing balances for your Philoxenia account.{" "}
+          <button
+            type="button"
+            className="underline underline-offset-2 hover:text-foreground"
+            onClick={() => void connectWallet()}
+          >
+            Reconnect Ready X
+          </button>{" "}
+          to pay or settle.
+        </p>
+      )}
       {compact && STRK20_PRIVACY_ENABLED && (
         <p className="text-xs text-muted">STRK20 privacy enabled for STRK</p>
       )}

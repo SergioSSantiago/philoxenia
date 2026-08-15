@@ -20,6 +20,15 @@ The brand lockup always goes to **`/`** (the landing page), never `/home`.
 
 `/home` is the signed-in app. Unauthenticated visitors get a Ready X connect modal there.
 
+## Landing first viewport
+
+Before scroll, the landing shows only:
+
+1. **Philoxenia** lockup (oversized / centered)
+2. **Connect** (top right)
+3. Live network totals under the brand (`LandingNetworkStats`): users, countries with listings, DAI booked, STRK booked — polled from `GET /stats/network`
+
+Stats fade as the brand docks into the header on scroll.
 ## Wallet
 
 Philoxenia connects **Ready X** only via the **desktop browser extension**. Braavos is not supported.

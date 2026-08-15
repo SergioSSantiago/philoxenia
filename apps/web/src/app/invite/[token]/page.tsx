@@ -11,18 +11,26 @@ import { api } from "@/lib/api";
 export default function InvitePage() {
   const params = useParams<{ token: string }>();
   const router = useRouter();
-  const { user, token, connectWallet, signIn } = useAuth();
+  const { user, token, connectWallet, signIn, openSignIn } = useAuth();
   const [invite, setInvite] = useState<InviteResolution | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  async function loadInvite() {
+    const data = await api.get<InviteResolution>(`/invite/${params.token}`);
+    setInvite(data);
+    return data;
+  }
 
   useEffect(() => {
-    api
-      .get<InviteResolution>(`/invite/${params.token}`)
-      .then(setInvite)
+    setLoading(true);
+    loadInvite()
       .catch(() => setError("Invitation unavailable."))
       .finally(() => setLoading(false));
-  }, [params.token]);
+    // Re-resolve when the guest signs in so introduction + friendship state update
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.token, token]);
 
   useEffect(() => {
     if (invite?.canViewListing) {
@@ -30,14 +38,31 @@ export default function InvitePage() {
     }
   }, [invite, router]);
 
+  // While waiting for host to accept friendship, poll invite status
+  useEffect(() => {
+    if (!invite?.friendshipPending || invite.canViewListing) return;
+    const id = window.setInterval(() => {
+      loadInvite().catch(() => undefined);
+    }, 3000);
+    return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invite?.friendshipPending, invite?.canViewListing]);
+
   async function requestFriendship() {
-    if (!token) {
-      await connectWallet();
-      await signIn();
+    setBusy(true);
+    setError("");
+    try {
+      if (!token) {
+        openSignIn();
+        return;
+      }
+      await api.post("/friends/request", { toUserId: invite!.hostId });
+      await loadInvite();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Request failed");
+    } finally {
+      setBusy(false);
     }
-    await api.post("/friends/request", { toUserId: invite!.hostId });
-    const updated = await api.get<InviteResolution>(`/invite/${params.token}`);
-    setInvite(updated);
   }
 
   if (loading) {
@@ -48,7 +73,7 @@ export default function InvitePage() {
     );
   }
 
-  if (error || !invite) {
+  if ((error && !invite) || !invite) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <Card className="max-w-md text-center">
@@ -73,21 +98,36 @@ export default function InvitePage() {
           Invitation
         </p>
         <h1 className="mt-4 text-2xl sm:text-3xl">
-          {invite.connector.displayName} invited you
+          {invite.hasConnector && invite.connector
+            ? `${invite.connector.displayName} invited you`
+            : `${invite.host.displayName} shared a place with you`}
         </h1>
         <p className="mt-4 text-sm text-muted leading-relaxed sm:text-base">
-          A private place hosted by{" "}
+          Private listing hosted by{" "}
           <span className="font-medium text-foreground">
             {invite.host.displayName}
           </span>
-          . Request friendship with the host to view and book. Payment in STRK
-          or DAI only.
+          . You must be friends with the host to view and book.
+          {invite.hasConnector && invite.connector
+            ? " If you book through this link, the connector reward goes to their wallet."
+            : " This host link has no connector reward."}
         </p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <UserBadge user={invite.connector} role="Shared by" />
+          {invite.hasConnector && invite.connector ? (
+            <UserBadge user={invite.connector} role="Connector (reward wallet)" />
+          ) : (
+            <div className="rounded-xl border border-border bg-background p-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-muted">
+                Connector
+              </p>
+              <p className="mt-1 text-sm text-muted">None — host shared link</p>
+            </div>
+          )}
           <UserBadge user={invite.host} role="Host" />
         </div>
+
+        {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
 
         {!user ? (
           <div className="mt-8 space-y-3">
@@ -98,20 +138,26 @@ export default function InvitePage() {
                 await signIn();
               }}
             >
-              Create account & connect wallet
+              Connect wallet to continue
             </Button>
           </div>
         ) : invite.friendshipPending ? (
           <p className="mt-8 text-sm text-muted leading-relaxed">
-            Friendship request pending.{" "}
+            Friendship request sent to{" "}
             <span className="font-medium text-foreground">
               {invite.host.displayName}
-            </span>{" "}
-            must accept before you can view the listing.
+            </span>
+            . When they accept, this page will open the listing automatically.
           </p>
         ) : (
-          <Button className="mt-8 w-full" onClick={requestFriendship}>
-            Request friendship with {invite.host.displayName}
+          <Button
+            className="mt-8 w-full"
+            disabled={busy}
+            onClick={requestFriendship}
+          >
+            {busy
+              ? "Sending…"
+              : `Request friendship with ${invite.host.displayName}`}
           </Button>
         )}
       </Card>

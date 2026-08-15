@@ -4,79 +4,55 @@
 
 # Invitations
 
-Connectors introduce guests to host listings via **opaque share links**.
+Connectors introduce guests to host listings via **opaque share links**. Several people can share the same listing; each link carries its own connector.
 
 ## Flow
 
 ```
-Friend of host                Guest (stranger)
-      │                              │
-      ├── POST /listings/:id/share ──┤
-      │   (generates token)          │
-      │                              │
-      └── share URL /invite/:token ─► opens invite page
-                                       │
-                                       ├── creates share_introduction (if logged in)
-                                       ├── prompts friend request to host
-                                       └── after acceptance → can view + book
+Host or friend of host
+      │
+      ├── POST /listings/:id/share
+      │     host share  → connectorId = null (shareable, no reward)
+      │     friend share → connectorId = sharer (reward wallet)
+      │
+      └── /invite/:token ──► guest
+                               │
+                               ├── must be friend of host (or request friendship)
+                               ├── records share_introduction (last link wins)
+                               └── after friendship → view + book
 ```
+
+## Multi-connector attribution
+
+- Many active shares can exist for one listing (one per share action).
+- When a logged-in guest opens a link, `share_introductions` for `(guest, listing)` is **upserted** to that share’s connector (last-touch).
+- At booking, `resolveConnectorForBooking` reads that introduction:
+  - `connectorId` null (host link) → direct booking, 0% connector
+  - connector still friends with host → that connector earns the reward on settle
+  - connector no longer friends with host → treated as no connector
 
 ## Share link properties
 
 | Property | Value |
 |----------|-------|
-| Token | Cryptographically opaque (`generateOpaqueToken`) |
-| Expiry | 30 days from creation |
+| Token | Cryptographically opaque |
+| Expiry | 30 days |
 | Status | `active`, `expired`, or `revoked` |
-| URL format | `/invite/{token}` (web route) |
+| URL | `/invite/{token}` |
 
 ## API
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| POST | `/listings/:id/share` | Yes | Create share (connector must be host or friend) |
-| GET | `/invite/:token` | Optional | Resolve invite; records introduction if guest is logged in |
+| POST | `/listings/:id/share` | Yes | Create share; returns `hasConnector` |
+| GET | `/invite/:token` | Optional | Resolve invite; records introduction if logged in |
 
-### Invite resolution response
+## Invite gate
 
-```typescript
-{
-  shareId, listingId, hostId, connectorId,
-  host, connector,           // user objects
-  canViewListing,            // true if guest is already friend of host
-  friendshipRequired,        // true if not yet friends
-  friendshipPending          // true if request already sent
-}
-```
-
-## Connector attribution
-
-When a logged-in guest opens an invite and is **not** yet friends with the host:
-
-1. A `share_introductions` row is inserted (idempotent on guest + listing).
-2. This links `guestId`, `connectorId`, `hostId`, `listingId`.
-3. At booking time, `resolveConnectorForBooking` uses this record and verifies the connector is still friends with the host.
-
-If the connector unfriends the host before booking, the connector is invalidated and the booking proceeds **without** a connector (direct friends booking, 0% protocol fee).
-
-## Direct bookings (no connector)
-
-Friends of the host can view and book **without** opening a share link. In that case `connectorId` is null, connector reward is 0%, and Philoxenia takes 0%.
-
-## MVP limitations
-
-- Share revocation UI is not implemented (status can be set to `revoked` in DB manually).
-- Invite page works without auth but introduction is only recorded for logged-in users.
-
-## Implementation status
-
-| Feature | Status |
-|---------|--------|
-| Share creation | Implemented |
-| Token expiry | Implemented |
-| Introduction tracking | Implemented |
-| Guest onboarding UX | Implemented (web `/invite/[token]`) |
-| Email / SMS invites | Not implemented |
+1. Guest opens link.
+2. If already friends with host → listing opens.
+3. If not → request friendship with host; after accept, listing unlocks.
+4. Display name is cosmetic; rewards always go to the connector **wallet**.
 
 ## Related
 

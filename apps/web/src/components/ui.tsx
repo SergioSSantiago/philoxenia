@@ -8,6 +8,7 @@ export function Button({
   children,
   variant = "primary",
   className = "",
+  type = "button",
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "ghost";
@@ -21,6 +22,7 @@ export function Button({
 
   return (
     <button
+      type={type}
       className={`inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium transition touch-manipulation active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 ${styles[variant]} ${className}`}
       {...props}
     >

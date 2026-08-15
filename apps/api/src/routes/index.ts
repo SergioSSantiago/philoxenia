@@ -6,6 +6,10 @@ import {
   toUserResponse,
 } from "../services/auth.js";
 import * as social from "../services/social.js";
+import * as notifications from "../services/notifications.js";
+import * as chat from "../services/chat.js";
+import { getStrkPerDai } from "../services/rates.js";
+import { getNetworkStats } from "../services/stats.js";
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
@@ -16,6 +20,15 @@ declare module "@fastify/jwt" {
 
 export async function registerRoutes(app: FastifyInstance) {
   app.get("/health", async () => ({ status: "ok" }));
+
+  app.get("/stats/network", async () => getNetworkStats());
+
+  app.get("/rates/strk-dai", async (request) => {
+    const q = z
+      .object({ fresh: z.enum(["1", "true"]).optional() })
+      .parse(request.query ?? {});
+    return getStrkPerDai({ fresh: Boolean(q.fresh) });
+  });
 
   app.post("/auth/challenge", async (request, reply) => {
     const body = z
@@ -170,6 +183,79 @@ export async function registerRoutes(app: FastifyInstance) {
     }
   );
 
+  app.post(
+    "/friends/cancel/:id",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+
+      try {
+        return await social.cancelFriendRequest(
+          params.id,
+          request.user.userId
+        );
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Request failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    "/friends/remove/:id",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+
+      try {
+        return await social.removeFriend(request.user.userId, params.id);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Request failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.get(
+    "/notifications",
+    { preHandler: [authenticate] },
+    async (request) => {
+      const [items, unreadCount] = await Promise.all([
+        notifications.listNotifications(request.user.userId),
+        notifications.unreadNotificationCount(request.user.userId),
+      ]);
+      return { items, unreadCount };
+    }
+  );
+
+  app.post(
+    "/notifications/read-all",
+    { preHandler: [authenticate] },
+    async (request) => {
+      return notifications.markAllNotificationsRead(request.user.userId);
+    }
+  );
+
+  app.post(
+    "/notifications/:id/read",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+      const row = await notifications.markNotificationRead(
+        params.id,
+        request.user.userId
+      );
+      if (!row) return reply.status(404).send({ error: "Not found" });
+      return row;
+    }
+  );
+
   app.delete(
     "/friends/:id",
     { preHandler: [authenticate] },
@@ -211,6 +297,60 @@ export async function registerRoutes(app: FastifyInstance) {
     { preHandler: [authenticate] },
     async (request) => {
       return social.getMyListings(request.user.userId);
+    }
+  );
+
+  app.patch(
+    "/my-listings/:id/availability",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+      const body = z
+        .object({
+          availability: z
+            .array(
+              z.object({
+                startDate: z.string(),
+                endDate: z.string(),
+              })
+            )
+            .optional(),
+          days: z
+            .array(
+              z.object({
+                day: z.string(),
+                pricePerNight: z.string().min(1),
+              })
+            )
+            .optional(),
+        })
+        .parse(request.body);
+
+      try {
+        if (body.days) {
+          return await social.setListingAvailableDays(
+            params.id,
+            request.user.userId,
+            body.days
+          );
+        }
+        if (body.availability) {
+          return await social.updateListingAvailability(
+            params.id,
+            request.user.userId,
+            body.availability
+          );
+        }
+        return reply
+          .status(400)
+          .send({ error: "Provide days or availability" });
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Update availability failed";
+        return reply.status(400).send({ error: message });
+      }
     }
   );
 
@@ -285,28 +425,73 @@ export async function registerRoutes(app: FastifyInstance) {
   });
 
   app.post(
-    "/bookings",
+    "/bookings/quote",
     { preHandler: [authenticate] },
     async (request, reply) => {
       const body = z
         .object({
           listingId: z.string().uuid(),
-          checkIn: z.string(),
-          checkOut: z.string(),
+          nights: z.array(z.string()).min(1).optional(),
+          checkIn: z.string().optional(),
+          checkOut: z.string().optional(),
+          paymentAsset: z.enum(["STRK", "DAI"]).optional(),
         })
         .parse(request.body);
 
       try {
-        const booking = await social.createBooking(
+        return await social.quoteBooking(request.user.userId, body);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Quote failed";
+        const status = message.includes("unavailable") ? 404 : 400;
+        return reply.status(status).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    "/bookings/confirm",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const body = z
+        .object({
+          bookingId: z.string().uuid(),
+          listingId: z.string().uuid(),
+          nights: z.array(z.string()).min(1).optional(),
+          checkIn: z.string().optional(),
+          checkOut: z.string().optional(),
+          fundTxHash: z.string().min(1),
+          escrowBookingId: z.string().min(1),
+          privacyMode: z.enum(["private", "public"]).optional(),
+          paymentAsset: z.enum(["STRK", "DAI"]).optional(),
+          totalPrice: z.string().optional(),
+          totalPriceStrk: z.string().optional(),
+          fxRate: z.string().optional(),
+        })
+        .parse(request.body);
+
+      try {
+        const booking = await social.confirmPaidBooking(
           request.user.userId,
           body
         );
         return reply.status(201).send(booking);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Booking failed";
+        const message =
+          err instanceof Error ? err.message : "Confirm booking failed";
         const status = message.includes("unavailable") ? 404 : 400;
         return reply.status(status).send({ error: message });
       }
+    }
+  );
+
+  app.post(
+    "/bookings",
+    { preHandler: [authenticate] },
+    async (_request, reply) => {
+      return reply.status(400).send({
+        error:
+          "Bookings are created only after payment. Use POST /bookings/quote, pay on-chain, then POST /bookings/confirm.",
+      });
     }
   );
 
@@ -410,6 +595,46 @@ export async function registerRoutes(app: FastifyInstance) {
     }
   );
 
+  app.post(
+    "/bookings/:id/cancel-request",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+      try {
+        return await social.socialCancelBooking(
+          params.id,
+          request.user.userId
+        );
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Cancel failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    "/bookings/:id/social-cancel",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+      try {
+        return await social.socialCancelBooking(
+          params.id,
+          request.user.userId
+        );
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Cancel failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
   app.get(
     "/connector/earnings",
     { preHandler: [authenticate] },
@@ -417,28 +642,110 @@ export async function registerRoutes(app: FastifyInstance) {
       return social.getConnectorEarnings(request.user.userId);
     }
   );
+
+  app.get("/messages", { preHandler: [authenticate] }, async (request) => {
+    return chat.listMessageThreads(request.user.userId);
+  });
+
+  app.get(
+    "/messages/:friendId",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const { friendId } = request.params as { friendId: string };
+      try {
+        return await chat.getConversation(request.user.userId, friendId);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Conversation unavailable";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    "/messages/:friendId",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const { friendId } = request.params as { friendId: string };
+      const body = z
+        .object({ body: z.string().min(1).max(2000) })
+        .parse(request.body);
+      try {
+        return await chat.sendTextMessage(
+          request.user.userId,
+          friendId,
+          body.body
+        );
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Send failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    "/messages/:friendId/transfer",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const { friendId } = request.params as { friendId: string };
+      const body = z
+        .object({
+          amount: z.string().min(1),
+          asset: z.enum(["STRK", "DAI"]),
+          txHash: z.string().min(10),
+        })
+        .parse(request.body);
+      try {
+        return await chat.recordTransferMessage(
+          request.user.userId,
+          friendId,
+          body
+        );
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Transfer record failed";
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
 }
 
-const createListingSchema = z.object({
-  title: z.string().min(1).max(200),
-  description: z.string().min(1),
-  location: z.string().min(1),
-  pricePerNight: z.string().min(1),
-  paymentAsset: z.enum(["STRK", "DAI"]),
-  minStay: z.number().int().min(1),
-  maxStay: z.number().int().min(1),
-  cancellationTerms: z.string().min(1),
-  connectorRewardPercent: z.number().int().min(0).max(100),
-  photos: z.array(z.string()).default([]),
-  availability: z
-    .array(
-      z.object({
-        startDate: z.string(),
-        endDate: z.string(),
-      })
-    )
-    .default([]),
-});
+const createListingSchema = z
+  .object({
+    title: z.string().min(1).max(200),
+    description: z.string().min(1),
+    location: z.string().min(1).max(300),
+    locationLat: z.number().min(-90).max(90),
+    locationLng: z.number().min(-180).max(180),
+    pricePerNight: z.string().min(1),
+    paymentAsset: z.enum(["STRK", "DAI"]).optional(),
+    minStay: z.number().int().min(1).optional(),
+    maxStay: z.number().int().min(1).optional(),
+    cancellationTerms: z.string().min(1).max(2000),
+    connectorRewardPercent: z.number().int().min(0).max(100),
+    photos: z.array(z.string().min(1)).min(1).max(8),
+    availability: z
+      .array(
+        z.object({
+          startDate: z.string(),
+          endDate: z.string(),
+        })
+      )
+      .min(1),
+  })
+  .superRefine((data, ctx) => {
+    for (let i = 0; i < data.availability.length; i++) {
+      const start = new Date(data.availability[i].startDate);
+      const end = new Date(data.availability[i].endDate);
+      if (!(end > start)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Availability end must be after start",
+          path: ["availability", i, "endDate"],
+        });
+      }
+    }
+  });
 
 async function authenticate(request: FastifyRequest) {
   try {

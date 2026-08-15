@@ -34,7 +34,28 @@ export function calculateBookingAmounts(
 } {
   const price = BigInt(Math.round(parseFloat(pricePerNight) * 1e18));
   const total = price * BigInt(nights);
+  return splitTotalAmount(
+    total,
+    connectorRewardPercent,
+    hasConnector
+  );
+}
 
+/** Split an already-summed total (e.g. sum of per-night prices). */
+export function splitBookingTotal(
+  totalPrice: string,
+  connectorRewardPercent: number,
+  hasConnector: boolean
+) {
+  const total = BigInt(Math.round(parseFloat(totalPrice) * 1e18));
+  return splitTotalAmount(total, connectorRewardPercent, hasConnector);
+}
+
+function splitTotalAmount(
+  total: bigint,
+  connectorRewardPercent: number,
+  hasConnector: boolean
+) {
   const format = (value: bigint) =>
     (Number(value) / 1e18).toFixed(18).replace(/\.?0+$/, "");
 

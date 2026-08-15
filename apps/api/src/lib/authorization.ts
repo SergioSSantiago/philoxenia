@@ -57,11 +57,13 @@ export async function resolveConnectorForBooking(
   listingId: string,
   hostId: string
 ): Promise<string | null> {
-  const connector = await getConnectorForGuestListing(guestId, listingId);
-  if (!connector) return null;
+  const connectorId = await getConnectorForGuestListing(guestId, listingId);
+  if (!connectorId) return null;
+  // Host shares and self-attribution never earn connector reward
+  if (connectorId === hostId || connectorId === guestId) return null;
 
-  const isFriend = await areFriends(connector, hostId);
-  return isFriend ? connector : null;
+  const isFriend = await areFriends(connectorId, hostId);
+  return isFriend ? connectorId : null;
 }
 
 export async function getFriendIds(userId: string): Promise<string[]> {

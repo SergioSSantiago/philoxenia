@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
+import { LandingNetworkStats } from "@/components/landing-network-stats";
 import { Button } from "@/components/ui";
 
 function clamp(value: number, min: number, max: number) {
@@ -46,7 +47,9 @@ export function LandingFrame({ children }: { children: ReactNode }) {
       if (!slot) return;
       const slotBox = slot.getBoundingClientRect();
       const startX = window.innerWidth / 2 - (slotBox.width * HERO_SCALE) / 2;
-      const startY = window.innerHeight / 2 - (slotBox.height * HERO_SCALE) / 2;
+      // Keep brand slightly above true center so stats fit under it
+      const startY =
+        window.innerHeight * 0.42 - (slotBox.height * HERO_SCALE) / 2;
       const scale = HERO_SCALE + (1 - HERO_SCALE) * t;
 
       setStyle({
@@ -76,6 +79,7 @@ export function LandingFrame({ children }: { children: ReactNode }) {
   }, []);
 
   const docked = progress > 0.88;
+  const statsOpacity = Math.max(0, 1 - progress * 1.35);
 
   return (
     <div className="landing-wash min-h-screen bg-background">
@@ -104,21 +108,29 @@ export function LandingFrame({ children }: { children: ReactNode }) {
         </div>
       </header>
 
+      {/* Mobile first viewport: brand + live stats */}
       <div
-        className="flex h-[100svh] items-center justify-center px-5 md:hidden"
+        className="flex h-[100svh] flex-col items-center justify-center gap-10 px-5 md:hidden"
         style={{
           opacity: 1 - progress,
           pointerEvents: progress > 0.5 ? "none" : "auto",
         }}
       >
         <BrandLockup size="hero" />
+        <LandingNetworkStats />
       </div>
 
+      {/* Desktop brand (scroll-dock animation) */}
       <div
         className="pointer-events-auto fixed z-[60] hidden will-change-transform md:block"
         style={style}
       >
         <BrandLockup size="large" />
+      </div>
+
+      {/* Desktop stats sit under the oversized brand, fade on scroll */}
+      <div className="pointer-events-none fixed inset-x-0 top-[58%] z-[55] hidden -translate-y-1/2 px-6 md:block">
+        <LandingNetworkStats opacity={statsOpacity} />
       </div>
 
       <div className="hidden h-[100svh] md:block" aria-hidden />

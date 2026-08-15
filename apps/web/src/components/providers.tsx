@@ -4,6 +4,7 @@ import { sepolia, mainnet } from "@starknet-react/chains";
 import { StarknetConfig, jsonRpcProvider } from "@starknet-react/core";
 import type { ReactNode } from "react";
 import { AuthProvider } from "@/lib/auth-context";
+import { NotificationsProvider } from "@/lib/notifications-context";
 import { availableConnectors } from "@/lib/wallet-connectors";
 import { useMainnet } from "@/lib/starknet-config";
 import { publicMainnetRpcFallback } from "@philoxenia/shared";
@@ -36,9 +37,11 @@ export function Providers({ children }: { children: ReactNode }) {
       chains={[chain]}
       provider={provider}
       connectors={connectors}
-      autoConnect={false}
+      autoConnect
     >
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider>
+        <NotificationsProvider>{children}</NotificationsProvider>
+      </AuthProvider>
     </StarknetConfig>
   );
 }

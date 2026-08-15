@@ -1,4 +1,5 @@
 import type { Listing, Booking, User } from "@philoxenia/shared";
+import { formatDaiPrice, formatTokenAmount } from "@philoxenia/shared";
 import Link from "next/link";
 import { WalletAddress } from "@/components/wallet-address";
 
@@ -29,7 +30,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
         <p className="mt-1 text-sm text-muted">{listing.location}</p>
         <p className="mt-3 text-sm">
           <span className="font-medium text-foreground">
-            {listing.pricePerNight} {listing.paymentAsset}
+            {formatDaiPrice(listing.pricePerNight)}
           </span>
           <span className="text-muted"> / night</span>
         </p>
@@ -64,8 +65,8 @@ export function BookingCard({ booking }: { booking: Booking }) {
             {new Date(booking.checkOut).toLocaleDateString()}
           </p>
           <p className="mt-2 text-sm">
-            {booking.totalPrice} {booking.paymentAsset} · {booking.nights}{" "}
-            nights
+            {formatTokenAmount(booking.totalPrice)} {booking.paymentAsset} ·{" "}
+            {booking.nights} nights
           </p>
         </div>
         <span className="shrink-0 rounded-full bg-accent-soft px-3 py-1 text-xs capitalize text-accent">

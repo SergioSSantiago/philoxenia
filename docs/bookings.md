@@ -39,14 +39,30 @@ pending ──fund──► funded ──settle──► completed
 Validations:
 
 - Guest can view the listing (friend of host)
-- Stay length within `minStay` / `maxStay`
-- Connector is **optional**: if a share introduction exists and the connector is still friends with the host, they are attributed; otherwise direct booking
-- No overlapping `pending`, `funded`, or `confirmed` bookings for same dates
+- Nights chosen one-by-one from **per-night inventory** (need not be consecutive); per-night DAI prices; paid nights blocked
+- Total = sum of selected nightly prices; STRK amount via **live** spot FX at quote/pay time
+- **Pay settles immediately** (fund + settle in one tx) → host + connector + protocol paid now; booking status `completed`
+- Chat notice after payment
+- Cancel = social mark + Messages; any money return is **voluntary peer transfer** (not escrow refund)
+
+### Quote & confirm
+
+**POST `/bookings/quote`** / **POST `/bookings/confirm`** accept either:
+
+```json
+{ "listingId": "uuid", "nights": ["2026-09-01", "2026-09-03"] }
+```
+
+or legacy contiguous `checkIn` / `checkOut`. Confirm also requires `bookingId`, `fundTxHash`, `escrowBookingId`.
 
 ### Amount calculation
 
 ```
-totalPrice = pricePerNight × nights
+totalPriceDai = sum of selected nightly DAI prices
+# Guest picks payment asset at pay time:
+#   DAI  → totalPrice = totalPriceDai (1:1)
+#   STRK → totalPrice = totalPriceDai × live strkPerDai (CoinGecko)
+```
 
 # With connector (listing connectorRewardPercent, e.g. 5%):
 connectorGross = totalPrice × connectorRewardPercent / 100

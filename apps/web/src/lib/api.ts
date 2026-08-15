@@ -40,7 +40,8 @@ export class ApiClient {
   post<T>(path: string, body?: unknown) {
     return this.request<T>(path, {
       method: "POST",
-      body: body ? JSON.stringify(body) : undefined,
+      // Always send a JSON body — empty POST + application/json confuses some parsers.
+      body: JSON.stringify(body ?? {}),
     });
   }
 

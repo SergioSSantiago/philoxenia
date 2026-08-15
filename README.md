@@ -71,15 +71,15 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 
 ### Smart contract (Starknet mainnet)
 
-| | |
-|--|--|
-| **BookingEscrow** | [`0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd`](https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd) |
-| Network | Starknet **mainnet** |
-| Token | STRK |
-| Owner / protocol treasury | `0x04746642f27C03a5d3706205E8d6fbFEd30d18Ed6bE45584BB2df5a65388E878` |
-| Protocol fee | **10% of connector reward** (0% if no connector) |
+| | STRK escrow | DAI escrow |
+|--|-------------|------------|
+| **BookingEscrow** | [`0x0714…001bd`](https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd) | [`0x00dc…18004`](https://voyager.online/contract/0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004) |
+| Network | Starknet **mainnet** | same |
+| Token | STRK | DAI (StarkGate) |
+| Owner / protocol treasury | `0x047466…E878` | same |
+| Protocol fee | **10% of connector reward** (0% if no connector) | same |
 
-Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
+List prices are in **DAI**. Guests pay in **STRK** (live FX) or **DAI** (1:1). Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
 
 Repo: https://github.com/SergioSSantiago/philoxenia · Vercel guide: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
 

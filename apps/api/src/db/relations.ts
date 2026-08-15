@@ -31,9 +31,20 @@ export const listingsRelations = relations(schema.listings, ({ one, many }) => (
     references: [schema.users.id],
   }),
   availability: many(schema.listingAvailability),
+  availableDays: many(schema.listingAvailableDays),
   shares: many(schema.listingShares),
   bookings: many(schema.bookings),
 }));
+
+export const listingAvailableDaysRelations = relations(
+  schema.listingAvailableDays,
+  ({ one }) => ({
+    listing: one(schema.listings, {
+      fields: [schema.listingAvailableDays.listingId],
+      references: [schema.listings.id],
+    }),
+  })
+);
 
 export const listingSharesRelations = relations(
   schema.listingShares,
@@ -71,3 +82,23 @@ export const bookingsRelations = relations(schema.bookings, ({ one }) => ({
     references: [schema.users.id],
   }),
 }));
+
+export const directMessagesRelations = relations(
+  schema.directMessages,
+  ({ one }) => ({
+    sender: one(schema.users, {
+      fields: [schema.directMessages.senderId],
+      references: [schema.users.id],
+      relationName: "messageSender",
+    }),
+    recipient: one(schema.users, {
+      fields: [schema.directMessages.recipientId],
+      references: [schema.users.id],
+      relationName: "messageRecipient",
+    }),
+    booking: one(schema.bookings, {
+      fields: [schema.directMessages.bookingId],
+      references: [schema.bookings.id],
+    }),
+  })
+);

@@ -98,10 +98,19 @@ export class PublicPaymentProvider implements PaymentProvider {
       }),
     });
 
+    // Pay host + connector + protocol immediately (same tx). Cancel is social/manual.
+    calls.push({
+      contractAddress: params.escrowAddress,
+      entrypoint: "settle_booking",
+      calldata: CallData.compile({
+        booking_id: cairo.uint256(bookingId),
+      }),
+    });
+
     const { transaction_hash } = await this.account.execute(calls);
 
     return {
-      status: "pending",
+      status: "confirmed",
       txHash: transaction_hash,
       privacyMode: "public",
     };

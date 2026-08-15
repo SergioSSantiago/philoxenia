@@ -4,9 +4,14 @@
 
 # Smart contracts
 
-Philoxenia's on-chain surface is a single escrow contract for booking settlement.
+Philoxenia's on-chain surface is a single escrow **class** deployed once per payment token.
 
-**Mainnet address:** [`0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd`](https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd) — full deploy notes in [deploy-escrow.md](./deploy-escrow.md).
+| Escrow | Mainnet |
+|--------|---------|
+| STRK | [`0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd`](https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd) |
+| DAI | [`0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004`](https://voyager.online/contract/0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004) |
+
+Full deploy notes in [deploy-escrow.md](./deploy-escrow.md).
 
 ## BookingEscrow
 
@@ -19,7 +24,7 @@ Philoxenia's on-chain surface is a single escrow contract for booking settlement
 constructor(token: ContractAddress, owner: ContractAddress, protocol_treasury: ContractAddress)
 ```
 
-- `token` — ERC20 used for funding and settlement (e.g. STRK)
+- `token` — ERC20 used for funding and settlement (STRK or DAI per deployment)
 - `owner` — backup for settle/refund; may also create bookings
 - `protocol_treasury` — receives Philoxenia’s 10% of connector rewards
 

@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, desc, inArray, ne, gt, lt } from "drizzle-orm";
+import { eq, and, or, ilike, desc, asc, inArray, ne, gt, lt } from "drizzle-orm";
 import { db, schema } from "../db/index.js";
 import {
   areFriends,
@@ -10,10 +10,12 @@ import {
 import {
   generateOpaqueToken,
   orderedPair,
-  calculateBookingAmounts,
+  splitBookingTotal,
   daysBetween,
 } from "../lib/utils.js";
 import { toUserResponse } from "./auth.js";
+import { createNotification } from "./notifications.js";
+import { daiToStrk, getStrkPerDai } from "./rates.js";
 
 function mapListing(
   listing: typeof schema.listings.$inferSelect,
@@ -25,6 +27,8 @@ function mapListing(
     title: listing.title,
     description: listing.description,
     location: listing.location,
+    locationLat: listing.locationLat,
+    locationLng: listing.locationLng,
     pricePerNight: listing.pricePerNight,
     paymentAsset: listing.paymentAsset,
     minStay: listing.minStay,
@@ -107,10 +111,32 @@ export async function sendFriendRequest(fromUserId: string, toUserId: string) {
     throw new Error("Friend request already pending");
   }
 
+  const reverse = await db.query.friendRequests.findFirst({
+    where: and(
+      eq(schema.friendRequests.fromUserId, toUserId),
+      eq(schema.friendRequests.toUserId, fromUserId),
+      eq(schema.friendRequests.status, "pending")
+    ),
+  });
+  if (reverse) {
+    throw new Error(
+      "They already sent you a request — check Incoming requests"
+    );
+  }
+
   const [request] = await db
     .insert(schema.friendRequests)
     .values({ fromUserId, toUserId })
     .returning();
+
+  const fromUser = await getUserById(fromUserId);
+  await createNotification({
+    userId: toUserId,
+    type: "friend_request",
+    title: "New friend request",
+    body: `${fromUser?.displayName ?? "Someone"} wants to connect`,
+    href: "/friends",
+  });
 
   return request;
 }
@@ -139,7 +165,19 @@ export async function acceptFriendRequest(
       .set({ status: "accepted" })
       .where(eq(schema.friendRequests.id, requestId));
 
-    await tx.insert(schema.friendships).values({ userAId, userBId });
+    await tx
+      .insert(schema.friendships)
+      .values({ userAId, userBId })
+      .onConflictDoNothing();
+  });
+
+  const accepter = await getUserById(currentUserId);
+  await createNotification({
+    userId: request.fromUserId,
+    type: "friend_accepted",
+    title: "Friend request accepted",
+    body: `${accepter?.displayName ?? "Someone"} accepted your request`,
+    href: "/friends",
   });
 
   return { success: true };
@@ -157,25 +195,89 @@ export async function rejectFriendRequest(
     throw new Error("Friend request not found");
   }
 
+  if (request.status !== "pending") {
+    throw new Error("Friend request is not pending");
+  }
+
   await db
     .update(schema.friendRequests)
     .set({ status: "rejected" })
     .where(eq(schema.friendRequests.id, requestId));
 
+  const rejecter = await getUserById(currentUserId);
+  await createNotification({
+    userId: request.fromUserId,
+    type: "friend_rejected",
+    title: "Friend request declined",
+    body: `${rejecter?.displayName ?? "Someone"} declined your request`,
+    href: "/friends",
+  });
+
+  return { success: true };
+}
+
+/** Sender withdraws a pending outgoing request. */
+export async function cancelFriendRequest(
+  requestId: string,
+  currentUserId: string
+) {
+  const request = await db.query.friendRequests.findFirst({
+    where: eq(schema.friendRequests.id, requestId),
+  });
+
+  if (!request || request.fromUserId !== currentUserId) {
+    throw new Error("Friend request not found");
+  }
+
+  if (request.status !== "pending") {
+    throw new Error("Friend request is not pending");
+  }
+
+  await db
+    .delete(schema.friendRequests)
+    .where(eq(schema.friendRequests.id, requestId));
+
+  const sender = await getUserById(currentUserId);
+  await createNotification({
+    userId: request.toUserId,
+    type: "friend_cancelled",
+    title: "Friend request withdrawn",
+    body: `${sender?.displayName ?? "Someone"} cancelled their request`,
+    href: "/friends",
+  });
+
   return { success: true };
 }
 
 export async function removeFriend(currentUserId: string, friendId: string) {
+  if (currentUserId === friendId) {
+    throw new Error("Cannot remove yourself");
+  }
+
   const [userAId, userBId] = orderedPair(currentUserId, friendId);
 
-  await db
+  const deleted = await db
     .delete(schema.friendships)
     .where(
       and(
         eq(schema.friendships.userAId, userAId),
         eq(schema.friendships.userBId, userBId)
       )
-    );
+    )
+    .returning();
+
+  if (deleted.length === 0) {
+    throw new Error("Friendship not found");
+  }
+
+  const remover = await getUserById(currentUserId);
+  await createNotification({
+    userId: friendId,
+    type: "friend_removed",
+    title: "Friendship ended",
+    body: `${remover?.displayName ?? "Someone"} removed you as a friend`,
+    href: "/friends",
+  });
 
   return { success: true };
 }
@@ -233,16 +335,75 @@ export async function createListing(
     title: string;
     description: string;
     location: string;
+    locationLat?: number | null;
+    locationLng?: number | null;
     pricePerNight: string;
-    paymentAsset: "STRK" | "DAI";
-    minStay: number;
-    maxStay: number;
+    paymentAsset?: "STRK" | "DAI";
+    minStay?: number;
+    maxStay?: number;
     cancellationTerms: string;
     connectorRewardPercent: number;
     photos: string[];
     availability: { startDate: string; endDate: string }[];
   }
 ) {
+  if (!input.photos.length) {
+    throw new Error("Add at least one photo");
+  }
+  if (input.photos.length > 8) {
+    throw new Error("Maximum 8 photos");
+  }
+  for (const photo of input.photos) {
+    if (
+      !photo.startsWith("data:image/") &&
+      !photo.startsWith("https://") &&
+      !photo.startsWith("http://")
+    ) {
+      throw new Error("Photos must be uploaded images or https URLs");
+    }
+    if (photo.startsWith("data:image/") && photo.length > 900_000) {
+      throw new Error("A photo is too large — compress and try again");
+    }
+  }
+
+  if (
+    input.locationLat == null ||
+    input.locationLng == null ||
+    Number.isNaN(input.locationLat) ||
+    Number.isNaN(input.locationLng)
+  ) {
+    throw new Error("Pin the exact location on the map");
+  }
+  if (
+    input.locationLat < -90 ||
+    input.locationLat > 90 ||
+    input.locationLng < -180 ||
+    input.locationLng > 180
+  ) {
+    throw new Error("Invalid map coordinates");
+  }
+
+  if (input.availability.length === 0) {
+    throw new Error("Set an availability window");
+  }
+
+  let derivedMax = 1;
+  for (const window of input.availability) {
+    const start = new Date(window.startDate);
+    const end = new Date(window.endDate);
+    const nights = daysBetween(start, end);
+    if (nights < 1) {
+      throw new Error("Availability end must be after start");
+    }
+    derivedMax = Math.max(derivedMax, nights);
+  }
+
+  const minStay = input.minStay ?? 1;
+  const maxStay = input.maxStay ?? derivedMax;
+  if (minStay < 1 || maxStay < minStay) {
+    throw new Error("Invalid stay limits");
+  }
+
   const [listing] = await db
     .insert(schema.listings)
     .values({
@@ -250,10 +411,12 @@ export async function createListing(
       title: input.title,
       description: input.description,
       location: input.location,
+      locationLat: input.locationLat.toFixed(7),
+      locationLng: input.locationLng.toFixed(7),
       pricePerNight: input.pricePerNight,
-      paymentAsset: input.paymentAsset,
-      minStay: input.minStay,
-      maxStay: input.maxStay,
+      paymentAsset: input.paymentAsset ?? "DAI",
+      minStay,
+      maxStay,
       cancellationTerms: input.cancellationTerms,
       connectorRewardPercent: input.connectorRewardPercent,
       photos: input.photos,
@@ -268,9 +431,51 @@ export async function createListing(
         endDate: new Date(a.endDate),
       }))
     );
+
+    const dayRows: {
+      listingId: string;
+      day: Date;
+      pricePerNight: string;
+    }[] = [];
+    for (const window of input.availability) {
+      for (const day of nightsInWindow(window.startDate, window.endDate)) {
+        dayRows.push({
+          listingId: listing.id,
+          day: dayUtcNoon(day),
+          pricePerNight: input.pricePerNight,
+        });
+      }
+    }
+    if (dayRows.length > 0) {
+      await db.insert(schema.listingAvailableDays).values(dayRows);
+    }
   }
 
   return getListingForViewer(listing.id, hostId);
+}
+
+function dayUtcNoon(day: string): Date {
+  return new Date(`${day.slice(0, 10)}T12:00:00.000Z`);
+}
+
+function toDayKey(d: Date | string): string {
+  if (typeof d === "string") return d.slice(0, 10);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Nights in [start, end) — end is check-out day. */
+function nightsInWindow(startDate: string, endDate: string): string[] {
+  const start = toDayKey(startDate);
+  const end = toDayKey(endDate);
+  const out: string[] = [];
+  let cur = start;
+  while (cur < end) {
+    out.push(cur);
+    const d = dayUtcNoon(cur);
+    d.setUTCDate(d.getUTCDate() + 1);
+    cur = toDayKey(d);
+  }
+  return out;
 }
 
 export async function getListingForViewer(
@@ -304,6 +509,17 @@ export async function getListingForViewer(
     where: eq(schema.listingAvailability.listingId, listingId),
   });
 
+  const days = await db.query.listingAvailableDays.findMany({
+    where: eq(schema.listingAvailableDays.listingId, listingId),
+    orderBy: [asc(schema.listingAvailableDays.day)],
+  });
+
+  const bookedRanges = await getPaidBookedRanges(listingId);
+  const bookedNights = new Set<string>();
+  for (const b of bookedRanges) {
+    for (const n of b.nights) bookedNights.add(n);
+  }
+
   return {
     ...mapListing(listing, listing.host ?? undefined),
     availability: availability.map((a) => ({
@@ -312,7 +528,134 @@ export async function getListingForViewer(
       startDate: a.startDate.toISOString(),
       endDate: a.endDate.toISOString(),
     })),
+    availableDays: days.map((d) => ({
+      id: d.id,
+      listingId: d.listingId,
+      day: toDayKey(d.day),
+      pricePerNight: d.pricePerNight,
+      booked: bookedNights.has(toDayKey(d.day)),
+    })),
+    bookedRanges,
   };
+}
+
+/** Paid stays that occupy nights (social-cancelled frees them). */
+export async function getPaidBookedRanges(listingId: string) {
+  const rows = await db.query.bookings.findMany({
+    where: and(
+      eq(schema.bookings.listingId, listingId),
+      inArray(schema.bookings.status, ["funded", "confirmed", "completed"])
+    ),
+  });
+  return rows.map((b) => {
+    const nights =
+      b.selectedNights && b.selectedNights.length > 0
+        ? b.selectedNights.map(toDayKey)
+        : nightsInWindow(b.checkIn.toISOString(), b.checkOut.toISOString());
+    return {
+      bookingId: b.id,
+      checkIn: b.checkIn.toISOString(),
+      checkOut: b.checkOut.toISOString(),
+      nights,
+      status: b.status,
+    };
+  });
+}
+
+/**
+ * Host replaces available nights + per-night DAI prices. Add/remove freely;
+ * conflicts with paid stays are resolved with the guest in Messages.
+ */
+export async function setListingAvailableDays(
+  listingId: string,
+  hostId: string,
+  days: { day: string; pricePerNight: string }[]
+) {
+  const listing = await db.query.listings.findFirst({
+    where: eq(schema.listings.id, listingId),
+  });
+  if (!listing || listing.hostId !== hostId) {
+    throw new Error(LISTING_UNAVAILABLE);
+  }
+
+  const seen = new Set<string>();
+  const normalized: { day: string; pricePerNight: string }[] = [];
+  for (const row of days) {
+    const day = toDayKey(row.day);
+    if (seen.has(day)) continue;
+    seen.add(day);
+    const price = row.pricePerNight.trim();
+    if (!price || Number(price) <= 0) {
+      throw new Error(`Invalid price for ${day}`);
+    }
+    normalized.push({ day, pricePerNight: price });
+  }
+  normalized.sort((a, b) => a.day.localeCompare(b.day));
+  const maxStay = Math.max(1, normalized.length);
+
+  await db.transaction(async (tx) => {
+    await tx
+      .delete(schema.listingAvailableDays)
+      .where(eq(schema.listingAvailableDays.listingId, listingId));
+
+    if (normalized.length > 0) {
+      await tx.insert(schema.listingAvailableDays).values(
+        normalized.map((d) => ({
+          listingId,
+          day: dayUtcNoon(d.day),
+          pricePerNight: d.pricePerNight,
+        }))
+      );
+
+      const start = normalized[0].day;
+      const last = normalized[normalized.length - 1].day;
+      const endDate = dayUtcNoon(last);
+      endDate.setUTCDate(endDate.getUTCDate() + 1);
+      await tx
+        .delete(schema.listingAvailability)
+        .where(eq(schema.listingAvailability.listingId, listingId));
+      await tx.insert(schema.listingAvailability).values({
+        listingId,
+        startDate: dayUtcNoon(start),
+        endDate,
+      });
+    } else {
+      await tx
+        .delete(schema.listingAvailability)
+        .where(eq(schema.listingAvailability.listingId, listingId));
+    }
+
+    await tx
+      .update(schema.listings)
+      .set({
+        minStay: 1,
+        maxStay,
+        updatedAt: new Date(),
+      })
+      .where(eq(schema.listings.id, listingId));
+  });
+
+  return getListingForViewer(listingId, hostId);
+}
+
+export async function updateListingAvailability(
+  listingId: string,
+  hostId: string,
+  availability: { startDate: string; endDate: string }[]
+) {
+  const listing = await db.query.listings.findFirst({
+    where: eq(schema.listings.id, listingId),
+  });
+  if (!listing || listing.hostId !== hostId) {
+    throw new Error(LISTING_UNAVAILABLE);
+  }
+  const days: { day: string; pricePerNight: string }[] = [];
+  for (const w of availability) {
+    for (const day of nightsInWindow(w.startDate, w.endDate)) {
+      days.push({ day, pricePerNight: listing.pricePerNight });
+    }
+  }
+  return setListingAvailableDays(listingId, hostId, days);
 }
 
 export async function getMyListings(hostId: string) {
@@ -361,7 +704,7 @@ export async function getSharedWithMeListings(userId: string) {
 
 export async function createListingShare(
   listingId: string,
-  connectorId: string
+  sharerId: string
 ) {
   const listing = await db.query.listings.findFirst({
     where: eq(schema.listings.id, listingId),
@@ -372,7 +715,7 @@ export async function createListingShare(
   }
 
   const canShare = await canShareListing(
-    connectorId,
+    sharerId,
     listingId,
     listing.hostId
   );
@@ -380,6 +723,10 @@ export async function createListingShare(
   if (!canShare) {
     throw new Error("Not authorized to share this listing");
   }
+
+  // Host may share for discovery, but is never a connector (0% connector path).
+  // A friend who shares becomes the connector for guests who use that link.
+  const connectorId = sharerId === listing.hostId ? null : sharerId;
 
   const token = generateOpaqueToken();
   const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -400,6 +747,8 @@ export async function createListingShare(
     token: share.token,
     inviteUrl: `/invite/${share.token}`,
     expiresAt: share.expiresAt?.toISOString() ?? null,
+    hasConnector: connectorId !== null,
+    connectorId,
   };
 }
 
@@ -426,32 +775,46 @@ export async function resolveInvite(token: string, guestId?: string) {
   let friendshipPending = false;
 
   if (guestId) {
-    const isFriend = await areFriends(guestId, share.hostId);
-    canViewListing = isFriend;
-    friendshipRequired = !isFriend;
+    if (guestId === share.hostId) {
+      canViewListing = true;
+      friendshipRequired = false;
+    } else {
+      const isFriend = await areFriends(guestId, share.hostId);
+      canViewListing = isFriend;
+      friendshipRequired = !isFriend;
 
-    const pending = await db.query.friendRequests.findFirst({
-      where: and(
-        eq(schema.friendRequests.fromUserId, guestId),
-        eq(schema.friendRequests.toUserId, share.hostId),
-        eq(schema.friendRequests.status, "pending")
-      ),
-    });
+      const pending = await db.query.friendRequests.findFirst({
+        where: and(
+          eq(schema.friendRequests.fromUserId, guestId),
+          eq(schema.friendRequests.toUserId, share.hostId),
+          eq(schema.friendRequests.status, "pending")
+        ),
+      });
 
-    friendshipPending = !!pending;
-
-    if (!isFriend) {
-      await db
-        .insert(schema.shareIntroductions)
-        .values({
-          shareId: share.id,
-          guestId,
-          connectorId: share.connectorId,
-          hostId: share.hostId,
-          listingId: share.listingId,
-        })
-        .onConflictDoNothing();
+      friendshipPending = !!pending;
     }
+
+    // Always attribute the opened share (last-touch). Multiple connectors can
+    // share the same listing; the link the guest opens decides the connector.
+    await db
+      .insert(schema.shareIntroductions)
+      .values({
+        shareId: share.id,
+        guestId,
+        connectorId: share.connectorId,
+        hostId: share.hostId,
+        listingId: share.listingId,
+      })
+      .onConflictDoUpdate({
+        target: [
+          schema.shareIntroductions.guestId,
+          schema.shareIntroductions.listingId,
+        ],
+        set: {
+          shareId: share.id,
+          connectorId: share.connectorId,
+        },
+      });
   }
 
   return {
@@ -459,17 +822,266 @@ export async function resolveInvite(token: string, guestId?: string) {
     listingId: share.listingId,
     hostId: share.hostId,
     connectorId: share.connectorId,
+    hasConnector: share.connectorId !== null,
     host: toUserResponse(share.host!),
-    connector: toUserResponse(share.connector!),
+    connector: share.connector ? toUserResponse(share.connector) : null,
     canViewListing,
     friendshipRequired,
     friendshipPending,
   };
 }
 
-export async function createBooking(
+export async function quoteBooking(
   guestId: string,
-  input: { listingId: string; checkIn: string; checkOut: string }
+  input: {
+    listingId: string;
+    /** Preferred: explicit nights (may be non-contiguous). */
+    nights?: string[];
+    checkIn?: string;
+    checkOut?: string;
+    paymentAsset?: "STRK" | "DAI";
+  }
+) {
+  const prepared = await prepareBooking(guestId, input);
+  const fx = await getStrkPerDai({ fresh: true });
+  const totalPriceDai = prepared.amountsDai.totalPrice;
+  const totalPriceStrk = daiToStrk(totalPriceDai, fx.strkPerDai);
+  const amountsStrk = {
+    totalPrice: totalPriceStrk,
+    connectorRewardAmount: daiToStrk(
+      prepared.amountsDai.connectorRewardAmount,
+      fx.strkPerDai
+    ),
+    protocolFeeAmount: daiToStrk(
+      prepared.amountsDai.protocolFeeAmount,
+      fx.strkPerDai
+    ),
+    protocolFeePercent: prepared.amountsDai.protocolFeePercent,
+    hostAmount: daiToStrk(prepared.amountsDai.hostAmount, fx.strkPerDai),
+    connectorRewardPercentApplied:
+      prepared.amountsDai.connectorRewardPercentApplied,
+  };
+
+  const paymentAsset = input.paymentAsset === "DAI" ? "DAI" : "STRK";
+  const payAmounts =
+    paymentAsset === "DAI"
+      ? {
+          totalPrice: totalPriceDai,
+          connectorRewardAmount: prepared.amountsDai.connectorRewardAmount,
+          protocolFeeAmount: prepared.amountsDai.protocolFeeAmount,
+          protocolFeePercent: prepared.amountsDai.protocolFeePercent,
+          hostAmount: prepared.amountsDai.hostAmount,
+          connectorRewardPercentApplied:
+            prepared.amountsDai.connectorRewardPercentApplied,
+        }
+      : amountsStrk;
+
+  return {
+    listingId: prepared.listing.id,
+    hostId: prepared.listing.hostId,
+    checkIn: prepared.checkIn.toISOString(),
+    checkOut: prepared.checkOut.toISOString(),
+    selectedNights: prepared.selectedNights,
+    nights: prepared.nights,
+    pricePerNightDai: prepared.listing.pricePerNight,
+    totalPriceDai,
+    totalPriceStrk,
+    paymentAsset,
+    displayAsset: paymentAsset,
+    fxRate: String(fx.strkPerDai),
+    fxUsdPerStrk: fx.usdPerStrk,
+    fxUsdPerDai: fx.usdPerDai,
+    fxSource: fx.source,
+    fxFetchedAt: fx.fetchedAt,
+    connectorId: prepared.connectorId,
+    connectorWallet: prepared.connectorWallet,
+    hasConnector: prepared.hasConnector,
+    connectorRewardPercent: payAmounts.connectorRewardPercentApplied,
+    connectorRewardAmount: payAmounts.connectorRewardAmount,
+    protocolFeeAmount: payAmounts.protocolFeeAmount,
+    protocolFeePercent: payAmounts.protocolFeePercent,
+    hostAmount: payAmounts.hostAmount,
+    totalPrice: payAmounts.totalPrice,
+    nightBreakdown: prepared.nightBreakdown,
+    note:
+      paymentAsset === "DAI"
+        ? "List prices are DAI per night. Paying in DAI settles 1:1. Host + connector are paid immediately on pay."
+        : "List prices are DAI per night. STRK amount uses the live DAI/STRK market rate at quote time. Host + connector are paid immediately on pay.",
+  };
+}
+
+/**
+ * Creates a completed booking only after on-chain payment (fund+settle).
+ * Client generates `bookingId` before the escrow multicall so ids match.
+ */
+export async function confirmPaidBooking(
+  guestId: string,
+  input: {
+    bookingId: string;
+    listingId: string;
+    nights?: string[];
+    checkIn?: string;
+    checkOut?: string;
+    fundTxHash: string;
+    escrowBookingId: string;
+    privacyMode?: "private" | "public";
+    paymentAsset?: "STRK" | "DAI";
+    /** Amount actually funded on-chain in `paymentAsset`. */
+    totalPrice?: string;
+    /** @deprecated Prefer totalPrice; kept for STRK clients. */
+    totalPriceStrk?: string;
+    fxRate?: string;
+  }
+) {
+  const existing = await db.query.bookings.findFirst({
+    where: eq(schema.bookings.id, input.bookingId),
+  });
+  if (existing) {
+    throw new Error("Booking already exists");
+  }
+
+  const prepared = await prepareBooking(guestId, {
+    listingId: input.listingId,
+    nights: input.nights,
+    checkIn: input.checkIn,
+    checkOut: input.checkOut,
+  });
+
+  const paymentAsset = input.paymentAsset === "DAI" ? "DAI" : "STRK";
+  const totalPriceDai = prepared.amountsDai.totalPrice;
+  const paidInput = input.totalPrice ?? input.totalPriceStrk;
+
+  let totalPrice: string;
+  let fxRateUsed: string | null;
+  let amounts: {
+    connectorRewardAmount: string;
+    protocolFeeAmount: string;
+    protocolFeePercent: number;
+    hostAmount: string;
+    connectorRewardPercentApplied: number;
+  };
+
+  if (paymentAsset === "DAI") {
+    totalPrice = totalPriceDai;
+    if (paidInput && Number(paidInput) > 0) {
+      const paid = Number(paidInput);
+      const expected = Number(totalPriceDai);
+      if (expected > 0 && Math.abs(paid - expected) / expected > 0.01) {
+        throw new Error(
+          "DAI amount does not match the quote — refresh and try again"
+        );
+      }
+      totalPrice = paidInput;
+    }
+    fxRateUsed = "1";
+    amounts = {
+      connectorRewardAmount: prepared.amountsDai.connectorRewardAmount,
+      protocolFeeAmount: prepared.amountsDai.protocolFeeAmount,
+      protocolFeePercent: prepared.amountsDai.protocolFeePercent,
+      hostAmount: prepared.amountsDai.hostAmount,
+      connectorRewardPercentApplied:
+        prepared.amountsDai.connectorRewardPercentApplied,
+    };
+  } else {
+    const fx = await getStrkPerDai({ fresh: true });
+    const freshStrk = daiToStrk(totalPriceDai, fx.strkPerDai);
+    totalPrice = freshStrk;
+    fxRateUsed = String(fx.strkPerDai);
+    if (paidInput && Number(paidInput) > 0) {
+      const paid = Number(paidInput);
+      const fresh = Number(freshStrk);
+      if (fresh > 0 && Math.abs(paid - fresh) / fresh > 0.05) {
+        throw new Error(
+          "STRK amount drifted too far from the live rate — refresh quote and try again"
+        );
+      }
+      totalPrice = paidInput;
+      fxRateUsed =
+        input.fxRate && Number(input.fxRate) > 0
+          ? input.fxRate
+          : String(paid / Number(totalPriceDai));
+    }
+    const strkPerDai = Number(fxRateUsed);
+    amounts = {
+      connectorRewardAmount: daiToStrk(
+        prepared.amountsDai.connectorRewardAmount,
+        strkPerDai
+      ),
+      protocolFeeAmount: daiToStrk(
+        prepared.amountsDai.protocolFeeAmount,
+        strkPerDai
+      ),
+      protocolFeePercent: prepared.amountsDai.protocolFeePercent,
+      hostAmount: daiToStrk(prepared.amountsDai.hostAmount, strkPerDai),
+      connectorRewardPercentApplied:
+        prepared.amountsDai.connectorRewardPercentApplied,
+    };
+  }
+
+  const [booking] = await db
+    .insert(schema.bookings)
+    .values({
+      id: input.bookingId,
+      listingId: prepared.listing.id,
+      hostId: prepared.listing.hostId,
+      guestId,
+      connectorId: prepared.connectorId ?? null,
+      checkIn: prepared.checkIn,
+      checkOut: prepared.checkOut,
+      nights: prepared.nights,
+      selectedNights: prepared.selectedNights,
+      totalPrice,
+      totalPriceDai,
+      fxRate: fxRateUsed,
+      connectorRewardPercent: amounts.connectorRewardPercentApplied,
+      connectorRewardAmount: amounts.connectorRewardAmount,
+      protocolFeeAmount: amounts.protocolFeeAmount,
+      protocolFeePercent: amounts.protocolFeePercent,
+      hostAmount: amounts.hostAmount,
+      paymentAsset,
+      status: "completed",
+      fundTxHash: input.fundTxHash,
+      settleTxHash: input.fundTxHash,
+      escrowBookingId: input.escrowBookingId,
+    })
+    .returning();
+
+  await db.insert(schema.payments).values({
+    bookingId: booking.id,
+    amount: booking.totalPrice,
+    asset: paymentAsset,
+    txHash: input.fundTxHash,
+    privacyMode: input.privacyMode ?? "public",
+    status: "confirmed",
+  });
+
+  try {
+    const { postBookingChatNotice } = await import("./chat.js");
+    await postBookingChatNotice({
+      guestId,
+      hostId: prepared.listing.hostId,
+      bookingId: booking.id,
+      listingTitle: prepared.listing.title,
+      checkIn: booking.checkIn.toISOString(),
+      checkOut: booking.checkOut.toISOString(),
+      totalPrice: booking.totalPrice,
+      paymentAsset,
+    });
+  } catch {
+    // best-effort
+  }
+
+  return mapBooking(booking);
+}
+
+async function prepareBooking(
+  guestId: string,
+  input: {
+    listingId: string;
+    nights?: string[];
+    checkIn?: string;
+    checkOut?: string;
+  }
 ) {
   const listing = await db.query.listings.findFirst({
     where: eq(schema.listings.id, input.listingId),
@@ -489,12 +1101,57 @@ export async function createBooking(
     throw new Error(LISTING_UNAVAILABLE);
   }
 
-  const checkIn = new Date(input.checkIn);
-  const checkOut = new Date(input.checkOut);
-  const nights = daysBetween(checkIn, checkOut);
+  if (listing.hostId === guestId) {
+    throw new Error("You cannot book your own listing");
+  }
 
-  if (nights < listing.minStay || nights > listing.maxStay) {
-    throw new Error("Stay length is outside listing limits");
+  let nightKeys: string[];
+  if (input.nights && input.nights.length > 0) {
+    nightKeys = [...new Set(input.nights.map(toDayKey))].sort();
+  } else if (input.checkIn && input.checkOut) {
+    nightKeys = nightsInWindow(input.checkIn, input.checkOut);
+  } else {
+    throw new Error("Select at least one night");
+  }
+
+  if (nightKeys.length < 1) {
+    throw new Error("Select at least one night");
+  }
+
+  const checkInDay = nightKeys[0];
+  const checkOutDay = (() => {
+    const d = dayUtcNoon(nightKeys[nightKeys.length - 1]);
+    d.setUTCDate(d.getUTCDate() + 1);
+    return toDayKey(d);
+  })();
+  const checkIn = dayUtcNoon(checkInDay);
+  const checkOut = dayUtcNoon(checkOutDay);
+  const nights = nightKeys.length;
+
+  const dayRows = await db.query.listingAvailableDays.findMany({
+    where: eq(schema.listingAvailableDays.listingId, listing.id),
+  });
+  const dayMap = new Map(
+    dayRows.map((d) => [toDayKey(d.day), d.pricePerNight])
+  );
+
+  const nightBreakdown: { day: string; pricePerNight: string }[] = [];
+  let totalDaiNum = 0;
+  for (const day of nightKeys) {
+    const price = dayMap.get(day);
+    if (!price) {
+      throw new Error(`Night ${day} is not available`);
+    }
+    nightBreakdown.push({ day, pricePerNight: price });
+    totalDaiNum += Number(price);
+  }
+
+  const paid = await getPaidBookedRanges(listing.id);
+  const taken = new Set(paid.flatMap((b) => b.nights));
+  for (const day of nightKeys) {
+    if (taken.has(day)) {
+      throw new Error(`Night ${day} is already booked`);
+    }
   }
 
   const connectorId = await resolveConnectorForBooking(
@@ -502,52 +1159,51 @@ export async function createBooking(
     listing.id,
     listing.hostId
   );
-
   const hasConnector = Boolean(connectorId);
   const rewardPercent = hasConnector ? listing.connectorRewardPercent : 0;
-
-  const overlapping = await db.query.bookings.findFirst({
-    where: and(
-      eq(schema.bookings.listingId, listing.id),
-      inArray(schema.bookings.status, ["pending", "funded", "confirmed"]),
-      lt(schema.bookings.checkIn, checkOut),
-      gt(schema.bookings.checkOut, checkIn)
-    ),
-  });
-
-  if (overlapping) {
-    throw new Error("Dates are not available");
-  }
-
-  const amounts = calculateBookingAmounts(
-    listing.pricePerNight,
-    nights,
+  const totalPriceDai = totalDaiNum.toFixed(18).replace(/\.?0+$/, "") || "0";
+  const amountsDai = splitBookingTotal(
+    totalPriceDai,
     rewardPercent,
     hasConnector
   );
 
-  const [booking] = await db
-    .insert(schema.bookings)
-    .values({
-      listingId: listing.id,
-      hostId: listing.hostId,
-      guestId,
-      connectorId: connectorId ?? null,
-      checkIn,
-      checkOut,
-      nights,
-      totalPrice: amounts.totalPrice,
-      connectorRewardPercent: amounts.connectorRewardPercentApplied,
-      connectorRewardAmount: amounts.connectorRewardAmount,
-      protocolFeeAmount: amounts.protocolFeeAmount,
-      protocolFeePercent: amounts.protocolFeePercent,
-      hostAmount: amounts.hostAmount,
-      paymentAsset: listing.paymentAsset,
-      status: "pending",
-    })
-    .returning();
+  let connectorWallet: string | null = null;
+  if (connectorId) {
+    const connector = await db.query.users.findFirst({
+      where: eq(schema.users.id, connectorId),
+    });
+    connectorWallet = connector?.walletAddress ?? null;
+  }
 
-  return mapBooking(booking);
+  return {
+    listing,
+    checkIn,
+    checkOut,
+    nights,
+    selectedNights: nightKeys,
+    nightBreakdown,
+    connectorId,
+    connectorWallet,
+    hasConnector,
+    rewardPercent,
+    amountsDai,
+  };
+}
+
+/** @deprecated Unpaid bookings are no longer created — use quote + confirmPaidBooking. */
+export async function createBooking(
+  guestId: string,
+  input: {
+    listingId: string;
+    checkIn: string;
+    checkOut: string;
+    paymentAsset?: "STRK" | "DAI";
+  }
+) {
+  throw new Error(
+    "Bookings are created only after payment. Use POST /bookings/quote then pay and POST /bookings/confirm."
+  );
 }
 
 function mapBooking(
@@ -568,7 +1224,10 @@ function mapBooking(
     checkIn: booking.checkIn.toISOString(),
     checkOut: booking.checkOut.toISOString(),
     nights: booking.nights,
+    selectedNights: booking.selectedNights ?? [],
     totalPrice: booking.totalPrice,
+    totalPriceDai: booking.totalPriceDai,
+    fxRate: booking.fxRate,
     connectorRewardPercent: booking.connectorRewardPercent,
     connectorRewardAmount: booking.connectorRewardAmount,
     protocolFeeAmount: booking.protocolFeeAmount,
@@ -679,7 +1338,7 @@ export async function updateBookingPayment(
   return getBookingById(bookingId, guestId);
 }
 
-/** Guest records on-chain settlement (host + connector + protocol paid). */
+/** Guest records on-chain settlement — normally unused; pay path settles immediately. */
 export async function settleBooking(
   bookingId: string,
   guestId: string,
@@ -708,7 +1367,63 @@ export async function settleBooking(
   return getBookingById(bookingId, guestId);
 }
 
-/** Host records on-chain refund (full amount returned to guest). */
+/**
+ * Mark a paid booking cancelled by social agreement. Money was already paid to
+ * host/connector — any return is voluntary via Messages / peer transfer.
+ * Frees the nights for other guests.
+ */
+export async function socialCancelBooking(
+  bookingId: string,
+  userId: string
+) {
+  const booking = await db.query.bookings.findFirst({
+    where: eq(schema.bookings.id, bookingId),
+    with: { listing: true },
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  const isParty =
+    booking.guestId === userId || booking.hostId === userId;
+  if (!isParty) {
+    throw new Error("Booking not found");
+  }
+
+  if (!["funded", "confirmed", "completed"].includes(booking.status)) {
+    throw new Error("Booking cannot be cancelled in current state");
+  }
+
+  await db
+    .update(schema.bookings)
+    .set({ status: "cancelled" })
+    .where(eq(schema.bookings.id, bookingId));
+
+  const otherId =
+    userId === booking.guestId ? booking.hostId : booking.guestId;
+  const title = booking.listing?.title ?? "listing";
+  const body = `Booking for “${title}” marked cancelled. Nights are free again. Any money return is voluntary — use Messages to send DAI/STRK if you agreed.`;
+
+  try {
+    const { sendTextMessage } = await import("./chat.js");
+    await sendTextMessage(userId, otherId, body);
+  } catch {
+    // best-effort
+  }
+
+  await createNotification({
+    userId: otherId,
+    type: "booking",
+    title: "Booking cancelled",
+    body,
+    href: `/messages/${userId}`,
+  });
+
+  return getBookingById(bookingId, userId);
+}
+
+/** @deprecated Escrow refund — prefer social cancel + voluntary peer transfer. */
 export async function refundBooking(
   bookingId: string,
   hostId: string,
@@ -723,7 +1438,9 @@ export async function refundBooking(
   }
 
   if (booking.status !== "funded") {
-    throw new Error("Booking cannot be refunded in current state");
+    throw new Error(
+      "On-chain refund only applies if settlement did not complete. Prefer social cancel + Messages."
+    );
   }
 
   await db
@@ -735,6 +1452,13 @@ export async function refundBooking(
     .where(eq(schema.bookings.id, bookingId));
 
   return getBookingById(bookingId, hostId);
+}
+
+export async function requestBookingCancel(
+  bookingId: string,
+  guestId: string
+) {
+  return socialCancelBooking(bookingId, guestId);
 }
 
 export async function getBookingById(bookingId: string, userId: string) {
