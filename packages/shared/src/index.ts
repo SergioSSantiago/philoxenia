@@ -302,6 +302,10 @@ export interface InviteResolution {
 export interface NetworkStats {
   users: number;
   countries: number;
+  /** Listings with ≥1 inventory night today or later. */
+  listingsOpen: number;
+  /** Sum of nights on paid bookings (funded / confirmed / completed). */
+  nightsBooked: number;
   transferredDai: string;
   transferredStrk: string;
   updatedAt: string;

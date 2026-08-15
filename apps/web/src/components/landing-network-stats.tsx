@@ -63,6 +63,14 @@ export function LandingNetworkStats({
       value: stats ? formatCount(stats.countries) : "—",
     },
     {
+      label: "listings open",
+      value: stats ? formatCount(stats.listingsOpen) : "—",
+    },
+    {
+      label: "nights booked",
+      value: stats ? formatCount(stats.nightsBooked) : "—",
+    },
+    {
       label: "DAI booked",
       value: stats ? formatTokenAmount(stats.transferredDai, 2) : "—",
     },
@@ -78,7 +86,7 @@ export function LandingNetworkStats({
       style={{ opacity }}
       aria-live="polite"
     >
-      <dl className="mx-auto grid max-w-md grid-cols-2 gap-x-8 gap-y-4 text-center sm:max-w-xl sm:grid-cols-4 sm:gap-x-6">
+      <dl className="mx-auto grid max-w-lg grid-cols-2 gap-x-8 gap-y-4 text-center sm:max-w-2xl sm:grid-cols-3 sm:gap-x-6">
         {items.map((item) => (
           <div key={item.label} className="min-w-0">
             <dt className="text-[10px] uppercase tracking-[0.14em] text-muted/80">

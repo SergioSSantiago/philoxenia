@@ -1,9 +1,11 @@
-import { count, eq, inArray, sql } from "drizzle-orm";
+import { count, eq, gte, inArray, sql } from "drizzle-orm";
 import { db, schema } from "../db/index.js";
 
 export type NetworkStats = {
   users: number;
   countries: number;
+  listingsOpen: number;
+  nightsBooked: number;
   transferredDai: string;
   transferredStrk: string;
   updatedAt: string;
@@ -56,6 +58,32 @@ export async function getNetworkStats(): Promise<NetworkStats> {
     if (c) countries.add(c);
   }
 
+  // Listings with at least one future (or today) open night in inventory
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const todayStart = new Date(`${todayKey}T00:00:00.000Z`);
+  const openDayRows = await db
+    .select({
+      listingId: schema.listingAvailableDays.listingId,
+    })
+    .from(schema.listingAvailableDays)
+    .where(gte(schema.listingAvailableDays.day, todayStart));
+  const listingsOpen = new Set(openDayRows.map((r) => r.listingId)).size;
+
+  // Paid stay nights (fund / confirm / complete)
+  const [nightsRow] = await db
+    .select({
+      value: sql<string>`coalesce(sum(${schema.bookings.nights}), 0)`,
+    })
+    .from(schema.bookings)
+    .where(
+      inArray(schema.bookings.status, [
+        "funded",
+        "confirmed",
+        "completed",
+      ])
+    );
+  const nightsBooked = Math.max(0, Math.floor(Number(nightsRow?.value ?? 0)));
+
   // Confirmed on-chain booking payments (actual transferred amounts)
   const paid = await db
     .select({
@@ -105,6 +133,8 @@ export async function getNetworkStats(): Promise<NetworkStats> {
   const data: NetworkStats = {
     users: Number(userRow?.value ?? 0),
     countries: countries.size,
+    listingsOpen,
+    nightsBooked,
     transferredDai,
     transferredStrk,
     updatedAt: new Date(now).toISOString(),

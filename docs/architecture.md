@@ -52,7 +52,7 @@ philoxenia/
 |-------|---------|
 | `GET /health` | Liveness |
 | `GET /rates/strk-dai` | Live STRK per DAI (CoinGecko) |
-| `GET /stats/network` | Landing totals: users, countries, DAI/STRK booked |
+| `GET /stats/network` | Landing totals: users, countries, listings open, nights booked, DAI/STRK booked |
 
 ## Web (`apps/web`)
 
