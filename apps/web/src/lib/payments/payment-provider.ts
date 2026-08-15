@@ -19,7 +19,12 @@ export interface FundBookingParams {
   amount: string;
   asset: PaymentAsset;
   guestAddress: string;
+  hostAddress: string;
+  /** Zero / omitted when there is no intermediary connector. */
+  connectorAddress?: string | null;
+  connectorRewardPercent: number;
   onChainBookingId: string;
+  onChainListingId: string;
 }
 
 export interface PaymentProvider {

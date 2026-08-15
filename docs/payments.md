@@ -9,7 +9,7 @@ Philoxenia supports STRK and DAI payments with optional STRK20 privacy for STRK.
 ## Principles
 
 - **Non-custodial** — funds move via the guest's Ready X wallet; Philoxenia holds no balances.
-- **0% protocol fee** — entire guest payment splits between host and connector only.
+- **Protocol fee only on connector rewards** — 10% of the connector share; **0%** on direct host↔guest bookings.
 - **Honest privacy labeling** — payments are marked `private` only when the wallet privacy API succeeds; otherwise `public`.
 
 ## Payment providers (web)
@@ -27,15 +27,14 @@ Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.
 
 Used for DAI and as STRK fallback:
 
-1. Check ERC20 `allowance(guest, escrow)`
-2. If insufficient, batch `approve(escrow, amount)` + `fund_booking(booking_id)`
-3. Return `{ status: "pending", txHash, privacyMode: "public" }`
+1. Multicall `create_booking` (guest) + ERC20 `approve` (if needed) + `fund_booking`
+2. Return `{ status: "pending", txHash, privacyMode: "public" }`
 
 Requires:
 
 - `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS`
 - Token address (`NEXT_PUBLIC_STRK_TOKEN_ADDRESS` or `NEXT_PUBLIC_DAI_TOKEN_ADDRESS`)
-- On-chain booking created via `create_booking` (not yet automated)
+- Host / optional connector wallet addresses on the booking payload
 
 ## STRK20 path
 
@@ -81,7 +80,6 @@ After wallet execution, guest calls **POST `/bookings/:id/fund`**. The API inser
 | No on-chain tx verification | API trusts client-reported hash |
 | STRK20 private transfer ≠ `fund_booking` | Escrow state may not update on private path |
 | No settle/refund in app | Funds remain in escrow after funding |
-| `create_booking` not automated | Public `fund_booking` fails without prior owner call |
 
 ## Related
 

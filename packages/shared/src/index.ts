@@ -10,6 +10,10 @@ export {
   getStarknetSepoliaRpcUrl,
   publicMainnetRpcFallback,
 } from "./starknet-rpc.js";
+export {
+  PROTOCOL_FEE_PERCENT_OF_CONNECTOR,
+  percentToBps,
+} from "./fees.js";
 
 export type BookingStatus =
   | "pending"
@@ -93,13 +97,20 @@ export interface Booking {
   listingId: string;
   hostId: string;
   guestId: string;
-  connectorId: string;
+  /** Null when host and guest book directly (no intermediary). */
+  connectorId: string | null;
   checkIn: string;
   checkOut: string;
   nights: number;
   totalPrice: string;
+  /** Listing connector reward %, applied only when a connector is present. */
   connectorRewardPercent: number;
+  /** Net amount paid to the connector after protocol take. */
   connectorRewardAmount: string;
+  /** Philoxenia take: 10% of the connector reward (0 if no connector). */
+  protocolFeeAmount: string;
+  /** Protocol take as % of connector reward (always 10 when connector present). */
+  protocolFeePercent: number;
   hostAmount: string;
   paymentAsset: PaymentAsset;
   status: BookingStatus;

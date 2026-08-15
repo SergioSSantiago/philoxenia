@@ -1,5 +1,6 @@
-import { AccountInterface, Call, uint256 } from "starknet";
+import { AccountInterface, Call, CallData, cairo, uint256 } from "starknet";
 import type { PaymentAsset } from "@philoxenia/shared";
+import { percentToBps } from "@philoxenia/shared";
 import type {
   FundBookingParams,
   PaymentProvider,
@@ -7,15 +8,15 @@ import type {
   PaymentProviderCapabilities,
 } from "./payment-provider";
 
-const ERC20_APPROVE_SELECTOR =
-  "0x219209e0832751178315610989993155855449677110219981140613629783950318930590499";
-const ERC20_ALLOWANCE_SELECTOR =
-  "0x182b2c8c297926a9313111562d8a473fb22658a222be4ad1a1c7a243152ea2e9";
-
 function parseAmount(amount: string): bigint {
   const [whole, frac = ""] = amount.split(".");
   const padded = frac.padEnd(18, "0").slice(0, 18);
   return BigInt(whole + padded);
+}
+
+function toUint256Calldata(value: bigint | string): string[] {
+  const u = uint256.bnToUint256(typeof value === "string" ? BigInt(value) : value);
+  return [u.low.toString(), u.high.toString()];
 }
 
 export class PublicPaymentProvider implements PaymentProvider {
@@ -45,8 +46,13 @@ export class PublicPaymentProvider implements PaymentProvider {
 
   async fundBooking(params: FundBookingParams): Promise<PaymentStatus> {
     const amount = parseAmount(params.amount);
-    const low = amount & ((1n << 128n) - 1n);
-    const high = amount >> 128n;
+    const bookingId = BigInt(params.onChainBookingId);
+    const listingId = BigInt(params.onChainListingId);
+    const rewardBps = percentToBps(params.connectorRewardPercent);
+    const connector =
+      params.connectorAddress && params.connectorRewardPercent > 0
+        ? params.connectorAddress
+        : "0x0";
 
     const allowance = await this.account.callContract({
       contractAddress: params.tokenAddress,
@@ -57,20 +63,39 @@ export class PublicPaymentProvider implements PaymentProvider {
     const currentAllowance =
       BigInt(allowance[0]) + (BigInt(allowance[1]) << 128n);
 
-    const calls: Call[] = [];
+    const calls: Call[] = [
+      {
+        contractAddress: params.escrowAddress,
+        entrypoint: "create_booking",
+        calldata: CallData.compile({
+          booking_id: cairo.uint256(bookingId),
+          listing_id: cairo.uint256(listingId),
+          host: params.hostAddress,
+          guest: params.guestAddress,
+          connector,
+          total_amount: cairo.uint256(amount),
+          connector_reward_bps: rewardBps,
+        }),
+      },
+    ];
 
     if (currentAllowance < amount) {
       calls.push({
         contractAddress: params.tokenAddress,
         entrypoint: "approve",
-        calldata: [params.escrowAddress, low.toString(), high.toString()],
+        calldata: [
+          params.escrowAddress,
+          ...toUint256Calldata(amount),
+        ],
       });
     }
 
     calls.push({
       contractAddress: params.escrowAddress,
       entrypoint: "fund_booking",
-      calldata: [params.onChainBookingId],
+      calldata: CallData.compile({
+        booking_id: cairo.uint256(bookingId),
+      }),
     });
 
     const { transaction_hash } = await this.account.execute(calls);

@@ -59,11 +59,9 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 | Wallet auth on smartphone | **Blocked** — Ready connect/sign deep-link unreliable |
 | Friends, listings, shares, bookings API | Implemented |
 | Profile (display name) + wallet-only friend search | Implemented |
-| `BookingEscrow` Cairo contract + unit tests | Implemented |
-| Public ERC20 payment path (approve + `fund_booking`) | Implemented in web |
+| `BookingEscrow` (optional connector + 10% of connector reward) | **Deployed mainnet** — see [docs/deploy-escrow.md](./docs/deploy-escrow.md) |
+| Public ERC20 path (`create_booking` + approve + `fund_booking`) | Implemented in web |
 | STRK20 wallet API detection + fallback | Implemented in web |
-| Contract deployment scripts | Not included — manual deploy required |
-| On-chain `create_booking` before funding | Contract only — **not wired** to API/web |
 | Settle / refund flows in UI or API | Contract only — **not wired** |
 | Full STRK20 ↔ escrow integration | Partial — see [PRIVACY.md](./PRIVACY.md) and [docs/strk20.md](./docs/strk20.md) |
 

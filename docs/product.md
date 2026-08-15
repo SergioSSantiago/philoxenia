@@ -19,7 +19,7 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - A **social trust network** for private stays
 - **Friend-based discovery** — see listings from friends, not strangers
 - **Connector introductions** — friends share listings with people outside the network
-- **Trustless settlement** — escrow on Starknet, 0% protocol fee
+- **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct bookings)
 - **Optional payment privacy** — STRK20 where the guest wallet supports it
 
 ## What Philoxenia is not
@@ -55,17 +55,29 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 3. Carlos creates an account, requests friendship with Bob, Bob accepts.
 4. Carlos books 5 nights (750 STRK total).
 5. Carlos funds the booking via wallet.
-6. On settlement: Host 712.5 STRK, Connector 37.5 STRK, Philoxenia 0 STRK.
+6. On settlement: Host 712.5 STRK, Connector 33.75 STRK, Philoxenia 3.75 STRK.
 
 ## Fee model
 
 | Party | Fee |
 |-------|-----|
-| Philoxenia protocol | **0%** |
-| Connector | Host-configured (0–100% of booking total) |
+| Direct host↔guest (no connector) | **0%** protocol |
+| Connector | Host-configured **% of booking total** (0–100%) |
+| Philoxenia | **10% of the connector reward** (not of the booking total) |
 | Host | Remainder after connector reward |
 
-Example: 750 STRK total, 5% connector → 712.5 host + 37.5 connector.
+Example with connector (750 STRK total, 5% connector reward):
+
+| Party | Amount |
+|-------|--------|
+| Guest pays | 750 |
+| Host | 712.5 |
+| Connector (net) | 33.75 |
+| Philoxenia | 3.75 |
+
+Example without connector: host receives 750; Philoxenia 0.
+
+UI always shows **percentages**. On-chain storage uses basis points internally (100 bps = 1%).
 
 ## MVP scope
 
@@ -79,12 +91,14 @@ Example: 750 STRK total, 5% connector → 712.5 host + 37.5 connector.
 - Booking creation with date validation and connector attribution
 - Payment initiation (public ERC20 or STRK20 when wallet supports it)
 
-**Requires deployment / further integration:**
+**Requires further integration:**
 
-- Deploy `BookingEscrow` and set `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS`
-- On-chain `create_booking` before funding
-- Settle and refund flows
+- Settle and refund flows in the app
 - Full STRK20 escrow path
+
+**On-chain (mainnet):** `BookingEscrow` at `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` — see [deploy-escrow.md](./deploy-escrow.md).
+
+**Fee model:** optional connector; Philoxenia takes **10% of the connector reward**; direct bookings **0%**.
 
 ## Related docs
 

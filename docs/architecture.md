@@ -92,7 +92,7 @@ See `.env` (not committed). Critical variables:
 
 - `DATABASE_URL`, `JWT_SECRET` — API
 - `NEXT_PUBLIC_API_URL` — web → API
-- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — escrow (empty until deployed)
+- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — mainnet `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd`
 - `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 provider path
 
 ## Deployment topology (typical)

@@ -20,7 +20,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - Friend-based discovery (no public listing directory)
 - Trustless settlement via Cairo smart contracts
 - STRK20 private payments where wallet support exists
-- 0% protocol commission
+- Trustless settlement via Cairo escrow (optional connector; Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
 - Ready X for wallet connect on **desktop** (browser extension)
 
 ## What it is not
@@ -137,7 +137,7 @@ Key variables:
 - `JWT_SECRET` — API session signing
 - `NEXT_PUBLIC_API_URL` — frontend → backend
 - `NEXT_PUBLIC_STARKNET_CHAIN` — `mainnet` in production
-- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — deployed escrow
+- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — mainnet escrow (`0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd`)
 - `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 path (default true)
 
 ## Acceptance scenario
@@ -146,7 +146,7 @@ Bob lists an apartment in Florence (150 STRK/night, 5% connector reward).
 Alice (Bob's friend) shares the listing with Carlos.
 Carlos creates an account, requests friendship with Bob, Bob accepts.
 Carlos books 5 nights (750 STRK total).
-Settlement: Host 712.5 STRK, Connector 37.5 STRK, Philoxenia 0 STRK.
+Settlement: Host 712.5 STRK, Connector 33.75 STRK, Philoxenia 3.75 STRK (10% of connector reward). Direct bookings (no connector): host gets 100%, protocol 0%.
 
 ## Documentation
 

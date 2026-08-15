@@ -26,7 +26,7 @@ Authorization logic lives in `apps/api/src/lib/authorization.ts` and is enforced
 
 - **`BookingEscrow`** — Only the designated guest can fund; only guest or contract owner can settle; only host or owner can refund.
 - **`create_booking`** — Owner-only. Prevents arbitrary booking injection.
-- **0% protocol fee** — Enforced in contract math: `host_amount + connector_amount = total_amount`.
+- **Protocol fee** — **10% of the connector reward** only (0% when there is no connector). Enforced in `BookingEscrow` settlement math.
 
 ## Payment integrity
 

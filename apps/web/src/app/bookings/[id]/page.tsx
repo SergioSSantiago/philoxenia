@@ -69,6 +69,13 @@ export default function BookingDetailPage() {
       const onChainBookingId = BigInt(
         `0x${booking.id.replace(/-/g, "").slice(0, 16)}`
       ).toString();
+      const onChainListingId = BigInt(
+        `0x${booking.listingId.replace(/-/g, "").slice(0, 16)}`
+      ).toString();
+
+      if (!booking.host?.walletAddress) {
+        throw new Error("Host wallet address missing on booking");
+      }
 
       const result = await provider.fundBooking({
         bookingId: booking.id,
@@ -77,7 +84,11 @@ export default function BookingDetailPage() {
         amount: booking.totalPrice,
         asset: booking.paymentAsset,
         guestAddress: address,
+        hostAddress: booking.host.walletAddress,
+        connectorAddress: booking.connector?.walletAddress ?? null,
+        connectorRewardPercent: booking.connectorRewardPercent,
         onChainBookingId,
+        onChainListingId,
       });
 
       setPrivacyMode(result.privacyMode);
@@ -149,28 +160,41 @@ export default function BookingDetailPage() {
 
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-muted">Accommodation</span>
+            <span className="text-muted">Host receives</span>
             <span>
               {booking.hostAmount} {booking.paymentAsset}
             </span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted">
-              Connector reward ({booking.connectorRewardPercent}%)
-            </span>
-            <span>
-              {booking.connectorRewardAmount} {booking.paymentAsset}
-            </span>
-          </div>
+          {booking.connectorId ? (
+            <>
+              <div className="flex justify-between">
+                <span className="text-muted">
+                  Connector ({booking.connectorRewardPercent}% − protocol take)
+                </span>
+                <span>
+                  {booking.connectorRewardAmount} {booking.paymentAsset}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted">
+                  Philoxenia ({booking.protocolFeePercent}% of connector reward)
+                </span>
+                <span>
+                  {booking.protocolFeeAmount} {booking.paymentAsset}
+                </span>
+              </div>
+            </>
+          ) : (
+            <p className="text-xs text-muted">
+              Direct booking — no connector. Protocol fee: 0%.
+            </p>
+          )}
           <div className="flex justify-between font-medium text-base pt-2">
             <span>Total</span>
             <span>
               {booking.totalPrice} {booking.paymentAsset}
             </span>
           </div>
-          <p className="text-xs text-muted pt-1">
-            Philoxenia protocol fee: 0%
-          </p>
         </div>
 
         {booking.fundTxHash && (

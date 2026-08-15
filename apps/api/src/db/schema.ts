@@ -179,9 +179,10 @@ export const bookings = pgTable("bookings", {
   guestId: uuid("guest_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  connectorId: uuid("connector_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+  /** Null when booking is direct (no intermediary connector). */
+  connectorId: uuid("connector_id").references(() => users.id, {
+    onDelete: "set null",
+  }),
   checkIn: timestamp("check_in", { withTimezone: true }).notNull(),
   checkOut: timestamp("check_out", { withTimezone: true }).notNull(),
   nights: integer("nights").notNull(),
@@ -191,6 +192,13 @@ export const bookings = pgTable("bookings", {
     precision: 78,
     scale: 18,
   }).notNull(),
+  protocolFeeAmount: numeric("protocol_fee_amount", {
+    precision: 78,
+    scale: 18,
+  })
+    .notNull()
+    .default("0"),
+  protocolFeePercent: integer("protocol_fee_percent").notNull().default(0),
   hostAmount: numeric("host_amount", { precision: 78, scale: 18 }).notNull(),
   paymentAsset: paymentAssetEnum("payment_asset").notNull(),
   status: bookingStatusEnum("status").notNull().default("pending"),

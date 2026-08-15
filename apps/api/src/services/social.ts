@@ -503,9 +503,8 @@ export async function createBooking(
     listing.hostId
   );
 
-  if (!connectorId) {
-    throw new Error("No valid connector found for this booking");
-  }
+  const hasConnector = Boolean(connectorId);
+  const rewardPercent = hasConnector ? listing.connectorRewardPercent : 0;
 
   const overlapping = await db.query.bookings.findFirst({
     where: and(
@@ -523,7 +522,8 @@ export async function createBooking(
   const amounts = calculateBookingAmounts(
     listing.pricePerNight,
     nights,
-    listing.connectorRewardPercent
+    rewardPercent,
+    hasConnector
   );
 
   const [booking] = await db
@@ -532,13 +532,15 @@ export async function createBooking(
       listingId: listing.id,
       hostId: listing.hostId,
       guestId,
-      connectorId,
+      connectorId: connectorId ?? null,
       checkIn,
       checkOut,
       nights,
       totalPrice: amounts.totalPrice,
-      connectorRewardPercent: listing.connectorRewardPercent,
+      connectorRewardPercent: amounts.connectorRewardPercentApplied,
       connectorRewardAmount: amounts.connectorRewardAmount,
+      protocolFeeAmount: amounts.protocolFeeAmount,
+      protocolFeePercent: amounts.protocolFeePercent,
       hostAmount: amounts.hostAmount,
       paymentAsset: listing.paymentAsset,
       status: "pending",
@@ -569,6 +571,8 @@ function mapBooking(
     totalPrice: booking.totalPrice,
     connectorRewardPercent: booking.connectorRewardPercent,
     connectorRewardAmount: booking.connectorRewardAmount,
+    protocolFeeAmount: booking.protocolFeeAmount,
+    protocolFeePercent: booking.protocolFeePercent,
     hostAmount: booking.hostAmount,
     paymentAsset: booking.paymentAsset,
     status: booking.status,
@@ -687,7 +691,7 @@ export async function getBookingById(bookingId: string, userId: string) {
   const involved =
     booking.guestId === userId ||
     booking.hostId === userId ||
-    booking.connectorId === userId;
+    (booking.connectorId !== null && booking.connectorId === userId);
 
   if (!involved) {
     throw new Error("Booking not found");

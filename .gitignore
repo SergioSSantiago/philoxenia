@@ -5,6 +5,11 @@ build/
 .env
 .env.local
 .env.*.local
+.env.production
+.env.production.api
+contracts/deploy.env
+contracts/QUE_HACER.md
+contracts/.deploy/
 *.log
 .DS_Store
 coverage/

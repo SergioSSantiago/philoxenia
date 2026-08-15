@@ -42,18 +42,27 @@ Validations:
 
 - Guest can view the listing (friend of host)
 - Stay length within `minStay` / `maxStay`
-- Valid connector introduction exists; connector still friends with host
+- Connector is **optional**: if a share introduction exists and the connector is still friends with the host, they are attributed; otherwise direct booking
 - No overlapping `pending`, `funded`, or `confirmed` bookings for same dates
 
 ### Amount calculation
 
 ```
 totalPrice = pricePerNight × nights
-connectorRewardAmount = totalPrice × connectorRewardPercent / 100
-hostAmount = totalPrice - connectorRewardAmount
+
+# With connector (listing connectorRewardPercent, e.g. 5%):
+connectorGross = totalPrice × connectorRewardPercent / 100
+protocolFeeAmount = connectorGross × 10 / 100          # Philoxenia: 10% of connector reward
+connectorRewardAmount = connectorGross − protocolFeeAmount
+hostAmount = totalPrice − connectorGross
+
+# Without connector:
+hostAmount = totalPrice
+connectorRewardAmount = 0
+protocolFeeAmount = 0
 ```
 
-Philoxenia protocol fee: **0%**.
+UI shows **percentages**. On-chain uses basis points internally.
 
 ## Funding
 
@@ -79,7 +88,7 @@ The web derives an on-chain ID from the UUID:
 BigInt(booking.id.replace(/-/g, "").slice(0, 16), 16).toString()
 ```
 
-This ID must match a `create_booking` call on `BookingEscrow` before `fund_booking` succeeds. **MVP gap:** `create_booking` is not invoked by API/web; only the contract owner can call it today.
+This ID must match a `create_booking` call on `BookingEscrow` before `fund_booking` succeeds. The web payment multicall runs `create_booking` + `approve` + `fund_booking` in one Ready X transaction (guest is allowed to create their own booking on-chain).
 
 ## Reading bookings
 

@@ -57,11 +57,14 @@ When a logged-in guest opens an invite and is **not** yet friends with the host:
 2. This links `guestId`, `connectorId`, `hostId`, `listingId`.
 3. At booking time, `resolveConnectorForBooking` uses this record and verifies the connector is still friends with the host.
 
-If the connector unfriends the host before booking, the connector is invalidated and booking fails.
+If the connector unfriends the host before booking, the connector is invalidated and the booking proceeds **without** a connector (direct friends booking, 0% protocol fee).
+
+## Direct bookings (no connector)
+
+Friends of the host can view and book **without** opening a share link. In that case `connectorId` is null, connector reward is 0%, and Philoxenia takes 0%.
 
 ## MVP limitations
 
-- **Booking requires an introduction record** — guests who discover a listing only via the friends network (without opening a share link) cannot book until a share introduction exists.
 - Share revocation UI is not implemented (status can be set to `revoked` in DB manually).
 - Invite page works without auth but introduction is only recorded for logged-in users.
 
