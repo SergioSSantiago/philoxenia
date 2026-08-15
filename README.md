@@ -18,9 +18,8 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 
 - A social trust network for private hospitality
 - Friend-based discovery (no public listing directory)
-- Trustless settlement via Cairo smart contracts
-- STRK20 private payments where wallet support exists
 - Trustless settlement via Cairo escrow (optional connector; Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
+- STRK20 private payments where wallet support exists
 - Ready X for wallet connect on **desktop** (browser extension)
 
 ## What it is not
@@ -61,9 +60,9 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 - Scarb 2.12+ and Starknet Foundry (for contracts)
 - [Ready X](https://www.ready.co/) browser extension (desktop)
 
-## Deploy (producción — Vercel)
+## Deploy (production — Vercel)
 
-**Producción en Vercel + GitHub — no localhost.**
+**Production on Vercel + GitHub — not localhost.**
 
 | App | URL |
 |-----|-----|
@@ -82,9 +81,9 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 
 Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
 
-Repo: https://github.com/SergioSSantiago/philoxenia · Guía Vercel: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
+Repo: https://github.com/SergioSSantiago/philoxenia · Vercel guide: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
 
-### Install (desarrollo local opcional)
+### Install (optional local development)
 
 ```bash
 git clone https://github.com/SergioSSantiago/philoxenia
@@ -92,13 +91,13 @@ cd philoxenia
 npm install
 ```
 
-Pega `ALCHEMY_API_KEY` en `.env` (raíz) y en el dashboard de Vercel (proyecto web **y** api).
+Paste `ALCHEMY_API_KEY` into `.env` (repo root) and into the Vercel dashboard (web **and** api projects).
 
-### Database (producción)
+### Database (production)
 
-Neon Postgres vía Vercel Integration — ver [docs/deployment-vercel.md](./docs/deployment-vercel.md).
+Neon Postgres via Vercel Integration — see [docs/deployment-vercel.md](./docs/deployment-vercel.md).
 
-### Database (local opcional)
+### Database (optional local)
 
 ```bash
 docker compose up -d

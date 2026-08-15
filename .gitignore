@@ -8,7 +8,7 @@ build/
 .env.production
 .env.production.api
 contracts/deploy.env
-contracts/QUE_HACER.md
+contracts/DONE.md
 contracts/.deploy/
 *.log
 .DS_Store

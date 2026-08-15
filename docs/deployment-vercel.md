@@ -2,47 +2,47 @@
   <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
 </p>
 
-# Deploy en Vercel (sin localhost)
+# Deploy on Vercel (no localhost)
 
-**Autor:** Sergio Sapiña Santiago · [@sergiossantiago](https://t.me/sergiossantiago)
+**Author:** Sergio Sapiña Santiago · [@sergiossantiago](https://t.me/sergiossantiago)
 
-## Repositorio
+## Repository
 
 https://github.com/SergioSSantiago/philoxenia
 
-## URLs de producción
+## Production URLs
 
-| Servicio | URL |
-|----------|-----|
+| Service | URL |
+|---------|-----|
 | Web | https://philoxenia-iota.vercel.app |
 | API | https://philoxenia-api.vercel.app |
 
-## Proyectos Vercel (monorepo)
+## Vercel projects (monorepo)
 
-Dos proyectos enlazados al mismo repo de GitHub:
+Two projects linked to the same GitHub repo:
 
 1. **philoxenia** — root directory: `apps/web`
 2. **philoxenia-api** — root directory: `apps/api`
 
 ## Smart contracts (mainnet)
 
-| Variable | Proyecto | Valor |
-|----------|----------|-------|
+| Variable | Project | Value |
+|----------|---------|-------|
 | `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` |
 | `NEXT_PUBLIC_STRK_TOKEN_ADDRESS` | web | `0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d` |
 
-Voyager: https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd — ver [deploy-escrow.md](./deploy-escrow.md).
+Voyager: https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd — see [deploy-escrow.md](./deploy-escrow.md).
 
-## Variables de entorno (Vercel Dashboard)
+## Environment variables (Vercel Dashboard)
 
-Configurar en **ambos** proyectos (web + api) donde aplique:
+Configure on **both** projects (web + api) where applicable:
 
-| Variable | Proyecto | Valor |
-|----------|----------|-------|
-| `ALCHEMY_API_KEY` | web **y api** | tu key de Alchemy (RPC mainnet) |
+| Variable | Project | Value |
+|----------|---------|-------|
+| `ALCHEMY_API_KEY` | web **and** api | your Alchemy key (mainnet RPC) |
 | `STARKNET_CHAIN` | api | `SN_MAIN` |
-| `DATABASE_URL` | api | connection string de Neon |
-| `JWT_SECRET` | api | string aleatorio largo |
+| `DATABASE_URL` | api | Neon connection string |
+| `JWT_SECRET` | api | long random string |
 | `CORS_ORIGIN` | api | `https://philoxenia-iota.vercel.app` |
 | `NEXT_PUBLIC_API_URL` | web | `https://philoxenia-api.vercel.app` |
 | `NEXT_PUBLIC_STARKNET_CHAIN` | web | `mainnet` |
@@ -50,7 +50,7 @@ Configurar en **ambos** proyectos (web + api) donde aplique:
 | `NEXT_PUBLIC_STRK_TOKEN_ADDRESS` | web | `0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d` |
 | `NEXT_PUBLIC_STRK20_PRIVACY` | web | `true` |
 
-Neon Postgres (proyecto **philoxenia-api**):
+Neon Postgres (**philoxenia-api** project):
 
 ```bash
 cd apps/api
@@ -58,9 +58,9 @@ vercel link --project philoxenia-api
 printf 'y\n' | vercel integration add neon -m region=fra1 -m auth=false --plan free_v3 -e production
 ```
 
-Tras conectar Neon, Vercel inyecta `DATABASE_URL` en **philoxenia-api** (no en el proyecto web).
+After connecting Neon, Vercel injects `DATABASE_URL` into **philoxenia-api** (not the web project).
 
-### Migraciones (contra Neon, no localhost)
+### Migrations (against Neon, not localhost)
 
 ```bash
 cd apps/api
@@ -69,21 +69,21 @@ set -a && source ../../.env.production.api && set +a
 cd ../.. && npm run db:migrate -w @philoxenia/api
 ```
 
-Importante: no uses `vercel env pull` desde la raíz del repo sin `--project philoxenia-api` — eso descarga vars del **web** (`philoxenia`) y no trae `DATABASE_URL`.
+Important: do not run `vercel env pull` from the repo root without `--project philoxenia-api` — that pulls **web** (`philoxenia`) vars and will not include `DATABASE_URL`.
 
-## Deploy manual
+## Manual deploy
 
 ```bash
 cd apps/api && vercel --prod
 cd apps/web && vercel --prod
 ```
 
-Cada push a `main` en GitHub redeploya si Git Integration está activa.
+Each push to `main` on GitHub redeploys if Git Integration is enabled.
 
-La web usa el camafeo de Philoxenia como favicon (`apps/web/public/philoxenia-mark.png`). El logo del header apunta a `/`. Sign-in es un modal Ready X en `/home` (**escritorio con extensión**).
+The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home` (**desktop extension**).
 
-**Smartphone bloqueado:** el login móvil con Ready no completa la firma de forma fiable; no es un cliente soportado hasta que eso se resuelva.
+**Smartphone blocked:** mobile Ready login does not complete the signature step reliably; it is not a supported client until that is fixed.
 
-## Local (opcional)
+## Local (optional)
 
-Solo si necesitas depurar en máquina. Producción = Vercel arriba.
+Only if you need to debug on your machine. Production = Vercel above.
