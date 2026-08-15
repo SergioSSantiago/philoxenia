@@ -69,15 +69,15 @@ Re-verified at Phase 1 build (2026-08-15):
 4. ✅ Docs: `docs/strk20.md`, `docs/booking-escrow-anonymizer.md`.
 5. ✅ Also: block booking nights before today (API `assertNoPastNights` + guest calendar).
 
-## 7. Phase 3 — BookingEscrow anonymizer + private fund wiring ✅ done 2026-08-15 (app); Cairo pending team
+## 7. Phase 3 — BookingEscrow anonymizer + private fund wiring ✅ done 2026-08-15
 
-**Status:** app wiring + design shipped; **production anonymizer Cairo is team-owned** (not generated here)
+**Status:** live on mainnet (ABI + Voyager verified + smoke-tested)
 
-- ✅ Design: `docs/booking-escrow-anonymizer.md`
-- ✅ Interim private fund: shadow-account path in `private-escrow-fund.ts` (default when privacy capable)
-- ✅ Target path: `fundBookingViaAnonymizer` when `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` is set
-- ⏳ Team: write/audit/deploy anonymizer Cairo; set env; optional escrow API redesign for stronger guest privacy
-- Entry for full anonymizer: audit before mainnet deploy of the helper contract
+- ✅ Cairo: `BookingEscrow` v2 + `BookingEscrowAnonymizer`
+- ✅ Deploy + `voyager verify` both classes
+- ✅ Env: `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` + new escrow addresses
+- ✅ Mainnet smoke: public pay, anonymizer `privacy_invoke`, connector 5% split
+- Optional later: hide guest in escrow storage; Wallet API sub-accounts; Xverse
 
 ## 8. Phase 4 — Tracked / later
 

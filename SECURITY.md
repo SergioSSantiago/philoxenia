@@ -38,11 +38,10 @@ Authorization logic lives in `apps/api/src/lib/authorization.ts` and is enforced
 | Gap | Risk | Mitigation path |
 |-----|------|-----------------|
 | No on-chain tx verification | Client could report a fake hash | Add RPC/event indexer validation |
-| `create_booking` not called before `fund_booking` | Public payment path may fail on-chain | Wire owner relayer or open `create_booking` to authorized callers |
-| No settle/refund UI | Funds may remain in escrow | Implement guest settle + host refund flows |
+| Guest/host/amounts in escrow storage | On-chain link of parties/amounts | Future escrow redesign (commitment guest id) |
 | Off-chain data at API operator | Operator can read all metadata | Self-host; encrypt at rest; future E2E options |
 | User search by wallet address | Minor enumeration | Rate-limit; display names are not searchable |
-| STRK20 private path vs escrow state | Escrow may not reflect private transfer | Integrate anonymizer or unified funding flow |
+| Ready Wallet API private pay | Needs desktop Ready + shield | Manual smoke; fallback to public/shadow |
 
 ## Operational security
 

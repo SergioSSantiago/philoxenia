@@ -19,7 +19,8 @@ Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustle
 | [payments.md](./payments.md) | STRK / DAI / STRK20 |
 | [strk20.md](./strk20.md) | Privacy payments |
 | [smart-contracts.md](./smart-contracts.md) | BookingEscrow interface |
-| [deploy-escrow.md](./deploy-escrow.md) | **Live mainnet STRK + DAI escrow** + Voyager links |
+| [deploy-escrow.md](./deploy-escrow.md) | **Live mainnet** STRK/DAI escrow + anonymizer + smoke tests |
+| [booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md) | privacy_invoke helper |
 | [privacy.md](./privacy.md) | Privacy boundaries |
 | [security.md](./security.md) | Auth (SNIP-12), threats |
 | [development.md](./development.md) | Local setup |

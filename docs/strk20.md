@@ -37,13 +37,14 @@ The upstream docs describe several builder paths:
 2. **Anonymizer contracts** — `privacy_invoke` pattern for DeFi and custom flows (e.g. escrow)
 3. **Low-level SDK** — `createPrivateTransfers`, proving, discovery for wallet builders
 
-Philoxenia uses path **1** for shield/unshield/balances (`WalletAccountV6`), with public ERC20 for booking escrow until the anonymizer (path **2**) ships. See `STRK20_INTEGRATION_PLAN.md`.
+Philoxenia uses path **1** for shield/unshield/balances (`WalletAccountV6`) and path **2** for private booking fund via `BookingEscrowAnonymizer` ([booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md)). See `STRK20_INTEGRATION_PLAN.md`.
 
-## Philoxenia implementation (Phase 1)
+## Philoxenia implementation
 
-- `apps/web/src/lib/payments/wallet-account-v6.ts` — `createStore` + `WalletAccountV6.connect`; capability via `walletV6.supportedWalletApi` (≥ 0.10).
-- `apps/web/src/lib/payments/strk20-payment-provider.ts` — `strk20InvokeTransaction` for deposit/withdraw; `strk20Balances` for private balance. **Booking fund remains public** until Phase 3 anonymizer.
-- UI: Profile → `Strk20PrivacyPanel` (Shield / Unshield).
+- `wallet-account-v6.ts` — `WalletAccountV6.connect`; capability via `supportedWalletApi` (≥ 0.10)
+- `strk20-payment-provider.ts` — shield/unshield/balances + private/public fund
+- `private-escrow-fund.ts` — anonymizer `privacy_invoke` (preferred) or shadow-account fallback
+- UI: Profile → Shield/Unshield; booking pay → Private (default) / Public
 
 ### Detection
 
@@ -69,11 +70,11 @@ await account.strk20InvokeTransaction([
 await account.strk20Balances([STRK_TOKEN_ADDRESS]);
 ```
 
-## What Philoxenia does not do (yet)
+## What Philoxenia does not hide
 
-- Private funding of `BookingEscrow` (needs team-owned anonymizer + audit)
-- Run proving/discovery infrastructure
-- Guarantee private settlement splits — `settle_booking` uses public ERC20 transfers
+- Escrow storage still records guest / host / amounts
+- Open-note amounts and shield/unshield ERC-20 legs are public by protocol design
+- `settle_booking` pays host/connector/treasury with public ERC-20 transfers
 
 ## Fallback behavior
 

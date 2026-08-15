@@ -71,15 +71,16 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 
 ### Smart contract (Starknet mainnet)
 
-| | STRK escrow | DAI escrow |
-|--|-------------|------------|
-| **BookingEscrow** | [`0x0305…e1f3`](https://voyager.online/contract/0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3) | [`0x004c…a712`](https://voyager.online/contract/0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712) |
-| Network | Starknet **mainnet** | same |
-| Token | STRK | DAI (StarkGate) |
-| Owner / protocol treasury | `0x047466…E878` | same |
-| Protocol fee | **10% of connector reward** (0% if no connector) | same |
+| | STRK escrow | DAI escrow | Anonymizer |
+|--|-------------|------------|------------|
+| **Contract** | [`0x0305…e1f3`](https://voyager.online/contract/0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3) | [`0x004c…a712`](https://voyager.online/contract/0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712) | [`0x056a…defb`](https://voyager.online/contract/0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb) |
+| Network | Starknet **mainnet** | same | same |
+| Token | STRK | DAI (StarkGate) | — |
+| Owner / protocol treasury | `0x047466…E878` | same | — |
+| Protocol fee | **10% of connector reward** (0% if no connector) | same | — |
+| Voyager | ABI + source verified | same class | ABI + source verified |
 
-List prices are in **DAI**. Guests pay in **STRK** (live FX) or **DAI** (1:1). Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
+List prices are in **DAI**. Guests pay in **STRK** (live FX) or **DAI** (1:1). Private STRK pay uses the anonymizer. Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
 
 Repo: https://github.com/SergioSSantiago/philoxenia · Vercel guide: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
 
@@ -148,7 +149,9 @@ Key variables:
 - `JWT_SECRET` — API session signing
 - `NEXT_PUBLIC_API_URL` — frontend → backend
 - `NEXT_PUBLIC_STARKNET_CHAIN` — `mainnet` in production
-- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — mainnet escrow (`0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3`)
+- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — STRK escrow v2
+- `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` — DAI escrow v2
+- `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` — privacy_invoke helper
 - `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 path (default true)
 
 ## Acceptance scenario
