@@ -8,6 +8,7 @@ import { Shell, Button, Card } from "@/components/ui";
 import { UserBadge } from "@/components/user-badge";
 import { AvailabilityCalendar } from "@/components/availability-calendar";
 import { GuestNightCalendar } from "@/components/guest-night-calendar";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 
@@ -51,6 +52,8 @@ export default function ListingPage() {
   >(null);
   const [guestSelected, setGuestSelected] = useState<string[]>([]);
   const [deleteBusy, setDeleteBusy] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     if (!token) {
@@ -112,19 +115,17 @@ export default function ListingPage() {
     return [...byDay.values()].sort((a, b) => a.day.localeCompare(b.day));
   }, [listing, draftDays]);
 
-  async function deleteListing() {
+  async function confirmDeleteListing() {
     if (!listing) return;
-    const ok = window.confirm(
-      "Delete this listing? You can only delete if there are no active paid bookings (past stays are OK)."
-    );
-    if (!ok) return;
     setDeleteBusy(true);
+    setDeleteError("");
     setError("");
     try {
       await api.delete(`/my-listings/${listing.id}`);
+      setDeleteOpen(false);
       router.push("/my-listings");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Delete failed");
+      setDeleteError(err instanceof Error ? err.message : "Delete failed");
     } finally {
       setDeleteBusy(false);
     }
@@ -402,12 +403,33 @@ export default function ListingPage() {
                 variant="ghost"
                 className="w-full text-red-700 sm:w-auto"
                 disabled={deleteBusy}
-                onClick={deleteListing}
+                onClick={() => {
+                  setDeleteError("");
+                  setDeleteOpen(true);
+                }}
               >
-                {deleteBusy ? "Deleting…" : "Delete listing"}
+                Delete listing
               </Button>
             )}
           </div>
+
+          <ConfirmDialog
+            open={deleteOpen}
+            title="Delete this listing?"
+            body="This permanently removes the listing, its photos, and calendar. You can only delete if there are no active paid bookings — past stays are fine."
+            confirmLabel="Delete listing"
+            cancelLabel="Keep listing"
+            danger
+            busy={deleteBusy}
+            error={deleteError}
+            onConfirm={() => void confirmDeleteListing()}
+            onCancel={() => {
+              if (!deleteBusy) {
+                setDeleteOpen(false);
+                setDeleteError("");
+              }
+            }}
+          />
 
           {isHost && (
             <p className="mt-3 text-sm text-muted">

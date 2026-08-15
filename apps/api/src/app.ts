@@ -26,12 +26,24 @@ export async function buildApp() {
     secret: process.env.JWT_SECRET ?? "dev-secret-change-in-production",
   });
 
-  app.setErrorHandler((error: Error, _request, reply) => {
+  app.setErrorHandler((error: Error & { validation?: unknown }, _request, reply) => {
     if (error.message === "Unauthorized") {
       return reply.status(401).send({ error: "Unauthorized" });
     }
+    // Zod / Fastify validation — surface a clear message instead of a blank 500
+    if (
+      error.name === "ZodError" ||
+      Array.isArray(error.validation) ||
+      error.message?.includes("Invalid")
+    ) {
+      return reply.status(400).send({ error: error.message || "Invalid request" });
+    }
     app.log.error(error);
-    return reply.status(500).send({ error: "Internal server error" });
+    const detail =
+      process.env.NODE_ENV === "production"
+        ? "Internal server error"
+        : error.message || "Internal server error";
+    return reply.status(500).send({ error: detail });
   });
 
   await registerRoutes(app);

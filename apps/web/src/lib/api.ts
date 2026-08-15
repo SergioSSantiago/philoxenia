@@ -12,9 +12,14 @@ export class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
       ...(options.headers as Record<string, string>),
     };
+
+    const method = (options.method ?? "GET").toUpperCase();
+    const hasBody = options.body != null && options.body !== "";
+    if (hasBody || method === "POST" || method === "PATCH" || method === "PUT") {
+      headers["Content-Type"] = headers["Content-Type"] ?? "application/json";
+    }
 
     if (this.token) {
       headers.Authorization = `Bearer ${this.token}`;
@@ -30,7 +35,13 @@ export class ApiClient {
       throw new Error(body.error ?? "Request failed");
     }
 
-    return response.json();
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
+    const text = await response.text();
+    if (!text) return undefined as T;
+    return JSON.parse(text) as T;
   }
 
   get<T>(path: string) {

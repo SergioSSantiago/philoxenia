@@ -304,10 +304,10 @@ export async function registerRoutes(app: FastifyInstance) {
     "/my-listings/:id",
     { preHandler: [authenticate] },
     async (request, reply) => {
-      const params = z
-        .object({ id: z.string().uuid() })
-        .parse(request.params);
       try {
+        const params = z
+          .object({ id: z.string().uuid() })
+          .parse(request.params);
         return await social.deleteListing(params.id, request.user.userId);
       } catch (err) {
         const message =

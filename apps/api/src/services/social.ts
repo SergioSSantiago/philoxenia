@@ -758,7 +758,48 @@ export async function deleteListing(listingId: string, hostId: string) {
     }
   }
 
-  await db.delete(schema.listings).where(eq(schema.listings.id, listingId));
+  try {
+    await db.transaction(async (tx) => {
+      const bookingRows = await tx.query.bookings.findMany({
+        where: eq(schema.bookings.listingId, listingId),
+        columns: { id: true },
+      });
+      const bookingIds = bookingRows.map((b) => b.id);
+
+      if (bookingIds.length > 0) {
+        await tx
+          .delete(schema.payments)
+          .where(inArray(schema.payments.bookingId, bookingIds));
+        await tx
+          .update(schema.directMessages)
+          .set({ bookingId: null })
+          .where(inArray(schema.directMessages.bookingId, bookingIds));
+        await tx
+          .delete(schema.bookings)
+          .where(inArray(schema.bookings.id, bookingIds));
+      }
+
+      await tx
+        .delete(schema.listingAvailableDays)
+        .where(eq(schema.listingAvailableDays.listingId, listingId));
+      await tx
+        .delete(schema.listingAvailability)
+        .where(eq(schema.listingAvailability.listingId, listingId));
+      await tx
+        .delete(schema.shareIntroductions)
+        .where(eq(schema.shareIntroductions.listingId, listingId));
+      await tx
+        .delete(schema.listingShares)
+        .where(eq(schema.listingShares.listingId, listingId));
+      await tx
+        .delete(schema.listings)
+        .where(eq(schema.listings.id, listingId));
+    });
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : "database error";
+    throw new Error(`Could not delete listing (${detail})`);
+  }
+
   return { ok: true as const, id: listingId };
 }
 
