@@ -35,6 +35,10 @@ fn zero() -> ContractAddress {
     0.try_into().unwrap()
 }
 
+fn connector() -> ContractAddress {
+    'connector'.try_into().unwrap()
+}
+
 fn deploy_token(recipient: ContractAddress, supply: u256) -> ContractAddress {
     let contract = declare("MockERC20").unwrap().contract_class();
     let mut calldata = array![];
@@ -119,6 +123,52 @@ fn test_privacy_invoke_create_fund_settle() {
     assert(host_bal == total, 'host paid');
     let anon_bal = IERC20Dispatcher { contract_address: token }.balance_of(anon);
     assert(anon_bal == 0, 'anon empty');
+}
+
+#[test]
+fn test_privacy_invoke_with_connector_reward() {
+    // 1000 tokens, 5% connector (500 bps) → gross 50; protocol 10% of gross = 5; connector 45; host 950
+    let total: u256 = 1000_000000000000000000;
+    let reward_bps: u16 = 500;
+    let token = deploy_token(pool(), total);
+    let anon = deploy_anonymizer();
+    let escrow = deploy_escrow(token, anon);
+
+    start_cheat_caller_address(token, pool());
+    IERC20Dispatcher { contract_address: token }.transfer(anon, total);
+    stop_cheat_caller_address(token);
+
+    let booking_id: u256 = 99;
+    start_cheat_caller_address(anon, pool());
+    let deposits = IBookingEscrowAnonymizerDispatcher { contract_address: anon }
+        .privacy_invoke(
+            escrow,
+            token,
+            booking_id,
+            7,
+            host(),
+            guest(),
+            connector(),
+            total,
+            reward_bps,
+            'note',
+        );
+    stop_cheat_caller_address(anon);
+
+    assert(deposits.len() == 0, 'no leftover note');
+
+    let booking = IBookingEscrowDispatcher { contract_address: escrow }.get_booking(booking_id);
+    assert(booking.funded, 'funded');
+    assert(booking.settled, 'settled');
+    assert(booking.host_amount == 950_000000000000000000, 'host amount');
+    assert(booking.connector_amount == 45_000000000000000000, 'connector net');
+    assert(booking.protocol_amount == 5_000000000000000000, 'protocol take');
+
+    let erc20 = IERC20Dispatcher { contract_address: token };
+    assert(erc20.balance_of(host()) == 950_000000000000000000, 'host paid');
+    assert(erc20.balance_of(connector()) == 45_000000000000000000, 'connector paid');
+    assert(erc20.balance_of(treasury()) == 5_000000000000000000, 'treasury paid');
+    assert(erc20.balance_of(anon) == 0, 'anon empty');
 }
 
 #[test]
