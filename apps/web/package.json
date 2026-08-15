@@ -13,6 +13,7 @@
     "@philoxenia/shared": "*",
     "@starknet-react/chains": "^5.0.3",
     "@starknet-react/core": "^5.0.3",
+    "@vercel/analytics": "^2.0.1",
     "leaflet": "^1.9.4",
     "next": "15.5.23",
     "qrcode.react": "^4.2.0",
