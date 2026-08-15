@@ -9,6 +9,6 @@
     "0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3",
     "0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712"
   ],
-  "demo_video": "https://philoxenia-iota.vercel.app/demo/philoxenia-strk20-demo.mp4",
+  "demo_video": "https://github.com/SergioSSantiago/philoxenia/releases/download/strk20-demo-v1/philoxenia-strk20-demo.mp4",
   "demo_url": "https://philoxenia-iota.vercel.app"
 }
