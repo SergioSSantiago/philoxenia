@@ -94,10 +94,11 @@ Single production contract: `BookingEscrow` (`src/booking_escrow.cairo`).
 
 ```
 Guest creates booking (API) ──► pending status in PostgreSQL
-Guest clicks Pay (Web)      ──► create_booking + approve + fund_booking
-Guest confirms (API)        ──► POST /bookings/:id/fund ──► funded status
-Guest settles (Web)         ──► settle_booking on-chain ──► POST /settle ──► completed
-Host refunds (Web)          ──► refund_booking on-chain ──► POST /refund ──► refunded
+Guest pays (Web)
+  ├─ Public  ──► multicall create + approve + fund + settle
+  └─ Private ──► Wallet API withdraw → anonymizer privacy_invoke
+Guest confirms (API)        ──► POST /bookings/confirm ──► completed (+ privacyMode)
+Host refunds (Web, rare)    ──► refund_booking on-chain ──► POST /refund ──► refunded
 ```
 
 ## Environment configuration
@@ -106,8 +107,10 @@ See `.env` (not committed). Critical variables:
 
 - `DATABASE_URL`, `JWT_SECRET` — API
 - `NEXT_PUBLIC_API_URL` — web → API
-- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — mainnet `0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3`
-- `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 provider path
+- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — STRK escrow (mainnet)
+- `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` — DAI escrow (mainnet)
+- `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` — private fund helper
+- `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 provider path (default on)
 
 ## Deployment topology (typical)
 

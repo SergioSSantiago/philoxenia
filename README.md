@@ -48,8 +48,8 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 | Frontend | Next.js 15, React, TypeScript, Tailwind CSS |
 | Backend | Fastify, Drizzle ORM, PostgreSQL |
 | Contracts | Cairo 2.12, Scarb, Starknet Foundry |
-| Wallet | Ready X via `@starknet-react/core`, `starknetkit`, starknet.js v8 |
-| Privacy | STRK20 via Starknet Wallet API |
+| Wallet | Ready X via `@starknet-react/core`, `starknetkit`, starknet.js **10.7** |
+| Privacy | STRK20 Wallet API + BookingEscrow anonymizer (mainnet) |
 
 ## Quick start
 

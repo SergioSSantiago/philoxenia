@@ -27,4 +27,6 @@ Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustle
 | [deployment.md](./deployment.md) | Generic deploy |
 | [deployment-vercel.md](./deployment-vercel.md) | Production on Vercel |
 
-Root summaries: [ARCHITECTURE.md](../ARCHITECTURE.md), [PRIVACY.md](../PRIVACY.md), [SECURITY.md](../SECURITY.md).
+Root summaries: [ARCHITECTURE.md](../ARCHITECTURE.md), [PRIVACY.md](../PRIVACY.md), [SECURITY.md](../SECURITY.md), [STRK20_INTEGRATION_PLAN.md](../STRK20_INTEGRATION_PLAN.md) (complete).
+
+Hackathon submission fields live in repo-root [`strk20.json`](../strk20.json) (`demo_url`, `demo_video`, txs, contracts).

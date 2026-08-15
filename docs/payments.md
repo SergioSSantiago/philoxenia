@@ -57,6 +57,7 @@ Requires the matching escrow address for the chosen asset, token address, and ho
 ## STRK20 path
 
 See [strk20.md](./strk20.md). Private selection does **not** fall back to public on failure.
+
 ## Peer transfers (Messages)
 
 Friends can send DAI or STRK directly from chat (`peer-transfer.ts`) — used for voluntary returns after social cancel. Not escrow.

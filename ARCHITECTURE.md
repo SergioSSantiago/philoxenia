@@ -51,25 +51,25 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 - **Settlement trust** — Escrow holds guest funds until settlement or refund; the protocol takes 0% commission.
 - **Connector rewards** — Configured per listing (0–100%); paid from the guest total on settlement.
 
-## MVP implementation status
+## Implementation status
 
 | Component | Status |
 |-----------|--------|
-| Wallet auth (Ready X extension, SNIP-12) — desktop | Implemented |
+| Wallet auth (Ready X extension, SNIP-12) — desktop | Shipped |
 | Wallet auth on smartphone | **Blocked** — Ready connect/sign deep-link unreliable |
-| Friends, listings, shares, bookings API | Implemented |
-| Profile (display name) + wallet-only friend search | Implemented |
-| `BookingEscrow` (optional connector + 10% of connector reward) | **Deployed mainnet** — see [docs/deploy-escrow.md](./docs/deploy-escrow.md) |
-| Public ERC20 path (`create_booking` + approve + `fund_booking`) | Implemented in web |
-| STRK20 wallet API detection + fallback | Implemented in web |
-| Settle / refund flows in UI or API | Contract only — **not wired** |
-| Full STRK20 ↔ escrow integration | Partial — see [PRIVACY.md](./PRIVACY.md) and [docs/strk20.md](./docs/strk20.md) |
+| Friends, listings, shares, bookings API | Shipped |
+| Profile (display name) + wallet-only friend search | Shipped |
+| `BookingEscrow` + anonymizer (connector + 10% of connector reward) | **Live mainnet** — [docs/deploy-escrow.md](./docs/deploy-escrow.md) |
+| Public ERC20 path (create + approve + fund + settle multicall) | Shipped |
+| STRK20 shield / unshield / private balances (Ready ≥ 0.10) | Shipped |
+| Private booking fund via anonymizer | Shipped — [PRIVACY.md](./PRIVACY.md), [docs/strk20.md](./docs/strk20.md) |
+| `privacyMode` on payments / booking API/UI | Shipped |
 
 ## Key design constraints
 
 - No public listing directory or search index.
 - No protocol token, NFTs, or internal custodial balances.
-- No protocol fee (host + connector split only).
+- Protocol fee only on connector rewards (10% of connector share); **0%** on direct bookings.
 - Authorization enforced server-side; the API returns 404 for unauthorized resources rather than revealing their existence.
 
 ## Further reading
