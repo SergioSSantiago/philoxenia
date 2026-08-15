@@ -114,7 +114,9 @@ function NewBookingForm() {
     void detectPrivacyCapable(address).then((ok) => {
       if (!cancelled) {
         setPrivacyCapable(ok);
-        if (!ok) setFundMode("public");
+        // Keep Private as default even if detection is pending/false —
+        // pay will error clearly instead of silently using public.
+        if (ok) setFundMode("private");
       }
     });
     return () => {
@@ -256,7 +258,7 @@ function NewBookingForm() {
         typeof provider.setFundPreference === "function"
       ) {
         provider.setFundPreference(
-          STRK20_PRIVACY_ENABLED && privacyCapable ? fundMode : "public"
+          STRK20_PRIVACY_ENABLED ? fundMode : "public"
         );
       }
 
@@ -447,40 +449,40 @@ function NewBookingForm() {
                   <p className="text-xs font-medium text-foreground">
                     Payment privacy
                   </p>
-                  {privacyCapable ? (
-                    <div className="flex flex-col gap-2 sm:flex-row">
-                      <button
-                        type="button"
-                        className={`rounded-full border px-4 py-2 text-xs ${
-                          fundMode === "private"
-                            ? "border-accent bg-accent-soft text-accent"
-                            : "border-border text-muted"
-                        }`}
-                        onClick={() => setFundMode("private")}
-                      >
-                        Private (default)
-                      </button>
-                      <button
-                        type="button"
-                        className={`rounded-full border px-4 py-2 text-xs ${
-                          fundMode === "public"
-                            ? "border-accent bg-accent-soft text-accent"
-                            : "border-border text-muted"
-                        }`}
-                        onClick={() => setFundMode("public")}
-                      >
-                        Public ERC-20
-                      </button>
-                    </div>
-                  ) : (
-                    <p className="text-xs text-muted">
-                      Ready wallet API ≥ 0.10 required for private pay — using
-                      public ERC-20.
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <button
+                      type="button"
+                      className={`rounded-full border px-4 py-2 text-xs ${
+                        fundMode === "private"
+                          ? "border-accent bg-accent-soft text-accent"
+                          : "border-border text-muted"
+                      }`}
+                      onClick={() => setFundMode("private")}
+                    >
+                      Private (default)
+                    </button>
+                    <button
+                      type="button"
+                      className={`rounded-full border px-4 py-2 text-xs ${
+                        fundMode === "public"
+                          ? "border-accent bg-accent-soft text-accent"
+                          : "border-border text-muted"
+                      }`}
+                      onClick={() => setFundMode("public")}
+                    >
+                      Public ERC-20
+                    </button>
+                  </div>
+                  {!privacyCapable && fundMode === "private" && (
+                    <p className="text-xs text-amber-800 leading-relaxed">
+                      Ready wallet API ≥ 0.10 is required for Private. Update or
+                      reconnect Ready — we will not fall back to a public pay
+                      silently.
                     </p>
                   )}
                   <p className="text-xs text-muted leading-relaxed">
-                    {fundMode === "private" && privacyCapable
-                      ? "Pays from shielded balance via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield first on Profile if needed — proofs can take a while."
+                    {fundMode === "private"
+                      ? "Pays from shielded balance via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield first on Profile — proofs can take a while."
                       : "Standard on-chain approve + fund. Visible on explorers."}
                   </p>
                 </div>
@@ -512,19 +514,15 @@ function NewBookingForm() {
               onClick={payAndBook}
             >
               {submitting
-                ? fundMode === "private" && privacyCapable
+                ? fundMode === "private"
                   ? "Proving & paying…"
                   : "Paying…"
                 : paymentAsset === "DAI"
                   ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
-                      fundMode === "private" && privacyCapable
-                        ? ` · ${privacyLabel("private")}`
-                        : ""
+                      fundMode === "private" ? ` · ${privacyLabel("private")}` : ""
                     }`
                   : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
-                      fundMode === "private" && privacyCapable
-                        ? ` · ${privacyLabel("private")}`
-                        : ""
+                      fundMode === "private" ? ` · ${privacyLabel("private")}` : ""
                     }`}
             </Button>
           </div>

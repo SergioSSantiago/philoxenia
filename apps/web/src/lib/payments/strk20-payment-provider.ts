@@ -181,20 +181,30 @@ export class Strk20PaymentProvider implements PaymentProvider {
   }
 
   async fundBooking(params: FundBookingParams): Promise<PaymentStatus> {
-    const capable = await this.detectPrivacySupport();
-
-    if (this.preferPrivate === "public" || !capable) {
+    if (this.preferPrivate === "public") {
       return this.publicFallback.fundBooking(params);
+    }
+
+    // Private is required — never silently fall back to public ERC-20.
+    const capable = await this.detectPrivacySupport();
+    if (!capable) {
+      throw new Error(
+        "Private pay needs Ready with STRK20 (wallet API ≥ 0.10). Update Ready, shield on Profile, then retry — or choose Public."
+      );
     }
 
     const session = await resolvePrivacyWallet(this.account.address);
     if (!session?.privacyCapable) {
-      return this.publicFallback.fundBooking(params);
+      throw new Error(
+        "Could not open a STRK20 wallet session. Reconnect Ready and try again."
+      );
     }
 
     const anonymizer = bookingAnonymizerAddress();
-    try {
-      if (anonymizer) {
+    const privateErrors: string[] = [];
+
+    if (anonymizer) {
+      try {
         const { transaction_hash } = await fundBookingViaAnonymizer(
           session.account,
           params,
@@ -205,8 +215,15 @@ export class Strk20PaymentProvider implements PaymentProvider {
           txHash: transaction_hash,
           privacyMode: "private",
         };
+      } catch (err) {
+        privateErrors.push(
+          err instanceof Error ? err.message : "anonymizer failed"
+        );
       }
+    }
 
+    // Still private: shadow-account path if anonymizer is unavailable/fails.
+    try {
       const { transaction_hash } = await fundBookingViaShadowAccount(
         session.account,
         params
@@ -217,15 +234,14 @@ export class Strk20PaymentProvider implements PaymentProvider {
         privacyMode: "private",
       };
     } catch (err) {
-      // Honest fallback — never invent a private success
-      const message = err instanceof Error ? err.message : "";
-      if (/screen|declin|insufficient|balance|private/i.test(message)) {
-        throw err instanceof Error
-          ? err
-          : new Error("Private payment failed");
-      }
-      return this.publicFallback.fundBooking(params);
+      privateErrors.push(
+        err instanceof Error ? err.message : "shadow account failed"
+      );
     }
+
+    throw new Error(
+      `Private payment failed (no public fallback). ${privateErrors.join(" | ")}. Shield enough balance on Profile, then retry.`
+    );
   }
 }
 

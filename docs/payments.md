@@ -33,9 +33,9 @@ Located in `apps/web/src/lib/payments/`:
 
 Private fund (default when Ready wallet API ≥ 0.10):
 
-1. **Anonymizer (live)** — `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` → `privacy_invoke` ([booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md))
-2. Else → shadow-account path from shielded balance
-3. Else / toggle Public → ERC-20 multicall
+1. **Anonymizer (live)** — OPEN note + `privacy_invoke` (no silent public fallback)
+2. If anonymizer fails → shadow-account path (still private)
+3. Public ERC-20 only when the guest explicitly chooses Public
 
 Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow.md](./deploy-escrow.md).
 

@@ -151,9 +151,10 @@ export async function fundBookingViaShadowAccount(
  * Fund escrow from shielded balance via team BookingEscrowAnonymizer.
  * Observers see pool ↔ anonymizer; guest/host/amounts remain in escrow storage.
  *
- * privacy_invoke ABI:
- *   (escrow, token, booking_id, listing_id, host, guest, connector,
- *    total_amount, connector_reward_bps, note_id) -> Span<OpenNoteDeposit>
+ * Wallet API shape (official private DeFi): OPEN note + invoke only.
+ * The pool withdraws `total_amount` of `token` to the helper as part of invoke.
+ *
+ * @see https://strk20-by-example.org/starknet-wallet-api/private-defi
  */
 export async function fundBookingViaAnonymizer(
   walletAccount: WalletAccountV6,
@@ -161,7 +162,6 @@ export async function fundBookingViaAnonymizer(
   anonymizer: string
 ): Promise<{ transaction_hash: string }> {
   const amount = parseAmount(params.amount);
-  const hexAmount = `0x${amount.toString(16)}`;
   const bookingId = BigInt(params.onChainBookingId);
   const listingId = BigInt(params.onChainListingId);
   const rewardBps = percentToBps(params.connectorRewardPercent);
@@ -170,16 +170,7 @@ export async function fundBookingViaAnonymizer(
       ? params.connectorAddress
       : "0x0";
 
-  // Pool withdraws `amount` to the helper, then calls privacy_invoke.
-  // OPEN note is required by Wallet API; settle consumes all tokens so the
-  // helper typically returns an empty Span (no credit).
   const actions: STRK20_ACTION[] = [
-    {
-      type: "withdraw",
-      token: params.tokenAddress,
-      amount: hexAmount,
-      recipient: anonymizer,
-    },
     {
       type: "transfer",
       token: params.tokenAddress,
@@ -201,7 +192,6 @@ export async function fundBookingViaAnonymizer(
           total_amount: cairo.uint256(amount),
           connector_reward_bps: rewardBps,
         }),
-        // Wallet resolves this placeholder to the OPEN note opened above.
         "${openNoteIds[0]}",
       ],
     },
@@ -209,3 +199,4 @@ export async function fundBookingViaAnonymizer(
 
   return walletAccount.strk20InvokeTransaction(actions);
 }
+
