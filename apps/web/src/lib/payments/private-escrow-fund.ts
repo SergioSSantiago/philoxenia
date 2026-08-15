@@ -175,16 +175,16 @@ export async function fundBookingViaShadowAccount(
  * Fund escrow from shielded balance via team BookingEscrowAnonymizer.
  * Observers see pool ↔ anonymizer; guest/host/amounts remain in escrow storage.
  *
- * Wallet API / pool shape (matches starknet-privacy InvokeExternal tests):
- * 1. `withdraw` to the anonymizer — pool sends `total_amount` of token publicly
- * 2. `transfer` amount `"OPEN"` — open note for any leftover
- * 3. `invoke` anonymizer `privacy_invoke` with `${openNoteIds[0]}`
+ * Wallet API / pool shape for full-consume settle (no leftover):
+ * 1. `withdraw` to the anonymizer — pool sends `total_amount` publicly
+ * 2. `invoke` anonymizer `privacy_invoke` (returns empty OpenNoteDeposit span)
  *
- * Docs sometimes omit (1); without it the helper has zero balance and reverts
- * (Paymaster TRANSACTION_EXECUTION_ERROR / INSUFFICIENT_BALANCE).
+ * Do **not** create an `OPEN` note here. The pool asserts
+ * `UNDEPOSITED_OPEN_NOTES == 0` at tx end, and rejects zero-amount deposits —
+ * so OPEN + empty leftover always reverts (Paymaster error 156).
  *
- * @see https://strk20-by-example.org/starknet-wallet-api/private-defi
- * @see https://github.com/starkware-libs/starknet-privacy/blob/main/sdk/tests/internal/invoke-external.test.ts
+ * @see https://github.com/starkware-libs/starknet-privacy/blob/main/packages/privacy/src/privacy.cairo
+ * @see https://strk20-by-example.org/helpers/escrow (Deposit returns empty span, no OPEN)
  */
 export async function fundBookingViaAnonymizer(
   walletAccount: WalletAccountV6,
@@ -211,14 +211,9 @@ export async function fundBookingViaAnonymizer(
       recipient: anon,
     },
     {
-      type: "transfer",
-      token,
-      amount: "OPEN",
-      recipient: toWalletFelt(params.guestAddress),
-    },
-    {
       type: "invoke",
       contract: anon,
+      // note_id unused when leftover is zero (empty deposit span).
       calldata: toWalletCalldata([
         ...CallData.compile({
           escrow: params.escrowAddress,
@@ -231,7 +226,7 @@ export async function fundBookingViaAnonymizer(
           total_amount: cairo.uint256(amount),
           connector_reward_bps: rewardBps,
         }),
-        "${openNoteIds[0]}",
+        "0x0",
       ]),
     },
   ];

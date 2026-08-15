@@ -30,11 +30,13 @@ Escrow still stores guest / host / amounts publicly.
 
 `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` → `fundBookingViaAnonymizer`.
 
-Wallet API actions (matches starknet-privacy `InvokeExternal` tests):
+Wallet API actions for settle-all (no leftover):
 
-1. `withdraw` token amount to the anonymizer (pool → helper; required — invoke alone does not fund it)
-2. `transfer` amount `"OPEN"` (open note for leftovers)
-3. `invoke` anonymizer calldata + `${openNoteIds[0]}`
+1. `withdraw` token amount to the anonymizer (pool → helper)
+2. `invoke` anonymizer calldata with `note_id = 0` (empty `OpenNoteDeposit` span)
+
+Do **not** create an `OPEN` note: the privacy pool reverts with `UNDEPOSITED_OPEN_NOTES`
+if an open note is created but not filled, and rejects zero-amount fills.
 
 No silent fallback to public when Private is selected. Shadow backup is opt-in (`NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1`).
 

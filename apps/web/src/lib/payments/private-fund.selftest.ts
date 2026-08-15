@@ -1,5 +1,5 @@
 /**
- * Unit checks for private fund: wallet-felt encoding + anonymizer calldata shape.
+ * Unit checks for private fund: wallet-felt encoding + settle-all anonymizer shape.
  * Run: npx tsx apps/web/src/lib/payments/private-fund.selftest.ts
  */
 import { CallData, cairo } from "starknet";
@@ -31,25 +31,23 @@ const compiled = CallData.compile({
   connector_reward_bps: 0,
 });
 
-// Decimal strings from CallData.compile must be rejected by the wallet path.
 assert.ok(
   compiled.some((v) => typeof v === "string" && !String(v).startsWith("0x")),
   "CallData.compile should produce decimal strings (why we re-encode)"
 );
 
-const calldata = toWalletCalldata([...compiled, "${openNoteIds[0]}"]);
+// Settle-all: no OPEN note — note_id is 0x0 (unused when leftover span is empty).
+const calldata = toWalletCalldata([...compiled, "0x0"]);
 
-assert.equal(calldata[calldata.length - 1], "${openNoteIds[0]}");
+assert.equal(calldata[calldata.length - 1], "0x0");
 assert.ok(calldata.length >= 10, "expected full privacy_invoke args");
 assert.equal(BigInt(calldata[0]), BigInt(ESCROW));
 assert.equal(BigInt(calldata[1]), BigInt(TOKEN));
 for (const item of calldata) {
-  if (item.startsWith("${")) continue;
   assert.match(item, /^0x[0-9a-f]+$/i, `felt must be 0x-hex: ${item}`);
 }
 
 assert.equal(toWalletFelt("1000"), "0x3e8");
-assert.equal(toWalletFelt("${openNoteIds[0]}"), "${openNoteIds[0]}");
 
 const actions = [
   {
@@ -58,14 +56,12 @@ const actions = [
     amount: toWalletFelt(amount),
     recipient: ANON,
   },
-  { type: "transfer", token: TOKEN, amount: "OPEN", recipient: GUEST },
   { type: "invoke", contract: ANON, calldata },
 ];
-assert.equal(actions.length, 3);
+assert.equal(actions.length, 2);
 assert.equal(actions[0].type, "withdraw");
-assert.equal(actions[1].type, "transfer");
-assert.equal(actions[2].type, "invoke");
-assert.ok(actions.some((a) => a.type === "withdraw"));
+assert.equal(actions[1].type, "invoke");
+assert.ok(!actions.some((a) => a.type === "transfer"));
 
 console.log("private-fund.selftest OK", {
   invokeCalldataLen: calldata.length,

@@ -34,6 +34,22 @@ function toHexAmount(amount: string): string {
   return `0x${value.toString(16)}`;
 }
 
+/** Prefer paymaster/RPC execution_error when wallets wrap it. */
+function formatWalletError(err: unknown): string {
+  if (!(err instanceof Error)) return String(err);
+  const anyErr = err as Error & {
+    baseError?: { data?: { execution_error?: string }; message?: string };
+    data?: { execution_error?: string };
+    error?: { data?: { execution_error?: string } };
+  };
+  const execution =
+    anyErr.baseError?.data?.execution_error ||
+    anyErr.data?.execution_error ||
+    anyErr.error?.data?.execution_error;
+  if (execution) return `${err.message}: ${execution}`;
+  return err.message;
+}
+
 function formatBalance(raw: string | number | bigint): string {
   try {
     const n = typeof raw === "bigint" ? raw : BigInt(raw);
@@ -217,9 +233,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
           privacyMode: "private",
         };
       } catch (err) {
-        privateErrors.push(
-          `anonymizer: ${err instanceof Error ? err.message : "failed"}`
-        );
+        privateErrors.push(`anonymizer: ${formatWalletError(err)}`);
       }
     }
 
@@ -238,7 +252,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
           privacyMode: "private",
         };
       } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
+        const msg = formatWalletError(err);
         if (
           /wallet_strk20ShadowAccountCommitment|Unknown request type/i.test(msg)
         ) {
