@@ -300,6 +300,24 @@ export async function registerRoutes(app: FastifyInstance) {
     }
   );
 
+  app.delete(
+    "/my-listings/:id",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+      try {
+        return await social.deleteListing(params.id, request.user.userId);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Delete listing failed";
+        const status = message.includes("unavailable") ? 404 : 400;
+        return reply.status(status).send({ error: message });
+      }
+    }
+  );
+
   app.patch(
     "/my-listings/:id/availability",
     { preHandler: [authenticate] },
@@ -724,6 +742,14 @@ const createListingSchema = z
     cancellationTerms: z.string().min(1).max(2000),
     connectorRewardPercent: z.number().int().min(0).max(100),
     photos: z.array(z.string().min(1)).min(1).max(8),
+    availableDays: z
+      .array(
+        z.object({
+          day: z.string().min(1),
+          pricePerNight: z.string().min(1),
+        })
+      )
+      .optional(),
     availability: z
       .array(
         z.object({
@@ -731,18 +757,29 @@ const createListingSchema = z
           endDate: z.string(),
         })
       )
-      .min(1),
+      .optional(),
   })
   .superRefine((data, ctx) => {
-    for (let i = 0; i < data.availability.length; i++) {
-      const start = new Date(data.availability[i].startDate);
-      const end = new Date(data.availability[i].endDate);
-      if (!(end > start)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Availability end must be after start",
-          path: ["availability", i, "endDate"],
-        });
+    const hasDays = (data.availableDays?.length ?? 0) > 0;
+    const hasWindows = (data.availability?.length ?? 0) > 0;
+    if (!hasDays && !hasWindows) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Select at least one available night",
+        path: ["availableDays"],
+      });
+    }
+    if (data.availability) {
+      for (let i = 0; i < data.availability.length; i++) {
+        const start = new Date(data.availability[i].startDate);
+        const end = new Date(data.availability[i].endDate);
+        if (!(end > start)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Availability end must be after start",
+            path: ["availability", i, "endDate"],
+          });
+        }
       }
     }
   });

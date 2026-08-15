@@ -292,7 +292,7 @@ export function AvailabilityCalendar({
                       : availableNight
                         ? "border-border bg-background text-foreground hover:bg-accent-soft/50"
                         : booked
-                          ? "border-border bg-muted/20 text-muted line-through"
+                          ? "cursor-not-allowed border-border bg-muted/25 text-muted line-through opacity-80"
                           : "border-transparent text-muted/40"
               }`}
             >
@@ -310,7 +310,9 @@ export function AvailabilityCalendar({
                 <span className="mt-0.5 text-[9px] text-accent">out</span>
               )}
               {booked && (
-                <span className="mt-0.5 text-[9px] text-muted">booked</span>
+                <span className="mt-0.5 text-[9px] font-medium text-muted">
+                  paid
+                </span>
               )}
             </button>
           );
@@ -334,8 +336,10 @@ export function AvailabilityCalendar({
       {mode === "host" && (
         <div className="space-y-3 rounded-xl border border-border bg-background p-4 text-sm">
           <p className="text-muted leading-relaxed">
-            Tap a day to add/remove it. Open a night in the list below to set a
-            custom DAI price. Paid bookings stay marked booked.
+            Tap a day to open/close it. Tap a night in the list (or long-press /
+            right-click a day) to set a custom DAI price.{" "}
+            <span className="text-foreground">Paid nights stay locked</span> —
+            you can’t remove them or change their price.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block text-xs">
@@ -421,6 +425,28 @@ export function AvailabilityCalendar({
                   </li>
                 ))}
             </ul>
+          )}
+
+          {days.some((d) => d.booked) && (
+            <div className="border-t border-border pt-3">
+              <p className="mb-1 text-xs font-medium text-foreground">
+                Paid nights (locked)
+              </p>
+              <ul className="max-h-28 space-y-1 overflow-y-auto text-xs text-muted">
+                {days
+                  .filter((d) => d.booked)
+                  .sort((a, b) => a.day.localeCompare(b.day))
+                  .map((d) => (
+                    <li
+                      key={`paid-${d.day}`}
+                      className="flex justify-between gap-2 line-through"
+                    >
+                      <span>{formatShort(d.day)}</span>
+                      <span>{formatTokenAmount(d.pricePerNight)} DAI</span>
+                    </li>
+                  ))}
+              </ul>
+            </div>
           )}
         </div>
       )}

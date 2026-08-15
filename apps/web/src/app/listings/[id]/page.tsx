@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import type { Listing } from "@philoxenia/shared";
+import type { Listing, ListingAvailableDay } from "@philoxenia/shared";
 import { formatDaiPrice } from "@philoxenia/shared";
 import { Shell, Button, Card } from "@/components/ui";
 import { UserBadge } from "@/components/user-badge";
@@ -50,6 +50,7 @@ export default function ListingPage() {
     { day: string; pricePerNight: string }[] | null
   >(null);
   const [guestSelected, setGuestSelected] = useState<string[]>([]);
+  const [deleteBusy, setDeleteBusy] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -62,6 +63,72 @@ export default function ListingPage() {
       .then(setListing)
       .catch(() => setError("Listing unavailable."));
   }, [token, params.id, router]);
+
+  const hostCalendarDays: ListingAvailableDay[] = useMemo(() => {
+    if (!listing) return [];
+    const byDay = new Map<string, ListingAvailableDay>();
+
+    // Always show paid nights as locked
+    for (const d of listing.availableDays ?? []) {
+      const day = d.day.slice(0, 10);
+      if (!d.booked) continue;
+      byDay.set(day, { ...d, day, booked: true });
+    }
+    for (const range of listing.bookedRanges ?? []) {
+      for (const n of range.nights ?? []) {
+        const day = n.slice(0, 10);
+        if (byDay.has(day)) continue;
+        byDay.set(day, {
+          id: day,
+          listingId: listing.id,
+          day,
+          pricePerNight: listing.pricePerNight,
+          booked: true,
+        });
+      }
+    }
+
+    const openSource =
+      draftDays ??
+      (listing.availableDays ?? [])
+        .filter((d) => !d.booked)
+        .map((d) => ({
+          day: d.day.slice(0, 10),
+          pricePerNight: d.pricePerNight,
+        }));
+
+    for (const d of openSource) {
+      const day = d.day.slice(0, 10);
+      if (byDay.get(day)?.booked) continue;
+      byDay.set(day, {
+        id: day,
+        listingId: listing.id,
+        day,
+        pricePerNight: d.pricePerNight,
+        booked: false,
+      });
+    }
+
+    return [...byDay.values()].sort((a, b) => a.day.localeCompare(b.day));
+  }, [listing, draftDays]);
+
+  async function deleteListing() {
+    if (!listing) return;
+    const ok = window.confirm(
+      "Delete this listing? You can only delete if there are no active paid bookings (past stays are OK)."
+    );
+    if (!ok) return;
+    setDeleteBusy(true);
+    setError("");
+    try {
+      await api.delete(`/my-listings/${listing.id}`);
+      router.push("/my-listings");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed");
+    } finally {
+      setDeleteBusy(false);
+    }
+  }
 
   async function saveAvailability() {
     if (!draftDays) return;
@@ -247,19 +314,7 @@ export default function ListingPage() {
             {isHost ? (
               <>
                 <AvailabilityCalendar
-                  days={
-                    draftDays
-                      ? draftDays.map((d) => ({
-                          id: d.day,
-                          listingId: listing.id,
-                          day: d.day,
-                          pricePerNight: d.pricePerNight,
-                          booked: listing.availableDays?.find(
-                            (x) => x.day === d.day
-                          )?.booked,
-                        }))
-                      : (listing.availableDays ?? [])
-                  }
+                  days={hostCalendarDays}
                   mode="host"
                   defaultPrice={listing.pricePerNight}
                   onChangeDays={(days) => {
@@ -341,6 +396,17 @@ export default function ListingPage() {
             >
               {shareBusy ? "Creating link…" : "Share listing"}
             </Button>
+            {isHost && (
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full text-red-700 sm:w-auto"
+                disabled={deleteBusy}
+                onClick={deleteListing}
+              >
+                {deleteBusy ? "Deleting…" : "Delete listing"}
+              </Button>
+            )}
           </div>
 
           {isHost && (

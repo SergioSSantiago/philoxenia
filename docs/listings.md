@@ -12,12 +12,21 @@ Hosts create **private listings** visible only to themselves and their friends.
 |-------|-------------|
 | `title`, `description` | Basic listing info |
 | `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84) |
-| `pricePerNight` | Decimal string **denominated in DAI**; guests may pay that amount in DAI or STRK |
-| `minStay`, `maxStay` | Derived from the availability window (not host-entered) |
+| `pricePerNight` | Default DAI price; nights can override per day on the calendar |
+| `minStay`, `maxStay` | Derived from open nights (not host-entered) |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow) |
 | `connectorRewardPercent` | 0–100; connector's share when an introduction exists |
 | `photos` | 1–8 compressed images (data URLs or https) |
-| `availability` | Required date range |
+| `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar |
+| `availability` | Legacy contiguous windows (still accepted) |
+
+Paid guest nights stay in inventory as **locked** (`booked`): host cannot remove them or change their price; social cancel frees them again.
+
+## Delete listing
+
+`DELETE /my-listings/:id` (host only).
+
+Allowed when there are **no active paid bookings** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete.
 
 ## Cancellation vs escrow
 

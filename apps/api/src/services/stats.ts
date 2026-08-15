@@ -1,5 +1,6 @@
 import { count, eq, gte, inArray, sql } from "drizzle-orm";
 import { db, schema } from "../db/index.js";
+import { countryFromLocation } from "../lib/geo.js";
 
 export type NetworkStats = {
   users: number;
@@ -14,22 +15,7 @@ export type NetworkStats = {
 let cached: { at: number; data: NetworkStats } | null = null;
 const CACHE_MS = 15_000;
 
-/** Last comma segment of a Nominatim-style address ≈ country. */
-export function countryFromLocation(location: string): string | null {
-  const parts = location
-    .split(",")
-    .map((p) => p.trim())
-    .filter(Boolean);
-  if (parts.length === 0) return null;
-  let country = parts[parts.length - 1];
-  // Prefer previous segment if last looks like a postal code
-  if (/^[\dA-Z]{2,}[\d\s-]*$/i.test(country) && parts.length > 1) {
-    country = parts[parts.length - 2];
-  }
-  const key = country.toLowerCase();
-  if (key.length < 2) return null;
-  return key;
-}
+export { countryFromLocation, looksLikePostalCode } from "../lib/geo.js";
 
 function normalizeAmount(value: string | null | undefined): string {
   if (!value) return "0";
@@ -141,4 +127,9 @@ export async function getNetworkStats(): Promise<NetworkStats> {
   };
   cached = { at: now, data };
   return data;
+}
+
+/** Test helper — bypass cache. */
+export function clearNetworkStatsCache() {
+  cached = null;
 }

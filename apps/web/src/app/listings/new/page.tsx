@@ -2,23 +2,17 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import type { ListingAvailableDay } from "@philoxenia/shared";
 import { Shell, Button, Card, TextInput } from "@/components/ui";
 import { PhotoUploader } from "@/components/photo-uploader";
 import {
   LocationMapPicker,
   type MapLocationValue,
 } from "@/components/location-map-picker";
+import { AvailabilityCalendar } from "@/components/availability-calendar";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import "leaflet/dist/leaflet.css";
-
-function nightsBetween(start: string, end: string): number {
-  if (!start || !end) return 0;
-  const a = new Date(start);
-  const b = new Date(end);
-  const ms = b.getTime() - a.getTime();
-  return Math.floor(ms / (24 * 60 * 60 * 1000));
-}
 
 export default function CreateListingPage() {
   const router = useRouter();
@@ -34,12 +28,20 @@ export default function CreateListingPage() {
   );
   const [photos, setPhotos] = useState<string[]>([]);
   const [mapLocation, setMapLocation] = useState<MapLocationValue | null>(null);
-  const [availabilityStart, setAvailabilityStart] = useState("");
-  const [availabilityEnd, setAvailabilityEnd] = useState("");
+  const [availableDays, setAvailableDays] = useState<
+    { day: string; pricePerNight: string }[]
+  >([]);
 
-  const maxStayNights = useMemo(
-    () => nightsBetween(availabilityStart, availabilityEnd),
-    [availabilityStart, availabilityEnd]
+  const calendarDays: ListingAvailableDay[] = useMemo(
+    () =>
+      availableDays.map((d) => ({
+        id: d.day,
+        listingId: "",
+        day: d.day,
+        pricePerNight: d.pricePerNight,
+        booked: false,
+      })),
+    [availableDays]
   );
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function CreateListingPage() {
       if (!title.trim()) throw new Error("Title is required");
       if (!description.trim()) throw new Error("Description is required");
       if (!pricePerNight || Number(pricePerNight) <= 0) {
-        throw new Error("Enter a valid price per night");
+        throw new Error("Enter a valid default price per night (DAI)");
       }
       if (!mapLocation) {
         throw new Error("Pin the exact location on the map");
@@ -63,11 +65,8 @@ export default function CreateListingPage() {
       if (photos.length === 0) {
         throw new Error("Add at least one photo");
       }
-      if (!availabilityStart || !availabilityEnd) {
-        throw new Error("Set availability dates");
-      }
-      if (maxStayNights < 1) {
-        throw new Error("Available until must be after available from");
+      if (availableDays.length < 1) {
+        throw new Error("Open at least one night on the calendar");
       }
       if (!cancellationTerms.trim()) {
         throw new Error("Cancellation terms are required");
@@ -83,12 +82,7 @@ export default function CreateListingPage() {
         cancellationTerms: cancellationTerms.trim(),
         connectorRewardPercent,
         photos,
-        availability: [
-          {
-            startDate: availabilityStart,
-            endDate: availabilityEnd,
-          },
-        ],
+        availableDays,
       });
       router.push(`/listings/${listing.id}`);
     } catch (err) {
@@ -132,7 +126,7 @@ export default function CreateListingPage() {
               />
             </label>
             <label className="block text-sm">
-              Price per night (DAI)
+              Default price per night (DAI)
               <TextInput
                 className="mt-1"
                 type="number"
@@ -144,8 +138,8 @@ export default function CreateListingPage() {
                 required
               />
               <span className="mt-1 block text-xs text-muted">
-                Listed in DAI. At booking, guests can pay that amount in DAI or
-                the same amount in STRK.
+                Used when you open nights on the calendar. You can set a
+                different DAI price per night there.
               </span>
             </label>
             <label className="block text-sm">
@@ -177,36 +171,26 @@ export default function CreateListingPage() {
 
           <section className="space-y-4">
             <h2 className="text-lg text-foreground">Availability</h2>
-            <p className="text-xs text-muted">
-              Stay length is limited by this window (1 night up to the full
-              range). No separate min/max fields.
+            <p className="text-xs text-muted leading-relaxed">
+              Same calendar as when you edit a listing: tap nights one by one,
+              or add a range, and set per-night DAI prices.
             </p>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block text-sm">
-                Available from
-                <TextInput
-                  className="mt-1"
-                  type="date"
-                  value={availabilityStart}
-                  onChange={(e) => setAvailabilityStart(e.target.value)}
-                  required
-                />
-              </label>
-              <label className="block text-sm">
-                Available until
-                <TextInput
-                  className="mt-1"
-                  type="date"
-                  value={availabilityEnd}
-                  onChange={(e) => setAvailabilityEnd(e.target.value)}
-                  required
-                />
-              </label>
-            </div>
-            {maxStayNights > 0 && (
+            {!pricePerNight || Number(pricePerNight) <= 0 ? (
               <p className="text-sm text-muted">
-                Guests can book 1–{maxStayNights} night
-                {maxStayNights === 1 ? "" : "s"} in this window.
+                Enter a default DAI price above to open nights on the calendar.
+              </p>
+            ) : (
+              <AvailabilityCalendar
+                days={calendarDays}
+                mode="host"
+                defaultPrice={pricePerNight}
+                onChangeDays={setAvailableDays}
+              />
+            )}
+            {availableDays.length > 0 && (
+              <p className="text-sm text-muted">
+                {availableDays.length} night
+                {availableDays.length === 1 ? "" : "s"} open.
               </p>
             )}
           </section>
@@ -214,10 +198,9 @@ export default function CreateListingPage() {
           <section className="space-y-3">
             <h2 className="text-lg text-foreground">Cancellation terms</h2>
             <p className="text-xs text-muted leading-relaxed">
-              Off-chain policy only. The escrow contract does{" "}
-              <span className="font-medium text-foreground">not</span> auto-apply
-              these rules — after funding, the host can refund or the guest can
-              settle. Write clear terms your network will honour.
+              Off-chain policy only. After payment, host and connector already
+              have the funds — resolve changes in Messages. Write clear terms
+              your network will honour.
             </p>
             <textarea
               className="min-h-24 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm"

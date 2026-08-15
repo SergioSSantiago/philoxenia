@@ -53,6 +53,7 @@ philoxenia/
 | `GET /health` | Liveness |
 | `GET /rates/strk-dai` | Live STRK per DAI (CoinGecko) |
 | `GET /stats/network` | Landing totals: users, countries, listings open, nights booked, DAI/STRK booked |
+| `DELETE /my-listings/:id` | Host deletes listing if no active paid bookings remain |
 
 ## Web (`apps/web`)
 
@@ -67,7 +68,7 @@ philoxenia/
 | Route | Purpose |
 |-------|---------|
 | `/` | Landing. Brand-first hero + live network stats; header brand links here |
-| `/home` | App home. If signed out, Ready X connect modal |
+| `/home` | App home: compact wallet/balances + interactive globe of accessible listings |
 | `/auth` | Legacy redirect to `/home` |
 | `/profile` | Display name, STRK/DAI balances, disconnect |
 | `/friends` | Friends; search by wallet address only |

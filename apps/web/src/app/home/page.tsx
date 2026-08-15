@@ -8,6 +8,7 @@ import { Shell, SectionTitle, EmptyState, Button, Card } from "@/components/ui";
 import { ListingCard, BookingCard } from "@/components/cards";
 import { WalletAddress } from "@/components/wallet-address";
 import { WalletBalances } from "@/components/wallet-balances";
+import { ListingsGlobe } from "@/components/listings-globe";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 
@@ -70,34 +71,41 @@ export default function HomePage() {
 
   return (
     <Shell wide>
-      <div className="mb-8 sm:mb-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="mb-8 grid gap-6 lg:grid-cols-[minmax(200px,260px)_minmax(0,1fr)] lg:items-start">
+        <aside className="space-y-3">
           <div>
-            <h1 className="text-3xl sm:text-4xl">Hello, {user.displayName}</h1>
-            <p className="mt-2 text-sm text-muted sm:text-base">
-              Your private network of trusted places.
+            <h1 className="text-2xl leading-tight sm:text-3xl">
+              Hello, {user.displayName}
+            </h1>
+            <p className="mt-1 text-xs text-muted leading-relaxed">
+              Your network of trusted places.
             </p>
           </div>
-          <Link href="/profile" className="shrink-0">
-            <Button variant="secondary" className="w-full sm:w-auto">
-              Edit profile
-            </Button>
-          </Link>
-        </div>
-      </div>
+          <Card className="space-y-3 p-4 sm:p-4">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.12em] text-muted">
+                Wallet
+              </p>
+              <div className="mt-1.5 scale-95 origin-left">
+                <WalletAddress address={user.walletAddress} />
+              </div>
+            </div>
+            <hr className="border-border" />
+            <WalletBalances compact />
+            <Link href="/profile" className="block">
+              <Button variant="secondary" className="w-full text-xs">
+                Edit profile
+              </Button>
+            </Link>
+          </Card>
+        </aside>
 
-      <Card className="mb-10 space-y-6">
-        <div>
-          <p className="text-sm text-muted">
-            Friends add you using your wallet address.
-          </p>
-          <div className="mt-3">
-            <WalletAddress address={user.walletAddress} />
-          </div>
-        </div>
-        <hr className="border-border" />
-        <WalletBalances />
-      </Card>
+        <ListingsGlobe
+          myListings={data.myListings}
+          networkListings={data.networkListings}
+          sharedListings={data.sharedListings}
+        />
+      </div>
 
       <div className="space-y-12">
         <section>

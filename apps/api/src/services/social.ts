@@ -16,6 +16,7 @@ import {
 import { toUserResponse } from "./auth.js";
 import { createNotification } from "./notifications.js";
 import { daiToStrk, getStrkPerDai } from "./rates.js";
+import { hasActivePaidNights } from "../lib/geo.js";
 
 function mapListing(
   listing: typeof schema.listings.$inferSelect,
@@ -344,7 +345,10 @@ export async function createListing(
     cancellationTerms: string;
     connectorRewardPercent: number;
     photos: string[];
-    availability: { startDate: string; endDate: string }[];
+    /** Preferred: explicit open nights with per-night DAI prices. */
+    availableDays?: { day: string; pricePerNight: string }[];
+    /** Legacy contiguous windows (expanded at default pricePerNight). */
+    availability?: { startDate: string; endDate: string }[];
   }
 ) {
   if (!input.photos.length) {
@@ -383,21 +387,36 @@ export async function createListing(
     throw new Error("Invalid map coordinates");
   }
 
-  if (input.availability.length === 0) {
-    throw new Error("Set an availability window");
-  }
-
-  let derivedMax = 1;
-  for (const window of input.availability) {
-    const start = new Date(window.startDate);
-    const end = new Date(window.endDate);
-    const nights = daysBetween(start, end);
-    if (nights < 1) {
-      throw new Error("Availability end must be after start");
+  let dayRows: { day: string; pricePerNight: string }[] = [];
+  if (input.availableDays && input.availableDays.length > 0) {
+    const seen = new Set<string>();
+    for (const row of input.availableDays) {
+      const day = toDayKey(row.day);
+      if (seen.has(day)) continue;
+      seen.add(day);
+      const price = row.pricePerNight.trim();
+      if (!price || Number(price) <= 0) {
+        throw new Error(`Invalid price for ${day}`);
+      }
+      dayRows.push({ day, pricePerNight: price });
     }
-    derivedMax = Math.max(derivedMax, nights);
+  } else if (input.availability && input.availability.length > 0) {
+    for (const window of input.availability) {
+      const start = new Date(window.startDate);
+      const end = new Date(window.endDate);
+      if (daysBetween(start, end) < 1) {
+        throw new Error("Availability end must be after start");
+      }
+      for (const day of nightsInWindow(window.startDate, window.endDate)) {
+        dayRows.push({ day, pricePerNight: input.pricePerNight });
+      }
+    }
+  } else {
+    throw new Error("Select at least one available night on the calendar");
   }
 
+  dayRows.sort((a, b) => a.day.localeCompare(b.day));
+  const derivedMax = Math.max(1, dayRows.length);
   const minStay = input.minStay ?? 1;
   const maxStay = input.maxStay ?? derivedMax;
   if (minStay < 1 || maxStay < minStay) {
@@ -423,33 +442,24 @@ export async function createListing(
     })
     .returning();
 
-  if (input.availability.length > 0) {
-    await db.insert(schema.listingAvailability).values(
-      input.availability.map((a) => ({
-        listingId: listing.id,
-        startDate: new Date(a.startDate),
-        endDate: new Date(a.endDate),
-      }))
-    );
+  const start = dayRows[0].day;
+  const last = dayRows[dayRows.length - 1].day;
+  const endDate = dayUtcNoon(last);
+  endDate.setUTCDate(endDate.getUTCDate() + 1);
 
-    const dayRows: {
-      listingId: string;
-      day: Date;
-      pricePerNight: string;
-    }[] = [];
-    for (const window of input.availability) {
-      for (const day of nightsInWindow(window.startDate, window.endDate)) {
-        dayRows.push({
-          listingId: listing.id,
-          day: dayUtcNoon(day),
-          pricePerNight: input.pricePerNight,
-        });
-      }
-    }
-    if (dayRows.length > 0) {
-      await db.insert(schema.listingAvailableDays).values(dayRows);
-    }
-  }
+  await db.insert(schema.listingAvailability).values({
+    listingId: listing.id,
+    startDate: dayUtcNoon(start),
+    endDate,
+  });
+
+  await db.insert(schema.listingAvailableDays).values(
+    dayRows.map((d) => ({
+      listingId: listing.id,
+      day: dayUtcNoon(d.day),
+      pricePerNight: d.pricePerNight,
+    }))
+  );
 
   return getListingForViewer(listing.id, hostId);
 }
@@ -520,6 +530,38 @@ export async function getListingForViewer(
     for (const n of b.nights) bookedNights.add(n);
   }
 
+  const availableByDay = new Map<
+    string,
+    {
+      id: string;
+      listingId: string;
+      day: string;
+      pricePerNight: string;
+      booked: boolean;
+    }
+  >();
+  for (const d of days) {
+    const key = toDayKey(d.day);
+    availableByDay.set(key, {
+      id: d.id,
+      listingId: d.listingId,
+      day: key,
+      pricePerNight: d.pricePerNight,
+      booked: bookedNights.has(key),
+    });
+  }
+  // Ensure paid nights always appear (locked) even if missing from inventory
+  for (const night of bookedNights) {
+    if (availableByDay.has(night)) continue;
+    availableByDay.set(night, {
+      id: night,
+      listingId,
+      day: night,
+      pricePerNight: listing.pricePerNight,
+      booked: true,
+    });
+  }
+
   return {
     ...mapListing(listing, listing.host ?? undefined),
     availability: availability.map((a) => ({
@@ -528,13 +570,9 @@ export async function getListingForViewer(
       startDate: a.startDate.toISOString(),
       endDate: a.endDate.toISOString(),
     })),
-    availableDays: days.map((d) => ({
-      id: d.id,
-      listingId: d.listingId,
-      day: toDayKey(d.day),
-      pricePerNight: d.pricePerNight,
-      booked: bookedNights.has(toDayKey(d.day)),
-    })),
+    availableDays: [...availableByDay.values()].sort((a, b) =>
+      a.day.localeCompare(b.day)
+    ),
     bookedRanges,
   };
 }
@@ -563,8 +601,8 @@ export async function getPaidBookedRanges(listingId: string) {
 }
 
 /**
- * Host replaces available nights + per-night DAI prices. Add/remove freely;
- * conflicts with paid stays are resolved with the guest in Messages.
+ * Host replaces open nights + per-night DAI prices.
+ * Paid (booked) nights are preserved and cannot be removed or repriced here.
  */
 export async function setListingAvailableDays(
   listingId: string,
@@ -578,11 +616,26 @@ export async function setListingAvailableDays(
     throw new Error(LISTING_UNAVAILABLE);
   }
 
+  const paid = await getPaidBookedRanges(listingId);
+  const paidNights = new Set(paid.flatMap((b) => b.nights));
+
+  const existingRows = await db.query.listingAvailableDays.findMany({
+    where: eq(schema.listingAvailableDays.listingId, listingId),
+  });
+  const existingByDay = new Map(
+    existingRows.map((d) => [toDayKey(d.day), d.pricePerNight])
+  );
+
   const seen = new Set<string>();
   const normalized: { day: string; pricePerNight: string }[] = [];
   for (const row of days) {
     const day = toDayKey(row.day);
     if (seen.has(day)) continue;
+    if (paidNights.has(day)) {
+      throw new Error(
+        `Night ${day} is already booked — leave it locked`
+      );
+    }
     seen.add(day);
     const price = row.pricePerNight.trim();
     if (!price || Number(price) <= 0) {
@@ -590,8 +643,21 @@ export async function setListingAvailableDays(
     }
     normalized.push({ day, pricePerNight: price });
   }
+
+  // Keep paid nights in inventory (locked) with their prior price
+  for (const day of [...paidNights].sort()) {
+    if (seen.has(day)) continue;
+    seen.add(day);
+    normalized.push({
+      day,
+      pricePerNight:
+        existingByDay.get(day) ?? listing.pricePerNight,
+    });
+  }
+
   normalized.sort((a, b) => a.day.localeCompare(b.day));
-  const maxStay = Math.max(1, normalized.length);
+  const openCount = normalized.filter((d) => !paidNights.has(d.day)).length;
+  const maxStay = Math.max(1, openCount || normalized.length);
 
   await db.transaction(async (tx) => {
     await tx
@@ -665,6 +731,35 @@ export async function getMyListings(hostId: string) {
   });
 
   return rows.map((l) => mapListing(l));
+}
+
+/** True if any paid night is today or in the future. */
+export { hasActivePaidNights } from "../lib/geo.js";
+
+/**
+ * Host deletes their listing when no active paid bookings remain.
+ * Past paid stays are OK — only today/future paid nights block delete.
+ */
+export async function deleteListing(listingId: string, hostId: string) {
+  const listing = await db.query.listings.findFirst({
+    where: eq(schema.listings.id, listingId),
+  });
+  if (!listing || listing.hostId !== hostId) {
+    throw new Error(LISTING_UNAVAILABLE);
+  }
+
+  const paid = await getPaidBookedRanges(listingId);
+  const todayKey = new Date().toISOString().slice(0, 10);
+  for (const b of paid) {
+    if (hasActivePaidNights(b.nights, b.checkOut, todayKey)) {
+      throw new Error(
+        "Cannot delete listing while it has active paid bookings. Wait until those stays are past, or mark them cancelled with the guest."
+      );
+    }
+  }
+
+  await db.delete(schema.listings).where(eq(schema.listings.id, listingId));
+  return { ok: true as const, id: listingId };
 }
 
 export async function getNetworkListings(userId: string) {
