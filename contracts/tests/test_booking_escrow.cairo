@@ -37,7 +37,9 @@ fn zero() -> ContractAddress {
 
 fn deploy_escrow() -> ContractAddress {
     let contract = declare("BookingEscrow").unwrap().contract_class();
-    let mut calldata = array![token().into(), owner().into(), treasury().into()];
+    let mut calldata = array![
+        token().into(), owner().into(), treasury().into(), zero().into(),
+    ];
     let (escrow, _) = contract.deploy(@calldata).unwrap();
     escrow
 }

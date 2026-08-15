@@ -14,7 +14,9 @@ export const PHILOXENIA_SHADOW_NONCE = "0x0";
 
 /** Optional team-deployed BookingEscrow anonymizer (privacy_invoke). */
 export function bookingAnonymizerAddress(): string | null {
-  const a = process.env.NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS?.trim();
+  const a =
+    process.env.NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS?.trim() ||
+    "0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb";
   return a || null;
 }
 
@@ -146,8 +148,12 @@ export async function fundBookingViaShadowAccount(
 }
 
 /**
- * When a team-deployed booking anonymizer exists, fund via privacy_invoke.
- * Calldata shape follows the helper ABI the team deploys (see docs).
+ * Fund escrow from shielded balance via team BookingEscrowAnonymizer.
+ * Observers see pool ↔ anonymizer; guest/host/amounts remain in escrow storage.
+ *
+ * privacy_invoke ABI:
+ *   (escrow, token, booking_id, listing_id, host, guest, connector,
+ *    total_amount, connector_reward_bps, note_id) -> Span<OpenNoteDeposit>
  */
 export async function fundBookingViaAnonymizer(
   walletAccount: WalletAccountV6,
@@ -164,8 +170,9 @@ export async function fundBookingViaAnonymizer(
       ? params.connectorAddress
       : "0x0";
 
-  // Placeholder-aware calldata for the team's privacy_invoke helper.
-  // Exact ABI must match docs/booking-escrow-anonymizer.md after audit/deploy.
+  // Pool withdraws `amount` to the helper, then calls privacy_invoke.
+  // OPEN note is required by Wallet API; settle consumes all tokens so the
+  // helper typically returns an empty Span (no credit).
   const actions: STRK20_ACTION[] = [
     {
       type: "withdraw",
@@ -183,9 +190,9 @@ export async function fundBookingViaAnonymizer(
       type: "invoke",
       contract: anonymizer,
       calldata: [
-        params.escrowAddress,
-        params.tokenAddress,
         ...CallData.compile({
+          escrow: params.escrowAddress,
+          token: params.tokenAddress,
           booking_id: cairo.uint256(bookingId),
           listing_id: cairo.uint256(listingId),
           host: params.hostAddress,
@@ -194,7 +201,7 @@ export async function fundBookingViaAnonymizer(
           total_amount: cairo.uint256(amount),
           connector_reward_bps: rewardBps,
         }),
-        "${poolAddress}",
+        // Wallet resolves this placeholder to the OPEN note opened above.
         "${openNoteIds[0]}",
       ],
     },

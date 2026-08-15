@@ -73,7 +73,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 
 | | STRK escrow | DAI escrow |
 |--|-------------|------------|
-| **BookingEscrow** | [`0x0714…001bd`](https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd) | [`0x00dc…18004`](https://voyager.online/contract/0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004) |
+| **BookingEscrow** | [`0x0305…e1f3`](https://voyager.online/contract/0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3) | [`0x004c…a712`](https://voyager.online/contract/0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712) |
 | Network | Starknet **mainnet** | same |
 | Token | STRK | DAI (StarkGate) |
 | Owner / protocol treasury | `0x047466…E878` | same |
@@ -148,7 +148,7 @@ Key variables:
 - `JWT_SECRET` — API session signing
 - `NEXT_PUBLIC_API_URL` — frontend → backend
 - `NEXT_PUBLIC_STARKNET_CHAIN` — `mainnet` in production
-- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — mainnet escrow (`0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd`)
+- `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — mainnet escrow (`0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3`)
 - `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 path (default true)
 
 ## Acceptance scenario

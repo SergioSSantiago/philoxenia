@@ -28,13 +28,15 @@ Two projects linked to the same GitHub repo:
 
 | Variable | Project | Value |
 |----------|---------|-------|
-| `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` (STRK) |
-| `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` | web | `0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004` (DAI) |
+| `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3` (STRK) |
+| `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` | web | `0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712` (DAI) |
+| `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` | web | `0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb` |
 | `NEXT_PUBLIC_STRK_TOKEN_ADDRESS` | web | `0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d` |
 | `NEXT_PUBLIC_DAI_TOKEN_ADDRESS` | web | `0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3` |
 
-Voyager STRK: https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd  
-Voyager DAI: https://voyager.online/contract/0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004 — see [deploy-escrow.md](./deploy-escrow.md).
+Voyager STRK: https://voyager.online/contract/0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3  
+Voyager DAI: https://voyager.online/contract/0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712  
+Voyager anonymizer: https://voyager.online/contract/0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb — see [deploy-escrow.md](./deploy-escrow.md).
 
 ## Environment variables (Vercel Dashboard)
 
@@ -49,8 +51,9 @@ Configure on **both** projects (web + api) where applicable:
 | `CORS_ORIGIN` | api | `https://philoxenia-iota.vercel.app` |
 | `NEXT_PUBLIC_API_URL` | web | `https://philoxenia-api.vercel.app` |
 | `NEXT_PUBLIC_STARKNET_CHAIN` | web | `mainnet` |
-| `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` |
-| `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` | web | `0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004` |
+| `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3` |
+| `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` | web | `0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712` |
+| `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` | web | `0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb` |
 | `NEXT_PUBLIC_STRK_TOKEN_ADDRESS` | web | `0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d` |
 | `NEXT_PUBLIC_DAI_TOKEN_ADDRESS` | web | `0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3` |
 | `NEXT_PUBLIC_STRK20_PRIVACY` | web | `true` |

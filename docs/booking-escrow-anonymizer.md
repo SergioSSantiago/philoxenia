@@ -2,51 +2,44 @@
   <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
 </p>
 
-# BookingEscrow anonymizer (Phase 3 design)
+# BookingEscrow anonymizer (STRK20 privacy_invoke)
 
-**Status:** design + dapp wiring. Philoxenia owns Cairo review, audit, deploy, and maintenance. This repo’s STRK20 skill does **not** generate the production anonymizer contract.
+**Status: live mainnet** — declared **with ABI**, Voyager-verified, wired into the web app.
+
+## Live addresses
+
+| Piece | Address |
+|-------|---------|
+| **BookingEscrowAnonymizer** | [`0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb`](https://voyager.online/contract/0x056a817104ad7544a55873584f3d8fb41a780e5466d152b3e1f12d578e75defb) |
+| Class (verified) | [`0x05ba21cfac1ce24c0b25330d24749c03223046b6ec3a4beb790ad9f23054599e`](https://voyager.online/class/0x05ba21cfac1ce24c0b25330d24749c03223046b6ec3a4beb790ad9f23054599e) |
+| Escrow STRK v2 | [`0x030533…e1f3`](https://voyager.online/contract/0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3) |
+| Escrow DAI v2 | [`0x004c03…a712`](https://voyager.online/contract/0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712) |
+| Escrow class (verified) | [`0x026a90…fd24`](https://voyager.online/class/0x026a90e91e9e50f5a91cda8b4e40a4008de2a47658758374d170823014c4fd24) |
 
 ## Goal
 
-Fund `BookingEscrow` from shielded STRK/DAI so observers see **pool ↔ anonymizer**, not the guest’s main wallet paying escrow — per [privacy_invoke](https://strk20-by-example.org/helpers/privacy-invoke) and [private DeFi](https://strk20-by-example.org/starknet-wallet-api/private-defi).
+Fund escrow from shielded STRK/DAI so observers see **pool ↔ anonymizer**, not the guest wallet as payer — [privacy_invoke](https://strk20-by-example.org/helpers/privacy-invoke).
 
 ## What stays public
 
-- Escrow storage still records guest, host, connector, amounts (current Cairo API).
-- Open-note output amounts (if any) are public by protocol design.
-- Shield/unshield ERC-20 legs are public.
+- Escrow storage: guest, host, connector, amounts
+- Open-note output amounts; shield/unshield ERC-20 legs
 
-## Interim path (shipped in app)
+## Cairo
 
-Until `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` is set, the web app funds via **shadow account** (`shadow_account_invoke`): private balance → withdraw to shadow → approve/create/fund/settle on escrow. That unlinks the **transaction payer** from the main wallet; guest address remains in escrow.
+`privacy_invoke(escrow, token, booking_id, listing_id, host, guest, connector, total_amount, connector_reward_bps, note_id) → Span<OpenNoteDeposit>`
 
-Code: `apps/web/src/lib/payments/private-escrow-fund.ts`.
+approve → create → fund → settle; empty span when settle consumes all.
 
-## Target path (team Cairo)
-
-1. Study `packages/vesu_lending_anonymizer` / Ekubo helpers in https://github.com/starkware-libs/starknet-privacy
-2. Helper `privacy_invoke`:
-   - Pool withdraws token to helper
-   - Helper `approve` + `create_booking` + `fund_booking` (+ optional `settle_booking`) on the correct escrow (STRK or DAI instance)
-   - Measure balance delta; return `Span<OpenNoteDeposit>` (or empty if no refund note)
-3. Atomic rollback if escrow reverts
-4. **Audit** before mainnet
-5. Deploy; set `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` (and DAI twin if needed)
-6. Dapp already calls `fundBookingViaAnonymizer` when that env is set
-
-### Possible escrow API adjustments (team decision)
-
-Current `create_booking` takes an explicit `guest` address — still public in storage. Stronger privacy may require a redesign (e.g. commitment guest id). Track under `STRK20_INTEGRATION_PLAN.md` open items.
+Dapp: `apps/web/src/lib/payments/private-escrow-fund.ts` (`fundBookingViaAnonymizer` when env set).
 
 ## Env
 
 | Variable | Purpose |
 |----------|---------|
-| `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` | Team-deployed helper; enables `invoke` path |
-| `NEXT_PUBLIC_SHADOW_ACCOUNT_ANONYMIZER` | Override shadow infra (defaults to mainnet privacy anonymizer) |
+| `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` | Enables `invoke` path |
+| `NEXT_PUBLIC_SHADOW_ACCOUNT_ANONYMIZER` | Shadow fallback |
 
-## References
+## Optional later
 
-- https://strk20-by-example.org/helpers/privacy-invoke
-- https://strk20-by-example.org/starknet-wallet-api/private-defi
-- `STRK20_INTEGRATION_PLAN.md`
+Sub-accounts Wallet API, Xverse, escrow redesign to hide guest on-chain.

@@ -6,7 +6,8 @@
 //! - protocol treasury receives 10% of the connector reward
 //!
 //! Direct host↔guest bookings (no connector) pay 0% protocol fee.
-//! UI shows percents; on-chain values use basis points (bps): 100 bps = 1%.
+//! An authorized anonymizer may create/fund/settle on behalf of the guest
+//! (STRK20 privacy_invoke path).
 
 use starknet::ContractAddress;
 
@@ -42,9 +43,11 @@ pub trait IBookingEscrow<TContractState> {
     fn fund_booking(ref self: TContractState, booking_id: u256);
     fn settle_booking(ref self: TContractState, booking_id: u256);
     fn refund_booking(ref self: TContractState, booking_id: u256);
+    fn set_anonymizer(ref self: TContractState, anonymizer: ContractAddress);
     fn get_booking(self: @TContractState, booking_id: u256) -> Booking;
     fn get_protocol_treasury(self: @TContractState) -> ContractAddress;
     fn get_protocol_take_bps(self: @TContractState) -> u16;
+    fn get_anonymizer(self: @TContractState) -> ContractAddress;
 }
 
 #[starknet::contract]
@@ -67,6 +70,8 @@ pub mod BookingEscrow {
         token: ContractAddress,
         owner: ContractAddress,
         protocol_treasury: ContractAddress,
+        /// STRK20 helper allowed to create/fund/settle for a guest.
+        anonymizer: ContractAddress,
         bookings: Map<u256, Booking>,
         booking_count: u256,
     }
@@ -78,6 +83,7 @@ pub mod BookingEscrow {
         BookingFunded: BookingFunded,
         BookingSettled: BookingSettled,
         BookingRefunded: BookingRefunded,
+        AnonymizerUpdated: AnonymizerUpdated,
     }
 
     #[derive(Drop, starknet::Event)]
@@ -116,12 +122,18 @@ pub mod BookingEscrow {
         amount: u256,
     }
 
+    #[derive(Drop, starknet::Event)]
+    struct AnonymizerUpdated {
+        anonymizer: ContractAddress,
+    }
+
     #[constructor]
     fn constructor(
         ref self: ContractState,
         token: ContractAddress,
         owner: ContractAddress,
         protocol_treasury: ContractAddress,
+        anonymizer: ContractAddress,
     ) {
         assert(!token.is_zero(), 'Invalid token');
         assert(!owner.is_zero(), 'Invalid owner');
@@ -129,7 +141,13 @@ pub mod BookingEscrow {
         self.token.write(token);
         self.owner.write(owner);
         self.protocol_treasury.write(protocol_treasury);
+        self.anonymizer.write(anonymizer);
         self.booking_count.write(0);
+    }
+
+    fn is_anonymizer(self: @ContractState, caller: ContractAddress) -> bool {
+        let a = self.anonymizer.read();
+        !a.is_zero() && caller == a
     }
 
     #[abi(embed_v0)]
@@ -146,7 +164,10 @@ pub mod BookingEscrow {
         ) {
             let caller = get_caller_address();
             assert(
-                caller == guest || caller == self.owner.read(), 'Only guest or owner',
+                caller == guest
+                    || caller == self.owner.read()
+                    || is_anonymizer(@self, caller),
+                'Only guest/owner/anon',
             );
             assert(total_amount > 0, 'Invalid amount');
             assert(connector_reward_bps <= 10000, 'Invalid reward %');
@@ -172,7 +193,6 @@ pub mod BookingEscrow {
                 let host_amt = total_amount - connector_gross;
                 (host_amt, connector_net, protocol_amt)
             } else {
-                // Direct booking: optional connector omitted → 0% protocol fee.
                 assert(
                     connector_reward_bps == 0 || connector.is_zero(),
                     'Connector required',
@@ -235,11 +255,15 @@ pub mod BookingEscrow {
             assert(!booking.funded, 'Already funded');
             assert(!booking.settled, 'Already settled');
             assert(!booking.refunded, 'Already refunded');
-            assert(caller == booking.guest, 'Only guest');
+            assert(
+                caller == booking.guest || is_anonymizer(@self, caller),
+                'Only guest/anon',
+            );
 
             let token = IERC20Dispatcher { contract_address: self.token.read() };
             let escrow = get_contract_address();
             let amount = booking.total_amount;
+            let guest = booking.guest;
             token.transfer_from(caller, escrow, amount);
 
             booking.funded = true;
@@ -248,7 +272,7 @@ pub mod BookingEscrow {
             self
                 .emit(
                     Event::BookingFunded(
-                        BookingFunded { booking_id, guest: caller, amount },
+                        BookingFunded { booking_id, guest, amount },
                     ),
                 );
         }
@@ -260,7 +284,12 @@ pub mod BookingEscrow {
             assert(booking.funded, 'Not funded');
             assert(!booking.settled, 'Already settled');
             assert(!booking.refunded, 'Already refunded');
-            assert(caller == booking.guest || caller == self.owner.read(), 'Unauthorized');
+            assert(
+                caller == booking.guest
+                    || caller == self.owner.read()
+                    || is_anonymizer(@self, caller),
+                'Unauthorized',
+            );
 
             let token = IERC20Dispatcher { contract_address: self.token.read() };
 
@@ -323,6 +352,12 @@ pub mod BookingEscrow {
                 );
         }
 
+        fn set_anonymizer(ref self: ContractState, anonymizer: ContractAddress) {
+            assert(get_caller_address() == self.owner.read(), 'Only owner');
+            self.anonymizer.write(anonymizer);
+            self.emit(Event::AnonymizerUpdated(AnonymizerUpdated { anonymizer }));
+        }
+
         fn get_booking(self: @ContractState, booking_id: u256) -> Booking {
             self.bookings.read(booking_id)
         }
@@ -333,6 +368,10 @@ pub mod BookingEscrow {
 
         fn get_protocol_take_bps(self: @ContractState) -> u16 {
             PROTOCOL_TAKE_BPS
+        }
+
+        fn get_anonymizer(self: @ContractState) -> ContractAddress {
+            self.anonymizer.read()
         }
     }
 }

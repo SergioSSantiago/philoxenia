@@ -96,7 +96,7 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 
 - Full STRK20 escrow path
 
-**On-chain (mainnet):** `BookingEscrow` at `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` — see [deploy-escrow.md](./deploy-escrow.md).
+**On-chain (mainnet):** `BookingEscrow` at `0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3` — see [deploy-escrow.md](./deploy-escrow.md).
 
 **Fee model:** optional connector; Philoxenia takes **10% of the connector reward**; direct bookings **0%**.
 
