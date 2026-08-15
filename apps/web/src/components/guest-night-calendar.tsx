@@ -37,10 +37,13 @@ export function GuestNightCalendar({
   onChangeSelected: (days: string[]) => void;
 }) {
   const openMap = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
     const m = new Map<string, ListingAvailableDay>();
     for (const d of days) {
       if (d.booked) continue;
-      m.set(d.day.slice(0, 10), d);
+      const key = d.day.slice(0, 10);
+      if (key < today) continue; // past nights are not bookable
+      m.set(key, d);
     }
     return m;
   }, [days]);
@@ -140,6 +143,9 @@ export function GuestNightCalendar({
           const info = openMap.get(key);
           const open = Boolean(info);
           const isSelected = selectedSet.has(key);
+          const dayKey = key;
+          const today = new Date().toISOString().slice(0, 10);
+          const isPast = dayKey < today;
           const booked = days.some(
             (d) => d.day.slice(0, 10) === key && d.booked
           );
@@ -151,12 +157,17 @@ export function GuestNightCalendar({
                 className={`flex min-h-[56px] flex-col items-center justify-center rounded-xl text-xs sm:min-h-[64px] ${
                   booked
                     ? "bg-muted/15 text-muted line-through"
-                    : "text-muted/35"
+                    : isPast
+                      ? "text-muted/25"
+                      : "text-muted/35"
                 }`}
               >
                 <span>{dayNum}</span>
                 {booked && (
                   <span className="mt-0.5 text-[9px]">booked</span>
+                )}
+                {isPast && !booked && (
+                  <span className="mt-0.5 text-[9px]">past</span>
                 )}
               </div>
             );
@@ -193,8 +204,8 @@ export function GuestNightCalendar({
       </div>
 
       <p className="text-xs text-muted leading-relaxed">
-        Tap nights one by one — they do not need to be consecutive. Price under
-        each day is DAI.
+        Tap nights one by one — they do not need to be consecutive. Past nights
+        cannot be booked. Price under each day is DAI.
         {firstOpen ? ` Open nights start ${firstOpen}.` : ""}
       </p>
     </div>

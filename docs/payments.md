@@ -28,11 +28,19 @@ Located in `apps/web/src/lib/payments/`:
 
 | Provider | When used |
 |----------|-----------|
-| `Strk20PaymentProvider` | `paymentAsset === "STRK"` and `NEXT_PUBLIC_STRK20_PRIVACY !== "false"` |
-| `PublicPaymentProvider` | DAI, privacy disabled, or STRK20 fallback |
+| `Strk20PaymentProvider` | STRK/DAI with `NEXT_PUBLIC_STRK20_PRIVACY !== "false"` |
+| `PublicPaymentProvider` | Privacy off, wallet without STRK20, or user chose Public |
+
+Private fund (default when Ready wallet API ≥ 0.10):
+
+1. `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` set → `privacy_invoke` helper (team Cairo; see [booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md))
+2. Else → shadow-account path (`private-escrow-fund.ts`) from shielded balance
+3. Else / toggle Public → ERC-20 multicall
 
 Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.  
 Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/tokens.ts`.
+
+**Bookable nights:** API and guest calendar reject nights before UTC today.
 
 ## Public path (ERC20)
 

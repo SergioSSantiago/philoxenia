@@ -90,7 +90,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         error={Boolean(strk.error)}
         hint={
           STRK20_PRIVACY_ENABLED
-            ? "Public balance · private STRK via wallet when paying"
+            ? "Public balance · shield on Profile for private STRK"
             : undefined
         }
       />

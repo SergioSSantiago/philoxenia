@@ -7,6 +7,7 @@ import type {
   PaymentStatus,
   PaymentProviderCapabilities,
 } from "./payment-provider";
+import { callContract } from "./rpc-call";
 
 function parseAmount(amount: string): bigint {
   const [whole, frac = ""] = amount.split(".");
@@ -35,7 +36,7 @@ export class PublicPaymentProvider implements PaymentProvider {
   }
 
   async getPublicBalance(address: string): Promise<string> {
-    const balance = await this.account.callContract({
+    const balance = await callContract({
       contractAddress: this.tokenAddress,
       entrypoint: "balanceOf",
       calldata: [address],
@@ -54,7 +55,7 @@ export class PublicPaymentProvider implements PaymentProvider {
         ? params.connectorAddress
         : "0x0";
 
-    const allowance = await this.account.callContract({
+    const allowance = await callContract({
       contractAddress: params.tokenAddress,
       entrypoint: "allowance",
       calldata: [params.guestAddress, params.escrowAddress],
@@ -83,10 +84,7 @@ export class PublicPaymentProvider implements PaymentProvider {
       calls.push({
         contractAddress: params.tokenAddress,
         entrypoint: "approve",
-        calldata: [
-          params.escrowAddress,
-          ...toUint256Calldata(amount),
-        ],
+        calldata: [params.escrowAddress, ...toUint256Calldata(amount)],
       });
     }
 

@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@philoxenia/shared": "*",
+    "@starknet-io/get-starknet-discovery": "6.0.4",
+    "@starknet-io/get-starknet-wallet-standard": "6.0.4",
+    "@starknet-io/types-js": "0.10.3",
     "@starknet-react/chains": "^5.0.3",
     "@starknet-react/core": "^5.0.3",
     "@vercel/analytics": "^2.0.1",
@@ -20,7 +23,7 @@
     "qrcode.react": "^4.2.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "starknet": "^8.9.2",
+    "starknet": "10.7.0",
     "starknetkit": "^3.4.3"
   },
   "devDependencies": {

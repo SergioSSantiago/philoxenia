@@ -37,48 +37,43 @@ The upstream docs describe several builder paths:
 2. **Anonymizer contracts** — `privacy_invoke` pattern for DeFi and custom flows (e.g. escrow)
 3. **Low-level SDK** — `createPrivateTransfers`, proving, discovery for wallet builders
 
-Philoxenia MVP uses path **1** with fallback to public ERC20.
+Philoxenia uses path **1** for shield/unshield/balances (`WalletAccountV6`), with public ERC20 for booking escrow until the anonymizer (path **2**) ships. See `STRK20_INTEGRATION_PLAN.md`.
 
-## Philoxenia implementation
+## Philoxenia implementation (Phase 1)
 
-`apps/web/src/lib/payments/strk20-payment-provider.ts`:
+- `apps/web/src/lib/payments/wallet-account-v6.ts` — `createStore` + `WalletAccountV6.connect`; capability via `walletV6.supportedWalletApi` (≥ 0.10).
+- `apps/web/src/lib/payments/strk20-payment-provider.ts` — `strk20InvokeTransaction` for deposit/withdraw; `strk20Balances` for private balance. **Booking fund remains public** until Phase 3 anonymizer.
+- UI: Profile → `Strk20PrivacyPanel` (Shield / Unshield).
 
 ### Detection
 
-Probes the connected account for:
-
 ```typescript
-wallet.walletApi?.privacy?.shield
+const versions = await walletV6.supportedWalletApi(wallet);
+// treat wallet-API >= 0.10 as STRK20-capable — do not probe strk20Balances for detection
 ```
 
-If absent → `PublicPaymentProvider`.
-
-### Private transfer
-
-When supported, calls (via wallet — **not** Philoxenia-defined protocol APIs):
+### Shield / unshield
 
 ```typescript
-wallet.walletApi?.privacy?.privateTransfer?.({
-  token: params.asset,      // e.g. "STRK"
-  amount: params.amount,
-  recipient: params.escrowAddress,
-})
+await account.strk20InvokeTransaction([
+  { type: "deposit", token: STRK, amount: hexAmount },
+]);
+await account.strk20InvokeTransaction([
+  { type: "withdraw", token: STRK, amount: hexAmount, recipient },
+]);
 ```
 
-### Private balance (optional)
+### Private balance
 
 ```typescript
-wallet.walletApi?.privacy?.getPrivateBalance?.(token)
+await account.strk20Balances([STRK_TOKEN_ADDRESS]);
 ```
-
-These method names come from the [Starknet Wallet API guide](https://strk20-by-example.org/) — refer there for exact signatures, error handling, and wallet compatibility.
 
 ## What Philoxenia does not do (yet)
 
-- Deploy or call the Starknet Privacy pool directly
-- Run proving or discovery infrastructure (`STRK20_PROVING_URL`, `STRK20_DISCOVERY_URL` are reserved)
-- Use anonymizer contracts for escrow (see [Escrow example](https://strk20-by-example.org/) in upstream docs for the recommended pattern)
-- Guarantee private settlement splits — `BookingEscrow.settle_booking` uses public ERC20 transfers
+- Private funding of `BookingEscrow` (needs team-owned anonymizer + audit)
+- Run proving/discovery infrastructure
+- Guarantee private settlement splits — `settle_booking` uses public ERC20 transfers
 
 ## Fallback behavior
 

@@ -20,6 +20,8 @@ import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import { createPaymentProvider } from "@/lib/payments/strk20-payment-provider";
 import { onChainIdFromUuid } from "@/lib/payments/escrow-actions";
+import { detectPrivacyCapable } from "@/lib/payments/wallet-account-v6";
+import { privacyLabel } from "@/lib/payments/payment-provider";
 import {
   STRK20_PRIVACY_ENABLED,
   escrowAddressForAsset,
@@ -96,10 +98,29 @@ function NewBookingForm() {
   const [listing, setListing] = useState<Listing | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
   const [paymentAsset, setPaymentAsset] = useState<PaymentAsset>("STRK");
+  const [fundMode, setFundMode] = useState<"private" | "public">("private");
+  const [privacyCapable, setPrivacyCapable] = useState(false);
   const [quote, setQuote] = useState<BookingQuote | null>(null);
   const [error, setError] = useState("");
   const [loadError, setLoadError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!address || !STRK20_PRIVACY_ENABLED) {
+      setPrivacyCapable(false);
+      return;
+    }
+    let cancelled = false;
+    void detectPrivacyCapable(address).then((ok) => {
+      if (!cancelled) {
+        setPrivacyCapable(ok);
+        if (!ok) setFundMode("public");
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
 
   useEffect(() => {
     if (!token) {
@@ -118,11 +139,12 @@ function NewBookingForm() {
         setListing(l);
         const pre = searchParams.get("nights");
         if (pre) {
+          const today = new Date().toISOString().slice(0, 10);
           setSelected(
             pre
               .split(",")
               .map(dayKey)
-              .filter(Boolean)
+              .filter((d) => Boolean(d) && d >= today)
           );
         }
       })
@@ -229,6 +251,14 @@ function NewBookingForm() {
         tokenAddress,
         STRK20_PRIVACY_ENABLED
       );
+      if (
+        "setFundPreference" in provider &&
+        typeof provider.setFundPreference === "function"
+      ) {
+        provider.setFundPreference(
+          STRK20_PRIVACY_ENABLED && privacyCapable ? fundMode : "public"
+        );
+      }
 
       const result = await provider.fundBooking({
         bookingId,
@@ -412,6 +442,50 @@ function NewBookingForm() {
                     : `${formatTokenAmount(quote.totalPriceStrk)} STRK`}
                 </span>
               </div>
+              {STRK20_PRIVACY_ENABLED && (
+                <div className="space-y-2 pt-1">
+                  <p className="text-xs font-medium text-foreground">
+                    Payment privacy
+                  </p>
+                  {privacyCapable ? (
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <button
+                        type="button"
+                        className={`rounded-full border px-4 py-2 text-xs ${
+                          fundMode === "private"
+                            ? "border-accent bg-accent-soft text-accent"
+                            : "border-border text-muted"
+                        }`}
+                        onClick={() => setFundMode("private")}
+                      >
+                        Private (default)
+                      </button>
+                      <button
+                        type="button"
+                        className={`rounded-full border px-4 py-2 text-xs ${
+                          fundMode === "public"
+                            ? "border-accent bg-accent-soft text-accent"
+                            : "border-border text-muted"
+                        }`}
+                        onClick={() => setFundMode("public")}
+                      >
+                        Public ERC-20
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted">
+                      Ready wallet API ≥ 0.10 required for private pay — using
+                      public ERC-20.
+                    </p>
+                  )}
+                  <p className="text-xs text-muted leading-relaxed">
+                    {fundMode === "private" && privacyCapable
+                      ? "Pays from shielded balance via your Philoxenia shadow account (or team anonymizer when configured). Escrow still records guest/host/amounts. Shield first on Profile if needed — proofs can take a while."
+                      : "Standard on-chain approve + fund. Visible on explorers."}
+                  </p>
+                </div>
+              )}
+
               <p className="text-xs text-muted">
                 {paymentAsset === "DAI"
                   ? "DAI settles at the listed price. Host and connector are paid immediately."
@@ -438,10 +512,20 @@ function NewBookingForm() {
               onClick={payAndBook}
             >
               {submitting
-                ? "Paying…"
+                ? fundMode === "private" && privacyCapable
+                  ? "Proving & paying…"
+                  : "Paying…"
                 : paymentAsset === "DAI"
-                  ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI`
-                  : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK`}
+                  ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
+                      fundMode === "private" && privacyCapable
+                        ? ` · ${privacyLabel("private")}`
+                        : ""
+                    }`
+                  : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
+                      fundMode === "private" && privacyCapable
+                        ? ` · ${privacyLabel("private")}`
+                        : ""
+                    }`}
             </Button>
           </div>
         </div>

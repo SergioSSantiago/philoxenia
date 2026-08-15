@@ -20,9 +20,16 @@ export const DAI_BOOKING_ESCROW_ADDRESS =
   process.env.NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS ??
   "0x00dc7fe1d48edba335f78b2b3155c599d04783623c5e6ecc83ea4da1d1618004";
 
-/** STRK20 private payments enabled by default (STRK only). */
+/** STRK20 private payments enabled by default. */
 export const STRK20_PRIVACY_ENABLED =
   process.env.NEXT_PUBLIC_STRK20_PRIVACY !== "false";
+
+/**
+ * Optional team-deployed BookingEscrow anonymizer (privacy_invoke).
+ * When set, private pay prefers this over the shadow-account path.
+ */
+export const BOOKING_ANONYMIZER_ADDRESS =
+  process.env.NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS?.trim() || "";
 
 export const SUPPORTED_PAYMENT_ASSETS: PaymentAsset[] = ["STRK", "DAI"];
 

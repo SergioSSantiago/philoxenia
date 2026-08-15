@@ -17,6 +17,7 @@ import { toUserResponse } from "./auth.js";
 import { createNotification } from "./notifications.js";
 import { daiToStrk, getStrkPerDai } from "./rates.js";
 import { hasActivePaidNights } from "../lib/geo.js";
+import { assertNoPastNights } from "../lib/booking-nights.js";
 
 function mapListing(
   listing: typeof schema.listings.$inferSelect,
@@ -1253,6 +1254,9 @@ async function prepareBooking(
   if (nightKeys.length < 1) {
     throw new Error("Select at least one night");
   }
+
+  const todayKey = new Date().toISOString().slice(0, 10);
+  assertNoPastNights(nightKeys, todayKey);
 
   const checkInDay = nightKeys[0];
   const checkOutDay = (() => {

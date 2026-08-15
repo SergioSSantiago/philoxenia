@@ -11,6 +11,7 @@ import {
 } from "@/components/ui";
 import { WalletAddress } from "@/components/wallet-address";
 import { WalletBalances } from "@/components/wallet-balances";
+import { Strk20PrivacyPanel } from "@/components/strk20-privacy-panel";
 import { useAuth } from "@/lib/auth-context";
 import { formatWalletError } from "@/lib/wallet-errors";
 
@@ -99,6 +100,10 @@ export default function ProfilePage() {
 
         <Card>
           <WalletBalances />
+        </Card>
+
+        <Card>
+          <Strk20PrivacyPanel />
         </Card>
 
         <Card>
