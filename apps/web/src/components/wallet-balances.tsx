@@ -2,6 +2,7 @@
 
 import { Component, type ReactNode } from "react";
 import { useAccount, useBalance } from "@starknet-react/core";
+import { formatTokenAmount } from "@philoxenia/shared";
 import { useAuth } from "@/lib/auth-context";
 import {
   DAI_TOKEN_ADDRESS,
@@ -22,14 +23,22 @@ function BalanceRow({
   hint?: string;
   error?: boolean;
 }) {
+  const display =
+    loading ? "…" : error ? "—" : amount != null ? formatTokenAmount(amount, 6) : "—";
+
   return (
-    <div className="flex items-start justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
-      <div>
+    <div className="flex min-w-0 items-start justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
+      <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-foreground">{label}</p>
-        {hint && <p className="mt-0.5 text-xs text-muted">{hint}</p>}
+        {hint && (
+          <p className="mt-0.5 text-xs leading-snug text-muted">{hint}</p>
+        )}
       </div>
-      <p className="shrink-0 text-right font-mono text-sm text-foreground">
-        {loading ? "…" : error ? "—" : (amount ?? "—")}
+      <p
+        className="max-w-[48%] shrink-0 truncate text-right font-mono text-sm tabular-nums text-foreground"
+        title={!loading && !error && amount ? amount : undefined}
+      >
+        {display}
       </p>
     </div>
   );
@@ -72,7 +81,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
     dai.data && !dai.error ? dai.data.formatted : undefined;
 
   return (
-    <div className={compact ? "space-y-2" : "space-y-3"}>
+    <div className={`min-w-0 ${compact ? "space-y-2" : "space-y-3"}`}>
       {!compact && (
         <div className="flex flex-wrap items-center gap-2">
           <p className="text-sm font-medium text-foreground">Your balances</p>
@@ -90,7 +99,9 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         error={Boolean(strk.error)}
         hint={
           STRK20_PRIVACY_ENABLED
-            ? "Public balance · shield on Profile for private STRK"
+            ? compact
+              ? "Public · shield on Profile"
+              : "Public balance · shield on Profile for private STRK"
             : undefined
         }
       />

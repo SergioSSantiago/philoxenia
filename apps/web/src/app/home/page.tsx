@@ -72,7 +72,7 @@ export default function HomePage() {
   return (
     <Shell wide>
       <div className="mb-8 grid gap-6 lg:grid-cols-[minmax(200px,260px)_minmax(0,1fr)] lg:items-start">
-        <aside className="space-y-3">
+        <aside className="min-w-0 space-y-3">
           <div>
             <h1 className="text-2xl leading-tight sm:text-3xl">
               Hello, {user.displayName}
@@ -81,12 +81,12 @@ export default function HomePage() {
               Your network of trusted places.
             </p>
           </div>
-          <Card className="space-y-3 p-4 sm:p-4">
-            <div>
+          <Card className="min-w-0 space-y-3 overflow-hidden p-4 sm:p-4">
+            <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-[0.12em] text-muted">
                 Wallet
               </p>
-              <div className="mt-1.5 scale-95 origin-left">
+              <div className="mt-1.5 min-w-0 origin-left scale-95">
                 <WalletAddress address={user.walletAddress} />
               </div>
             </div>
