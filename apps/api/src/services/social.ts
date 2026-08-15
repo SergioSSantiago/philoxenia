@@ -1208,7 +1208,7 @@ export async function confirmPaidBooking(
     // best-effort
   }
 
-  return mapBooking(booking);
+  return mapBooking(booking, undefined, input.privacyMode ?? "public");
 }
 
 async function prepareBooking(
@@ -1353,7 +1353,8 @@ function mapBooking(
     host?: typeof schema.users.$inferSelect;
     guest?: typeof schema.users.$inferSelect;
     connector?: typeof schema.users.$inferSelect;
-  }
+  },
+  privacyMode: "private" | "public" | null = null
 ) {
   return {
     id: booking.id,
@@ -1375,6 +1376,7 @@ function mapBooking(
     hostAmount: booking.hostAmount,
     paymentAsset: booking.paymentAsset,
     status: booking.status,
+    privacyMode,
     escrowBookingId: booking.escrowBookingId,
     fundTxHash: booking.fundTxHash,
     settleTxHash: booking.settleTxHash,
@@ -1391,6 +1393,28 @@ function mapBooking(
   };
 }
 
+async function privacyModesForBookings(
+  bookingIds: string[]
+): Promise<Map<string, "private" | "public">> {
+  const map = new Map<string, "private" | "public">();
+  if (bookingIds.length === 0) return map;
+  const rows = await db
+    .select({
+      bookingId: schema.payments.bookingId,
+      privacyMode: schema.payments.privacyMode,
+      createdAt: schema.payments.createdAt,
+    })
+    .from(schema.payments)
+    .where(inArray(schema.payments.bookingId, bookingIds))
+    .orderBy(desc(schema.payments.createdAt));
+  for (const row of rows) {
+    if (!map.has(row.bookingId)) {
+      map.set(row.bookingId, row.privacyMode);
+    }
+  }
+  return map;
+}
+
 export async function getMyBookings(userId: string) {
   const rows = await db.query.bookings.findMany({
     where: or(
@@ -1401,13 +1425,18 @@ export async function getMyBookings(userId: string) {
     orderBy: [desc(schema.bookings.createdAt)],
   });
 
+  const modes = await privacyModesForBookings(rows.map((b) => b.id));
   return rows.map((b) =>
-    mapBooking(b, {
-      listing: b.listing ?? undefined,
-      host: b.host ?? undefined,
-      guest: b.guest ?? undefined,
-      connector: b.connector ?? undefined,
-    })
+    mapBooking(
+      b,
+      {
+        listing: b.listing ?? undefined,
+        host: b.host ?? undefined,
+        guest: b.guest ?? undefined,
+        connector: b.connector ?? undefined,
+      },
+      modes.get(b.id) ?? null
+    )
   );
 }
 
@@ -1426,10 +1455,15 @@ export async function getConnectorEarnings(connectorId: string) {
     0
   );
 
+  const modes = await privacyModesForBookings(rows.map((b) => b.id));
   return {
     totalEarned: totalEarned.toFixed(18).replace(/\.?0+$/, ""),
     bookings: rows.map((b) =>
-      mapBooking(b, { listing: b.listing ?? undefined })
+      mapBooking(
+        b,
+        { listing: b.listing ?? undefined },
+        modes.get(b.id) ?? null
+      )
     ),
   };
 }
@@ -1620,12 +1654,17 @@ export async function getBookingById(bookingId: string, userId: string) {
     throw new Error("Booking not found");
   }
 
-  return mapBooking(booking, {
-    listing: booking.listing ?? undefined,
-    host: booking.host ?? undefined,
-    guest: booking.guest ?? undefined,
-    connector: booking.connector ?? undefined,
-  });
+  const modes = await privacyModesForBookings([booking.id]);
+  return mapBooking(
+    booking,
+    {
+      listing: booking.listing ?? undefined,
+      host: booking.host ?? undefined,
+      guest: booking.guest ?? undefined,
+      connector: booking.connector ?? undefined,
+    },
+    modes.get(booking.id) ?? null
+  );
 }
 
 export async function getHomeData(userId: string) {

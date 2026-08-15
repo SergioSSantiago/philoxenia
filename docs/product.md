@@ -89,14 +89,11 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 - Private listings (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution
-- Payment initiation (public ERC20 or STRK20 when wallet supports it)
-- Settle (guest) and refund (host) via Ready X + API confirmation
+- Payment initiation: **Private** (STRK20 anonymizer, default) or **Public** ERC-20
+- Settle is atomic with pay (host + connector paid immediately)
+- Shield / unshield on Profile (Ready ≥ 0.10)
 
-**Requires further integration:**
-
-- Full STRK20 escrow path
-
-**On-chain (mainnet):** `BookingEscrow` at `0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3` — see [deploy-escrow.md](./deploy-escrow.md).
+**On-chain (mainnet):** `BookingEscrow` + `BookingEscrowAnonymizer` — see [deploy-escrow.md](./deploy-escrow.md) and [booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md).
 
 **Fee model:** optional connector; Philoxenia takes **10% of the connector reward**; direct bookings **0%**.
 
@@ -108,3 +105,5 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 - [invitations.md](./invitations.md)
 - [bookings.md](./bookings.md)
 - [payments.md](./payments.md)
+- [privacy.md](./privacy.md)
+- [strk20.md](./strk20.md)

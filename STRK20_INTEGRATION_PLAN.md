@@ -77,21 +77,22 @@ Re-verified at Phase 1 build (2026-08-15):
 - ✅ Deploy + `voyager verify` both classes
 - ✅ Env: `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` + new escrow addresses
 - ✅ Mainnet smoke: public pay, anonymizer `privacy_invoke`, connector 5% split
-- Optional later: hide guest in escrow storage; Wallet API sub-accounts; Xverse
+- ✅ Private Ready path live: hex calldata + withdraw→invoke (no OPEN for settle-all); verified private booking on mainnet 2026-08-15
+- ✅ `payments.privacy_mode` + booking API/UI `privacyMode`
 
-## 8. Phase 4 — Tracked / later
+## 8. Phase 4 — Out of scope (product complete)
 
-- Wallet-API **sub-accounts** when builder-facing (SDK has pieces; Wallet API still pending as of skill check) — would hide user↔acting-account link further.
-- Xverse if/when dapp-facing Wallet API ships.
-- Indexing / analytics: if any “user activity” UI is added, filter pool `Deposit` event **topic1**, never tx sender.
-- Privacy Bridge only if EVM funding becomes a product need (reference, not a pin).
+Not planned for this product release:
+
+- Wallet-API sub-accounts / Xverse
+- Escrow redesign to hide guest address in storage
+- Privacy Bridge / EVM funding
 
 ## 9. Testing
 
-- Mainnet micro-amounts with Ready (product already mainnet-only).
-- Wallet test dapp for connection/API sanity.
-- Phase 3: snforge atomic success/revert tests on anonymizer; staging deploy before production alias.
-- Pure local Katana/devnet does **not** exercise wallet proving — don’t rely on it for STRK20 UX sign-off.
+- ✅ Mainnet private booking via Ready (anonymizer path)
+- ✅ snforge anonymizer create/fund/settle
+- Wallet test dapp for connection/API sanity when debugging wallets
 
 ## 10. Compliance & security notes
 
@@ -100,15 +101,13 @@ Re-verified at Phase 1 build (2026-08-15):
 - Anonymizer: team owns review, audit, deploy, maintenance.
 - No viewing keys, notes, or proofs in app code or env files beyond public addresses / RPC.
 
-## 11. Open items to re-verify at build time
+## 11. Checklist (closed)
 
-- [x] `starknet` pin → **10.7.0** (2026-08-15)
+- [x] `starknet` pin → **10.7.0**
 - [x] get-starknet → **6.0.4**
-- [ ] `@starknet-react/core` + `starknetkit` runtime with starknet 10.7 (connect / SNIP-12 auth smoke)
-- [ ] Pool fee amount and fee UX in shield UI
-- [ ] Whether current `BookingEscrow.fund_booking` can be driven from an anonymizer without revealing guest (may need escrow redesign)
-- [ ] Xverse / sub-accounts Wallet API status
-- [ ] `packages/shadow_account_anonymizer` relevance for later phases
+- [x] Ready connect / SNIP-12 auth + private book
+- [x] Anonymizer drives fund/settle without guest as ERC-20 payer into escrow
+- [x] Honest privacy docs (guest/host/amounts still public in escrow storage)
 
 ## 12. Links
 
@@ -117,6 +116,9 @@ Re-verified at Phase 1 build (2026-08-15):
 - https://strk20-by-example.org/starknet-wallet-api/starknet-js
 - https://strk20-by-example.org/starknet-wallet-api/starknet-start-hook
 - https://strk20-by-example.org/starknet-wallet-api/private-defi
+- https://strk20-by-example.org/helpers/privacy-invoke
+- https://docs.starknet.io/build/starknet-privacy/overview
+- https://github.com/starkware-libs/starknet-privacy
 - https://strk20-by-example.org/helpers/privacy-invoke
 - https://docs.starknet.io/build/starknet-privacy/overview
 - https://github.com/starkware-libs/starknet-privacy

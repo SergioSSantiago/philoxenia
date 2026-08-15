@@ -195,6 +195,8 @@ export interface Booking {
   hostAmount: string;
   paymentAsset: PaymentAsset;
   status: BookingStatus;
+  /** From the confirmed payment row; null if no payment recorded. */
+  privacyMode: "private" | "public" | null;
   escrowBookingId: string | null;
   fundTxHash: string | null;
   settleTxHash: string | null;

@@ -33,8 +33,8 @@ Located in `apps/web/src/lib/payments/`:
 
 Private fund (default when Ready wallet API ≥ 0.10):
 
-1. **Anonymizer (live)** — OPEN note + `privacy_invoke` (no silent public fallback)
-2. If anonymizer fails → shadow-account path (still private)
+1. **Anonymizer (live)** — `withdraw` to helper + `privacy_invoke` (no silent public fallback)
+2. Shadow-account backup only if `NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1` (Ready lacks it by default)
 3. Public ERC-20 only when the guest explicitly chooses Public
 
 Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow.md](./deploy-escrow.md).
@@ -46,18 +46,17 @@ Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/
 
 ## Public path (ERC20)
 
-Used for DAI and as STRK fallback:
+Used when the guest chooses Public (or privacy is disabled):
 
 1. Multicall `create_booking` + ERC20 `approve` (if needed) + `fund_booking` + `settle_booking`
-2. Return `{ status: "confirmed", txHash, privacyMode: "public" }`
-3. Client confirms with `POST /bookings/confirm` (`paymentAsset`, `totalPrice`, nights)
+2. Return `{ status: "pending", txHash, privacyMode: "public" }`
+3. Client confirms with `POST /bookings/confirm` (`paymentAsset`, `totalPrice`, `privacyMode`, nights)
 
 Requires the matching escrow address for the chosen asset, token address, and host / optional connector wallets.
 
 ## STRK20 path
 
-See [strk20.md](./strk20.md). Falls back to the public path when the wallet privacy API is unavailable.
-
+See [strk20.md](./strk20.md). Private selection does **not** fall back to public on failure.
 ## Peer transfers (Messages)
 
 Friends can send DAI or STRK directly from chat (`peer-transfer.ts`) — used for voluntary returns after social cancel. Not escrow.

@@ -54,8 +54,8 @@ export function Strk20PrivacyPanel() {
   if (!capable) {
     return (
       <p className="text-xs text-muted">
-        This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10). Booking
-        payments stay public ERC-20 until then.
+        This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10). Use
+        Public ERC-20 on booking pay, or update Ready.
       </p>
     );
   }

@@ -44,6 +44,6 @@ No silent fallback to public when Private is selected. Shadow backup is opt-in (
 
 Simulated pool withdraw (`transfer` to anonymizer) + `privacy_invoke`: create/fund/settle succeeded; host paid; anonymizer balance 0. See [deploy-escrow.md](./deploy-escrow.md).
 
-## Optional later
+## Product scope
 
-Wallet API sub-accounts, Xverse, escrow redesign to hide guest on-chain.
+Shipped: private payer path via anonymizer. Out of scope for this product: Wallet API sub-accounts, Xverse, redesigning escrow to hide guest storage.

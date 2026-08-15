@@ -113,6 +113,16 @@ export default function BookingDetailPage() {
             <p className="text-muted">Status</p>
             <p className="capitalize">{booking.status}</p>
           </div>
+          <div>
+            <p className="text-muted">Payment privacy</p>
+            <p>
+              {booking.privacyMode === "private"
+                ? "Private (STRK20)"
+                : booking.privacyMode === "public"
+                  ? "Public ERC-20"
+                  : "—"}
+            </p>
+          </div>
         </div>
 
         <hr className="border-border" />
@@ -153,10 +163,24 @@ export default function BookingDetailPage() {
 
         {booking.fundTxHash && (
           <p className="break-all font-mono text-xs text-muted">
-            Tx: {booking.fundTxHash}
+            Tx:{" "}
+            <a
+              href={`https://voyager.online/tx/${booking.fundTxHash}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-accent underline-offset-2 hover:underline"
+            >
+              {booking.fundTxHash}
+            </a>
           </p>
         )}
 
+        {booking.privacyMode === "private" && (
+          <p className="text-xs text-muted leading-relaxed">
+            Paid from shielded balance via the privacy pool → Philoxenia
+            anonymizer. Escrow still stores guest, host, and amounts on-chain.
+          </p>
+        )}
         <p className="text-xs text-muted leading-relaxed">
           Host and connector were paid when the guest paid. If plans change,
           talk in{" "}

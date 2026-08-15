@@ -67,6 +67,11 @@ export function BookingCard({ booking }: { booking: Booking }) {
           <p className="mt-2 text-sm">
             {formatTokenAmount(booking.totalPrice)} {booking.paymentAsset} ·{" "}
             {booking.nights} nights
+            {booking.privacyMode === "private"
+              ? " · Private"
+              : booking.privacyMode === "public"
+                ? " · Public"
+                : ""}
           </p>
         </div>
         <span className="shrink-0 rounded-full bg-accent-soft px-3 py-1 text-xs capitalize text-accent">

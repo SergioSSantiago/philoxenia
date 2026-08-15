@@ -4,7 +4,7 @@
 
 # Privacy
 
-Philoxenia targets **selective payment privacy** via STRK20 (Starknet Privacy) where wallets support it. It does **not** claim full-stack anonymity.
+Philoxenia offers **selective payment privacy** via STRK20 (Starknet Privacy) with Ready (wallet API ≥ 0.10). It does **not** claim full-stack anonymity.
 
 ## What is private
 
@@ -12,29 +12,32 @@ Philoxenia targets **selective payment privacy** via STRK20 (Starknet Privacy) w
 |------|---------------|
 | Listing discovery | Private by design — no public marketplace; listings visible only to host, friends, and introduced guests |
 | Social graph | Off-chain; not published on-chain |
-| Payment amount / sender (STRK path) | Can be private **if** the guest wallet exposes the [Starknet Wallet API privacy methods](https://docs.starknet.io/build/starknet-privacy) and the transfer succeeds |
+| Escrow payer (Private STRK/DAI path) | Shielded balance → privacy pool → Philoxenia anonymizer → escrow. Observers see pool↔helper, not the guest as the public ERC-20 payer into escrow |
 
 ## What is not private
 
 | Area | Reality |
 |------|---------|
 | Off-chain metadata | Listings, bookings, friendships, and tx hashes are stored in PostgreSQL operated by the API host |
-| Public ERC20 fallback | When STRK20 privacy is unavailable, payments use standard `approve` + `fund_booking` — visible on-chain |
-| Escrow contract | `BookingEscrow` uses OpenZeppelin ERC20 transfers; settlement splits are public on-chain events |
+| Escrow storage & settlement | Guest, host, amounts, and host/connector payouts remain public on-chain |
+| Shield / unshield legs | Deposit and withdraw amounts are public ERC-20 transfers by STRK20 design |
+| Public ERC-20 pay | Explicit “Public” choice — standard `approve` + fund/settle, fully visible |
 | API sessions | JWT-authenticated; wallet address linked to user profile |
 | Connector attribution | Connector identity is recorded off-chain for reward calculation |
 
-## STRK20 integration (MVP)
+## STRK20 integration (shipped)
 
-The web app (`Strk20PaymentProvider`) probes the connected wallet for `walletApi.privacy` methods (as described in [STRK20 by Example](https://strk20-by-example.org/)). If privacy is unavailable, it **falls back to public ERC20** and records `privacyMode: "public"`. It never labels a payment private without wallet support.
+- **Shield / unshield / private balance** — `WalletAccountV6` on Profile
+- **Private booking fund** — `withdraw` to `BookingEscrowAnonymizer` + `privacy_invoke` (create/fund/settle). No silent fallback to public when Private is selected
+- **Labeling** — `payments.privacy_mode` is `private` only when that path succeeds; exposed on booking API/UI as `privacyMode`
 
-**Current gap:** The private-transfer path sends funds via the wallet privacy API; the public path calls `fund_booking` on `BookingEscrow`. Full end-to-end private escrow (e.g. via anonymizer contracts) is not yet integrated. See [docs/strk20.md](./docs/strk20.md).
+See [docs/strk20.md](./docs/strk20.md) and [docs/booking-escrow-anonymizer.md](./docs/booking-escrow-anonymizer.md).
 
 ## Honest expectations
 
-- Philoxenia reduces **discovery** exposure, not all data exposure.
-- Payment privacy depends on wallet, network, and token support — not on Philoxenia alone.
-- Starknet Privacy includes a [compliance layer](https://docs.starknet.io/build/starknet-privacy/overview) with selective disclosure for authorized auditors; this is a protocol property, not something Philoxenia disables.
+- Philoxenia reduces **discovery** exposure and hides the **guest as public escrow payer** on the Private path — not all data exposure.
+- Payment privacy depends on Ready + STRK20 — not on Philoxenia alone.
+- Starknet Privacy includes a [compliance layer](https://docs.starknet.io/build/starknet-privacy/overview) with selective disclosure for authorized auditors.
 - Operators hosting the API can see off-chain data. Self-hosting is the mitigation for that trust boundary.
 
 ## References
