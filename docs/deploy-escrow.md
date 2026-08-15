@@ -41,10 +41,11 @@ Example: 0.1 STRK, 5% connector → host **0.095** / connector **0.0045** / prot
 | 1 | Public create → approve → fund → settle (0.05 STRK, no connector) | Host +0.05 · funded+settled |
 | 2 | Anonymizer: transfer → `privacy_invoke` (0.05 STRK) | Host +0.05 · anon balance 0 |
 | 3 | Public with connector 5% (0.1 STRK) | Host +0.095 · connector +0.0045 · protocol +0.0005 |
+| 4 | Anonymizer + connector 5% (0.1 STRK) | Host +0.095 · connector +0.0045 · protocol +0.0005 · anon 0 ([tx](https://voyager.online/tx/0x00ec6212f110e82098cef2351061af3008381498e19d3c1e0dfe7c485525e265)) |
 
-Automated: `cd contracts && scarb test` (5/5) · `npm test -w @philoxenia/api` (13/13).
+Automated: `cd contracts && scarb test` (6/6, includes `test_privacy_invoke_with_connector_reward`) · `npm test -w @philoxenia/api` (fee split unit tests).
 
-**Not automated here:** Ready wallet shield / Wallet API private pay (needs desktop Ready + shielded balance). App path is wired; smoke that flow manually once.
+**Not automated here:** Ready Wallet API private pay with a live invite connector (needs desktop Ready + shield). The anonymizer+connector split itself is covered by row 4 (pool→helper simulated by ERC-20 transfer).
 
 ## Source
 
