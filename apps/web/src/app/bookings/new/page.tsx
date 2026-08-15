@@ -93,7 +93,7 @@ function NewBookingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const listingId = searchParams.get("listing") ?? "";
-  const { token, user } = useAuth();
+  const { token, user, connectWallet } = useAuth();
   const { account, address } = useAccount();
   const [listing, setListing] = useState<Listing | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -105,6 +105,12 @@ function NewBookingForm() {
   const [error, setError] = useState("");
   const [loadError, setLoadError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [reconnecting, setReconnecting] = useState(false);
+
+  // JWT can outlive the Ready connector (common on Firefox). Public and
+  // Private both need a live account to sign — surface reconnect, don't
+  // leave Pay grey with no reason.
+  const walletReady = Boolean(account && address);
 
   useEffect(() => {
     if (!address || !STRK20_PRIVACY_ENABLED) {
@@ -209,10 +215,28 @@ function NewBookingForm() {
     };
   }, [range.ok, selectedKey, listingId, range.nights, paymentAsset]);
 
+  async function reconnectForPay() {
+    setReconnecting(true);
+    setError("");
+    try {
+      await connectWallet();
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not reconnect Ready. Open the extension and try again."
+      );
+    } finally {
+      setReconnecting(false);
+    }
+  }
+
   async function payAndBook() {
     if (!listing || !range.ok || range.nights.length === 0) return;
     if (!account || !address) {
-      setError("Connect your wallet to pay");
+      setError(
+        "Ready is not connected for signing. Tap Connect Ready, then Pay again — Public and Private both need a live wallet session."
+      );
       return;
     }
     if (!listing.host?.walletAddress) {
@@ -499,6 +523,13 @@ function NewBookingForm() {
 
           {error && <p className="text-sm text-red-700">{error}</p>}
 
+          {!walletReady && quote && range.ok && (
+            <p className="text-sm text-amber-800 leading-relaxed">
+              Ready is signed in for Philoxenia but not connected for
+              transactions. Reconnect the extension to pay (Public or Private).
+            </p>
+          )}
+
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
             {selected.length > 0 && (
               <Button
@@ -509,23 +540,37 @@ function NewBookingForm() {
                 Clear
               </Button>
             )}
-            <Button
-              type="button"
-              disabled={submitting || !quote || !account || !range.ok}
-              onClick={payAndBook}
-            >
-              {submitting
-                ? fundMode === "private"
-                  ? "Proving & paying…"
-                  : "Paying…"
-                : paymentAsset === "DAI"
-                  ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
-                      fundMode === "private" ? ` · ${privacyLabel("private")}` : ""
-                    }`
-                  : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
-                      fundMode === "private" ? ` · ${privacyLabel("private")}` : ""
-                    }`}
-            </Button>
+            {!walletReady ? (
+              <Button
+                type="button"
+                disabled={reconnecting || !quote || !range.ok}
+                onClick={() => void reconnectForPay()}
+              >
+                {reconnecting ? "Connecting Ready…" : "Connect Ready to pay"}
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                disabled={submitting || !quote || !range.ok}
+                onClick={payAndBook}
+              >
+                {submitting
+                  ? fundMode === "private"
+                    ? "Proving & paying…"
+                    : "Paying…"
+                  : paymentAsset === "DAI"
+                    ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
+                        fundMode === "private"
+                          ? ` · ${privacyLabel("private")}`
+                          : ""
+                      }`
+                    : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
+                        fundMode === "private"
+                          ? ` · ${privacyLabel("private")}`
+                          : ""
+                      }`}
+              </Button>
+            )}
           </div>
         </div>
       )}
