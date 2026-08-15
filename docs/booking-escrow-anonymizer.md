@@ -28,9 +28,14 @@ Escrow still stores guest / host / amounts publicly.
 
 ## App wiring
 
-`NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` → `fundBookingViaAnonymizer` in `apps/web/src/lib/payments/private-escrow-fund.ts`.
+`NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` → `fundBookingViaAnonymizer`.
 
-Fallback order: team anonymizer → shadow account → public ERC-20.
+Wallet API actions (official private DeFi shape):
+
+1. `transfer` amount `"OPEN"` (open note for leftovers)
+2. `invoke` anonymizer calldata + `${openNoteIds[0]}`
+
+No silent fallback to public when Private is selected (shadow is the only private backup).
 
 ## Smoke (mainnet)
 
