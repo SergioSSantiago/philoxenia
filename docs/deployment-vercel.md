@@ -24,6 +24,15 @@ Dos proyectos enlazados al mismo repo de GitHub:
 1. **philoxenia** — root directory: `apps/web`
 2. **philoxenia-api** — root directory: `apps/api`
 
+## Smart contracts (mainnet)
+
+| Variable | Proyecto | Valor |
+|----------|----------|-------|
+| `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` |
+| `NEXT_PUBLIC_STRK_TOKEN_ADDRESS` | web | `0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d` |
+
+Voyager: https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd — ver [deploy-escrow.md](./deploy-escrow.md).
+
 ## Variables de entorno (Vercel Dashboard)
 
 Configurar en **ambos** proyectos (web + api) donde aplique:
@@ -37,6 +46,8 @@ Configurar en **ambos** proyectos (web + api) donde aplique:
 | `CORS_ORIGIN` | api | `https://philoxenia-iota.vercel.app` |
 | `NEXT_PUBLIC_API_URL` | web | `https://philoxenia-api.vercel.app` |
 | `NEXT_PUBLIC_STARKNET_CHAIN` | web | `mainnet` |
+| `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd` |
+| `NEXT_PUBLIC_STRK_TOKEN_ADDRESS` | web | `0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d` |
 | `NEXT_PUBLIC_STRK20_PRIVACY` | web | `true` |
 
 Neon Postgres (proyecto **philoxenia-api**):

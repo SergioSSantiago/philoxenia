@@ -70,7 +70,19 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 | Web | https://philoxenia-iota.vercel.app |
 | API | https://philoxenia-api.vercel.app |
 
-Repo: https://github.com/SergioSSantiago/philoxenia · Guía: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
+### Smart contract (Starknet mainnet)
+
+| | |
+|--|--|
+| **BookingEscrow** | [`0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd`](https://voyager.online/contract/0x071472045bd45e232bb0542f8f6f9a9af42947e15e57575cd7b55650ac9001bd) |
+| Network | Starknet **mainnet** |
+| Token | STRK |
+| Owner / protocol treasury | `0x04746642f27C03a5d3706205E8d6fbFEd30d18Ed6bE45584BB2df5a65388E878` |
+| Protocol fee | **10% of connector reward** (0% if no connector) |
+
+Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
+
+Repo: https://github.com/SergioSSantiago/philoxenia · Guía Vercel: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
 
 ### Install (desarrollo local opcional)
 
@@ -151,6 +163,8 @@ Settlement: Host 712.5 STRK, Connector 33.75 STRK, Philoxenia 3.75 STRK (10% of 
 ## Documentation
 
 - [docs/](./docs/) — full docs index
+- [docs/deploy-escrow.md](./docs/deploy-escrow.md) — **BookingEscrow mainnet address**
+- [docs/smart-contracts.md](./docs/smart-contracts.md) — escrow interface and fees
 - [docs/brand.md](./docs/brand.md) — logo and header
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [PRIVACY.md](./PRIVACY.md)
