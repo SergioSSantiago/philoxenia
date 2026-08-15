@@ -30,12 +30,13 @@ Escrow still stores guest / host / amounts publicly.
 
 `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` → `fundBookingViaAnonymizer`.
 
-Wallet API actions (official private DeFi shape):
+Wallet API actions (matches starknet-privacy `InvokeExternal` tests):
 
-1. `transfer` amount `"OPEN"` (open note for leftovers)
-2. `invoke` anonymizer calldata + `${openNoteIds[0]}`
+1. `withdraw` token amount to the anonymizer (pool → helper; required — invoke alone does not fund it)
+2. `transfer` amount `"OPEN"` (open note for leftovers)
+3. `invoke` anonymizer calldata + `${openNoteIds[0]}`
 
-No silent fallback to public when Private is selected (shadow is the only private backup).
+No silent fallback to public when Private is selected. Shadow backup is opt-in (`NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1`).
 
 ## Smoke (mainnet)
 

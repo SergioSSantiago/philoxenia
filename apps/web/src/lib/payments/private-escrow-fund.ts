@@ -175,10 +175,16 @@ export async function fundBookingViaShadowAccount(
  * Fund escrow from shielded balance via team BookingEscrowAnonymizer.
  * Observers see pool ↔ anonymizer; guest/host/amounts remain in escrow storage.
  *
- * Wallet API shape (official private DeFi): OPEN note + invoke only.
- * The pool withdraws `total_amount` of `token` to the helper as part of invoke.
+ * Wallet API / pool shape (matches starknet-privacy InvokeExternal tests):
+ * 1. `withdraw` to the anonymizer — pool sends `total_amount` of token publicly
+ * 2. `transfer` amount `"OPEN"` — open note for any leftover
+ * 3. `invoke` anonymizer `privacy_invoke` with `${openNoteIds[0]}`
+ *
+ * Docs sometimes omit (1); without it the helper has zero balance and reverts
+ * (Paymaster TRANSACTION_EXECUTION_ERROR / INSUFFICIENT_BALANCE).
  *
  * @see https://strk20-by-example.org/starknet-wallet-api/private-defi
+ * @see https://github.com/starkware-libs/starknet-privacy/blob/main/sdk/tests/internal/invoke-external.test.ts
  */
 export async function fundBookingViaAnonymizer(
   walletAccount: WalletAccountV6,
@@ -186,6 +192,7 @@ export async function fundBookingViaAnonymizer(
   anonymizer: string
 ): Promise<{ transaction_hash: string }> {
   const amount = parseAmount(params.amount);
+  const hexAmount = toWalletFelt(amount);
   const bookingId = BigInt(params.onChainBookingId);
   const listingId = BigInt(params.onChainListingId);
   const rewardBps = percentToBps(params.connectorRewardPercent);
@@ -193,17 +200,25 @@ export async function fundBookingViaAnonymizer(
     params.connectorAddress && params.connectorRewardPercent > 0
       ? params.connectorAddress
       : "0x0";
+  const anon = toWalletFelt(anonymizer);
+  const token = toWalletFelt(params.tokenAddress);
 
   const actions: STRK20_ACTION[] = [
     {
+      type: "withdraw",
+      token,
+      amount: hexAmount,
+      recipient: anon,
+    },
+    {
       type: "transfer",
-      token: toWalletFelt(params.tokenAddress),
+      token,
       amount: "OPEN",
       recipient: toWalletFelt(params.guestAddress),
     },
     {
       type: "invoke",
-      contract: toWalletFelt(anonymizer),
+      contract: anon,
       calldata: toWalletCalldata([
         ...CallData.compile({
           escrow: params.escrowAddress,

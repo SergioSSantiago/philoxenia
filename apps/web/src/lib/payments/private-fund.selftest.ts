@@ -52,13 +52,20 @@ assert.equal(toWalletFelt("1000"), "0x3e8");
 assert.equal(toWalletFelt("${openNoteIds[0]}"), "${openNoteIds[0]}");
 
 const actions = [
+  {
+    type: "withdraw",
+    token: TOKEN,
+    amount: toWalletFelt(amount),
+    recipient: ANON,
+  },
   { type: "transfer", token: TOKEN, amount: "OPEN", recipient: GUEST },
   { type: "invoke", contract: ANON, calldata },
 ];
-assert.equal(actions.length, 2);
-assert.equal(actions[0].type, "transfer");
-assert.equal(actions[1].type, "invoke");
-assert.ok(!actions.some((a) => a.type === "withdraw"));
+assert.equal(actions.length, 3);
+assert.equal(actions[0].type, "withdraw");
+assert.equal(actions[1].type, "transfer");
+assert.equal(actions[2].type, "invoke");
+assert.ok(actions.some((a) => a.type === "withdraw"));
 
 console.log("private-fund.selftest OK", {
   invokeCalldataLen: calldata.length,
