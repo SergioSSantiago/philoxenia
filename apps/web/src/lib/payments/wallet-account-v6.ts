@@ -41,6 +41,86 @@ export type PrivacyWalletSession = {
   walletApiVersions: string[];
 };
 
+export type PrivacyDetectResult = {
+  capable: boolean;
+  versions: string[];
+  /** Human-readable reason when not capable. */
+  reason: string | null;
+};
+
+function isFirefox(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /firefox/i.test(navigator.userAgent);
+}
+
+function injectedWindowKeys(): string[] {
+  if (typeof window === "undefined") return [];
+  return Object.getOwnPropertyNames(window).filter((k) =>
+    k.toLowerCase().startsWith("starknet")
+  );
+}
+
+/**
+ * Wait briefly for Ready to inject (Firefox often registers after first paint).
+ */
+async function discoverWallets(
+  timeoutMs = 2000
+): Promise<WalletWithStarknetFeatures[]> {
+  const store = createStore();
+  store._refreshInjectedWallets();
+
+  const immediate = store.getWallets();
+  if (immediate.length > 0) return immediate;
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = (wallets: WalletWithStarknetFeatures[]) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(wallets);
+    };
+
+    const cleanup = store.subscribe((wallets) => {
+      if (wallets.length > 0) finish([...wallets]);
+    });
+
+    const poll = window.setInterval(() => {
+      store._refreshInjectedWallets();
+      const found = store.getWallets();
+      if (found.length > 0) finish(found);
+    }, 200);
+
+    window.setTimeout(() => {
+      window.clearInterval(poll);
+      store._refreshInjectedWallets();
+      finish(store.getWallets());
+    }, timeoutMs);
+  });
+}
+
+function notCapableReason(versions: string[], hadWallet: boolean): string {
+  const fx = isFirefox();
+  const keys = injectedWindowKeys();
+
+  if (!hadWallet) {
+    if (keys.length === 0) {
+      return fx
+        ? "Ready extension not detected in Firefox. Install/update Ready for Firefox, allow it on this site, then reconnect via the extension (not QR/WalletConnect). Chrome/Brave often ships STRK20 (wallet API ≥ 0.10) first."
+        : "Ready extension not detected. Install Ready, refresh, and connect with the browser extension (WalletConnect/mobile does not expose Private pay).";
+    }
+    return "A Starknet object is injected but Wallet API discovery failed. Unlock Ready, refresh this page, and reconnect.";
+  }
+
+  if (versions.length === 0) {
+    return fx
+      ? "Ready connected but did not report wallet API versions. Update Ready for Firefox (or try Chrome/Brave) — STRK20 needs wallet API ≥ 0.10."
+      : "Ready connected but did not report wallet API versions. Update Ready and reconnect.";
+  }
+
+  return `Ready wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private). Update Ready${fx ? " — Firefox builds sometimes lag behind Chrome" : ""} and reconnect.`;
+}
+
 /**
  * Resolve a WalletAccountV6 from injected wallets (Ready).
  * Prefer the wallet matching `preferredAddress` from starknet-react.
@@ -50,8 +130,7 @@ export async function resolvePrivacyWallet(
 ): Promise<PrivacyWalletSession | null> {
   if (typeof window === "undefined") return null;
 
-  const store = createStore();
-  const wallets = store.getWallets();
+  const wallets = await discoverWallets();
   if (wallets.length === 0) return null;
 
   let selected: WalletWithStarknetFeatures | undefined;
@@ -80,6 +159,13 @@ export async function resolvePrivacyWallet(
 
   if (!selected) return null;
 
+  // Wake the extension before version probe (helps Firefox).
+  try {
+    await walletV6.requestAccounts(selected);
+  } catch {
+    // still try supportedWalletApi
+  }
+
   let walletApiVersions: string[] = [];
   try {
     walletApiVersions = (await walletV6.supportedWalletApi(selected)).map(
@@ -104,6 +190,40 @@ export async function resolvePrivacyWallet(
 export async function detectPrivacyCapable(
   preferredAddress?: string | null
 ): Promise<boolean> {
-  const session = await resolvePrivacyWallet(preferredAddress);
-  return Boolean(session?.privacyCapable);
+  const result = await diagnosePrivacyWallet(preferredAddress);
+  return result.capable;
+}
+
+/** Detection + reason for UI (Firefox / outdated Ready / WC-only). */
+export async function diagnosePrivacyWallet(
+  preferredAddress?: string | null
+): Promise<PrivacyDetectResult> {
+  if (typeof window === "undefined") {
+    return { capable: false, versions: [], reason: "Not in browser." };
+  }
+
+  try {
+    const session = await resolvePrivacyWallet(preferredAddress);
+    if (!session) {
+      return {
+        capable: false,
+        versions: [],
+        reason: notCapableReason([], false),
+      };
+    }
+    if (session.privacyCapable) {
+      return { capable: true, versions: session.walletApiVersions, reason: null };
+    }
+    return {
+      capable: false,
+      versions: session.walletApiVersions,
+      reason: notCapableReason(session.walletApiVersions, true),
+    };
+  } catch {
+    return {
+      capable: false,
+      versions: [],
+      reason: notCapableReason([], injectedWindowKeys().length > 0),
+    };
+  }
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "@starknet-react/core";
 import { Button } from "@/components/ui";
 import { createStrk20Provider } from "@/lib/payments/strk20-payment-provider";
+import { diagnosePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 import { STRK20_PRIVACY_ENABLED } from "@/lib/tokens";
 
 /**
@@ -13,6 +14,7 @@ import { STRK20_PRIVACY_ENABLED } from "@/lib/tokens";
 export function Strk20PrivacyPanel() {
   const { account, address, isConnected } = useAccount();
   const [capable, setCapable] = useState(false);
+  const [hint, setHint] = useState("");
   const [privateBal, setPrivateBal] = useState<string | null>(null);
   const [amount, setAmount] = useState("1");
   const [busy, setBusy] = useState(false);
@@ -22,16 +24,18 @@ export function Strk20PrivacyPanel() {
   useEffect(() => {
     if (!account || !STRK20_PRIVACY_ENABLED) {
       setCapable(false);
+      setHint("");
       setPrivateBal(null);
       return;
     }
     let cancelled = false;
     const provider = createStrk20Provider(account, "STRK");
     void (async () => {
-      const ok = await provider.detectPrivacySupport();
+      const diag = await diagnosePrivacyWallet(address);
       if (cancelled) return;
-      setCapable(ok);
-      if (ok) {
+      setCapable(diag.capable);
+      setHint(diag.reason ?? "");
+      if (diag.capable) {
         const bal = await provider.getPrivateBalance();
         if (!cancelled) setPrivateBal(bal);
       }
@@ -39,7 +43,7 @@ export function Strk20PrivacyPanel() {
     return () => {
       cancelled = true;
     };
-  }, [account]);
+  }, [account, address]);
 
   if (!STRK20_PRIVACY_ENABLED) return null;
 
@@ -53,9 +57,9 @@ export function Strk20PrivacyPanel() {
 
   if (!capable) {
     return (
-      <p className="text-xs text-muted">
-        This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10). Use
-        Public ERC-20 on booking pay, or update Ready.
+      <p className="text-xs text-muted leading-relaxed">
+        {hint ||
+          "This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10). Use Public ERC-20 on booking pay, or update Ready."}
       </p>
     );
   }

@@ -20,7 +20,7 @@ import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import { createPaymentProvider } from "@/lib/payments/strk20-payment-provider";
 import { onChainIdFromUuid } from "@/lib/payments/escrow-actions";
-import { detectPrivacyCapable } from "@/lib/payments/wallet-account-v6";
+import { diagnosePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 import { privacyLabel } from "@/lib/payments/payment-provider";
 import {
   STRK20_PRIVACY_ENABLED,
@@ -100,6 +100,7 @@ function NewBookingForm() {
   const [paymentAsset, setPaymentAsset] = useState<PaymentAsset>("STRK");
   const [fundMode, setFundMode] = useState<"private" | "public">("private");
   const [privacyCapable, setPrivacyCapable] = useState(false);
+  const [privacyHint, setPrivacyHint] = useState("");
   const [quote, setQuote] = useState<BookingQuote | null>(null);
   const [error, setError] = useState("");
   const [loadError, setLoadError] = useState("");
@@ -108,16 +109,17 @@ function NewBookingForm() {
   useEffect(() => {
     if (!address || !STRK20_PRIVACY_ENABLED) {
       setPrivacyCapable(false);
+      setPrivacyHint("");
       return;
     }
     let cancelled = false;
-    void detectPrivacyCapable(address).then((ok) => {
-      if (!cancelled) {
-        setPrivacyCapable(ok);
-        // Keep Private as default even if detection is pending/false —
-        // pay will error clearly instead of silently using public.
-        if (ok) setFundMode("private");
-      }
+    void diagnosePrivacyWallet(address).then((result) => {
+      if (cancelled) return;
+      setPrivacyCapable(result.capable);
+      setPrivacyHint(result.reason ?? "");
+      // Keep Private as default even if detection is pending/false —
+      // pay will error clearly instead of silently using public.
+      if (result.capable) setFundMode("private");
     });
     return () => {
       cancelled = true;
@@ -475,9 +477,8 @@ function NewBookingForm() {
                   </div>
                   {!privacyCapable && fundMode === "private" && (
                     <p className="text-xs text-amber-800 leading-relaxed">
-                      Ready wallet API ≥ 0.10 is required for Private. Update or
-                      reconnect Ready — we will not fall back to a public pay
-                      silently.
+                      {privacyHint ||
+                        "Ready wallet API ≥ 0.10 is required for Private. Update or reconnect Ready — we will not fall back to a public pay silently."}
                     </p>
                   )}
                   <p className="text-xs text-muted leading-relaxed">
