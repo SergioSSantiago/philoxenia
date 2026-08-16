@@ -9,7 +9,7 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 ## Model
 
 - Users are identified by Starknet wallet address (normalized) and a display name.
-- Display names are shown to friends but **are not searchable**. Add someone by wallet address only.
+- Display names are shown to friends but **are not searchable**. Add someone by wallet address only. `WalletAddress` truncates in compact mode; **Copy** flashes **Copied!** for 2s (Share uses the native sheet, then copy).
 - Friendships are **mutual** — created when a friend request is accepted.
 - Stored as ordered pairs `(userAId, userBId)` to prevent duplicates.
 

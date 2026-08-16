@@ -43,6 +43,17 @@ Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow
 
 Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (also linked from Home). Ready must be connected to sign. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
 
+## Balances (Home vs Profile)
+
+`WalletBalances` (`apps/web/src/components/wallet-balances.tsx`) shows **public** ERC-20 STRK and DAI.
+
+| Surface | Mode | Notes |
+|---------|------|--------|
+| `/home` | `compact` | Hint “Public · shield on Profile”; STRK20 badge as a one-liner |
+| `/profile` | full | Same public rows + `Strk20PrivacyPanel` (shield / unshield) + AVNU swap |
+
+If the JWT session is still valid but Ready is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, private pay, settle, swap).
+
 Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.  
 Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/tokens.ts`.
 

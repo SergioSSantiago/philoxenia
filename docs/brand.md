@@ -30,7 +30,8 @@ Before scroll, the landing shows only:
 
 Stats fade as the brand docks into the header on scroll.
 
-Footer (after the role sections): fee line, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
+Below the fold: tagline **Direct stays: 0% protocol fee.** (`whitespace-nowrap` on `0% protocol fee` so the phrase does not wrap mid-line). Footer: fee recap, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
+
 ## Wallet
 
 Philoxenia connects **Ready X** only. Braavos is not supported.
