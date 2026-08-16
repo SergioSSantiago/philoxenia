@@ -108,9 +108,9 @@ vercel ls philoxenia
 # or open https://vercel.com/sergiossantiagos-projects/philoxenia
 ```
 
-The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home`. **Ideal:** Ready X in-app browser (see [product.md](./product.md)).
+The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home`. **Ideal for Private STRK:** Ready X in-app browser (see [product.md](./product.md)).
 
-**Smartphone blocked:** mobile Ready login does not complete the signature step reliably; it is not a supported client until that is fixed.
+**iPhone:** Safari can **Connect** via WalletConnect (`ready://` after the starknetkit patch). Login is two steps (Connect, then Sign in). Private STRK still prefers the Ready X in-app browser.
 
 ## Local (optional)
 

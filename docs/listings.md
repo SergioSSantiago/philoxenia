@@ -51,6 +51,7 @@ Everyone else ──► 404 (listing unavailable)
 |--------|------|------|-------------|
 | POST | `/my-listings` | Yes | Create listing (map pin + photos required) |
 | GET | `/my-listings` | Yes | Host's own listings |
+| DELETE | `/my-listings/:id` | Yes | Host delete when no active paid bookings remain |
 | GET | `/my-network/listings` | Yes | Friends' listings |
 | GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
 | GET | `/shared-listings` | Yes | Listings shared with user via introductions |

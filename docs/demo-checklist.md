@@ -1,6 +1,8 @@
 # Happy-path checklist (prod)
 
-Use **two Ready X wallets** (Chrome + Smart Wallet + Private, or Ready X app browser on iPhone). Prefer **three** if demoing connectors (host / connector / guest).
+Use **two Ready X wallets** (Chrome + Smart Wallet + Private, or Ready X on iPhone). Prefer **three** if demoing connectors (host / connector / guest).
+
+On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private STRK in section C, open Philoxenia in the **Ready X in-app browser**.
 
 ## A. Social + listing
 
