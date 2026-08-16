@@ -10,6 +10,7 @@ Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustle
 |-----|--------|
 | [brand.md](./brand.md) | Logo (sleeping-head cameo) and header → `/` |
 | [product.md](./product.md) | Product — Ready X: Chrome (desktop) / Ready X app browser (iPhone); Firefox has no Ready X |
+| [roles.md](./roles.md) | **Host · Guest · Connector** — why connector grows the app |
 | [connectors.md](./connectors.md) | **Earn as a connector** — key growth loop, Earnings UI, share surfaces |
 | [architecture.md](./architecture.md) | Monorepo, pages, data flow |
 | [social-graph.md](./social-graph.md) | Friends; friend profile; search by wallet only |
@@ -29,6 +30,7 @@ Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustle
 | [development.md](./development.md) | Local setup |
 | [deployment.md](./deployment.md) | Generic deploy |
 | [deployment-vercel.md](./deployment-vercel.md) | Production on Vercel |
+| [seo.md](./seo.md) | Sitemap, robots, Search Console |
 
 Root summaries: [ARCHITECTURE.md](../ARCHITECTURE.md), [PRIVACY.md](../PRIVACY.md), [SECURITY.md](../SECURITY.md), [STRK20_INTEGRATION_PLAN.md](../STRK20_INTEGRATION_PLAN.md) (complete).
 

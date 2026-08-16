@@ -11,28 +11,11 @@ import { GuestNightCalendar } from "@/components/guest-night-calendar";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
-
-async function copyText(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    try {
-      const el = document.createElement("textarea");
-      el.value = text;
-      el.setAttribute("readonly", "");
-      el.style.position = "fixed";
-      el.style.left = "-9999px";
-      document.body.appendChild(el);
-      el.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(el);
-      return ok;
-    } catch {
-      return false;
-    }
-  }
-}
+import {
+  copyText,
+  inviteReadyStatus,
+  shareInviteNative,
+} from "@/lib/share-invite";
 
 export default function ListingPage() {
   const params = useParams<{ id: string }>();
@@ -161,34 +144,11 @@ export default function ListingPage() {
         token: string;
         hasConnector: boolean;
       }>(`/listings/${params.id}/share`);
-      // Absolute invite link — never the wallet. Opening it records connector attribution.
       const url = `${window.location.origin}${result.inviteUrl}`;
       setShareUrl(url);
       setShareHasConnector(result.hasConnector);
-
-      if (typeof navigator.share === "function") {
-        try {
-          await navigator.share({
-            title: listing?.title ?? "Philoxenia listing",
-            text: "Open this Philoxenia invite to view the listing.",
-            url,
-          });
-          setShareStatus("Invite link shared");
-          return;
-        } catch (err) {
-          if (err instanceof Error && err.name === "AbortError") {
-            setShareStatus("Share cancelled");
-            return;
-          }
-        }
-      }
-
       const copied = await copyText(url);
-      setShareStatus(
-        copied
-          ? "Invite link copied — paste it in WhatsApp or anywhere"
-          : "Could not copy automatically — select the link below"
-      );
+      setShareStatus(inviteReadyStatus(copied, result.hasConnector));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Share failed");
     } finally {
@@ -199,11 +159,23 @@ export default function ListingPage() {
   async function copyShareLink() {
     if (!shareUrl) return;
     const copied = await copyText(shareUrl);
-    setShareStatus(
-      copied
-        ? "Invite link copied — paste it in WhatsApp or anywhere"
-        : "Could not copy automatically — select the link below"
-    );
+    setShareStatus(inviteReadyStatus(copied, shareHasConnector));
+  }
+
+  async function shareViaSystem() {
+    if (!shareUrl) return;
+    const result = await shareInviteNative({
+      title: listing?.title ?? "Philoxenia listing",
+      text: "Open this Philoxenia invite to view the listing.",
+      url: shareUrl,
+    });
+    if (result === "shared") {
+      setShareStatus(
+        shareHasConnector
+          ? "Invite shared — you are the connector"
+          : "Invite link shared"
+      );
+    }
   }
 
   if (error) {
@@ -447,14 +419,24 @@ export default function ListingPage() {
               <p className="break-all font-mono text-xs text-foreground select-all">
                 {shareUrl}
               </p>
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-full sm:w-auto"
-                onClick={copyShareLink}
-              >
-                Copy invite link
-              </Button>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-full sm:w-auto"
+                  onClick={copyShareLink}
+                >
+                  Copy invite link
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="w-full sm:w-auto"
+                  onClick={() => void shareViaSystem()}
+                >
+                  Share via…
+                </Button>
+              </div>
               {shareHasConnector ? (
                 <p className="text-muted leading-relaxed">
                   You are the connector for this link. When someone opens it,

@@ -28,7 +28,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 
 - A social trust network for private hospitality
 - Friend-based discovery (no public listing directory)
-- **Connectors** — friends introduce guests and **earn a % on settle**; the growth loop of the product ([docs/connectors.md](./docs/connectors.md))
+- **Three roles — Host, Guest, Connector** ([docs/roles.md](./docs/roles.md)). **Connector** grows the app: introduce guests to friends’ places and **earn a % on settle** ([docs/connectors.md](./docs/connectors.md))
 - Trustless settlement via Cairo escrow (Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
 - STRK20 private payments with **Ready X** (Smart Wallet + Private enabled)
 - Sealed chat, peer transfers, AVNU STRK ↔ DAI swap
@@ -188,6 +188,7 @@ See [docs/connectors.md](./docs/connectors.md).
 ## Documentation
 
 - [docs/](./docs/) — full docs index
+- [docs/roles.md](./docs/roles.md) — **Host · Guest · Connector**
 - [docs/connectors.md](./docs/connectors.md) — **earn as a connector (key loop)**
 - [docs/deploy-escrow.md](./docs/deploy-escrow.md) — **BookingEscrow mainnet address**
 - [docs/smart-contracts.md](./docs/smart-contracts.md) — escrow interface and fees

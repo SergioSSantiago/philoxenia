@@ -66,11 +66,15 @@ On iPhone you **must** use the browser inside the **Ready X** wallet app. Openin
 
 ## Roles
 
+Philoxenia has three roles — **Host**, **Guest**, and **Connector**. One wallet can be all three. **Connector is the growth engine:** without introductions there is no public directory to fill stays.
+
 | Role | Description |
 |------|-------------|
 | **Host** | Creates listings; sets connector %; receives accommodation payment on settlement |
 | **Guest** | Books and funds stays; must be friends with the host (or become friends after an invite) |
-| **Connector** | **Key role** — a friend who shares a listing invite; earns the host’s configured % of the booking total, paid to their wallet on settle |
+| **Connector** | **Start here to grow the network** — a friend who shares a listing invite; earns the host’s configured % of the booking total, paid to their wallet on settle |
+
+**Be a connector:** open **Earnings** (`/connector`), share a friend’s listing, earn when they book. No need to host. Details: **[roles.md](./roles.md)** · **[connectors.md](./connectors.md)**
 
 One person can be host on their places, guest on friends’ places, and connector when they introduce others.
 
@@ -129,6 +133,7 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 ## Related docs
 
 - [brand.md](./brand.md)
+- [roles.md](./roles.md) — **Host · Guest · Connector (start with connector)**
 - [connectors.md](./connectors.md) — **earn as a connector (key loop)**
 - [social-graph.md](./social-graph.md)
 - [listings.md](./listings.md)

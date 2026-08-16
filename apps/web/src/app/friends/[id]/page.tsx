@@ -15,32 +15,15 @@ import {
 import { WalletAddress } from "@/components/wallet-address";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
+import {
+  copyText,
+  inviteReadyStatus,
+  shareInviteNative,
+} from "@/lib/share-invite";
 
 interface FriendProfile {
   friend: User;
   listings: Listing[];
-}
-
-async function copyText(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    try {
-      const el = document.createElement("textarea");
-      el.value = text;
-      el.setAttribute("readonly", "");
-      el.style.position = "fixed";
-      el.style.left = "-9999px";
-      document.body.appendChild(el);
-      el.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(el);
-      return ok;
-    } catch {
-      return false;
-    }
-  }
 }
 
 export default function FriendProfilePage() {
@@ -78,48 +61,12 @@ export default function FriendProfilePage() {
         hasConnector: boolean;
       }>(`/listings/${listing.id}/share`);
       const url = `${window.location.origin}${result.inviteUrl}`;
-
-      if (typeof navigator.share === "function") {
-        try {
-          await navigator.share({
-            title: listing.title,
-            text: `Stay at ${listing.title} via Philoxenia — open this invite to book.`,
-            url,
-          });
-          setShareByListing((prev) => ({
-            ...prev,
-            [listing.id]: {
-              url,
-              status: result.hasConnector
-                ? "Invite shared — you are the connector"
-                : "Invite shared",
-            },
-          }));
-          return;
-        } catch (err) {
-          if (err instanceof Error && err.name === "AbortError") {
-            setShareByListing((prev) => ({
-              ...prev,
-              [listing.id]: {
-                url,
-                status: "Share cancelled — link ready below",
-              },
-            }));
-            return;
-          }
-        }
-      }
-
       const copied = await copyText(url);
       setShareByListing((prev) => ({
         ...prev,
         [listing.id]: {
           url,
-          status: copied
-            ? result.hasConnector
-              ? "Invite copied — you earn if they book through this link."
-              : "Invite copied."
-            : "Select the link below and copy it manually.",
+          status: inviteReadyStatus(copied, result.hasConnector),
         },
       }));
     } catch (err) {
@@ -127,6 +74,44 @@ export default function FriendProfilePage() {
     } finally {
       setSharingId(null);
     }
+  }
+
+  async function shareInviteViaSystem(
+    listingId: string,
+    title: string,
+    asConnector: boolean
+  ) {
+    const share = shareByListing[listingId];
+    if (!share) return;
+    const result = await shareInviteNative({
+      title,
+      text: `Stay at ${title} via Philoxenia — open this invite to book.`,
+      url: share.url,
+    });
+    if (result === "shared") {
+      setShareByListing((prev) => ({
+        ...prev,
+        [listingId]: {
+          ...share,
+          status: asConnector
+            ? "Invite shared — you are the connector"
+            : "Invite shared",
+        },
+      }));
+    }
+  }
+
+  async function copyInviteAgain(listingId: string, asConnector: boolean) {
+    const share = shareByListing[listingId];
+    if (!share) return;
+    const copied = await copyText(share.url);
+    setShareByListing((prev) => ({
+      ...prev,
+      [listingId]: {
+        ...share,
+        status: inviteReadyStatus(copied, asConnector),
+      },
+    }));
   }
 
   if (error && !profile) {
@@ -290,6 +275,32 @@ export default function FriendProfilePage() {
                         <p className="break-all font-mono text-xs text-muted select-all">
                           {share.url}
                         </p>
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            className="w-full sm:w-auto"
+                            onClick={() =>
+                              void copyInviteAgain(listing.id, canEarn)
+                            }
+                          >
+                            Copy link
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            className="w-full sm:w-auto"
+                            onClick={() =>
+                              void shareInviteViaSystem(
+                                listing.id,
+                                listing.title,
+                                canEarn
+                              )
+                            }
+                          >
+                            Share via…
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </div>

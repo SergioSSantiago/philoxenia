@@ -1,11 +1,27 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingFrame } from "@/components/landing-frame";
 import { ReadyWalletNotice } from "@/components/ready-wallet-notice";
 import { Button } from "@/components/ui";
+import { landingJsonLd } from "@/lib/json-ld";
+import { SITE_DESCRIPTION, SITE_TAGLINE } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: SITE_TAGLINE,
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+};
 
 export default function LandingPage() {
+  const jsonLd = landingJsonLd();
+
   return (
     <LandingFrame>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <section className="mx-auto max-w-5xl px-6 pb-24 pt-8 text-center sm:pt-12">
         <h1 className="text-5xl leading-tight md:text-6xl">
           Trust who you trust.
@@ -13,9 +29,10 @@ export default function LandingPage() {
           Pay trustless.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted">
-          Philoxenia is a private network for hospitality. Discover places
-          through friends—not public listings. Book and settle payments on
-          Starknet with no protocol commission.
+          Philoxenia is private hospitality on Starknet — hosts, guests, and{" "}
+          <strong className="font-medium text-foreground">connectors</strong>{" "}
+          who earn by introducing trusted people to trusted places. No public
+          marketplace. Direct stays: <strong className="font-medium text-foreground">0%</strong> protocol fee.
         </p>
 
         <div className="mx-auto mt-8 max-w-2xl text-left">
@@ -26,25 +43,50 @@ export default function LandingPage() {
           <Link href="/home">
             <Button>Explore</Button>
           </Link>
-          <Link href="/listings/new">
-            <Button variant="secondary">List your place</Button>
+          <Link href="/connector">
+            <Button variant="secondary">Earn as a connector</Button>
           </Link>
+          <Link href="/listings/new">
+            <Button variant="ghost">List your place</Button>
+          </Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-6 py-8">
+        <div className="rounded-2xl border border-accent/25 bg-accent-soft/40 px-6 py-8 text-center sm:px-10">
+          <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">
+            Start here
+          </p>
+          <h2 className="mt-2 text-2xl text-foreground sm:text-3xl">
+            Be a connector — grow the network and earn
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+            Share a friend&apos;s listing invite. When your guest books, you
+            receive the host&apos;s connector % on settle — paid to your wallet.
+            No inventory required. Hosts win filled nights; guests arrive with a
+            vouch; you get paid for the introduction.
+          </p>
+          <div className="mt-6">
+            <Link href="/home">
+              <Button>Connect wallet &amp; open Earnings</Button>
+            </Link>
+          </div>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-5xl gap-12 px-6 py-16 md:grid-cols-3 md:gap-16">
         {[
           {
-            title: "Connect with people you trust",
-            body: "Your friend network is the trust layer. No public marketplace, no anonymous browsing.",
+            title: "Host",
+            body: "List privately for friends. Set a connector % so your network wants to bring guests. Direct bookings stay 0% protocol.",
           },
           {
-            title: "Discover private places",
-            body: "See listings from friends—or places shared with you through a trusted introduction.",
+            title: "Connector",
+            body: "Introduce someone you trust to a friend’s place. Earn a cut when they book — the growth loop of Philoxenia.",
           },
           {
-            title: "Book and pay privately",
-            body: "Settlement happens trustlessly on Starknet. STRK20 privacy where supported.",
+            title: "Guest",
+            body: "Book through friendship or an invite. Settle trustlessly on Starknet, with STRK20 privacy when Ready X supports it.",
           },
         ].map((item) => (
           <div key={item.title}>
@@ -55,7 +97,8 @@ export default function LandingPage() {
       </section>
 
       <footer className="border-t border-border py-10 text-center text-sm text-muted">
-        Philoxenia takes 0% protocol commission.
+        Direct host↔guest: 0% protocol. Connectors earn; Philoxenia takes 10% of
+        the connector reward only.
       </footer>
     </LandingFrame>
   );

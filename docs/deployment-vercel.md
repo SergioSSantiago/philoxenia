@@ -53,6 +53,7 @@ Configure on **both** projects (web + api) where applicable:
 | `DAI_BOOKING_ESCROW_ADDRESS` | api | DAI escrow (payment verify) |
 | `CORS_ORIGIN` | api | `https://philoxenia-iota.vercel.app` |
 | `NEXT_PUBLIC_API_URL` | web | `https://philoxenia-api.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | web | `https://philoxenia-iota.vercel.app` (sitemap / OG / canonical) |
 | `NEXT_PUBLIC_STARKNET_CHAIN` | web | `mainnet` |
 | `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` | web | `0x030533c6110ee5c414a5678bd71115be738852d709c74d8136fa965271c2e1f3` |
 | `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` | web | `0x004c0322af24bb710f3aa0e48293517777188b42d9c4428b77304008ad0ea712` |

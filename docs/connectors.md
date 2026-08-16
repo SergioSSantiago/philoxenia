@@ -4,9 +4,13 @@
 
 # Connectors
 
-**Connectors are how Philoxenia grows.** Hosts list privately; guests book privately; connectors bridge the gap — introducing trusted people to trusted places and earning when a stay settles.
+**Connectors are how Philoxenia grows — and the best way to start using the app.** Hosts list privately; guests book privately; connectors bridge the gap — introducing trusted people to trusted places and **earning when a stay settles**.
+
+You do not need to host a place to participate. Open **Earnings**, share a friend’s listing, get paid on settle.
 
 Without connectors, the network stays closed among existing friends. With connectors, hospitality spreads one introduction at a time, and the introducer is paid on-chain.
+
+Roles overview (Host · Guest · Connector): **[roles.md](./roles.md)**
 
 ## Why be a connector
 
