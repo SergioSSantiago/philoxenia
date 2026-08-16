@@ -4,7 +4,7 @@
 
 # STRK20 (Starknet Privacy)
 
-Philoxenia uses STRK20 for optional private STRK/DAI **booking fund** and for shield/unshield on Profile. Official protocol docs remain authoritative.
+Philoxenia uses STRK20 for optional private STRK/DAI **booking fund** and for shield/unshield of **STRK and DAI** on Profile. Official protocol docs remain authoritative.
 
 ## Official resources
 
@@ -29,7 +29,7 @@ Philoxenia does **not** implement the STRK20 protocol. It integrates via the **W
 
 ## Philoxenia paths (complete)
 
-1. **Wallet API** — shield / unshield / balances (`WalletAccountV6`, wallet API ≥ 0.10). **Ideal:** Ready X in-app browser. Firefox / desktop legacy Ready usually lacks ≥ 0.10 → Private unavailable.
+1. **Wallet API** — shield / unshield / balances for STRK and DAI (`WalletAccountV6`, wallet API ≥ 0.10). **Ideal:** Ready X in-app browser. Firefox / desktop legacy Ready usually lacks ≥ 0.10 → Private unavailable.
 2. **Anonymizer** — private booking fund via `BookingEscrowAnonymizer.privacy_invoke` ([booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md))
 
 ### Private fund actions (settle-all)

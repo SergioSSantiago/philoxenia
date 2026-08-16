@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useAccount } from "@starknet-react/core";
+import type { PaymentAsset } from "@philoxenia/shared";
 import { ActionNotice } from "@/components/action-notice";
 import { Button } from "@/components/ui";
 import { useAuth } from "@/lib/auth-context";
@@ -21,13 +22,14 @@ type NoticeState = {
 };
 
 /**
- * Shield / unshield STRK via Ready WalletAccountV6.
+ * Shield / unshield STRK or DAI via Ready WalletAccountV6.
  * Deposit amounts are public ERC-20 legs — labeled honestly.
  * Requires a live Ready signing session (JWT alone is not enough).
  */
 export function Strk20PrivacyPanel() {
   const { account, address } = useAccount();
   const { reconnectWallet } = useAuth();
+  const [asset, setAsset] = useState<PaymentAsset>("STRK");
   const [capable, setCapable] = useState(false);
   const [hint, setHint] = useState("");
   const [privateBal, setPrivateBal] = useState<string | null>(null);
@@ -46,7 +48,7 @@ export function Strk20PrivacyPanel() {
       setPrivateBal(null);
       return { capable: false, reason: null as string | null };
     }
-    const provider = createStrk20Provider(account, "STRK");
+    const provider = createStrk20Provider(account, asset);
     const diag = await diagnosePrivacyWallet(address);
     setCapable(diag.capable);
     setHint(diag.reason ?? "");
@@ -57,7 +59,7 @@ export function Strk20PrivacyPanel() {
       setPrivateBal(null);
     }
     return { capable: diag.capable, reason: diag.reason };
-  }, [account, address]);
+  }, [account, address, asset]);
 
   useEffect(() => {
     if (!STRK20_PRIVACY_ENABLED) return;
@@ -69,12 +71,11 @@ export function Strk20PrivacyPanel() {
     setMsg("");
     setNotice({
       title: "Reconnecting Ready",
-      body: "Approve the connection in Ready X (unlock if asked). We disconnect first so Private STRK can rediscover wallet API ≥ 0.10 — a silent reconnect does nothing when Ready is already linked.",
+      body: "Approve the connection in Ready X (unlock if asked). We disconnect first so Private STRK/DAI can rediscover wallet API ≥ 0.10 — a silent reconnect does nothing when Ready is already linked.",
       tone: "info",
     });
     try {
       await reconnectWallet();
-      // starknet-react + extension inject settle after connectAsync
       let lastReason: string | null = null;
       let ok = false;
       for (let i = 0; i < 12; i++) {
@@ -92,8 +93,8 @@ export function Strk20PrivacyPanel() {
 
       if (ok) {
         setNotice({
-          title: "Private STRK ready",
-          body: "Ready X reported a privacy-capable session. You can shield and unshield now.",
+          title: "Private balances ready",
+          body: "Ready X reported a privacy-capable session. You can shield and unshield STRK or DAI now.",
           tone: "info",
           primaryLabel: "Got it",
         });
@@ -102,7 +103,7 @@ export function Strk20PrivacyPanel() {
           title: "Still not privacy-capable",
           body:
             lastReason ??
-            "Ready connected, but Private STRK needs Ready X with Smart Wallet + Private (API ≥ 0.10).",
+            "Ready connected, but Private needs Ready X with Smart Wallet + Private (API ≥ 0.10).",
           tone: "warn",
           primaryLabel: "Try again",
           secondaryLabel: "Refresh page",
@@ -131,15 +132,17 @@ export function Strk20PrivacyPanel() {
     setBusy(true);
     setMsg("");
     try {
-      const provider = createStrk20Provider(account, "STRK");
+      const provider = createStrk20Provider(account, asset);
       if (action === "shield") {
-        setMsg("Approve deposit (public amount), then the private proof…");
+        setMsg(
+          `Approve ${asset} deposit (public amount), then the private proof…`
+        );
         const { txHash } = await provider.shield(amount);
-        setMsg(`Shielded. Tx ${txHash.slice(0, 10)}…`);
+        setMsg(`Shielded ${asset}. Tx ${txHash.slice(0, 10)}…`);
       } else {
-        setMsg("Unshielding to your public balance…");
+        setMsg(`Unshielding ${asset} to your public balance…`);
         const { txHash } = await provider.unshield(amount, address);
-        setMsg(`Unshielded. Tx ${txHash.slice(0, 10)}…`);
+        setMsg(`Unshielded ${asset}. Tx ${txHash.slice(0, 10)}…`);
       }
       await refreshPrivate();
     } catch (e) {
@@ -167,9 +170,11 @@ export function Strk20PrivacyPanel() {
     <>
       <div className="space-y-3 rounded-xl border border-border bg-background p-4">
         <div>
-          <p className="text-sm font-medium text-foreground">Private STRK</p>
+          <p className="text-sm font-medium text-foreground">
+            Private STRK / DAI
+          </p>
           <p className="mt-0.5 text-xs text-muted">
-            Shielded balance (wallet-mediated). Deposit/withdraw amounts are
+            Shielded balances (wallet-mediated). Deposit/withdraw amounts are
             public onchain.
           </p>
         </div>
@@ -178,7 +183,7 @@ export function Strk20PrivacyPanel() {
           <div className="space-y-3">
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
               Ready is not connected for signing. Connect to view and manage
-              your shielded STRK balance.
+              shielded STRK or DAI.
             </div>
             <Button
               type="button"
@@ -219,11 +224,31 @@ export function Strk20PrivacyPanel() {
           </div>
         ) : (
           <>
+            <div className="flex gap-2" role="group" aria-label="Token">
+              {(["STRK", "DAI"] as const).map((token) => (
+                <button
+                  key={token}
+                  type="button"
+                  disabled={busy || reconnecting}
+                  onClick={() => {
+                    setAsset(token);
+                    setMsg("");
+                  }}
+                  className={`min-h-10 flex-1 rounded-lg border px-3 text-sm font-medium transition ${
+                    asset === token
+                      ? "border-foreground bg-foreground text-surface"
+                      : "border-border bg-surface text-foreground hover:bg-background"
+                  }`}
+                >
+                  {token}
+                </button>
+              ))}
+            </div>
             <p className="font-mono text-sm text-foreground">
-              {privateBal == null ? "…" : `${privateBal} STRK`}
+              {privateBal == null ? "…" : `${privateBal} ${asset}`}
             </p>
             <label className="block text-xs text-muted">
-              Amount
+              Amount ({asset})
               <input
                 type="text"
                 inputMode="decimal"
@@ -240,7 +265,7 @@ export function Strk20PrivacyPanel() {
                 disabled={busy || reconnecting}
                 onClick={() => void run("shield")}
               >
-                Shield
+                Shield {asset}
               </Button>
               <Button
                 type="button"
@@ -249,7 +274,7 @@ export function Strk20PrivacyPanel() {
                 disabled={busy || reconnecting}
                 onClick={() => void run("unshield")}
               >
-                Unshield
+                Unshield {asset}
               </Button>
             </div>
             {msg ? <p className="text-xs text-foreground">{msg}</p> : null}
