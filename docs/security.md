@@ -64,7 +64,7 @@ Document and secure the owner key; consider multisig for production.
 ## Frontend security
 
 - No private keys in frontend code
-- Ready X only. **Ideal:** Philoxenia inside the Ready X in-app browser (STRK20). Firefox / desktop often only have legacy Ready without privacy API. System mobile browser deep-links are unsupported for reliable login.
+- Ready X only. Safari → WalletConnect redirect (`ready://`) for login; **ideal for STRK20:** Philoxenia inside the Ready X in-app browser. Firefox / desktop often only have legacy Ready without privacy API.
 - Escrow/token addresses from env vars (public)
 - Wallet prompts user for all signatures
 - Sign-in UI is a modal on `/home`; `/auth` redirects there

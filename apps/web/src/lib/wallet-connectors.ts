@@ -9,12 +9,20 @@ import { publicMainnetRpcFallback } from "@philoxenia/shared";
 import { useMainnet } from "@/lib/starknet-config";
 
 /**
- * Official Ready / StarknetKit wiring (published starknetkit still exports
- * ArgentMobileConnector; docs call the same thing ReadyConnector).
+ * Ready mobile connector (StarknetKit docs call this ReadyConnector from
+ * `starknetkit/ready` — that export is not in npm 3.4.3 yet; ArgentMobileConnector
+ * is the shipped equivalent).
+ *
+ * Modes (https://www.starknetkit.com/docs/latest/connectors/ready):
+ * - Desktop: QR
+ * - Mobile system browser: app redirect (ready:// after our starknetkit patch)
+ * - In-app browser: automatic injected connect
  *
  * @see https://www.starknetkit.com/docs/latest/connectors/ready
  * @see https://github.com/argentlabs/demo-dapp-starknet/blob/develop/src/connectors/index.ts
  */
+export const isInReadyAppBrowser = isInArgentMobileAppBrowser;
+
 const rpc =
   process.env.NEXT_PUBLIC_STARKNET_MAINNET_RPC || publicMainnetRpcFallback;
 
@@ -22,13 +30,14 @@ const chainId = useMainnet
   ? constants.NetworkName.SN_MAIN
   : constants.NetworkName.SN_SEPOLIA;
 
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+
+/** Ready docs prefer hostname; demo-dapp still passes full href. */
 function dappUrl(): string {
-  // Official demo-dapp uses the full page URL with ArgentMobileConnector.
-  // (ReadyConnector docs ask for hostname; that export is not in npm 3.4.x yet.)
-  if (typeof window !== "undefined" && window.location.href) {
-    return window.location.href;
+  if (typeof window !== "undefined" && window.location.hostname) {
+    return window.location.hostname;
   }
-  return "https://philoxenia-iota.vercel.app";
+  return "philoxenia-iota.vercel.app";
 }
 
 function readyMobileConnector() {
@@ -40,7 +49,9 @@ function readyMobileConnector() {
       description: "Private P2P hospitality on Starknet",
       icons: ["https://philoxenia-iota.vercel.app/philoxenia-mark.png"],
       rpcUrl: rpc,
+      ...(projectId ? { projectId } : {}),
     },
+    inAppBrowserOptions: {},
   }) as Connector;
 }
 
@@ -53,9 +64,12 @@ function readyExtensionConnector() {
   }) as Connector;
 }
 
+/**
+ * Standalone Ready connector list per StarknetKit Ready docs:
+ * in-app → Ready only; otherwise extension + Ready mobile.
+ */
 export function availableConnectors(): Connector[] {
-  // In Ready’s in-app browser, only the mobile connector (injected path).
-  if (typeof window !== "undefined" && isInArgentMobileAppBrowser()) {
+  if (typeof window !== "undefined" && isInReadyAppBrowser()) {
     return [readyMobileConnector()];
   }
 
@@ -71,7 +85,7 @@ export function pickReadyConnector(
     return connectors[0];
   }
 
-  if (isInArgentMobileAppBrowser()) {
+  if (isInReadyAppBrowser()) {
     return connectors.find((c) => c.id === "argentMobile") ?? connectors[0];
   }
 
@@ -79,6 +93,7 @@ export function pickReadyConnector(
     /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
+  // Mobile system browser → Ready mobile (WalletConnect / app redirect).
   if (mobile) {
     return connectors.find((c) => c.id === "argentMobile") ?? connectors[0];
   }

@@ -128,16 +128,16 @@ npm run db:generate -w @philoxenia/api   # if script exists
 - Sign-in UI: `apps/web/src/components/auth-modal.tsx` on `/home`
 - Brand lockup: `apps/web/src/components/brand-lockup.tsx` → `/`
 
-Connect with [Ready X](https://www.ready.co/) — **Chrome** + Smart Wallet + Private on desktop; on **iPhone** open the app in the **Ready X wallet browser** (not Safari). Firefox has no Ready X.
+Connect with [Ready X](https://www.ready.co/) — **Chrome** + Smart Wallet + Private on desktop; on **iPhone** Connect from Safari (opens Ready X) or use the **Ready X wallet browser** for Private. Firefox has no Ready X.
 
 ### Wallet clients
 
 | Client | Auth | Private STRK20 |
 |--------|------|----------------|
 | Chrome + Ready X (Smart Wallet + Private) | Supported | Yes |
-| Ready X **app browser** (iPhone) | Supported (required on iPhone) | Yes |
+| Ready X **app browser** (iPhone) | Supported | Yes |
+| iPhone Safari → Ready X (`ready://`) | Login via WC redirect | Private unreliable |
 | Firefox / legacy Ready | Often works | Usually **no** |
-| iPhone Safari / system Chrome → Ready | Unreliable | No |
 
 ## Common issues
 
@@ -147,7 +147,7 @@ Connect with [Ready X](https://www.ready.co/) — **Chrome** + Smart Wallet + Pr
 | CORS errors | Match `CORS_ORIGIN` to web URL |
 | Payment fails | Set `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS`; ensure on-chain booking exists |
 | Wallet auth fails (Ready X) | Mainnet; Smart Wallet + Private; `ALCHEMY_API_KEY` |
-| Wallet auth fails on iPhone Safari | Expected — open Philoxenia in the Ready X app browser |
+| Wallet auth fails on iPhone Safari | Install Ready X; allow app open on Connect; use in-app browser if WC fails |
 | Private pay blocked on Firefox | Expected — use Chrome + Ready X or Ready X app browser |
 
 ## Related

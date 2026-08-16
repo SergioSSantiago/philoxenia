@@ -58,7 +58,7 @@ philoxenia/
 ## Web (`apps/web`)
 
 - **Framework:** Next.js 15 (App Router), React, Tailwind CSS
-- **Wallet:** Ready X — **ideal path is the Ready X in-app browser** (`isInArgentMobileAppBrowser`). Firefox / desktop tabs usually inject only legacy Ready (no STRK20 API ≥ 0.10). System mobile browsers deep-linking to Ready are unreliable for SNIP-12.
+- **Wallet:** Ready X — Safari can Connect via WalletConnect (`ready://` after starknetkit patch). **Ideal for STRK20:** Ready X in-app browser (`isInArgentMobileAppBrowser` / wallet API ≥ 0.10). Firefox / desktop tabs often inject only legacy Ready.
 - **State:** React context for auth (`auth-context.tsx`); JWT in localStorage
 - **API client:** `lib/api.ts` (Bearer JWT)
 - **Brand:** `components/brand-lockup.tsx` → `/`; landing hero shows live `LandingNetworkStats`

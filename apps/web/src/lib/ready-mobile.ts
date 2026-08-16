@@ -8,24 +8,23 @@ export function isMobileBrowser(): boolean {
   return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 }
 
-/** Ready / Ready X in-app browser (injects starknet_argentX with isInAppBrowser). */
+/** Ready / Ready X in-app browser (StarknetKit: isInReadyAppBrowser). */
 export function isReadyInAppBrowser(): boolean {
   return isInArgentMobileAppBrowser();
 }
 
 /**
- * App Store / Play links for **Ready X** (STRK20), not the legacy Ready Crypto Card.
- * Safari WalletConnect still deep-links `argent://` → old app; that path is unsupported.
+ * App Store / Play links for **Ready X**.
+ * @see https://apps.apple.com/us/app/ready-x/id6744935604
  */
 export function readyMobileStoreHref(): string {
   if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
-    // Ready X Android listing; legacy package redirects / may coexist.
     return "https://play.google.com/store/apps/details?id=im.argent.contractwalletclient";
   }
   return "https://apps.apple.com/us/app/ready-x/id6744935604";
 }
 
-/** Canonical production URL to paste into the Ready X in-app browser. */
+/** URL to open inside the Ready X in-app browser (optional / Private path). */
 export function philoxeniaOpenUrl(): string {
   if (typeof window !== "undefined" && window.location?.origin) {
     return `${window.location.origin}/home`;
@@ -34,8 +33,11 @@ export function philoxeniaOpenUrl(): string {
 }
 
 /**
- * Deep link for an already-open WalletConnect session request.
- * Prefer `ready://` (Ready X); `argent://` opens the legacy Ready app.
+ * Deep link for a pending WalletConnect sign/tx request.
+ * Ready docs: `ready://` — Philoxenia patches starknetkit so mainnet uses this
+ * (stock 3.4.3 maps SN_MAIN → `argent://` legacy).
+ *
+ * @see https://docs.ready.co/ready/ready-mobile-for-your-react-native-app
  */
 export function readySignRequestHref(): string {
   const href = encodeURIComponent(
@@ -46,7 +48,7 @@ export function readySignRequestHref(): string {
   return `ready://app/wc/request?href=${href}&device=mobile`;
 }
 
-/** Legacy scheme — only as last-resort fallback. */
+/** Legacy Argent scheme — only if Ready X is not installed. */
 export function readyLegacySignRequestHref(): string {
   const href = encodeURIComponent(
     typeof window !== "undefined"
@@ -56,15 +58,12 @@ export function readyLegacySignRequestHref(): string {
   return `argent://app/wc/request?href=${href}&device=mobile`;
 }
 
-/** @deprecated Use readySignRequestHref (ready://). Kept for callers expecting Ready X name. */
+/** @deprecated Alias of readySignRequestHref. */
 export function readyXSignRequestHref(): string {
   return readySignRequestHref();
 }
 
-/**
- * Best-effort reopen of Ready for a pending WC sign request.
- * Only useful inside flows that already established WC — not for first login from Safari.
- */
+/** Reopen Ready X for a pending WC sign request (mobile system browser). */
 export function openReadyForSignRequest(): void {
   if (typeof window === "undefined") return;
   if (isInArgentMobileAppBrowser()) return;
@@ -72,6 +71,6 @@ export function openReadyForSignRequest(): void {
   try {
     window.location.assign(readySignRequestHref());
   } catch {
-    // Safari can block programmatic navigation; UI fallback link covers this.
+    // Safari may block; UI fallback link covers this.
   }
 }

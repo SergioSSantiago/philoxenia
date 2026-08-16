@@ -13,7 +13,7 @@ The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.55;">
 <strong style="color:#7f1d1d;">⚠ Required: Ready X setup (read this first)</strong><br/><br/>
 <strong>Desktop:</strong> <strong>Chrome</strong> + <strong>Ready X</strong> extension, with <strong>Smart Wallet</strong> and <strong>Private</strong> turned on.<br/><br/>
-<strong>iPhone:</strong> open Philoxenia in the <strong>Ready X wallet app browser</strong>. Safari / iOS Chrome will <strong>not</strong> work for login or private pay.<br/><br/>
+<strong>iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604">Ready X</a>. Safari can <strong>Connect</strong> via WalletConnect redirect into Ready X (StarknetKit mobile system browser mode). For <strong>Private STRK</strong>, prefer opening Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
 <strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears — <strong>no private payments</strong>.
 </p>
 
@@ -51,18 +51,23 @@ See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend
 ### What you must do (checklist)
 
 1. **Desktop:** Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** (not Firefox). Enable **Smart Wallet** and **Private**.
-2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older “Ready” / Crypto Card app). Open https://philoxenia-iota.vercel.app **inside the Ready X in-app browser** — not Safari. Safari → Connect opens the legacy wallet via `argent://` and never completes sign-in.
-3. Connect Ready X → Sign in (approve SNIP-12).
+2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For Private STRK, open the same URL in the **Ready X in-app browser**.
+3. Connect Ready X → Sign in (approve SNIP-12). On mobile Safari this is two steps: Connect, then Sign in (second open of Ready X).
 
 Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home`. Display name is optional; friends add you by **wallet address only**.
 
+Wallet wiring follows [StarknetKit Ready connector](https://www.starknetkit.com/docs/latest/connectors/ready) modes (desktop QR / mobile redirect / in-app). npm `starknetkit@3.4.3` still exports `ArgentMobileConnector` (docs rename: `ReadyConnector`); Philoxenia patches mainnet deep links to `ready://` because stock maps `SN_MAIN` → `argent://` (legacy).
+
 ### Firefox — no Ready X
 
-Firefox does **not** list the Ready X extension. Users only see the **legacy Ready Wallet** (formerly Argent). That build typically **cannot** expose wallet API ≥ 0.10 or run Private pay / shield / unshield. Use **Chrome + Ready X** (desktop) or the **Ready X app browser** (iPhone).
+Firefox does **not** list the Ready X extension. Users only see the **legacy Ready Wallet** (formerly Argent). That build typically **cannot** expose wallet API ≥ 0.10 or run Private pay / shield / unshield. Use **Chrome + Ready X** (desktop) or the Ready X app browser (iPhone).
 
-### iPhone Safari / system Chrome — blocked
+### iPhone — Safari vs in-app
 
-On iPhone you **must** use the browser inside the **Ready X** wallet app. Opening Philoxenia in Safari (or Chrome) and deep-linking to Ready does **not** complete login or private pay reliably.
+| Path | Login | Private STRK |
+|------|--------|----------------|
+| Safari → Connect → Ready X (`ready://`) | Supported (WC redirect) | Unreliable — needs wallet API ≥ 0.10 |
+| Ready X in-app browser | Supported (injected) | Supported when Smart Wallet + Private on |
 
 ## Roles
 

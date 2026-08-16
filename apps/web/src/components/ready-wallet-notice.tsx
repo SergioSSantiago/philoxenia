@@ -1,4 +1,4 @@
-/** Shared copy: Ready X setup required for Philoxenia (login + private pay). */
+/** Shared copy: Ready X setup for Philoxenia (login + private pay). */
 
 export const READY_WALLET_SETUP_TITLE = "Required: Ready X setup";
 
@@ -19,19 +19,18 @@ export function ReadyWalletNotice({
       </p>
       {compact ? (
         <p className="mt-1.5 text-xs leading-relaxed text-red-800/95">
-          <strong>Desktop:</strong> Chrome + Ready X extension, with{" "}
-          <strong>Smart Wallet</strong> and <strong>Private</strong> on.{" "}
+          <strong>Desktop:</strong> Chrome + Ready X extension,{" "}
+          <strong>Smart Wallet</strong> + <strong>Private</strong>.{" "}
           <strong>iPhone:</strong> install{" "}
-          <strong>Ready X</strong> (App Store — not the old Ready / Crypto Card),
-          then open Philoxenia in its <strong>in-app browser</strong>. Safari
-          opens the old wallet and cannot finish login.{" "}
+          <strong>Ready X</strong>, then Connect (opens the app) — or open
+          Philoxenia in the Ready X in-app browser for Private STRK.{" "}
           <strong>Firefox:</strong> no Ready X — no private pay.
         </p>
       ) : (
         <ul className="mt-2 list-disc space-y-1.5 pl-4 text-xs leading-relaxed text-red-800/95 sm:text-sm">
           <li>
             <strong>Desktop:</strong> use <strong>Chrome</strong> with the{" "}
-            <strong>Ready X</strong> extension. In Ready X, enable{" "}
+            <strong>Ready X</strong> extension. Enable{" "}
             <strong>Smart Wallet</strong> and <strong>Private</strong>.
           </li>
           <li>
@@ -43,17 +42,14 @@ export function ReadyWalletNotice({
               className="font-semibold underline underline-offset-2"
             >
               Ready X
-            </a>{" "}
-            (not the older Ready / Crypto Card app). Open Philoxenia{" "}
-            <strong>inside the Ready X in-app browser</strong> — not Safari.
-            Safari WalletConnect deep-links to the legacy app and never returns
-            a signature.
+            </a>
+            . From Safari you can <strong>Connect</strong> (WalletConnect
+            redirect into Ready X). For Private STRK, prefer Philoxenia inside
+            the <strong>Ready X in-app browser</strong>.
           </li>
           <li>
-            <strong>Firefox:</strong> the Ready X extension is{" "}
-            <strong>not available</strong>. Only the legacy Ready Wallet
-            appears, which <strong>cannot</strong> do private payments. Use
-            Chrome + Ready X (desktop) or the Ready X app browser (iPhone).
+            <strong>Firefox:</strong> Ready X extension is unavailable — no
+            private payments. Use Chrome + Ready X or the Ready X app browser.
           </li>
         </ul>
       )}

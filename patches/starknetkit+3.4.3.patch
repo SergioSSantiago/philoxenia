@@ -1,0 +1,25 @@
+diff --git a/node_modules/starknetkit/dist/index-3203c1a5.js b/node_modules/starknetkit/dist/index-3203c1a5.js
+index 731e254..6db5916 100644
+--- a/node_modules/starknetkit/dist/index-3203c1a5.js
++++ b/node_modules/starknetkit/dist/index-3203c1a5.js
+@@ -12848,7 +12848,7 @@ const wt = new NS(), Gs = gi.NetworkName, kS = async ({
+   if (String(t).startsWith(Gs.SN_SEPOLIA) || e === 11155111)
+     return "argent-dev://";
+   if (String(t).startsWith(Gs.SN_MAIN) || e === 1)
+-    return "argent://";
++    return "ready://";
+ };
+ var qS = Object.defineProperty, jS = (t, e, i) => e in t ? qS(t, e, { enumerable: !0, configurable: !0, writable: !0, value: i }) : t[e] = i, pi = (t, e, i) => jS(t, typeof e != "symbol" ? e + "" : e, i);
+ function zS(t) {
+diff --git a/node_modules/starknetkit/dist/index-42161a8d.js b/node_modules/starknetkit/dist/index-42161a8d.js
+index d94e85e..fcb7666 100644
+--- a/node_modules/starknetkit/dist/index-42161a8d.js
++++ b/node_modules/starknetkit/dist/index-42161a8d.js
+@@ -1934,6 +1934,7 @@ class Re extends H {
+       url: l,
+       icons: c,
+       rpcUrl: g,
++      mobileUrl: "ready://",
+       modalWallet: G(this, { discoveryWallets: p })
+     };
+     a === I && (console.log("========= NOTICE ========="), console.log(
