@@ -28,8 +28,9 @@ Public marketing surface is the landing page. Authenticated app routes are not m
 ## After deploy
 
 1. Confirm `/robots.txt` and `/sitemap.xml` return 200.
-2. [Google Search Console](https://search.google.com/search-console) → add property `https://philoxenia-iota.vercel.app` → submit sitemap `https://philoxenia-iota.vercel.app/sitemap.xml`.
-3. Request indexing for the homepage URL.
+2. Confirm Google HTML verification file is live: `/googlecbfc040f934ed5ea.html`
+3. [Google Search Console](https://search.google.com/search-console) → verify property → submit sitemap `https://philoxenia-iota.vercel.app/sitemap.xml`.
+4. Request indexing for the homepage URL.
 
 ## Related
 
