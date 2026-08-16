@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LandingFrame } from "@/components/landing-frame";
+import { ReadyWalletNotice } from "@/components/ready-wallet-notice";
 import { Button } from "@/components/ui";
 
 export default function LandingPage() {
@@ -17,7 +18,11 @@ export default function LandingPage() {
           Starknet with no protocol commission.
         </p>
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+        <div className="mx-auto mt-8 max-w-2xl text-left">
+          <ReadyWalletNotice />
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link href="/home">
             <Button>Explore</Button>
           </Link>

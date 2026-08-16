@@ -16,6 +16,7 @@ import { WalletAddress } from "@/components/wallet-address";
 import { useAuth } from "@/lib/auth-context";
 import { formatWalletError } from "@/lib/wallet-errors";
 import { pickReadyConnector } from "@/lib/wallet-connectors";
+import { ReadyWalletNotice } from "@/components/ready-wallet-notice";
 import {
   isMobileBrowser,
   isReadyInAppBrowser,
@@ -171,6 +172,8 @@ export function AuthModal() {
         </div>
 
         <div className="mt-6 space-y-4">
+          <ReadyWalletNotice compact />
+
           {!isConnected ? (
             <>
               <Button

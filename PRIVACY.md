@@ -4,7 +4,11 @@
 
 # Privacy
 
-Philoxenia offers **selective payment privacy** via STRK20 (Starknet Privacy) when the wallet exposes API ≥ 0.10 — **ideally Ready X’s in-app browser**. It does **not** claim full-stack anonymity. Firefox / desktop legacy Ready typically cannot do Private pay.
+Philoxenia offers **selective payment privacy** via STRK20 when **Ready X** has **Smart Wallet** and **Private** enabled (wallet API ≥ 0.10) — on **Chrome/Brave** or in the Ready X in-app browser. It does **not** claim full-stack anonymity.
+
+<p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
+<strong>Firefox has no Ready X extension</strong> — only legacy Ready Wallet → <strong>no private pay</strong>. Use Chrome/Brave + Ready X (Smart Wallet + Private).
+</p>
 
 ## What is private
 

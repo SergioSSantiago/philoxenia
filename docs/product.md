@@ -10,6 +10,12 @@ Philoxenia is private peer-to-peer hospitality on Starknet.
 
 The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](./brand.md).
 
+<p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.55;">
+<strong style="color:#7f1d1d;">⚠ Required: Ready X setup (read this first)</strong><br/><br/>
+<strong>Chrome or Brave</strong> + <strong>Ready X</strong> extension, with <strong>Smart Wallet</strong> and <strong>Private</strong> turned on in the wallet settings — <em>or</em> open Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
+<strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears, and it <strong>does not support private payments</strong> (no wallet API ≥ 0.10). Do not use Firefox for Philoxenia privacy flows.
+</p>
+
 ## Problem
 
 Traditional home-sharing platforms are public marketplaces with platform fees and broad data exposure. Philoxenia targets hosts and guests who already trust each other — or are one introduction away — and want trustless settlement without a public listing directory.
@@ -20,7 +26,7 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - **Friend-based discovery** — see listings from friends, not strangers
 - **Connector introductions** — friends share listings with people outside the network
 - **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct bookings)
-- **Optional payment privacy** — STRK20 where the guest wallet supports it
+- **Payment privacy** — STRK20 when Ready X has Smart Wallet + Private enabled
 
 ## What Philoxenia is not
 
@@ -31,20 +37,27 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 
 ## How you sign in
 
-**Ideal client: Ready X in-app browser.** Open Philoxenia inside the browser that **Ready X** ships with the wallet app. That is the supported path for connect, SNIP-12 login, and **STRK20 private payments** (wallet API ≥ 0.10).
+### What you must do (checklist)
 
-- Braavos is not offered.
-- There is no `/auth` page. Connect is a modal on `/home`.
-- Disconnect returns to `/home` and shows the same modal.
-- Display name is optional at sign-in and editable later in `/profile`. Friends add you by **wallet address only**.
+1. Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** or **Brave** (not Firefox).
+2. In Ready X, enable **Smart Wallet** and **Private**.
+3. Open https://philoxenia-iota.vercel.app → Connect Ready → Sign in (approve SNIP-12).
+4. Optional alternate: open the same URL inside the **Ready X in-app browser**.
 
-### Desktop browsers & Firefox — legacy Ready only
+Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home`. Display name is optional; friends add you by **wallet address only**.
 
-On **Firefox** and typical **desktop browser tabs** (Chrome/Brave/Safari outside Ready X), you usually only get the **older Ready Wallet extension** (formerly Argent). That build often **does not expose wallet API ≥ 0.10**, so **Private / shield / unshield are unavailable**. You can still use Philoxenia with **Public ERC-20** pay if the extension connects for signing — but privacy payments require Ready X’s in-app browser (or a Ready build that reports API ≥ 0.10).
+### Firefox — no Ready X
+
+Firefox does **not** list the Ready X extension. Users only see the **legacy Ready Wallet** (formerly Argent). That build typically **cannot**:
+
+- expose wallet API ≥ 0.10  
+- run Private booking pay / shield / unshield  
+
+Public ERC-20 may still work if the old extension connects — but **private Philoxenia requires Chrome/Brave + Ready X** (or Ready X in-app).
 
 ### External mobile Safari / Chrome — blocked
 
-Opening Philoxenia in the phone’s system browser and deep-linking out to Ready is **not** reliable: WalletConnect may connect, but the login signature approve sheet often never appears. Prefer the **Ready X in-app browser**, not Safari/Chrome → Ready.
+Opening Philoxenia in the phone’s system browser and deep-linking out to Ready is **not** reliable for the login signature. Prefer the **Ready X in-app browser**.
 
 ## Roles
 

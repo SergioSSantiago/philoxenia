@@ -33,8 +33,7 @@ Stats fade as the brand docks into the header on scroll.
 
 Philoxenia connects **Ready X** only. Braavos is not supported.
 
-**Ideal:** open the app inside the **Ready X in-app browser**. That surface exposes STRK20 (wallet API ≥ 0.10) for Private pay, shield, and unshield.
-
-**Firefox / desktop browser tabs:** usually only the **legacy Ready Wallet extension** is available — it typically **cannot** do privacy payments. Public ERC-20 may still work.
-
-**System mobile browsers** (Safari/Chrome → deep-link Ready) are unreliable for login signatures; use Ready X’s built-in browser instead.
+<p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
+<strong>Required:</strong> Chrome/Brave + Ready X with <strong>Smart Wallet</strong> and <strong>Private</strong> on — or Ready X in-app browser.<br/>
+<strong>Firefox:</strong> Ready X is not available (legacy Ready only → no privacy).
+</p>

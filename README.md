@@ -10,6 +10,16 @@
 
 Built with [Cursor](https://cursor.com) AI-assisted development (disclosed, not hidden).
 
+<p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.5;">
+<strong style="color:#7f1d1d;">⚠ Required before you start — Ready X setup</strong><br/><br/>
+<strong>1. Use Chrome or Brave</strong> with the <strong>Ready X</strong> extension
+(<a href="https://www.ready.co/" style="color:#b91c1c;">ready.co</a>),
+<strong>or</strong> open this app inside the <strong>Ready X in-app browser</strong>.<br/><br/>
+<strong>2. In Ready X, enable Smart Wallet and Private</strong> (STRK20 / wallet API ≥ 0.10).
+Without both, login and private pay will not work.<br/><br/>
+<strong>3. Do not use Firefox for Ready X.</strong> Firefox does <strong>not</strong> offer the Ready X extension — only the legacy Ready Wallet (formerly Argent), which <strong>cannot</strong> do private payments. Use Chrome/Brave + Ready X instead.
+</p>
+
 Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **not** a public accommodation marketplace. Listings are visible only to hosts, their friends, and guests introduced through a valid share flow.
 
 The brand mark is a cameo of a sleeping head on joined hands — rest, trust, hospitality. It sits next to the name in the app header and links to `/`. See [docs/brand.md](./docs/brand.md).
@@ -19,8 +29,8 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - A social trust network for private hospitality
 - Friend-based discovery (no public listing directory)
 - Trustless settlement via Cairo escrow (optional connector; Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
-- STRK20 private payments where Ready supports wallet API ≥ 0.10
-- **Ideal wallet path:** open Philoxenia inside the **Ready X** in-app browser
+- STRK20 private payments with **Ready X** (Smart Wallet + Private enabled)
+- Wallet paths that work: **Chrome/Brave + Ready X extension**, or **Ready X in-app browser**
 
 ## What it is not
 
@@ -28,6 +38,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - No public marketplace, followers, NFTs, or protocol token
 - No custodial wallets or internal balances
 - No Braavos or other wallet connectors
+- **Not Firefox** for Ready X / private pay (legacy Ready only there)
 
 ## Architecture
 
@@ -58,7 +69,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 - Node.js 20+
 - Docker (for PostgreSQL)
 - Scarb 2.12+ and Starknet Foundry (for contracts)
-- [Ready X](https://www.ready.co/) — open the live app in Ready X’s **in-app browser** for privacy pay
+- [Ready X](https://www.ready.co/) on **Chrome/Brave** with **Smart Wallet + Private** enabled (Firefox has no Ready X extension)
 
 ## Deploy (production — Vercel)
 
@@ -133,11 +144,12 @@ scarb test
 
 There is no `/auth` page. The header brand goes to `/` (landing). Connect / disconnect opens a **Ready X** modal on `/home`.
 
-**Ideal:** open https://philoxenia-iota.vercel.app inside the **Ready X in-app browser**. That is the path where SNIP-12 login and **STRK20 private payments** work reliably. Friends find each other by **wallet address only**.
+<p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
+<strong>Chrome/Brave + Ready X</strong> with <strong>Smart Wallet</strong> and <strong>Private</strong> enabled — or the Ready X in-app browser.
+<strong>Firefox has no Ready X extension</strong> (legacy Ready only → no private pay).
+</p>
 
-### Firefox / desktop browser tabs
-
-Outside Ready X you typically only get the **legacy Ready Wallet extension**. It often lacks wallet API ≥ 0.10 → **no Private / shield**. Public ERC-20 pay may still work if the extension can sign. Prefer Ready X’s built-in browser for the full product.
+Friends find each other by **wallet address only**.
 
 ### System mobile browsers — blocked
 
