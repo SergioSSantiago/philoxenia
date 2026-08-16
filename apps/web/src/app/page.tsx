@@ -97,8 +97,25 @@ export default function LandingPage() {
       </section>
 
       <footer className="border-t border-border py-10 text-center text-sm text-muted">
-        Direct host↔guest: 0% protocol. Connectors earn; Philoxenia takes 10% of
-        the connector reward only.
+        <p>
+          Direct host↔guest: 0% protocol. Connectors earn; Philoxenia takes 10% of
+          the connector reward only.
+        </p>
+        <p className="mt-3">
+          Made in Lausanne, Switzerland{" "}
+          <span aria-label="Switzerland" role="img">
+            🇨🇭
+          </span>{" "}
+          by{" "}
+          <a
+            href="https://github.com/SergioSSantiago"
+            className="text-foreground underline-offset-2 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Sergio SSantiago
+          </a>
+        </p>
       </footer>
     </LandingFrame>
   );
