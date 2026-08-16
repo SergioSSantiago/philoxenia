@@ -8,7 +8,7 @@ Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **n
 
 The brand mark (sleeping head on joined hands) sits in the header and always goes to `/`. Sign-in is a Ready X modal on `/home`, not a dedicated auth page.
 
-**Ideal client:** Chrome + **Ready X** with **Smart Wallet** and **Private** (desktop), or the **Ready X app browser** on **iPhone** (not Safari). **Firefox has no Ready X**. See [docs/product.md](./docs/product.md).
+**Ideal client:** Chrome + **Ready X** with **Smart Wallet** and **Private** (desktop), or the **Ready X in-app browser** on **iPhone**. Safari can **Connect** via WalletConnect (`ready://` after the starknetkit patch). **Firefox has no Ready X**. See [docs/product.md](./docs/product.md).
 
 ## System overview
 
@@ -20,7 +20,7 @@ The brand mark (sleeping head on joined hands) sits in the header and always goe
          │ wallet (Ready X — starknet-react / starknetkit / starknet.js)
          ▼
 ┌─────────────────┐
-│ Starknet wallet │ ──► BookingEscrow + ERC20 / STRK20 (where supported)
+│ Starknet wallet │ ──► BookingEscrow + anonymizer + mailbox + ERC20 / STRK20
 └─────────────────┘
 ```
 
@@ -29,7 +29,7 @@ The brand mark (sleeping head on joined hands) sits in the header and always goe
 | **Web** (`apps/web`) | Landing, Ready X auth modal, social graph, listings, invitations, bookings, wallet payments |
 | **API** (`apps/api`) | Off-chain state, authorization, JWT sessions |
 | **Shared** (`packages/shared`) | TypeScript types shared by web and API |
-| **Contracts** (`contracts/`) | On-chain escrow and settlement |
+| **Contracts** (`contracts/`) | Escrow, anonymizer, sealed-message mailbox |
 | **PostgreSQL** | Users, friendships, listings, shares, booking metadata, payment records |
 
 ## On-chain vs off-chain
@@ -42,8 +42,9 @@ The brand mark (sleeping head on joined hands) sits in the header and always goe
 | Booking dates, amounts, status | Off-chain |
 | Payment tx hashes, privacy mode | Off-chain (mirrors wallet activity) |
 | Escrow funding, settlement, refund | On-chain (`BookingEscrow`) |
+| Optional sealed-message anchor | On-chain (`MessageMailbox` via privacy pool) |
 
-Philoxenia does **not** put social relationships or listing content on-chain. Only payment escrow and settlement are trustless.
+Philoxenia does **not** put social relationships or listing content on-chain. Payment escrow/settlement are trustless; chat ciphertext hashes can optionally be anchored on-chain.
 
 ## Trust model
 
@@ -56,9 +57,9 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 
 | Component | Status |
 |-----------|--------|
-| Wallet auth via Ready X **in-app browser** | Shipped (ideal path) |
+| Wallet auth via Ready X **in-app browser** | Shipped (ideal path for STRK20) |
+| Wallet auth on iPhone Safari → Ready (`ready://`) | Shipped — WalletConnect redirect (Connect, then Sign in) |
 | Wallet auth on Firefox / desktop legacy Ready | Partial — Public pay may work; **no STRK20 privacy** without API ≥ 0.10 |
-| Wallet auth via system mobile browser → Ready | **Blocked** — deep-link sign unreliable |
 | Friends, listings, shares, bookings API | Shipped |
 | Friend profile + connector share UI (`/friends/[id]`, `/connector`) | Shipped |
 | Profile (display name) + wallet-only friend search | Shipped |
@@ -69,6 +70,7 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 | Private booking fund via anonymizer | Shipped — [PRIVACY.md](./PRIVACY.md), [docs/strk20.md](./docs/strk20.md) |
 | `privacyMode` on payments / booking API/UI | Shipped |
 | Sealed E2E chat + peer transfers | Shipped |
+| `MessageMailbox` on-chain message anchor | **Live mainnet** — [docs/message-mailbox.md](./docs/message-mailbox.md) |
 
 ## Key design constraints
 

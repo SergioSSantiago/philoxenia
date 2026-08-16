@@ -28,7 +28,7 @@ Nonces are single-use and expire in 5 minutes.
 
 ### Authorization patterns
 
-- JWT required on all routes except `/health`, `/auth/*`, and unauthenticated `GET /invite/:token`
+- JWT required on all routes except `GET /health`, `GET /stats/network`, `GET /rates/strk-dai`, `POST /auth/*`, and `GET /invite/:token`
 - Listing/booking access checks in service layer before returning data
 - Generic error messages prevent enumeration
 

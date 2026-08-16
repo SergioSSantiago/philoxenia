@@ -15,8 +15,8 @@ Built with [Cursor](https://cursor.com) AI-assisted development (disclosed, not 
 <strong>1. Desktop:</strong> use <strong>Chrome</strong> with the <strong>Ready X</strong> extension
 (<a href="https://www.ready.co/" style="color:#b91c1c;">ready.co</a>).
 In Ready X, enable <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/><br/>
-<strong>2. iPhone:</strong> you <strong>must</strong> open Philoxenia in the <strong>browser inside the Ready X wallet app</strong>.
-Safari / Chrome on iOS will <strong>not</strong> complete login or private pay reliably.<br/><br/>
+<strong>2. iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604" style="color:#b91c1c;">Ready X</a>.
+Safari can <strong>Connect</strong> via WalletConnect (`ready://`). For <strong>Private STRK</strong>, open the same URL in the <strong>Ready X in-app browser</strong>.<br/><br/>
 <strong>3. Firefox:</strong> Ready X is <strong>not available</strong> — only the legacy Ready Wallet, which <strong>cannot</strong> do private payments. Use Chrome + Ready X (desktop) or the Ready X app browser (iPhone).
 </p>
 
@@ -32,7 +32,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - Trustless settlement via Cairo escrow (Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
 - STRK20 private payments with **Ready X** (Smart Wallet + Private enabled)
 - Sealed chat, peer transfers, AVNU STRK ↔ DAI swap
-- Wallet paths that work: **Chrome + Ready X extension** (desktop), or **Ready X app browser** (especially iPhone)
+- Wallet paths: **Chrome + Ready X** (desktop); **iPhone Safari** for login (WalletConnect); **Ready X in-app browser** for Private STRK
 
 ## What it is not
 
@@ -41,7 +41,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - No custodial wallets or internal balances
 - No Braavos or other wallet connectors
 - **Not Firefox** for Ready X / private pay (legacy Ready only there)
-- **Not iPhone Safari/Chrome** — must use the Ready X wallet app browser
+- **Not iPhone Safari for Private STRK** — login can redirect into Ready X; private pay needs the in-app browser
 
 ## Architecture
 
@@ -72,7 +72,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 - Node.js 20+
 - Docker (for PostgreSQL)
 - Scarb 2.12+ and Starknet Foundry (for contracts)
-- [Ready X](https://www.ready.co/) — Chrome + Smart Wallet + Private (desktop); on iPhone use the Ready X app browser (not Safari)
+- [Ready X](https://www.ready.co/) — Chrome + Smart Wallet + Private (desktop); iPhone Safari for Connect, in-app browser for Private
 
 ## Deploy (production — Vercel)
 
@@ -149,15 +149,18 @@ There is no `/auth` page. The header brand goes to `/` (landing). Connect / disc
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
 <strong>Desktop:</strong> Chrome + Ready X with <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/>
-<strong>iPhone:</strong> open Philoxenia in the <strong>Ready X app browser</strong> (not Safari).<br/>
+<strong>iPhone:</strong> Safari can Connect (WalletConnect → Ready X). For Private STRK, use the <strong>Ready X in-app browser</strong>.<br/>
 <strong>Firefox:</strong> no Ready X extension → no private pay.
 </p>
 
 Friends find each other by **wallet address only**.
 
-### System mobile browsers — blocked
+### iPhone — Safari vs in-app
 
-On **iPhone**, Safari / Chrome will not work. You must open Philoxenia in the **browser built into the Ready X wallet app**.
+| Path | Login | Private STRK |
+|------|--------|----------------|
+| Safari → Connect → Ready X (`ready://`) | Supported (WC redirect; Connect then Sign in) | Unreliable — needs wallet API ≥ 0.10 |
+| Ready X in-app browser | Supported (injected) | Supported when Smart Wallet + Private on |
 
 ## Environment variables
 

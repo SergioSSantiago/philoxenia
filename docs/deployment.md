@@ -4,16 +4,16 @@
 
 # Deployment
 
-Deploying Philoxenia beyond local development.
+**Production is already on Vercel** (web + API, Git Integration on `main`). See [deployment-vercel.md](./deployment-vercel.md). This page is the generic / self-host checklist.
 
 ## Components to deploy
 
-| Component | Suggested hosting |
-|-----------|-------------------|
-| PostgreSQL | Managed DB (RDS, Supabase, Neon) or self-hosted |
-| API (`apps/api`) | Node container (Fly.io, Railway, ECS) |
-| Web (`apps/web`) | Vercel, Netlify, or static/Node host |
-| `BookingEscrow` | Starknet Sepolia (test) or mainnet (prod) |
+| Component | Production today | Generic alternative |
+|-----------|------------------|---------------------|
+| PostgreSQL | Neon (Vercel Integration) | RDS, Supabase, self-hosted |
+| API (`apps/api`) | Vercel (`philoxenia-api`) | Fly.io, Railway, ECS |
+| Web (`apps/web`) | Vercel (`philoxenia`) | Netlify or Node host |
+| Cairo contracts | Starknet **mainnet** | Sepolia for experiments |
 
 ## 1. Database
 

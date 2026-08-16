@@ -4,10 +4,10 @@
 
 # Privacy
 
-Philoxenia offers **selective payment privacy** via STRK20 when **Ready X** has **Smart Wallet** and **Private** enabled (wallet API ≥ 0.10) — on **Chrome** (desktop) or in the **Ready X app browser** (required on iPhone). It does **not** claim full-stack anonymity.
+Philoxenia offers **selective payment privacy** via STRK20 when **Ready X** has **Smart Wallet** and **Private** enabled (wallet API ≥ 0.10) — on **Chrome** (desktop) or in the **Ready X in-app browser** (iPhone). It does **not** claim full-stack anonymity.
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
-<strong>iPhone:</strong> use the Ready X wallet app browser — not Safari.<br/>
+<strong>iPhone:</strong> Safari can <strong>login</strong> via WalletConnect. For <strong>Private STRK</strong>, open Philoxenia in the Ready X in-app browser.<br/>
 <strong>Firefox:</strong> no Ready X extension → <strong>no private pay</strong>. Use Chrome + Ready X (desktop).
 </p>
 

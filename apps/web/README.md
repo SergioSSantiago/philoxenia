@@ -20,7 +20,7 @@ npm run typecheck -w @philoxenia/web
 
 ## Auth
 
-Sign-in is a modal on `/home`. **Desktop:** Chrome + Ready X (Smart Wallet + Private). **iPhone:** Ready X app browser only (not Safari). `/auth` redirects to `/home`.
+Sign-in is a modal on `/home`. **Desktop:** Chrome + Ready X (Smart Wallet + Private). **iPhone:** Safari can Connect via WalletConnect (`ready://`); Private STRK needs the Ready X in-app browser. `/auth` redirects to `/home`.
 
 Firefox: no Ready X → no private pay.
 

@@ -118,7 +118,7 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 
 **Implemented (off-chain + UI):**
 
-- Wallet authentication via **Ready X in-app browser** (SNIP-12) — ideal path for privacy pay
+- Wallet authentication via Ready X (SNIP-12): Chrome extension, iPhone Safari WalletConnect, or **in-app browser** (ideal for privacy pay)
 - Friend requests and friendships (search by wallet address)
 - Friend profile (`/friends/[id]`): listings + share-as-connector; name/wallet links from Friends & Messages
 - **Earnings (`/connector`)**: how connectors earn, shareable friend listings, reward history

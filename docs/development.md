@@ -23,6 +23,8 @@ cd philoxenia
 npm install
 ```
 
+`npm install` runs `postinstall` → `patch-package`. That applies `patches/starknetkit+3.4.3.patch`, which remaps StarknetKit mainnet mobile deep links from `argent://` (legacy Argent) to `ready://` (Ready X). Without the patch, iPhone Safari WalletConnect can open the old Argent app instead of Ready X.
+
 ## Database
 
 Start PostgreSQL:
@@ -124,6 +126,7 @@ npm run db:generate -w @philoxenia/api   # if script exists
 
 - App Router under `apps/web/src/app/`
 - Wallet providers in `apps/web/src/components/providers.tsx` (Ready X only)
+- Connectors: `apps/web/src/lib/wallet-connectors.ts` (`ArgentMobileConnector` = Ready mobile on npm `starknetkit@3.4.3`)
 - Auth context persists JWT in localStorage
 - Sign-in UI: `apps/web/src/components/auth-modal.tsx` on `/home`
 - Brand lockup: `apps/web/src/components/brand-lockup.tsx` → `/`

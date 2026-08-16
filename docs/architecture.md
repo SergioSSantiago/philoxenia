@@ -46,19 +46,23 @@ philoxenia/
 | `direct_messages` | Friend chat + optional peer transfers |
 | `auth_nonces` | Wallet auth challenge nonces |
 
-### Public endpoints (no auth)
+### Public endpoints (no JWT)
 
 | Route | Purpose |
 |-------|---------|
 | `GET /health` | Liveness |
 | `GET /rates/strk-dai` | Live STRK per DAI (CoinGecko) |
 | `GET /stats/network` | Landing totals: users, countries, listings open, nights booked, DAI/STRK booked |
-| `DELETE /my-listings/:id` | Host deletes listing if no active paid bookings remain |
+| `GET /invite/:token` | Resolve a share token (404 if invalid; does not leak listings) |
+| `POST /auth/challenge` | SNIP-12 nonce for a wallet |
+| `POST /auth/verify` | Signature → JWT |
+
+Host listing delete is **not** public: `DELETE /my-listings/:id` requires JWT and only succeeds when the listing has no active paid bookings.
 
 ## Web (`apps/web`)
 
 - **Framework:** Next.js 15 (App Router), React, Tailwind CSS
-- **Wallet:** Ready X — Safari can Connect via WalletConnect (`ready://` after starknetkit patch). **Ideal for STRK20:** Ready X in-app browser (`isInArgentMobileAppBrowser` / wallet API ≥ 0.10). Firefox / desktop tabs often inject only legacy Ready.
+- **Wallet:** Ready X via `apps/web/src/lib/wallet-connectors.ts`. Safari Connect uses WalletConnect (`ready://` after `patches/starknetkit+3.4.3.patch`). **Ideal for STRK20:** Ready X in-app browser (`isInArgentMobileAppBrowser` / wallet API ≥ 0.10). Firefox / desktop tabs often inject only legacy Ready.
 - **State:** React context for auth (`auth-context.tsx`); JWT in localStorage
 - **API client:** `lib/api.ts` (Bearer JWT)
 - **Brand:** `components/brand-lockup.tsx` → `/`; landing hero shows live `LandingNetworkStats`
@@ -88,10 +92,15 @@ Exports TypeScript interfaces used by both API responses and web components: `Us
 
 ## Contracts (`contracts/`)
 
-Single production contract: `BookingEscrow` (`src/booking_escrow.cairo`).
+Mainnet Cairo (Scarb 2.12, Starknet Foundry tests in `contracts/tests/`):
 
-- Built with Scarb 2.12, OpenZeppelin ERC20
-- Tested with Starknet Foundry (`contracts/tests/`)
+| Contract | Role |
+|----------|------|
+| `BookingEscrow` | Create / fund / settle / refund; STRK and DAI deployments of the same class |
+| `BookingEscrowAnonymizer` | STRK20 `privacy_invoke` helper that funds escrow without the guest as public ERC-20 payer |
+| `MessageMailbox` | Optional sealed-chat payload-hash anchor via the privacy pool |
+
+Addresses: [smart-contracts.md](./smart-contracts.md), [message-mailbox.md](./message-mailbox.md), [deploy-escrow.md](./deploy-escrow.md).
 
 ## Data flow: booking + payment
 
@@ -113,18 +122,19 @@ See `.env` (not committed). Critical variables:
 - `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — STRK escrow (mainnet)
 - `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` — DAI escrow (mainnet)
 - `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` — private fund helper
+- `NEXT_PUBLIC_MESSAGE_MAILBOX_ADDRESS` — optional on-chain message anchor
 - `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 provider path (default on)
 
-## Deployment topology (typical)
+## Deployment topology (production)
 
 ```
-Internet ──► Next.js (Vercel/self-hosted)
+Internet ──► Next.js (Vercel: philoxenia-iota.vercel.app)
               │
-              ├──► Fastify API (Railway/Fly/self-hosted)
-              │         └──► PostgreSQL
+              ├──► Fastify API (Vercel: philoxenia-api.vercel.app)
+              │         └──► Neon PostgreSQL
               │
-              └──► Starknet RPC + user wallet
-                        └──► BookingEscrow (Sepolia/mainnet)
+              └──► Starknet mainnet RPC + Ready X
+                        └──► BookingEscrow + anonymizer + mailbox
 ```
 
-See [deployment.md](./deployment.md) for setup steps.
+Push to `main` deploys both Vercel projects (Git Integration). Do not CLI-deploy after a push. See [deployment-vercel.md](./deployment-vercel.md). Generic/self-host notes: [deployment.md](./deployment.md).
