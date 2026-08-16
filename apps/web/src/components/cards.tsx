@@ -50,35 +50,56 @@ export function ListingCard({ listing }: { listing: Listing }) {
 }
 
 export function BookingCard({ booking }: { booking: Booking }) {
+  const host = booking.host;
+  const listingHref = `/listings/${booking.listingId}`;
+  const hostHref = host ? `/friends/${host.id}` : `/friends/${booking.hostId}`;
+
   return (
-    <Link
-      href={`/bookings/${booking.id}`}
-      className="block rounded-xl border border-border bg-surface p-5 transition hover:shadow-sm touch-manipulation"
-    >
+    <div className="rounded-xl border border-border bg-surface p-5 transition hover:shadow-sm">
       <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h3 className="text-lg">
-            {booking.listing?.title ?? "Booking"}
-          </h3>
-          <p className="mt-1 text-sm text-muted">
+        <div className="min-w-0 flex-1 space-y-2">
+          <Link
+            href={listingHref}
+            className="block text-lg text-foreground underline-offset-2 hover:underline touch-manipulation"
+          >
+            {booking.listing?.title ?? "Private listing"}
+          </Link>
+          {host ? (
+            <p className="text-sm text-muted">
+              Host:{" "}
+              <Link
+                href={hostHref}
+                className="font-medium text-foreground underline-offset-2 hover:underline touch-manipulation"
+              >
+                {host.displayName}
+              </Link>
+            </p>
+          ) : null}
+          <Link
+            href={`/bookings/${booking.id}`}
+            className="block text-sm text-muted touch-manipulation hover:text-foreground"
+          >
             {new Date(booking.checkIn).toLocaleDateString()} –{" "}
             {new Date(booking.checkOut).toLocaleDateString()}
-          </p>
-          <p className="mt-2 text-sm">
-            {formatTokenAmount(booking.totalPrice)} {booking.paymentAsset} ·{" "}
-            {booking.nights} nights
-            {booking.privacyMode === "private"
-              ? " · Private"
-              : booking.privacyMode === "public"
-                ? " · Public"
-                : ""}
-          </p>
+            <span className="mt-1 block">
+              {formatTokenAmount(booking.totalPrice)} {booking.paymentAsset} ·{" "}
+              {booking.nights} nights
+              {booking.privacyMode === "private"
+                ? " · Private"
+                : booking.privacyMode === "public"
+                  ? " · Public"
+                  : ""}
+            </span>
+          </Link>
         </div>
-        <span className="shrink-0 rounded-full bg-accent-soft px-3 py-1 text-xs capitalize text-accent">
+        <Link
+          href={`/bookings/${booking.id}`}
+          className="shrink-0 rounded-full bg-accent-soft px-3 py-1 text-xs capitalize text-accent touch-manipulation"
+        >
           {booking.status}
-        </span>
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 }
 

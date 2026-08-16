@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import type { Booking } from "@philoxenia/shared";
 import { formatTokenAmount } from "@philoxenia/shared";
 import { Shell, Button, Card } from "@/components/ui";
+import { UserBadge } from "@/components/user-badge";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 
@@ -76,6 +77,8 @@ export default function BookingDetailPage() {
   const isGuest = user?.id === booking.guestId;
   const isHost = user?.id === booking.hostId;
   const otherId = isGuest ? booking.hostId : booking.guestId;
+  const counterparty = isGuest ? booking.host : booking.guest;
+  const counterpartyRole = isGuest ? "Host" : "Guest";
   const canCancel = ["funded", "confirmed", "completed"].includes(
     booking.status
   );
@@ -83,10 +86,57 @@ export default function BookingDetailPage() {
 
   return (
     <Shell>
-      <h1 className="mb-2 text-4xl">Booking</h1>
-      <p className="mb-8 text-muted">
-        {booking.listing?.title ?? "Private listing"}
-      </p>
+      <div className="mb-8">
+        <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
+          Booking
+        </p>
+        <h1 className="mt-1 text-3xl text-foreground sm:text-4xl">
+          <Link
+            href={`/listings/${booking.listingId}`}
+            className="underline-offset-2 hover:underline"
+          >
+            {booking.listing?.title ?? "Private listing"}
+          </Link>
+        </h1>
+        <p className="mt-2 text-sm text-muted">
+          Tap the title for the listing. Open the {counterpartyRole.toLowerCase()}{" "}
+          to see their profile and places.
+        </p>
+      </div>
+
+      {counterparty && (
+        <Card className="mb-6 space-y-3">
+          <UserBadge user={counterparty} role={counterpartyRole} />
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+            <Link href={`/listings/${booking.listingId}`} className="block">
+              <Button className="w-full sm:w-auto">Open listing</Button>
+            </Link>
+            <Link href={`/friends/${counterparty.id}`} className="block">
+              <Button variant="secondary" className="w-full sm:w-auto">
+                View {counterpartyRole.toLowerCase()} &amp; listings
+              </Button>
+            </Link>
+            <Link href={`/messages/${counterparty.id}`} className="block">
+              <Button variant="ghost" className="w-full sm:w-auto">
+                Message {counterpartyRole.toLowerCase()}
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      )}
+
+      {!counterparty && (
+        <div className="mb-6 flex flex-col gap-2 sm:flex-row">
+          <Link href={`/listings/${booking.listingId}`}>
+            <Button>Open listing</Button>
+          </Link>
+          <Link href={`/friends/${otherId}`}>
+            <Button variant="secondary">
+              View {counterpartyRole.toLowerCase()}
+            </Button>
+          </Link>
+        </div>
+      )}
 
       <Card className="space-y-4">
         <div className="grid gap-4 text-sm sm:grid-cols-2">
