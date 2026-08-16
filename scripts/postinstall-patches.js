@@ -1,8 +1,9 @@
 /**
  * Apply patches/ via patch-package after install.
- * Vercel production installs omit devDependencies; patch-package lives in
- * dependencies so this always runs when the monorepo root is installed (web).
- * No-op if there is no patches directory (e.g. odd install layouts).
+ *
+ * - Web monorepo install has starknetkit → apply Ready X deep-link patch.
+ * - API (or any install without starknetkit) → no-op. patch-package errors if
+ *   a patch exists for a package that is not in node_modules.
  */
 const { existsSync } = require("fs");
 const { join } = require("path");
@@ -10,8 +11,16 @@ const { spawnSync } = require("child_process");
 
 const root = join(__dirname, "..");
 const patchesDir = join(root, "patches");
+const starknetkitDir = join(root, "node_modules", "starknetkit");
 
 if (!existsSync(patchesDir)) {
+  process.exit(0);
+}
+
+if (!existsSync(starknetkitDir)) {
+  console.log(
+    "postinstall-patches: skipping (starknetkit not installed in this install)"
+  );
   process.exit(0);
 }
 
