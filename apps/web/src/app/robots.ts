@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/googlecbfc040f934ed5ea.html"],
         disallow: [
           "/home",
           "/profile",
@@ -25,6 +25,5 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: `${SITE}/sitemap.xml`,
-    host: SITE,
   };
 }

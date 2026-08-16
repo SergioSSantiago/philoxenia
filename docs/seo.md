@@ -25,12 +25,19 @@ Public marketing surface is the landing page. Authenticated app routes are not m
 | `src/lib/json-ld.ts` | JSON-LD Organization + WebSite + SoftwareApplication |
 | `src/app/page.tsx` | Landing copy + connector incentive + JSON-LD script |
 
-## After deploy
+## Google Search Console verification
 
-1. Confirm `/robots.txt` and `/sitemap.xml` return 200.
-2. Confirm Google HTML verification file is live: `/googlecbfc040f934ed5ea.html`
-3. [Google Search Console](https://search.google.com/search-console) → verify property → submit sitemap `https://philoxenia-iota.vercel.app/sitemap.xml`.
-4. Request indexing for the homepage URL.
+HTML file (file method): served at `/googlecbfc040f934ed5ea.html` (route + `public/` copy).
+
+Preferred fallback — **Balise meta HTML**:
+
+1. In Search Console choose *Balise meta* (not fichier HTML).
+2. Copy only the `content="…"` value.
+3. Set Vercel env `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` on the **philoxenia** web project.
+4. Redeploy, then click Valider.
+
+Property URL must be exactly: `https://philoxenia-iota.vercel.app` (https, no `www`).
+
 
 ## Related
 
