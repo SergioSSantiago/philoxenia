@@ -95,6 +95,8 @@ Important: do not run `vercel env pull` from the repo root without `--project ph
 
 Implemented via `ignoreCommand` in `apps/web/vercel.json` and `apps/api/vercel.json` (exit `0` = skip build, `1` = build).
 
+**Docs-only commits do not deploy.** A push that only touches `docs/` (or root markdown) is skipped by both projects. To get a **web** Production build, the commit must also change `apps/web/**` (or `packages/shared` / root lockfile). API builds need `apps/api/**`.
+
 ### Do not double-deploy
 
 - **Never** run `vercel --prod` / `vercel deploy` after (or instead of) a push when Git Integration is on — that creates a **second** Production deployment for the same commit.
