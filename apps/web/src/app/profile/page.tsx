@@ -104,6 +104,7 @@ export default function ProfilePage() {
         </Card>
 
         <Card>
+          <h3 className="mb-1 text-lg text-foreground">Swap</h3>
           <TokenSwapPanel />
         </Card>
 

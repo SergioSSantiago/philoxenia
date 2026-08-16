@@ -153,7 +153,8 @@ export function TokenSwapPanel() {
     }
   }
 
-  if (!user) return null;
+  // Always render the panel — parent Profile already gates on auth.
+  // Returning null here looked like a missing feature when user hydrated late.
 
   return (
     <>
@@ -243,6 +244,7 @@ export function TokenSwapPanel() {
 
         <Button
           type="button"
+          className="w-full sm:w-auto"
           disabled={busy || reconnecting || !amount.trim()}
           onClick={() => void onSwap()}
         >
