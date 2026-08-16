@@ -112,17 +112,19 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         error={Boolean(dai.error)}
       />
       {!isConnected && user && (
-        <p className="text-xs text-muted">
-          Showing balances for your Philoxenia account.{" "}
-          <button
-            type="button"
-            className="underline underline-offset-2 hover:text-foreground"
-            onClick={() => void connectWallet()}
-          >
-            Reconnect Ready X
-          </button>{" "}
-          to pay or settle.
-        </p>
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
+          Showing public balances from your Philoxenia session. Ready is not
+          connected for signing — reconnect to shield, pay privately, or settle.
+          <div className="mt-2">
+            <button
+              type="button"
+              className="font-medium text-accent underline-offset-2 hover:underline"
+              onClick={() => void connectWallet()}
+            >
+              Connect Ready X
+            </button>
+          </div>
+        </div>
       )}
       {compact && STRK20_PRIVACY_ENABLED && (
         <p className="text-xs text-muted">STRK20 privacy enabled for STRK</p>
