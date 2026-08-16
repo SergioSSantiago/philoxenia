@@ -85,11 +85,30 @@ export async function registerRoutes(app: FastifyInstance) {
     async (request, reply) => {
       const body = z
         .object({
-          displayName: z.string().min(1).max(64),
+          displayName: z.string().min(1).max(64).optional(),
+          messagePublicKey: z.string().min(16).max(512).optional(),
         })
         .parse(request.body);
 
       try {
+        if (body.messagePublicKey) {
+          const user = await social.updateUserMessagePublicKey(
+            request.user.userId,
+            body.messagePublicKey
+          );
+          if (body.displayName) {
+            return reply.send(
+              await social.updateUserDisplayName(
+                request.user.userId,
+                body.displayName
+              )
+            );
+          }
+          return reply.send(user);
+        }
+        if (!body.displayName) {
+          return reply.status(400).send({ error: "Nothing to update" });
+        }
         const user = await social.updateUserDisplayName(
           request.user.userId,
           body.displayName
@@ -686,7 +705,7 @@ export async function registerRoutes(app: FastifyInstance) {
     async (request, reply) => {
       const { friendId } = request.params as { friendId: string };
       const body = z
-        .object({ body: z.string().min(1).max(2000) })
+        .object({ body: z.string().min(1).max(8000) })
         .parse(request.body);
       try {
         return await chat.sendTextMessage(

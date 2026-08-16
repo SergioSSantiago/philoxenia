@@ -170,6 +170,7 @@ Key variables:
 - `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` — STRK escrow v2
 - `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` — DAI escrow v2
 - `NEXT_PUBLIC_BOOKING_ANONYMIZER_ADDRESS` — privacy_invoke helper
+- `NEXT_PUBLIC_MESSAGE_MAILBOX_ADDRESS` — sealed message mailbox helper
 - `NEXT_PUBLIC_STRK20_PRIVACY` — enable STRK20 path (default true)
 
 ## Acceptance scenario

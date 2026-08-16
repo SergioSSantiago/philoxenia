@@ -32,6 +32,8 @@ export interface User {
   id: string;
   walletAddress: string;
   displayName: string;
+  /** Base64url SPKI — for sealed E2E chat. Null until published from the device. */
+  messagePublicKey?: string | null;
   createdAt: string;
 }
 

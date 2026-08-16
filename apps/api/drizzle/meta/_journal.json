@@ -71,6 +71,13 @@
       "when": 1755232000000,
       "tag": "0009_selected_nights",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1755234000000,
+      "tag": "0010_message_public_key",
+      "breakpoints": true
     }
   ]
 }

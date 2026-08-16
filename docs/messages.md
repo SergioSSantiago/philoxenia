@@ -4,35 +4,57 @@
 
 # Messages
 
-Friends can chat in-app. Threads are 1:1. Peer token sends and booking events appear in the same conversation.
+Friends chat 1:1. **Text is sealed end-to-end** (Phase A): ciphertext only on the API; decrypt on device. Peer token sends and booking events share the same thread.
+
+## Privacy model (honest)
+
+| Element | Phase A (now) | Full STRK20 RFP |
+|---------|---------------|-----------------|
+| Message content | Hidden from API (E2E) | Hidden |
+| Friend relationship | Visible to API | Hidden (channel via viewing key) |
+| On-chain sender anonymity | Not yet | Pool is `msg.sender` via `privacy_invoke` |
+| Discovery | Friend id + API | `discoverMessages(viewingKey)` |
+
+See [PRIVATE_MESSAGING_PLAN.md](../PRIVATE_MESSAGING_PLAN.md) and the Cairo `MessageMailbox` helper.
 
 ## Features
 
 | Kind | Description |
 |------|-------------|
-| `text` | Plain message (1–2000 chars) |
-| `transfer` | Public ERC-20 transfer of STRK or DAI to the friend’s wallet, then recorded in chat |
-| `booking` | System notice when a guest books the host’s listing (both get a notification) |
+| `text` | Sealed body (`phx1.…`). Plaintext never stored. Limit ~900 chars plaintext. |
+| `transfer` | Public ERC-20 STRK/DAI to the friend’s wallet, then recorded in chat |
+| `booking` | System notice when a guest books the host’s listing |
 
-Only friends can message each other.
+Only friends can message each other. Each user publishes `messagePublicKey` (device ECDH P-256) via `PATCH /users/me` when they open Messages.
 
 ## API
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | GET | `/messages` | Yes | Threads (friends + last message) |
-| GET | `/messages/:friendId` | Yes | Conversation |
-| POST | `/messages/:friendId` | Yes | Send text `{ body }` |
-| POST | `/messages/:friendId/transfer` | Yes | Record transfer `{ amount, asset, txHash }` after on-chain send |
+| GET | `/messages/:friendId` | Yes | Conversation (ciphertext for sealed texts) |
+| POST | `/messages/:friendId` | Yes | Send `{ body }` — prefer sealed `phx1.…` (max 8000) |
+| POST | `/messages/:friendId/transfer` | Yes | Record transfer after on-chain send |
+| PATCH | `/users/me` | Yes | `{ messagePublicKey }` and/or `{ displayName }` |
 
 ## Web
 
-- `/messages` — thread list
-- `/messages/[friendId]` — chat + “Send DAI / STRK”
-- Friends list → **Message**
+- `/messages` — sealed inbox list
+- `/messages/[friendId]` — sealed composer + pay sheet
+- Keys live in `localStorage` per wallet (`philoxenia_msg_priv_*`); never uploaded
+
+## On-chain (Phase B)
+
+Optional checkbox in the thread UI anchors a ciphertext hash via Ready → privacy pool → [MessageMailbox](./message-mailbox.md).
+
+| Piece | Address |
+|-------|---------|
+| MessageMailbox | `0x00db59cc85293629eacd959ea17faaa13c6e9116afa68274c465738692e53691` |
 
 ## Related
 
 - [social-graph.md](./social-graph.md)
 - [bookings.md](./bookings.md)
 - [payments.md](./payments.md)
+- [message-mailbox.md](./message-mailbox.md)
+- [PRIVATE_MESSAGING_PLAN.md](../PRIVATE_MESSAGING_PLAN.md)

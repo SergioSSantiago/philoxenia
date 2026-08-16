@@ -72,6 +72,28 @@ export async function updateUserDisplayName(userId: string, displayName: string)
   return toUserResponse(updated);
 }
 
+export async function updateUserMessagePublicKey(
+  userId: string,
+  messagePublicKey: string
+) {
+  const key = messagePublicKey.trim();
+  if (!key || key.length < 16 || key.length > 512) {
+    throw new Error("Invalid message public key");
+  }
+
+  const [updated] = await db
+    .update(schema.users)
+    .set({ messagePublicKey: key })
+    .where(eq(schema.users.id, userId))
+    .returning();
+
+  if (!updated) {
+    throw new Error("User not found");
+  }
+
+  return toUserResponse(updated);
+}
+
 export async function searchUsers(query: string, currentUserId: string) {
   let normalized = query.trim().toLowerCase().replace(/\s/g, "");
   if (!normalized) return [];

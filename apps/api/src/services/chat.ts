@@ -131,8 +131,14 @@ export async function sendTextMessage(
 ) {
   await requireFriendship(senderId, recipientId);
   const trimmed = body.trim();
-  if (!trimmed || trimmed.length > 2000) {
-    throw new Error("Message must be 1–2000 characters");
+  const sealed = trimmed.startsWith("phx1.");
+  const maxLen = sealed ? 8000 : 2000;
+  if (!trimmed || trimmed.length > maxLen) {
+    throw new Error(
+      sealed
+        ? "Sealed message payload too large"
+        : "Message must be 1–2000 characters"
+    );
   }
 
   const [row] = await db
@@ -148,8 +154,8 @@ export async function sendTextMessage(
   await createNotification({
     userId: recipientId,
     type: "message",
-    title: "New message",
-    body: trimmed.slice(0, 120),
+    title: sealed ? "New sealed message" : "New message",
+    body: sealed ? "Encrypted on your device — open chat to read" : trimmed.slice(0, 120),
     href: `/messages/${senderId}`,
   });
 

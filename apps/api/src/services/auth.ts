@@ -143,6 +143,7 @@ export function toUserResponse(user: typeof schema.users.$inferSelect) {
     id: user.id,
     walletAddress: user.walletAddress,
     displayName: user.displayName,
+    messagePublicKey: user.messagePublicKey ?? null,
     createdAt: user.createdAt.toISOString(),
   };
 }

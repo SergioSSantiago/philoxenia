@@ -42,12 +42,20 @@ Philoxenia minimizes **public discovery** of hospitality offers and offers an op
 
 Philoxenia records `privacyMode` on the payment row and surfaces it on booking responses. It does not independently re-verify pool proofs.
 
+### Direct message privacy ⚡ (Phase A sealed)
+
+- Chat bodies are **E2E sealed** (`phx1.…`) before POST; API stores ciphertext only
+- Device ECDH keys; public half published as `users.message_public_key`
+- Friend graph and who messaged whom remain visible to the API operator
+- On-chain anonymous mail (`MessageMailbox` + `privacy_invoke`) is Phase B; pool ECDH discovery is Phase C — see [messages.md](./messages.md) and [PRIVATE_MESSAGING_PLAN.md](../PRIVATE_MESSAGING_PLAN.md)
+
 ## What STRK20 does not hide in Philoxenia
 
 1. Listing and booking metadata in PostgreSQL  
 2. Wallet address on user profile (auth)  
 3. Escrow guest/host/amount fields and settlement Transfer events  
 4. API JWT sessions  
+5. Who is friends / who DMs whom (until Phase C viewing-key discovery)  
 
 ## Fallback policy
 
@@ -72,4 +80,5 @@ Starknet Privacy includes auditor selective disclosure by design. Philoxenia inh
 - [PRIVACY.md](../PRIVACY.md)
 - [strk20.md](./strk20.md)
 - [booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md)
+- [messages.md](./messages.md)
 - [payments.md](./payments.md)

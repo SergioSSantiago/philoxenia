@@ -42,6 +42,8 @@ export const users = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     walletAddress: text("wallet_address").notNull(),
     displayName: text("display_name").notNull(),
+    /** SPKI public key (base64url) for sealed E2E chat — private key stays on device. */
+    messagePublicKey: text("message_public_key"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
       .notNull(),
