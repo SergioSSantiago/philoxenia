@@ -59,6 +59,8 @@ philoxenia/
 
 Host listing delete is **not** public: `DELETE /my-listings/:id` requires JWT and only succeeds when the listing has no active paid bookings.
 
+Signed-in home uses `GET /home` (JWT): friends, network listings, shared listings, own listings, bookings, pending friend-request count.
+
 ## Web (`apps/web`)
 
 - **Framework:** Next.js 15 (App Router), React, Tailwind CSS
@@ -72,7 +74,7 @@ Host listing delete is **not** public: `DELETE /my-listings/:id` requires JWT an
 | Route | Purpose |
 |-------|---------|
 | `/` | Landing. Brand-first hero + live network stats; header brand links here |
-| `/home` | App home: compact wallet/balances + interactive globe of accessible listings |
+| `/home` | Signed-in snapshot: compact wallet + STRK/DAI + swap link, globe of accessible listings, friends’ places, **Shared with me**, own listings, recent bookings (**You host** / **You stay**), friends count |
 | `/auth` | Legacy redirect to `/home` |
 | `/profile` | Display name, STRK/DAI balances, shield/unshield, AVNU STRK ↔ DAI swap |
 | `/friends` | Friends; search by wallet; tap name/wallet → friend listings |

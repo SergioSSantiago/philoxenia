@@ -29,6 +29,8 @@ Before scroll, the landing shows only:
 3. Live network totals under the brand (`LandingNetworkStats`): users, countries (normalized from address country, e.g. Suiza→switzerland), listings open, nights booked, DAI booked, STRK booked — polled from `GET /stats/network`
 
 Stats fade as the brand docks into the header on scroll.
+
+Footer (after the role sections): fee line, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
 ## Wallet
 
 Philoxenia connects **Ready X** only. Braavos is not supported.

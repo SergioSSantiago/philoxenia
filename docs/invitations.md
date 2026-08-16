@@ -50,6 +50,8 @@ Host or friend of host
 | `/friends/[id]` | Share that friend’s listings |
 | `/listings/[id]` | Share this listing (host or friend) |
 
+**Copy UX:** `CopyInviteButton` (`apps/web/src/components/copy-invite-button.tsx`) writes the `/invite/{token}` URL via `copyText` in `lib/share-invite.ts` (Clipboard API, then `execCommand` fallback). On success the button reads **Copied!** for 2s and the status line says the invite is ready to paste (connector copy mentions you earn if they book). If both copy paths fail, the URL stays visible so the user can select it.
+
 ## API
 
 | Method | Path | Auth | Description |
