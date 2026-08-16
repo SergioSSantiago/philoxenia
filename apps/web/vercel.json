@@ -2,7 +2,7 @@
   "installCommand": "cd ../.. && npm install",
   "buildCommand": "cd ../.. && npm run build -w @philoxenia/shared && npm run build -w @philoxenia/web",
   "framework": "nextjs",
-  "ignoreCommand": "git -C ../.. diff --quiet HEAD^ HEAD -- apps/web packages/shared package.json package-lock.json apps/web/package.json",
+  "ignoreCommand": "git -C ../.. diff --quiet HEAD^ HEAD -- apps/web packages/shared package.json package-lock.json apps/web/package.json patches scripts/postinstall-patches.js",
   "headers": [
     {
       "source": "/googlecbfc040f934ed5ea.html",
