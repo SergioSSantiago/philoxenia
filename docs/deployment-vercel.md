@@ -49,6 +49,10 @@ Configure on **both** projects (web + api) where applicable:
 | `STARKNET_CHAIN` | api | `SN_MAIN` |
 | `DATABASE_URL` | api | Neon connection string |
 | `JWT_SECRET` | api | long random string |
+| `ALCHEMY_API_KEY` | web **and** api | Alchemy key (auth + payment verify) |
+| `STARKNET_CHAIN` | api | `SN_MAIN` |
+| `BOOKING_ESCROW_ADDRESS` | api | STRK escrow (payment verify) |
+| `DAI_BOOKING_ESCROW_ADDRESS` | api | DAI escrow (payment verify) |
 | `CORS_ORIGIN` | api | `https://philoxenia-iota.vercel.app` |
 | `NEXT_PUBLIC_API_URL` | web | `https://philoxenia-api.vercel.app` |
 | `NEXT_PUBLIC_STARKNET_CHAIN` | web | `mainnet` |

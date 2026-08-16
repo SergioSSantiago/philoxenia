@@ -1,160 +1,63 @@
-<p align="center">
-  <img src="./assets/philoxenia-mark.png" alt="Philoxenia" width="64" height="64" />
-</p>
-
 # Bookings
 
 Bookings coordinate stay metadata off-chain and payment on-chain via escrow.
+**Pay = fund + settle in one transaction.** The API only records a booking after
+Starknet receipt verification (`BookingSettled` on Philoxenia escrow).
 
-## Lifecycle
+## Lifecycle (current)
 
 ```
-pending ──fund──► funded ──settle──► completed
-   │                  │
-   └── cancel ──► cancelled
-                      └──refund──► refunded
+quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → completed
+                                                              │
+                                              social-cancel → cancelled (nights freed)
 ```
 
 | Status | Meaning |
 |--------|---------|
-| `pending` | Created; awaiting guest payment |
-| `funded` | Guest submitted payment tx hash |
-| `confirmed` | Reserved for post-settlement confirmation |
-| `completed` | Guest settled on-chain; host / connector / treasury paid |
-| `cancelled` | Cancelled before funding (API not wired yet) |
-| `refunded` | Host refunded on-chain; full amount returned to guest |
+| `completed` | Payment verified on-chain; host/connector paid |
+| `cancelled` | Social cancel — nights free; **no** escrow clawback |
+| `funded` | Legacy intermediate (pre-settle path only) |
+| `refunded` | Legacy on-chain refund — only if still `funded` |
+| `pending` | Unused by current web pay path |
 
 ## Creating a booking
 
-**POST `/bookings`** (authenticated guest)
+1. `POST /bookings/quote` — nights + amounts  
+2. Client pays on-chain (public multicall or STRK20 anonymizer)  
+3. `POST /bookings/confirm` with `{ bookingId, listingId, nights, fundTxHash, escrowBookingId, … }`
 
-```json
-{
-  "listingId": "uuid",
-  "checkIn": "ISO date",
-  "checkOut": "ISO date"
-}
-```
+**Confirm verifies:**
 
-Validations:
+- Tx exists and `execution_status === SUCCEEDED`
+- Escrow emitted `BookingSettled` for `escrowBookingId`
+- `fundTxHash` not already used on another payment
 
-- Guest can view the listing (friend of host)
-- Nights chosen one-by-one from **per-night inventory** (need not be consecutive); per-night DAI prices; paid nights blocked
-- Total = sum of selected nightly prices; STRK amount via **live** spot FX at quote/pay time
-- **Pay settles immediately** (fund + settle in one tx) → host + connector + protocol paid now; booking status `completed`
-- Chat notice after payment
-- Cancel = social mark + Messages; any money return is **voluntary peer transfer** (not escrow refund)
+Fake or unrelated hashes are rejected.
 
-### Quote & confirm
+## Cancel & refund (honest)
 
-**POST `/bookings/quote`** / **POST `/bookings/confirm`** accept either:
+| Action | Effect |
+|--------|--------|
+| **Free nights** (`POST …/social-cancel`) | Sets `cancelled`; nights reusable; chat notice |
+| **Money return** | Voluntary peer transfer in Messages (Send DAI/STRK) |
+| **On-chain `refund_booking`** | Only if booking never settled (`funded`); UI does not offer this after immediate settle |
 
-```json
-{ "listingId": "uuid", "nights": ["2026-09-01", "2026-09-03"] }
-```
+## API
 
-or legacy contiguous `checkIn` / `checkOut`. Confirm also requires `bookingId`, `fundTxHash`, `escrowBookingId`.
-
-### Amount calculation
-
-```
-totalPriceDai = sum of selected nightly DAI prices
-# Guest picks payment asset at pay time:
-#   DAI  → totalPrice = totalPriceDai (1:1)
-#   STRK → totalPrice = totalPriceDai × live strkPerDai (CoinGecko)
-```
-
-# With connector (listing connectorRewardPercent, e.g. 5%):
-connectorGross = totalPrice × connectorRewardPercent / 100
-protocolFeeAmount = connectorGross × 10 / 100          # Philoxenia: 10% of connector reward
-connectorRewardAmount = connectorGross − protocolFeeAmount
-hostAmount = totalPrice − connectorGross
-
-# Without connector:
-hostAmount = totalPrice
-connectorRewardAmount = 0
-protocolFeeAmount = 0
-```
-
-UI shows **percentages**. On-chain uses basis points internally.
-
-## Funding
-
-Guest pays via wallet on `/bookings/[id]`, then confirms:
-
-**POST `/bookings/:id/fund`**
-
-```json
-{
-  "fundTxHash": "0x…",
-  "escrowBookingId": "optional on-chain id",
-  "privacyMode": "private | public"
-}
-```
-
-Updates booking to `funded` and inserts a `payments` row.
-
-## Settlement
-
-Guest (or contract owner) calls `settle_booking` on-chain, then confirms:
-
-**POST `/bookings/:id/settle`** (guest only)
-
-```json
-{
-  "settleTxHash": "0x…"
-}
-```
-
-Updates booking to `completed`. Pays host, connector (if any), and protocol treasury.
-
-## Refund
-
-Host (or contract owner) calls `refund_booking` on-chain, then confirms:
-
-**POST `/bookings/:id/refund`** (host only)
-
-```json
-{
-  "refundTxHash": "0x…"
-}
-```
-
-Updates booking to `refunded`. Returns full `total_amount` to the guest.
-
-## On-chain booking ID
-
-The web derives an on-chain ID from the UUID:
-
-```typescript
-BigInt(`0x${booking.id.replace(/-/g, "").slice(0, 16)}`).toString()
-```
-
-This ID is stored as `escrowBookingId` after funding. Settle and refund reuse it.
-
-The web payment multicall runs `create_booking` + `approve` + `fund_booking` in one Ready X transaction (guest is allowed to create their own booking on-chain).
-
-## Reading bookings
-
-| Method | Path | Access |
-|--------|------|--------|
-| GET | `/bookings` | Guest or host bookings for current user |
-| GET | `/bookings/:id` | Guest, host, or connector |
-
-## Implementation status
-
-| Feature | Status |
-|---------|--------|
-| Create booking (API) | Implemented |
-| Date overlap check | Implemented |
-| Fund confirmation (API) | Implemented |
-| Pay button (web) | Implemented |
-| On-chain create before fund | Implemented (multicall) |
-| Settle (UI + API) | Implemented |
-| Refund (UI + API) | Implemented |
-| Cancel before fund | Not implemented |
+| Method | Path | Notes |
+|--------|------|-------|
+| POST | `/bookings/quote` | Quote |
+| POST | `/bookings/confirm` | Verified create → `completed` |
+| POST | `/bookings/:id/social-cancel` | Free nights |
+| POST | `/bookings/:id/fund` | Legacy — verified |
+| POST | `/bookings/:id/settle` | Legacy — verified |
+| POST | `/bookings/:id/refund` | Legacy funded-only — verified |
+| GET | `/bookings` | List |
+| GET | `/bookings/:id` | Detail |
 
 ## Related
 
 - [payments.md](./payments.md)
 - [smart-contracts.md](./smart-contracts.md)
+- [demo-checklist.md](./demo-checklist.md)
+- [security.md](./security.md)

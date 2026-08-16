@@ -31,6 +31,14 @@ export default function BookingDetailPage() {
 
   async function socialCancel() {
     if (!booking) return;
+    const agreed = window.confirm(
+      "This only frees the nights in Philoxenia.\n\n" +
+        "Host/connector were already paid on-chain at booking time. " +
+        "Any money return must be agreed in Messages and sent with Send DAI/STRK.\n\n" +
+        "Continue?"
+    );
+    if (!agreed) return;
+
     setBusy(true);
     setError("");
     setOk("");
@@ -40,7 +48,7 @@ export default function BookingDetailPage() {
       );
       setBooking(updated);
       setOk(
-        "Marked cancelled — nights are free again. Agree any money return in Messages and send DAI/STRK there."
+        "Nights freed. Money was already settled on-chain — arrange any return in Messages."
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Cancel failed");
@@ -71,6 +79,7 @@ export default function BookingDetailPage() {
   const canCancel = ["funded", "confirmed", "completed"].includes(
     booking.status
   );
+  const alreadySettled = ["completed", "cancelled"].includes(booking.status);
 
   return (
     <Shell>
@@ -163,7 +172,7 @@ export default function BookingDetailPage() {
 
         {booking.fundTxHash && (
           <p className="break-all font-mono text-xs text-muted">
-            Tx:{" "}
+            Verified tx:{" "}
             <a
               href={`https://voyager.online/tx/${booking.fundTxHash}`}
               target="_blank"
@@ -181,27 +190,29 @@ export default function BookingDetailPage() {
             anonymizer. Escrow still stores guest, host, and amounts on-chain.
           </p>
         )}
-        <p className="text-xs text-muted leading-relaxed">
-          Host and connector were paid when the guest paid. If plans change,
-          talk in{" "}
-          <Link
-            href={`/messages/${otherId}`}
-            className="text-accent underline-offset-2 hover:underline"
-          >
-            Messages
-          </Link>{" "}
-          and return funds voluntarily with Send DAI/STRK. Marking cancel only
-          frees the nights.
-        </p>
+
+        <div className="rounded-xl border border-border bg-background/80 px-4 py-3 text-xs leading-relaxed text-muted">
+          <p className="font-medium text-foreground">Cancel &amp; refund policy</p>
+          <p className="mt-1">
+            Pay settles immediately (host + connector paid in the same tx). There
+            is <span className="text-foreground">no escrow clawback</span> after
+            settlement. Cancelling only frees nights. Refunds are social: agree
+            in Messages, then Send DAI/STRK.
+          </p>
+        </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
-          {(isGuest || isHost) && canCancel && (
+          {(isGuest || isHost) && canCancel && booking.status !== "cancelled" && (
             <Button
               variant="secondary"
               disabled={busy}
               onClick={socialCancel}
             >
-              {busy ? "Updating…" : "Mark cancelled (free nights)"}
+              {busy
+                ? "Updating…"
+                : alreadySettled
+                  ? "Free nights (no on-chain refund)"
+                  : "Mark cancelled (free nights)"}
             </Button>
           )}
           <Button

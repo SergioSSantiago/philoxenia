@@ -11,7 +11,7 @@ function parseCorsOrigins(): string[] | true {
 
 export async function buildApp() {
   const app = Fastify({
-    logger: process.env.NODE_ENV !== "production",
+    logger: true,
     bodyLimit: 8 * 1024 * 1024,
   });
 

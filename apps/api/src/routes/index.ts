@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import {
   createAuthChallenge,
@@ -10,12 +10,40 @@ import * as notifications from "../services/notifications.js";
 import * as chat from "../services/chat.js";
 import { getStrkPerDai } from "../services/rates.js";
 import { getNetworkStats } from "../services/stats.js";
+import { writeAuditLog } from "../lib/audit.js";
+import { clientIp, rateLimitCheck } from "../lib/rate-limit.js";
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
     payload: { userId: string };
     user: { userId: string };
   }
+}
+
+function enforceRateLimit(
+  request: FastifyRequest,
+  reply: FastifyReply,
+  bucket: string,
+  limit: number,
+  windowMs: number
+) {
+  const ip = clientIp(
+    request.headers as Record<string, unknown>,
+    request.ip ?? "unknown"
+  );
+  const check = rateLimitCheck(`${bucket}:${ip}`, limit, windowMs);
+  if (!check.ok) {
+    void writeAuditLog({
+      action: "rate_limit.hit",
+      meta: { bucket, ip },
+      request,
+    });
+    return reply
+      .status(429)
+      .header("Retry-After", String(check.retryAfterSec))
+      .send({ error: "Too many requests — try again shortly" });
+  }
+  return null;
 }
 
 export async function registerRoutes(app: FastifyInstance) {
@@ -31,6 +59,9 @@ export async function registerRoutes(app: FastifyInstance) {
   });
 
   app.post("/auth/challenge", async (request, reply) => {
+    const limited = enforceRateLimit(request, reply, "auth.challenge", 20, 60_000);
+    if (limited) return limited;
+
     const body = z
       .object({ walletAddress: z.string().min(1) })
       .parse(request.body);
@@ -40,6 +71,9 @@ export async function registerRoutes(app: FastifyInstance) {
   });
 
   app.post("/auth/verify", async (request, reply) => {
+    const limited = enforceRateLimit(request, reply, "auth.verify", 15, 60_000);
+    if (limited) return limited;
+
     const body = z
       .object({
         walletAddress: z.string().min(1),
@@ -133,7 +167,16 @@ export async function registerRoutes(app: FastifyInstance) {
   app.get(
     "/friends/search",
     { preHandler: [authenticate] },
-    async (request) => {
+    async (request, reply) => {
+      const limited = enforceRateLimit(
+        request,
+        reply,
+        "friends.search",
+        40,
+        60_000
+      );
+      if (limited) return limited;
+
       const query = z
         .object({ q: z.string() })
         .parse(request.query);
@@ -515,7 +558,14 @@ export async function registerRoutes(app: FastifyInstance) {
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Confirm booking failed";
-        const status = message.includes("unavailable") ? 404 : 400;
+        const status =
+          /unavailable/i.test(message)
+            ? 404
+            : /not found on Starknet|did not succeed|no BookingSettled|already used/i.test(
+                  message
+                )
+              ? 400
+              : 400;
         return reply.status(status).send({ error: message });
       }
     }

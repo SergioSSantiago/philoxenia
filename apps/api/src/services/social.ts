@@ -13,6 +13,11 @@ import {
   splitBookingTotal,
   daysBetween,
 } from "../lib/utils.js";
+import { writeAuditLog } from "../lib/audit.js";
+import {
+  verifyEscrowPaymentTx,
+  verifyEscrowRefundTx,
+} from "../lib/verify-booking-tx.js";
 import { toUserResponse } from "./auth.js";
 import { createNotification } from "./notifications.js";
 import { daiToStrk, getStrkPerDai } from "./rates.js";
@@ -1177,6 +1182,20 @@ export async function confirmPaidBooking(
     };
   }
 
+  const verified = await verifyEscrowPaymentTx({
+    txHash: input.fundTxHash,
+    escrowBookingId: input.escrowBookingId,
+    paymentAsset,
+    requireSettled: true,
+  });
+
+  const reused = await db.query.payments.findFirst({
+    where: eq(schema.payments.txHash, verified.txHash),
+  });
+  if (reused) {
+    throw new Error("This transaction was already used for another booking");
+  }
+
   const [booking] = await db
     .insert(schema.bookings)
     .values({
@@ -1199,8 +1218,8 @@ export async function confirmPaidBooking(
       hostAmount: amounts.hostAmount,
       paymentAsset,
       status: "completed",
-      fundTxHash: input.fundTxHash,
-      settleTxHash: input.fundTxHash,
+      fundTxHash: verified.txHash,
+      settleTxHash: verified.txHash,
       escrowBookingId: input.escrowBookingId,
     })
     .returning();
@@ -1209,9 +1228,23 @@ export async function confirmPaidBooking(
     bookingId: booking.id,
     amount: booking.totalPrice,
     asset: paymentAsset,
-    txHash: input.fundTxHash,
+    txHash: verified.txHash,
     privacyMode: input.privacyMode ?? "public",
     status: "confirmed",
+  });
+
+  await writeAuditLog({
+    action: "booking.confirm_verified",
+    actorUserId: guestId,
+    resourceType: "booking",
+    resourceId: booking.id,
+    meta: {
+      txHash: verified.txHash,
+      event: verified.matchedEvent,
+      escrow: verified.fromEscrow,
+      privacyMode: input.privacyMode ?? "public",
+      paymentAsset,
+    },
   });
 
   try {
@@ -1511,13 +1544,37 @@ export async function updateBookingPayment(
     throw new Error("Booking cannot be funded in current state");
   }
 
+  const escrowBookingId = data.escrowBookingId ?? booking.escrowBookingId;
+  if (!escrowBookingId) {
+    throw new Error("escrowBookingId required to verify payment on-chain");
+  }
+
+  const verified = await verifyEscrowPaymentTx({
+    txHash: data.fundTxHash,
+    escrowBookingId,
+    paymentAsset: booking.paymentAsset as "STRK" | "DAI",
+    requireSettled: false,
+  });
+
+  const reused = await db.query.payments.findFirst({
+    where: eq(schema.payments.txHash, verified.txHash),
+  });
+  if (reused) {
+    throw new Error("This transaction was already used for another booking");
+  }
+
+  const nextStatus =
+    verified.matchedEvent === "BookingSettled" ? "completed" : "funded";
+
   await db.transaction(async (tx) => {
     await tx
       .update(schema.bookings)
       .set({
-        status: "funded",
-        fundTxHash: data.fundTxHash,
-        escrowBookingId: data.escrowBookingId ?? null,
+        status: nextStatus,
+        fundTxHash: verified.txHash,
+        settleTxHash:
+          verified.matchedEvent === "BookingSettled" ? verified.txHash : null,
+        escrowBookingId,
       })
       .where(eq(schema.bookings.id, bookingId));
 
@@ -1525,10 +1582,18 @@ export async function updateBookingPayment(
       bookingId,
       amount: booking.totalPrice,
       asset: booking.paymentAsset,
-      txHash: data.fundTxHash,
+      txHash: verified.txHash,
       privacyMode: data.privacyMode ?? "public",
       status: "confirmed",
     });
+  });
+
+  await writeAuditLog({
+    action: "booking.fund_verified",
+    actorUserId: guestId,
+    resourceType: "booking",
+    resourceId: bookingId,
+    meta: { txHash: verified.txHash, event: verified.matchedEvent },
   });
 
   return getBookingById(bookingId, guestId);
@@ -1552,13 +1617,32 @@ export async function settleBooking(
     throw new Error("Booking cannot be settled in current state");
   }
 
+  if (!booking.escrowBookingId) {
+    throw new Error("Missing escrow booking id");
+  }
+
+  const verified = await verifyEscrowPaymentTx({
+    txHash: data.settleTxHash,
+    escrowBookingId: booking.escrowBookingId,
+    paymentAsset: booking.paymentAsset as "STRK" | "DAI",
+    requireSettled: true,
+  });
+
   await db
     .update(schema.bookings)
     .set({
       status: "completed",
-      settleTxHash: data.settleTxHash,
+      settleTxHash: verified.txHash,
     })
     .where(eq(schema.bookings.id, bookingId));
+
+  await writeAuditLog({
+    action: "booking.settle_verified",
+    actorUserId: guestId,
+    resourceType: "booking",
+    resourceId: bookingId,
+    meta: { txHash: verified.txHash },
+  });
 
   return getBookingById(bookingId, guestId);
 }
@@ -1596,10 +1680,18 @@ export async function socialCancelBooking(
     .set({ status: "cancelled" })
     .where(eq(schema.bookings.id, bookingId));
 
+  await writeAuditLog({
+    action: "booking.social_cancel",
+    actorUserId: userId,
+    resourceType: "booking",
+    resourceId: bookingId,
+    meta: { previousStatus: booking.status },
+  });
+
   const otherId =
     userId === booking.guestId ? booking.hostId : booking.guestId;
   const title = booking.listing?.title ?? "listing";
-  const body = `Booking for “${title}” marked cancelled. Nights are free again. Any money return is voluntary — use Messages to send DAI/STRK if you agreed.`;
+  const body = `Booking for “${title}” marked cancelled. Nights are free again. Funds already settled on-chain — any money return is voluntary via Messages (Send DAI/STRK).`;
 
   try {
     const { sendTextMessage } = await import("./chat.js");
@@ -1619,7 +1711,7 @@ export async function socialCancelBooking(
   return getBookingById(bookingId, userId);
 }
 
-/** @deprecated Escrow refund — prefer social cancel + voluntary peer transfer. */
+/** Legacy escrow refund — only if status is still `funded` (pre-settle). Prefer social cancel. */
 export async function refundBooking(
   bookingId: string,
   hostId: string,
@@ -1639,13 +1731,31 @@ export async function refundBooking(
     );
   }
 
+  if (!booking.escrowBookingId) {
+    throw new Error("Missing escrow booking id");
+  }
+
+  const verified = await verifyEscrowRefundTx({
+    txHash: data.refundTxHash,
+    escrowBookingId: booking.escrowBookingId,
+    paymentAsset: booking.paymentAsset as "STRK" | "DAI",
+  });
+
   await db
     .update(schema.bookings)
     .set({
       status: "refunded",
-      refundTxHash: data.refundTxHash,
+      refundTxHash: verified.txHash,
     })
     .where(eq(schema.bookings.id, bookingId));
+
+  await writeAuditLog({
+    action: "booking.refund_verified",
+    actorUserId: hostId,
+    resourceType: "booking",
+    resourceId: bookingId,
+    meta: { txHash: verified.txHash },
+  });
 
   return getBookingById(bookingId, hostId);
 }

@@ -14,7 +14,8 @@ Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustle
 | [social-graph.md](./social-graph.md) | Friends; search by wallet only |
 | [listings.md](./listings.md) | Private listings |
 | [invitations.md](./invitations.md) | Share links |
-| [bookings.md](./bookings.md) | Booking lifecycle; non-contiguous nights; STRK/DAI pay |
+| [bookings.md](./bookings.md) | Verified pay; social cancel (no clawback) |
+| [demo-checklist.md](./demo-checklist.md) | Prod happy-path checklist |
 | [messages.md](./messages.md) | Sealed DMs + peer DAI/STRK transfers |
 | [message-mailbox.md](./message-mailbox.md) | On-chain MessageMailbox helper |
 | [payments.md](./payments.md) | STRK / DAI / STRK20 |

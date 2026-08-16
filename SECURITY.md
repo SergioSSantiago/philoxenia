@@ -30,18 +30,19 @@ Authorization logic lives in `apps/api/src/lib/authorization.ts` and is enforced
 
 ## Payment integrity
 
-- The API records `fundTxHash` and `privacyMode` after the guest submits payment confirmation.
-- **MVP limitation:** The API does not yet verify on-chain that the tx actually funded the correct escrow booking. Trust is placed in the client-reported hash until indexer verification is added.
+- `POST /bookings/confirm` verifies the Starknet receipt (`SUCCEEDED`) and a `BookingSettled` event for the claimed `escrowBookingId` on Philoxenia STRK/DAI escrow.
+- Reused `fundTxHash` values are rejected.
+- Confirm / cancel / rate-limit hits write to `audit_logs`.
 
-## Known gaps (MVP)
+## Known gaps (honest)
 
-| Gap | Risk | Mitigation path |
-|-----|------|-----------------|
-| No on-chain tx verification | Client could report a fake hash | Add RPC/event indexer validation |
-| Guest/host/amounts in escrow storage | On-chain link of parties/amounts | Future escrow redesign (commitment guest id) |
-| Off-chain data at API operator | Operator can read all metadata | Self-host; encrypt at rest; future E2E options |
-| User search by wallet address | Minor enumeration | Rate-limit; display names are not searchable |
-| Ready Wallet API private pay | Needs desktop Ready + shield | Manual smoke; fallback to public/shadow |
+| Gap | Risk | Status |
+|-----|------|--------|
+| Guest/host/amounts in escrow storage | On-chain link of parties/amounts | By design for MVP escrow |
+| Off-chain social graph at API operator | Operator can read friendships / listing metadata | Self-host mitigation |
+| Messaging Phase C (viewing-key discovery) | Friend link still off-chain | Blocked on Wallet API / SDK |
+| Escrow owner is single EOA | Key risk | Multisig ops follow-up |
+| Ready X only for private pay | UX friction | Documented product constraint |
 
 ## Operational security
 

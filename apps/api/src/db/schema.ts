@@ -331,3 +331,26 @@ export const directMessages = pgTable(
     index("direct_messages_recipient_idx").on(table.recipientId),
   ]
 );
+
+/** Structured security / ops audit trail (payment verify, cancel, auth spikes). */
+export const auditLogs = pgTable(
+  "audit_logs",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    actorUserId: uuid("actor_user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    action: text("action").notNull(),
+    resourceType: text("resource_type"),
+    resourceId: text("resource_id"),
+    meta: text("meta"),
+    ip: text("ip"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    index("audit_logs_action_idx").on(table.action),
+    index("audit_logs_created_idx").on(table.createdAt),
+  ]
+);

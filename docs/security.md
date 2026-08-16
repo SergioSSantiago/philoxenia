@@ -14,7 +14,7 @@ Expanded security notes for API, contracts, and deployment.
 | Listings / bookings | Unauthorized access | Server-side authorization; 404 on denial |
 | JWT tokens | Theft / forgery | HTTPS + secret signing key |
 | Escrow funds | Wrong recipient | Contract enforces guest/host/connector addresses at `create_booking` |
-| Payment claims | Fake tx hash | **Weak** — client-reported; no chain verification |
+| Payment claims | Fake tx hash | **Mitigated** — receipt + `BookingSettled` for escrow id; reject reused hashes |
 
 ## API security
 
@@ -40,9 +40,10 @@ Zod schemas on all request bodies and params.
 
 - Rotate `JWT_SECRET`; use strong random value
 - Enable HTTPS everywhere
-- Rate-limit auth and search endpoints
-- Add on-chain tx verification before marking bookings funded
-- Structured audit logging for admin/owner actions
+- Rate-limit auth and search endpoints ✅ (`/auth/challenge`, `/auth/verify`, `/friends/search`)
+- On-chain tx verification before completing bookings ✅ (`verifyEscrowPaymentTx`)
+- Structured audit logging ✅ (`audit_logs` for confirm / cancel / rate-limit)
+- Keep `ALCHEMY_API_KEY` + `STARKNET_CHAIN=SN_MAIN` on the **API** Vercel project
 
 ## Contract security
 
@@ -91,13 +92,15 @@ Keep `starknet`, `@starknet-react/core`, OpenZeppelin, and Foundry versions alig
 
 ## Pre-deployment checklist
 
-- [ ] Change `JWT_SECRET` and DB password
-- [ ] Set restrictive `CORS_ORIGIN`
-- [ ] Deploy escrow with multisig owner
-- [ ] Configure RPC endpoint (not public shared node for production)
-- [ ] Verify `NEXT_PUBLIC_*` addresses match deployed contracts
-- [ ] Do not expose PostgreSQL port publicly
-- [ ] Plan tx verification before accepting funded status
+- [x] Change `JWT_SECRET` and DB password
+- [x] Set restrictive `CORS_ORIGIN`
+- [ ] Deploy escrow with multisig owner (current: single owner — ops follow-up)
+- [x] Configure RPC endpoint (Alchemy on API + web)
+- [x] Verify `NEXT_PUBLIC_*` addresses match deployed contracts
+- [x] Do not expose PostgreSQL port publicly (Neon)
+- [x] Tx verification before accepting funded/completed status
+- [x] Rate-limit auth + friend search
+- [x] Audit log table for payment confirm / cancel / rate-limit
 
 ## Related
 
