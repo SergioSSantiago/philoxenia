@@ -13,15 +13,12 @@
     "test": "npm run test -w @philoxenia/api && npm run test:contracts",
     "test:contracts": "cd contracts && scarb test",
     "lint": "npm run lint -w @philoxenia/web && npm run lint -w @philoxenia/api",
-    "typecheck": "npm run typecheck -w @philoxenia/web && npm run typecheck -w @philoxenia/api && npm run typecheck -w @philoxenia/shared",
-    "postinstall": "node scripts/postinstall-patches.js"
-  },
-  "dependencies": {
-    "patch-package": "^8.0.1"
+    "typecheck": "npm run typecheck -w @philoxenia/web && npm run typecheck -w @philoxenia/api && npm run typecheck -w @philoxenia/shared"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
-    "dotenv-cli": "^8.0.0"
+    "dotenv-cli": "^8.0.0",
+    "patch-package": "^8.0.1"
   },
   "overrides": {
     "starknet": "10.7.0"

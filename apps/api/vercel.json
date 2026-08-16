@@ -1,5 +1,5 @@
 {
   "installCommand": "npm install",
-  "ignoreCommand": "git -C ../.. diff --quiet HEAD^ HEAD -- apps/api packages/shared package.json package-lock.json apps/api/package.json",
+  "ignoreCommand": "git -C ../.. diff --quiet HEAD^ HEAD -- apps/api packages/shared package.json package-lock.json apps/api/package.json scripts/postinstall-patches.js",
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }

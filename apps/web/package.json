@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "node ../../scripts/postinstall-patches.js"
   },
   "dependencies": {
     "@avnu/avnu-sdk": "^4.2.0",
@@ -25,7 +26,8 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "starknet": "10.7.0",
-    "starknetkit": "^3.4.3"
+    "starknetkit": "^3.4.3",
+    "patch-package": "^8.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
