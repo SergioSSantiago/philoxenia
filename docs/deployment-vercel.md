@@ -84,14 +84,29 @@ cd ../.. && npm run db:migrate -w @philoxenia/api
 
 Important: do not run `vercel env pull` from the repo root without `--project philoxenia-api` — that pulls **web** (`philoxenia`) vars and will not include `DATABASE_URL`.
 
-## Manual deploy
+## How production deploys (one path only)
+
+**Git push to `main` is the only normal deploy.** Both Vercel projects are linked to GitHub; each push triggers at most one Production build **per project**.
+
+| Project | Builds when these paths change |
+|---------|--------------------------------|
+| **philoxenia** (web) | `apps/web/**`, `packages/shared/**`, root lockfile / package.json |
+| **philoxenia-api** | `apps/api/**`, `packages/shared/**`, root lockfile / package.json |
+
+Implemented via `ignoreCommand` in `apps/web/vercel.json` and `apps/api/vercel.json` (exit `0` = skip build, `1` = build).
+
+### Do not double-deploy
+
+- **Never** run `vercel --prod` / `vercel deploy` after (or instead of) a push when Git Integration is on — that creates a **second** Production deployment for the same commit.
+- Agents: “commit + push + deploy” means **push only**; wait for the Git-triggered build.
+- CLI deploy is emergency-only (Git Integration down, or user explicitly asks for CLI without a push).
+
+### Verify a deploy
 
 ```bash
-cd apps/api && vercel --prod
-cd apps/web && vercel --prod
+vercel ls philoxenia
+# or open https://vercel.com/sergiossantiagos-projects/philoxenia
 ```
-
-Each push to `main` on GitHub redeploys if Git Integration is enabled.
 
 The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home`. **Ideal:** Ready X in-app browser (see [product.md](./product.md)).
 

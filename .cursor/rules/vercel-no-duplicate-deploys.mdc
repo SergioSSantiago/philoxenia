@@ -1,0 +1,22 @@
+---
+description: One Vercel deploy path only — never double-deploy via CLI + Git
+alwaysApply: true
+---
+
+# Vercel deploys (no duplicates)
+
+Philoxenia has **Git Integration** on two Vercel projects (`philoxenia` web + `philoxenia-api`). Every push to `main` already triggers production builds.
+
+## Hard rule
+
+- **Deploy = `git push` only.** Do **not** run `vercel deploy`, `vercel --prod`, or `vercel redeploy` after a push (or in the same “commit + push + deploy” flow).
+- Manual CLI deploys **duplicate** Production deployments for the same commit (seen as paired Ready builds a few minutes apart).
+- When the user asks to “commit, push y deploy”, **push is enough**. Say that Vercel Git will pick it up; do not CLI-deploy.
+
+## Exceptions (rare)
+
+Only use the Vercel CLI if the user **explicitly** asks for a CLI-only redeploy **without** a git push, or Git Integration is broken. Never combine CLI prod deploy + push for the same change.
+
+## Path filters
+
+`ignoreCommand` in each app’s `vercel.json` skips builds when that app’s paths did not change. Do not remove those without replacing equivalent ignore logic.
