@@ -26,7 +26,10 @@ export const metadata: Metadata = {
   description:
     "A private peer-to-peer hospitality network. Discover places through people you trust.",
   icons: {
-    icon: "/philoxenia-mark.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/philoxenia-mark.png", type: "image/png", sizes: "256x256" },
+    ],
     apple: "/philoxenia-mark.png",
   },
 };
