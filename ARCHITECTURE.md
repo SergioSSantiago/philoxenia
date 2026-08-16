@@ -8,7 +8,7 @@ Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **n
 
 The brand mark (sleeping head on joined hands) sits in the header and always goes to `/`. Sign-in is a Ready X modal on `/home`, not a dedicated auth page.
 
-**Ideal client:** Chrome/Brave + **Ready X** with **Smart Wallet** and **Private** enabled, or the Ready X in-app browser. **Firefox has no Ready X** (legacy Ready only → no private pay). See [docs/product.md](./docs/product.md).
+**Ideal client:** Chrome + **Ready X** with **Smart Wallet** and **Private** (desktop), or the **Ready X app browser** on **iPhone** (not Safari). **Firefox has no Ready X**. See [docs/product.md](./docs/product.md).
 
 ## System overview
 

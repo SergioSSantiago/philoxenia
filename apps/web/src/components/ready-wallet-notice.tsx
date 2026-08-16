@@ -19,29 +19,32 @@ export function ReadyWalletNotice({
       </p>
       {compact ? (
         <p className="mt-1.5 text-xs leading-relaxed text-red-800/95">
-          Use <strong>Chrome</strong> (or Brave) with the{" "}
-          <strong>Ready X</strong> extension. Enable <strong>Smart Wallet</strong>{" "}
-          and <strong>Private</strong> in Ready. Firefox does{" "}
-          <strong>not</strong> ship Ready X — only the old Ready Wallet, which
-          cannot do private pay.
+          <strong>Desktop:</strong> Chrome + Ready X extension, with{" "}
+          <strong>Smart Wallet</strong> and <strong>Private</strong> on.{" "}
+          <strong>iPhone:</strong> open Philoxenia in the{" "}
+          <strong>Ready X app browser</strong> (Safari will not work).{" "}
+          <strong>Firefox:</strong> no Ready X extension — legacy Ready only, no
+          private pay.
         </p>
       ) : (
         <ul className="mt-2 list-disc space-y-1.5 pl-4 text-xs leading-relaxed text-red-800/95 sm:text-sm">
           <li>
-            Prefer <strong>Chrome</strong> or <strong>Brave</strong> with the{" "}
-            <strong>Ready X</strong> browser extension — or open Philoxenia inside
-            the <strong>Ready X in-app browser</strong>.
+            <strong>Desktop:</strong> use <strong>Chrome</strong> with the{" "}
+            <strong>Ready X</strong> extension. In Ready X, enable{" "}
+            <strong>Smart Wallet</strong> and <strong>Private</strong>.
           </li>
           <li>
-            In Ready X settings, turn on <strong>Smart Wallet</strong> and{" "}
-            <strong>Private</strong> (STRK20 / wallet API ≥ 0.10). Without that,
-            login or Private pay will fail.
+            <strong>iPhone:</strong> you{" "}
+            <strong>must open Philoxenia inside the Ready X wallet app
+            browser</strong>
+            — not Safari or Chrome on iOS. Otherwise connect/sign and private
+            pay will fail.
           </li>
           <li>
             <strong>Firefox:</strong> the Ready X extension is{" "}
-            <strong>not available</strong>. You only get the legacy Ready Wallet
-            (formerly Argent), which does <strong>not</strong> support private
-            payments. Use Chrome/Brave + Ready X instead.
+            <strong>not available</strong>. Only the legacy Ready Wallet
+            appears, which <strong>cannot</strong> do private payments. Use
+            Chrome + Ready X (desktop) or the Ready X app browser (iPhone).
           </li>
         </ul>
       )}

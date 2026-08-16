@@ -128,15 +128,16 @@ npm run db:generate -w @philoxenia/api   # if script exists
 - Sign-in UI: `apps/web/src/components/auth-modal.tsx` on `/home`
 - Brand lockup: `apps/web/src/components/brand-lockup.tsx` → `/`
 
-Connect with [Ready X](https://www.ready.co/) — open the app in Ready X’s **in-app browser** for auth and STRK20 private payments. Firefox / desktop legacy Ready is Public-pay only when privacy API is missing.
+Connect with [Ready X](https://www.ready.co/) — **Chrome** + Smart Wallet + Private on desktop; on **iPhone** open the app in the **Ready X wallet browser** (not Safari). Firefox has no Ready X.
 
 ### Wallet clients
 
 | Client | Auth | Private STRK20 |
 |--------|------|----------------|
-| Ready X **in-app browser** | Supported (ideal) | Yes (API ≥ 0.10) |
-| Firefox / desktop legacy Ready extension | Often works | Usually **no** |
-| System Safari/Chrome → Ready deep-link | Unreliable | N/A |
+| Chrome + Ready X (Smart Wallet + Private) | Supported | Yes |
+| Ready X **app browser** (iPhone) | Supported (required on iPhone) | Yes |
+| Firefox / legacy Ready | Often works | Usually **no** |
+| iPhone Safari / system Chrome → Ready | Unreliable | No |
 
 ## Common issues
 
@@ -145,9 +146,9 @@ Connect with [Ready X](https://www.ready.co/) — open the app in Ready X’s **
 | API connection refused | Check `docker compose ps`; verify `DATABASE_URL` |
 | CORS errors | Match `CORS_ORIGIN` to web URL |
 | Payment fails | Set `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS`; ensure on-chain booking exists |
-| Wallet auth fails (Ready X in-app) | Mainnet; `ALCHEMY_API_KEY`; chain `SN_MAIN` |
-| Wallet auth fails (phone system browser) | Expected — use Ready X in-app browser |
-| Private pay blocked on Firefox | Expected — use Ready X in-app or Public ERC-20 |
+| Wallet auth fails (Ready X) | Mainnet; Smart Wallet + Private; `ALCHEMY_API_KEY` |
+| Wallet auth fails on iPhone Safari | Expected — open Philoxenia in the Ready X app browser |
+| Private pay blocked on Firefox | Expected — use Chrome + Ready X or Ready X app browser |
 
 ## Related
 

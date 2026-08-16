@@ -12,8 +12,9 @@ The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.55;">
 <strong style="color:#7f1d1d;">⚠ Required: Ready X setup (read this first)</strong><br/><br/>
-<strong>Chrome or Brave</strong> + <strong>Ready X</strong> extension, with <strong>Smart Wallet</strong> and <strong>Private</strong> turned on in the wallet settings — <em>or</em> open Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
-<strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears, and it <strong>does not support private payments</strong> (no wallet API ≥ 0.10). Do not use Firefox for Philoxenia privacy flows.
+<strong>Desktop:</strong> <strong>Chrome</strong> + <strong>Ready X</strong> extension, with <strong>Smart Wallet</strong> and <strong>Private</strong> turned on.<br/><br/>
+<strong>iPhone:</strong> open Philoxenia in the <strong>Ready X wallet app browser</strong>. Safari / iOS Chrome will <strong>not</strong> work for login or private pay.<br/><br/>
+<strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears — <strong>no private payments</strong>.
 </p>
 
 ## Problem
@@ -39,25 +40,19 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 
 ### What you must do (checklist)
 
-1. Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** or **Brave** (not Firefox).
-2. In Ready X, enable **Smart Wallet** and **Private**.
-3. Open https://philoxenia-iota.vercel.app → Connect Ready → Sign in (approve SNIP-12).
-4. Optional alternate: open the same URL inside the **Ready X in-app browser**.
+1. **Desktop:** Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** (not Firefox). Enable **Smart Wallet** and **Private**.
+2. **iPhone:** Open https://philoxenia-iota.vercel.app inside the **Ready X wallet app browser** — not Safari or Chrome on iOS.
+3. Connect Ready → Sign in (approve SNIP-12).
 
 Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home`. Display name is optional; friends add you by **wallet address only**.
 
 ### Firefox — no Ready X
 
-Firefox does **not** list the Ready X extension. Users only see the **legacy Ready Wallet** (formerly Argent). That build typically **cannot**:
+Firefox does **not** list the Ready X extension. Users only see the **legacy Ready Wallet** (formerly Argent). That build typically **cannot** expose wallet API ≥ 0.10 or run Private pay / shield / unshield. Use **Chrome + Ready X** (desktop) or the **Ready X app browser** (iPhone).
 
-- expose wallet API ≥ 0.10  
-- run Private booking pay / shield / unshield  
+### iPhone Safari / system Chrome — blocked
 
-Public ERC-20 may still work if the old extension connects — but **private Philoxenia requires Chrome/Brave + Ready X** (or Ready X in-app).
-
-### External mobile Safari / Chrome — blocked
-
-Opening Philoxenia in the phone’s system browser and deep-linking out to Ready is **not** reliable for the login signature. Prefer the **Ready X in-app browser**.
+On iPhone you **must** use the browser inside the **Ready X** wallet app. Opening Philoxenia in Safari (or Chrome) and deep-linking to Ready does **not** complete login or private pay reliably.
 
 ## Roles
 

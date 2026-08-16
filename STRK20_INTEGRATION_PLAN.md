@@ -43,7 +43,7 @@ Re-verified at close-out (2026-08-15):
 - `starknet@10.7.0` (override in root `package.json`)
 - `@starknet-io/get-starknet-discovery@6.0.4`, `@starknet-io/get-starknet-wallet-standard@6.0.4`, `@starknet-io/types-js@0.10.3`
 - Capability detect: wallet-API **≥ 0.10** via `walletV6.supportedWalletApi` — **never** probe `strk20Balances([])` for feature detection
-- Test wallet: Ready extension (+ wallet test dapp https://starknet-wallet-account.vercel.app/) — Firefox Ready 5.30.0 may lack API ≥ 0.10; prefer Chrome/Brave
+- Test wallet: Ready X on Chrome with Smart Wallet + Private, or Ready X app browser on iPhone (Firefox has no Ready X)
 - Cairo: Scarb / Starknet Foundry for anonymizer (team-owned)
 - Pool (mainnet): `0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a`
 - Note: `@starknet-react/core` / `starknetkit` peer-declare starknet ^8; override forces 10.7.0

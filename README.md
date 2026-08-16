@@ -12,12 +12,12 @@ Built with [Cursor](https://cursor.com) AI-assisted development (disclosed, not 
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.5;">
 <strong style="color:#7f1d1d;">⚠ Required before you start — Ready X setup</strong><br/><br/>
-<strong>1. Use Chrome or Brave</strong> with the <strong>Ready X</strong> extension
-(<a href="https://www.ready.co/" style="color:#b91c1c;">ready.co</a>),
-<strong>or</strong> open this app inside the <strong>Ready X in-app browser</strong>.<br/><br/>
-<strong>2. In Ready X, enable Smart Wallet and Private</strong> (STRK20 / wallet API ≥ 0.10).
-Without both, login and private pay will not work.<br/><br/>
-<strong>3. Do not use Firefox for Ready X.</strong> Firefox does <strong>not</strong> offer the Ready X extension — only the legacy Ready Wallet (formerly Argent), which <strong>cannot</strong> do private payments. Use Chrome/Brave + Ready X instead.
+<strong>1. Desktop:</strong> use <strong>Chrome</strong> with the <strong>Ready X</strong> extension
+(<a href="https://www.ready.co/" style="color:#b91c1c;">ready.co</a>).
+In Ready X, enable <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/><br/>
+<strong>2. iPhone:</strong> you <strong>must</strong> open Philoxenia in the <strong>browser inside the Ready X wallet app</strong>.
+Safari / Chrome on iOS will <strong>not</strong> complete login or private pay reliably.<br/><br/>
+<strong>3. Firefox:</strong> Ready X is <strong>not available</strong> — only the legacy Ready Wallet, which <strong>cannot</strong> do private payments. Use Chrome + Ready X (desktop) or the Ready X app browser (iPhone).
 </p>
 
 Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **not** a public accommodation marketplace. Listings are visible only to hosts, their friends, and guests introduced through a valid share flow.
@@ -30,7 +30,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - Friend-based discovery (no public listing directory)
 - Trustless settlement via Cairo escrow (optional connector; Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
 - STRK20 private payments with **Ready X** (Smart Wallet + Private enabled)
-- Wallet paths that work: **Chrome/Brave + Ready X extension**, or **Ready X in-app browser**
+- Wallet paths that work: **Chrome + Ready X extension** (desktop), or **Ready X app browser** (especially iPhone)
 
 ## What it is not
 
@@ -39,6 +39,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - No custodial wallets or internal balances
 - No Braavos or other wallet connectors
 - **Not Firefox** for Ready X / private pay (legacy Ready only there)
+- **Not iPhone Safari/Chrome** — must use the Ready X wallet app browser
 
 ## Architecture
 
@@ -69,7 +70,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 - Node.js 20+
 - Docker (for PostgreSQL)
 - Scarb 2.12+ and Starknet Foundry (for contracts)
-- [Ready X](https://www.ready.co/) on **Chrome/Brave** with **Smart Wallet + Private** enabled (Firefox has no Ready X extension)
+- [Ready X](https://www.ready.co/) — Chrome + Smart Wallet + Private (desktop); on iPhone use the Ready X app browser (not Safari)
 
 ## Deploy (production — Vercel)
 
@@ -145,15 +146,16 @@ scarb test
 There is no `/auth` page. The header brand goes to `/` (landing). Connect / disconnect opens a **Ready X** modal on `/home`.
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
-<strong>Chrome/Brave + Ready X</strong> with <strong>Smart Wallet</strong> and <strong>Private</strong> enabled — or the Ready X in-app browser.
-<strong>Firefox has no Ready X extension</strong> (legacy Ready only → no private pay).
+<strong>Desktop:</strong> Chrome + Ready X with <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/>
+<strong>iPhone:</strong> open Philoxenia in the <strong>Ready X app browser</strong> (not Safari).<br/>
+<strong>Firefox:</strong> no Ready X extension → no private pay.
 </p>
 
 Friends find each other by **wallet address only**.
 
 ### System mobile browsers — blocked
 
-Safari / Chrome on the phone deep-linking out to Ready is unreliable for the login signature. Use Ready X’s in-app browser instead.
+On **iPhone**, Safari / Chrome will not work. You must open Philoxenia in the **browser built into the Ready X wallet app**.
 
 ## Environment variables
 
