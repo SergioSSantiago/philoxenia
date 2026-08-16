@@ -39,6 +39,10 @@ Private fund (default when Ready wallet API ≥ 0.10):
 
 Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow.md](./deploy-escrow.md).
 
+## Swap STRK ↔ DAI (Profile)
+
+Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile**. Ready must be connected to sign. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
+
 Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.  
 Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/tokens.ts`.
 
