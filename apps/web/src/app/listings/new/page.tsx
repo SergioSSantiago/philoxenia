@@ -155,8 +155,9 @@ export default function CreateListingPage() {
                 }
               />
               <span className="mt-1 block text-xs text-muted">
-                Share for a friend who introduces a guest. Direct bookings: 0%
-                protocol fee.
+                A friend who shares your listing earns this % of the stay (3–10%
+                is typical). Philoxenia takes 10% of that connector reward only.
+                Direct bookings stay 0% protocol.
               </span>
             </label>
           </section>

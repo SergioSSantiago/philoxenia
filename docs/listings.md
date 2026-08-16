@@ -15,7 +15,7 @@ Hosts create **private listings** visible only to themselves and their friends.
 | `pricePerNight` | Default DAI price; nights can override per day on the calendar |
 | `minStay`, `maxStay` | Derived from open nights (not host-entered) |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow) |
-| `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Hosts: set > 0 so friends have a reason to share ([connectors.md](./connectors.md)) |
+| `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Create-listing UI default is **5%** and explains 3–10% typical; Philoxenia takes 10% of that reward only ([connectors.md](./connectors.md)) |
 | `photos` | 1–8 compressed images (data URLs or https) |
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar |
 | `availability` | Legacy contiguous windows (still accepted) |
