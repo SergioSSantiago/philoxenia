@@ -8,7 +8,7 @@ Security model for the Philoxenia MVP. This document describes intended controls
 
 ## Authentication
 
-- **Wallet-based auth** — Users prove control of a Starknet address with a SNIP-12 typed-data signature (`Authentication { nonce }`, domain name `Philoxenia`). No password or custodial keys. **Ideal client:** Ready X **in-app browser** (STRK20). Firefox / desktop legacy Ready usually lacks privacy API; system mobile browser deep-links are unreliable for login.
+- **Wallet-based auth** — SNIP-12 typed-data signature (`Authentication { nonce }`, domain `Philoxenia`). **Desktop:** Chrome + Ready X (Smart Wallet + Private). **iPhone:** Ready X app browser only (not Safari). Firefox has no Ready X / no privacy API.
 - **JWT sessions** — API issues 7-day JWTs after signature verification. Protect `JWT_SECRET` in production.
 - **Nonce replay protection** — Auth nonces expire after 5 minutes and are marked used after verification.
 

@@ -20,9 +20,9 @@ npm run typecheck -w @philoxenia/web
 
 ## Auth
 
-Sign-in is a modal on `/home`. **Ideal:** open this app in the **Ready X in-app browser** (private pay). `/auth` redirects to `/home`. Disconnect returns to `/home` with the same modal.
+Sign-in is a modal on `/home`. **Desktop:** Chrome + Ready X (Smart Wallet + Private). **iPhone:** Ready X app browser only (not Safari). `/auth` redirects to `/home`.
 
-Firefox / desktop legacy Ready: Public pay only when wallet API &lt; 0.10. System Safari/Chrome → Ready deep-link is unreliable for login — use Ready X’s built-in browser.
+Firefox: no Ready X → no private pay.
 
 ## Layout
 

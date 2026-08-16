@@ -106,19 +106,19 @@ function notCapableReason(versions: string[], hadWallet: boolean): string {
   if (!hadWallet) {
     if (keys.length === 0) {
       return fx
-        ? "Ready extension not detected in Firefox. Install/update Ready for Firefox, allow it on this site, then reconnect via the extension (not QR/WalletConnect). Chrome/Brave often ships STRK20 (wallet API ≥ 0.10) first."
-        : "Ready extension not detected. Install Ready, refresh, and connect with the browser extension (WalletConnect/mobile does not expose Private pay).";
+        ? "Ready X is not available on Firefox. Use Chrome + Ready X (Smart Wallet + Private), or open Philoxenia in the Ready X app browser on iPhone."
+        : "Ready X not detected. Install Ready X in Chrome, enable Smart Wallet + Private, refresh, and reconnect — or open Philoxenia in the Ready X app browser on iPhone.";
     }
-    return "A Starknet object is injected but Wallet API discovery failed. Unlock Ready, refresh this page, and reconnect.";
+    return "A Starknet object is injected but Wallet API discovery failed. Unlock Ready X, refresh this page, and reconnect.";
   }
 
   if (versions.length === 0) {
     return fx
-      ? "Ready connected but did not report wallet API versions. Update Ready for Firefox (or try Chrome/Brave) — STRK20 needs wallet API ≥ 0.10."
-      : "Ready connected but did not report wallet API versions. Update Ready and reconnect.";
+      ? "Ready connected but did not report wallet API versions. Firefox has no Ready X — use Chrome + Ready X with Smart Wallet + Private, or the Ready X app browser on iPhone."
+      : "Ready connected but did not report wallet API versions. Enable Smart Wallet + Private in Ready X (Chrome), or open Philoxenia in the Ready X app browser on iPhone.";
   }
 
-  return `Ready wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private). Update Ready${fx ? " — Firefox builds sometimes lag behind Chrome" : ""} and reconnect.`;
+  return `Ready wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private). Update Ready X${fx ? " — Firefox has no Ready X; switch to Chrome or the Ready X app browser" : ""}, enable Smart Wallet + Private, and reconnect.`;
 }
 
 /**
