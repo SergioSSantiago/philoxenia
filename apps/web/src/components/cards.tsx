@@ -49,32 +49,69 @@ export function ListingCard({ listing }: { listing: Listing }) {
   );
 }
 
-export function BookingCard({ booking }: { booking: Booking }) {
-  const host = booking.host;
+export function BookingCard({
+  booking,
+  viewerId,
+}: {
+  booking: Booking;
+  viewerId?: string;
+}) {
+  const asHost = Boolean(viewerId && viewerId === booking.hostId);
+  const asGuest = Boolean(viewerId && viewerId === booking.guestId);
+  const roleLabel = asHost ? "You host" : asGuest ? "You stay" : null;
+  const other = asHost ? booking.guest : booking.host;
+  const otherRole = asHost ? "Guest" : "Host";
+  const otherHref = other
+    ? `/friends/${other.id}`
+    : asHost
+      ? `/friends/${booking.guestId}`
+      : `/friends/${booking.hostId}`;
   const listingHref = `/listings/${booking.listingId}`;
-  const hostHref = host ? `/friends/${host.id}` : `/friends/${booking.hostId}`;
 
   return (
     <div className="rounded-xl border border-border bg-surface p-5 transition hover:shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1 space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {roleLabel ? (
+              <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent">
+                {roleLabel}
+              </span>
+            ) : null}
+            <Link
+              href={`/bookings/${booking.id}`}
+              className="rounded-full border border-border px-2.5 py-0.5 text-xs capitalize text-muted touch-manipulation"
+            >
+              {booking.status}
+            </Link>
+          </div>
           <Link
             href={listingHref}
             className="block text-lg text-foreground underline-offset-2 hover:underline touch-manipulation"
           >
             {booking.listing?.title ?? "Private listing"}
           </Link>
-          {host ? (
+          {other ? (
             <p className="text-sm text-muted">
-              Host:{" "}
+              {otherRole}:{" "}
               <Link
-                href={hostHref}
+                href={otherHref}
                 className="font-medium text-foreground underline-offset-2 hover:underline touch-manipulation"
               >
-                {host.displayName}
+                {other.displayName}
               </Link>
             </p>
-          ) : null}
+          ) : (
+            <p className="text-sm text-muted">
+              {otherRole}:{" "}
+              <Link
+                href={otherHref}
+                className="font-medium text-foreground underline-offset-2 hover:underline touch-manipulation"
+              >
+                View profile
+              </Link>
+            </p>
+          )}
           <Link
             href={`/bookings/${booking.id}`}
             className="block text-sm text-muted touch-manipulation hover:text-foreground"
@@ -92,12 +129,6 @@ export function BookingCard({ booking }: { booking: Booking }) {
             </span>
           </Link>
         </div>
-        <Link
-          href={`/bookings/${booking.id}`}
-          className="shrink-0 rounded-full bg-accent-soft px-3 py-1 text-xs capitalize text-accent touch-manipulation"
-        >
-          {booking.status}
-        </Link>
       </div>
     </div>
   );

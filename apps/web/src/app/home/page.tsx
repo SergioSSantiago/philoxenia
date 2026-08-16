@@ -162,7 +162,7 @@ export default function HomePage() {
           ) : (
             <div className="space-y-4">
               {data.myBookings.slice(0, 5).map((b) => (
-                <BookingCard key={b.id} booking={b} />
+                <BookingCard key={b.id} booking={b} viewerId={user.id} />
               ))}
             </div>
           )}

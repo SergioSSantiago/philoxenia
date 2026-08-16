@@ -10,7 +10,7 @@ import { api } from "@/lib/api";
 
 export default function BookingsPage() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
@@ -23,13 +23,16 @@ export default function BookingsPage() {
 
   return (
     <Shell>
-      <SectionTitle title="My bookings" />
+      <SectionTitle
+        title="My bookings"
+        subtitle="Stays you book as guest and bookings on your listings as host."
+      />
       {bookings.length === 0 ? (
         <EmptyState message="No bookings yet." />
       ) : (
         <div className="space-y-4">
           {bookings.map((b) => (
-            <BookingCard key={b.id} booking={b} />
+            <BookingCard key={b.id} booking={b} viewerId={user?.id} />
           ))}
         </div>
       )}
