@@ -12,6 +12,7 @@ import {
 import { WalletAddress } from "@/components/wallet-address";
 import { WalletBalances } from "@/components/wallet-balances";
 import { Strk20PrivacyPanel } from "@/components/strk20-privacy-panel";
+import { TokenSwapPanel } from "@/components/token-swap-panel";
 import { useAuth } from "@/lib/auth-context";
 import { formatWalletError } from "@/lib/wallet-errors";
 
@@ -100,6 +101,10 @@ export default function ProfilePage() {
 
         <Card>
           <WalletBalances />
+        </Card>
+
+        <Card>
+          <TokenSwapPanel />
         </Card>
 
         <Card>

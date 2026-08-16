@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@avnu/avnu-sdk": "^4.2.0",
     "@philoxenia/shared": "*",
     "@starknet-io/get-starknet-discovery": "6.0.4",
     "@starknet-io/get-starknet-wallet-standard": "6.0.4",
