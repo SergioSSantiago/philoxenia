@@ -18,8 +18,10 @@ import type {
 } from "@philoxenia/shared";
 import { formatTokenAmount } from "@philoxenia/shared";
 import { Shell, Button, TextInput } from "@/components/ui";
+import { ActionNotice } from "@/components/action-notice";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
+import { formatWalletError } from "@/lib/wallet-errors";
 import {
   isSealedBody,
   sealMessage,
@@ -45,8 +47,8 @@ type DisplayMessage = ChatMessage & {
 export default function ChatThreadPage() {
   const params = useParams<{ friendId: string }>();
   const router = useRouter();
-  const { token, user } = useAuth();
-  const { account } = useAccount();
+  const { token, user, connectWallet } = useAuth();
+  const { account, address } = useAccount();
   const { ready: sealedReady, ensure: ensureSealed } = useSealedMessaging();
   const [conversation, setConversation] = useState<ChatConversation | null>(
     null
@@ -57,14 +59,27 @@ export default function ChatThreadPage() {
   const [asset, setAsset] = useState<PaymentAsset>("STRK");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [reconnecting, setReconnecting] = useState(false);
   const [showPay, setShowPay] = useState(false);
   const [payMode, setPayMode] = useState<"private" | "public">("private");
   const [anchorOnChain, setAnchorOnChain] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [onChainNote, setOnChainNote] = useState("");
+  const [notice, setNotice] = useState<{
+    title: string;
+    body: string;
+    tone: "warn" | "error" | "info";
+    primaryLabel?: string;
+  } | null>(null);
+  const pendingPayRef = useRef<{
+    amount: string;
+    asset: PaymentAsset;
+    mode: "private" | "public";
+  } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLTextAreaElement>(null);
   const mailboxReady = Boolean(messageMailboxAddress());
+  const walletReady = Boolean(account && address);
 
   const decryptConversation = useCallback(
     async (data: ChatConversation) => {
@@ -174,43 +189,122 @@ export default function ChatThreadPage() {
     }
   }
 
+  async function reconnectReady() {
+    setReconnecting(true);
+    setError("");
+    setNotice({
+      title: "Connecting Ready",
+      body: "Approve the connection in the Ready X extension (or unlock the wallet). Private and public sends both need a live signing session — Philoxenia login alone is not enough.",
+      tone: "info",
+    });
+    try {
+      await connectWallet();
+      setNotice({
+        title: "Ready connected",
+        body: pendingPayRef.current
+          ? "Finishing your transfer…"
+          : "Wallet is ready to sign. You can send now.",
+        tone: "info",
+        primaryLabel: "Got it",
+      });
+    } catch (err) {
+      pendingPayRef.current = null;
+      setNotice({
+        title: "Could not connect Ready",
+        body: formatWalletError(err),
+        tone: "error",
+        primaryLabel: "Try again",
+      });
+    } finally {
+      setReconnecting(false);
+    }
+  }
+
+  const executeTransfer = useCallback(
+    async (
+      liveAccount: NonNullable<typeof account>,
+      payAmount: string,
+      payAsset: PaymentAsset,
+      mode: "private" | "public"
+    ) => {
+      if (!conversation) return;
+      setBusy(true);
+      setError("");
+      try {
+        const txHash =
+          mode === "private"
+            ? await transferToFriendPrivate(
+                liveAccount,
+                conversation.friend.walletAddress,
+                payAmount,
+                payAsset
+              )
+            : await transferToFriend(
+                liveAccount,
+                conversation.friend.walletAddress,
+                payAmount,
+                payAsset
+              );
+        await api.post(`/messages/${params.friendId}/transfer`, {
+          amount: payAmount,
+          asset: payAsset,
+          txHash,
+          privacyMode: mode,
+        });
+        setAmount("");
+        setShowPay(false);
+        pendingPayRef.current = null;
+        setNotice(null);
+        await load();
+      } catch (err) {
+        const msg = formatWalletError(err);
+        const needsReconnect =
+          /not connected|reconnect|wallet api|Ready X|STRK20|privacy|signing|session/i.test(
+            msg
+          );
+        setNotice({
+          title: needsReconnect ? "Ready session needed" : "Transfer failed",
+          body: msg,
+          tone: "error",
+          primaryLabel: needsReconnect ? "Connect Ready" : "Dismiss",
+        });
+        setError(msg);
+      } finally {
+        setBusy(false);
+      }
+    },
+    [conversation, load, params.friendId]
+  );
+
+  useEffect(() => {
+    const pending = pendingPayRef.current;
+    if (!pending || !account || !conversation) return;
+    pendingPayRef.current = null;
+    setNotice({
+      title: "Sending…",
+      body: "Ready is connected — completing your transfer. Approve in the wallet if prompted.",
+      tone: "info",
+    });
+    void executeTransfer(account, pending.amount, pending.asset, pending.mode);
+  }, [account, conversation, executeTransfer]);
+
   async function sendTransfer(e: FormEvent) {
     e.preventDefault();
-    if (!conversation || !account) {
-      setError("Connect your wallet to send tokens.");
+    if (!conversation) return;
+    const payAmount = amount.trim();
+    if (!payAmount) return;
+
+    if (!account) {
+      pendingPayRef.current = {
+        amount: payAmount,
+        asset,
+        mode: payMode,
+      };
+      await reconnectReady();
       return;
     }
-    setBusy(true);
-    setError("");
-    try {
-      const txHash =
-        payMode === "private"
-          ? await transferToFriendPrivate(
-              account,
-              conversation.friend.walletAddress,
-              amount,
-              asset
-            )
-          : await transferToFriend(
-              account,
-              conversation.friend.walletAddress,
-              amount,
-              asset
-            );
-      await api.post(`/messages/${params.friendId}/transfer`, {
-        amount,
-        asset,
-        txHash,
-        privacyMode: payMode,
-      });
-      setAmount("");
-      setShowPay(false);
-      await load();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Transfer failed");
-    } finally {
-      setBusy(false);
-    }
+
+    await executeTransfer(account, payAmount, asset, payMode);
   }
 
   function onComposerKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
@@ -311,6 +405,13 @@ export default function ChatThreadPage() {
                   : "Normal ERC-20 transfer. Amount and both wallet addresses are visible on-chain."}
               </p>
 
+              {!walletReady && (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
+                  Philoxenia is signed in, but Ready is not connected for
+                  signing. Connect Ready before sending (Public or Private).
+                </div>
+              )}
+
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="block text-sm">
                   Amount
@@ -334,13 +435,31 @@ export default function ChatThreadPage() {
                   </select>
                 </label>
               </div>
-              <Button type="submit" disabled={busy || !amount}>
-                {busy
-                  ? "Sending…"
-                  : payMode === "private"
-                    ? `Send ${asset} privately`
-                    : `Send ${asset} publicly`}
-              </Button>
+              {!walletReady ? (
+                <Button
+                  type="button"
+                  disabled={reconnecting || !amount.trim()}
+                  onClick={() => {
+                    if (!amount.trim()) return;
+                    pendingPayRef.current = {
+                      amount: amount.trim(),
+                      asset,
+                      mode: payMode,
+                    };
+                    void reconnectReady();
+                  }}
+                >
+                  {reconnecting ? "Connecting Ready…" : "Connect Ready to send"}
+                </Button>
+              ) : (
+                <Button type="submit" disabled={busy || !amount.trim()}>
+                  {busy
+                    ? "Sending…"
+                    : payMode === "private"
+                      ? `Send ${asset} privately`
+                      : `Send ${asset} publicly`}
+                </Button>
+              )}
             </form>
           </div>
         )}
@@ -436,7 +555,26 @@ export default function ChatThreadPage() {
         </form>
       </div>
 
-      {error && <p className="mt-3 text-sm text-red-700">{error}</p>}
+      {error && !notice && (
+        <p className="mt-3 text-sm text-red-700">{error}</p>
+      )}
+
+      <ActionNotice
+        open={Boolean(notice)}
+        title={notice?.title ?? ""}
+        body={notice?.body ?? ""}
+        tone={notice?.tone ?? "warn"}
+        busy={reconnecting || busy}
+        primaryLabel={notice?.primaryLabel}
+        onPrimary={() => {
+          if (notice?.primaryLabel === "Connect Ready" || notice?.primaryLabel === "Try again") {
+            void reconnectReady();
+            return;
+          }
+          setNotice(null);
+        }}
+        onSecondary={() => setNotice(null)}
+      />
     </Shell>
   );
 }
