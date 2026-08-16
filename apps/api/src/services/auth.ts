@@ -92,11 +92,19 @@ export async function verifyAuthSignature(
 
   const provider = getRpcProvider();
 
-  const isValid = await provider.verifyMessageInStarknet(
-    typedData,
-    signature,
-    normalized
-  );
+  let isValid = false;
+  try {
+    isValid = await provider.verifyMessageInStarknet(
+      typedData,
+      signature,
+      normalized
+    );
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
+    throw new Error(
+      `Could not verify signature on Starknet (${detail}). Confirm Ready is on mainnet and try again.`
+    );
+  }
 
   if (!isValid) {
     throw new Error("Invalid signature");

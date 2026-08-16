@@ -219,7 +219,7 @@ export function AuthModal() {
                 disabled={!canSign}
                 onClick={() => void handleSignIn()}
               >
-                {waiting
+                {signing || (waiting && challengeReady)
                   ? "Approve in Ready…"
                   : !account
                     ? "Wallet loading…"

@@ -17,7 +17,7 @@ import { api } from "./api";
 import { openReadyForSignRequest } from "./ready-mobile";
 import { snip12ChainId } from "./starknet-config";
 import { pickReadyConnector } from "./wallet-connectors";
-import { formatWalletError } from "./wallet-errors";
+import { formatWalletError, normalizeWalletSignature } from "./wallet-errors";
 
 interface AuthContextValue {
   user: User | null;
@@ -178,17 +178,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             nonce: string;
             expiresAt: string;
           }>("/auth/challenge", { walletAddress: address });
-      challengeRef.current = null;
-      setChallengeReady(false);
+
+      // Keep challenge until verify succeeds so a failed attempt can retry
+      // without getting stuck on "Preparing signature…".
+      challengeRef.current = { ...challenge, walletAddress: address };
+      setChallengeReady(true);
 
       const typedData = buildPhiloxeniaAuthTypedData({
         nonce: challenge.nonce,
         chainId: snip12ChainId,
       });
 
-      let signature: Awaited<
-        ReturnType<NonNullable<typeof account>["signMessage"]>
-      >;
+      let signature: unknown;
       try {
         // On mobile WC, starknetkit opens argent://app/wc/request. After an
         // await (challenge fetch), iOS may block that — reopen explicitly.
@@ -204,24 +205,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(formatWalletError(err));
       }
 
-      const sigArray = Array.isArray(signature)
-        ? signature.map(String)
-        : [String(signature.r), String(signature.s)];
+      let sigArray: string[];
+      try {
+        sigArray = normalizeWalletSignature(signature);
+      } catch (err) {
+        throw new Error(formatWalletError(err));
+      }
 
-      const session = await api.post<{ token: string; user: User }>(
-        "/auth/verify",
-        {
-          walletAddress: address,
-          signature: sigArray,
-          displayName,
+      try {
+        const session = await api.post<{ token: string; user: User }>(
+          "/auth/verify",
+          {
+            walletAddress: address,
+            signature: sigArray,
+            displayName,
+          }
+        );
+
+        challengeRef.current = null;
+        setChallengeReady(false);
+        setToken(session.token);
+        setUser(session.user);
+        api.setToken(session.token);
+        persistSession(session.token, session.user);
+        setSignInOpen(false);
+      } catch (err) {
+        // Consume used/invalid challenge and mint a fresh one for the next tap.
+        challengeRef.current = null;
+        setChallengeReady(false);
+        try {
+          const next = await api.post<{
+            message: string;
+            nonce: string;
+            expiresAt: string;
+          }>("/auth/challenge", { walletAddress: address });
+          challengeRef.current = { ...next, walletAddress: address };
+          setChallengeReady(true);
+        } catch {
+          // leave challengeReady false; UI will show Preparing until address effect retries
         }
-      );
-
-      setToken(session.token);
-      setUser(session.user);
-      api.setToken(session.token);
-      persistSession(session.token, session.user);
-      setSignInOpen(false);
+        throw new Error(formatWalletError(err));
+      }
     },
     [address, account]
   );
