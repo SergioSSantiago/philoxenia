@@ -46,6 +46,7 @@ In-app notifications (polled ~2.5s while the tab is visible) for friend request 
 |--------|------|-------------|
 | GET | `/friends` | Friends + pending incoming/outgoing |
 | GET | `/friends/search?q=` | Search by **wallet address only** (min 2 chars) |
+| GET | `/friends/:id` | Friend profile + their listings (must be friends) |
 | PATCH | `/users/me` | Update display name (1–64 chars) |
 | POST | `/friends/request` | Send request `{ toUserId }` |
 | POST | `/friends/accept/:id` | Accept incoming request |
@@ -53,6 +54,18 @@ In-app notifications (polled ~2.5s while the tab is visible) for friend request 
 | POST | `/friends/cancel/:id` | Cancel outgoing pending request |
 | POST | `/friends/remove/:id` | Remove friendship |
 | DELETE | `/friends/:id` | Remove friendship (legacy) |
+
+## Friend profile (web)
+
+`/friends/[id]` — identity, wallet, listings from that friend, and **Share invite & earn** when the listing has a connector %.
+
+Opened by tapping **name** or **wallet** on:
+
+- `/friends` (accepted friends)
+- `/messages` inbox
+- `/messages/[friendId]` chat header
+
+Chat remains available via Message buttons / preview / ›.
 
 ## Authorization rules
 
@@ -68,6 +81,7 @@ Defined in `apps/api/src/lib/authorization.ts`:
 ## Discovery
 
 - **Network listings** (`GET /my-network/listings`) — listings from friends only.
+- **Friend listings** (`GET /friends/:id`) — one friend’s places (same visibility rule).
 - **No global directory** — there is no endpoint to browse all listings.
 
 ## Invitation interaction
@@ -84,11 +98,14 @@ When a guest opens an invite but is not yet friends with the host:
 |---------|--------|
 | Friend requests + friendships | Implemented |
 | Search users | Implemented (wallet address only) |
+| Friend profile + listings | Implemented (`/friends/[id]`) |
+| Connector share from social surfaces | Implemented |
 | On-chain social graph | Not planned for MVP |
 | Block lists / privacy controls | Not implemented |
 
 ## Related
 
+- [connectors.md](./connectors.md) — earn by introducing guests
 - [listings.md](./listings.md) — visibility rules
 - [invitations.md](./invitations.md) — connector flow
 - [messages.md](./messages.md) — friend chat + peer transfers

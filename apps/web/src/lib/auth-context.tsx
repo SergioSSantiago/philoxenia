@@ -29,6 +29,8 @@ interface AuthContextValue {
   openSignIn: () => void;
   closeSignIn: () => void;
   connectWallet: () => Promise<void>;
+  /** Disconnect then connect again — use when Private/STRK20 needs a live API session. */
+  reconnectWallet: () => Promise<void>;
   disconnect: () => void;
   signIn: (displayName?: string) => Promise<void>;
   refreshUser: () => Promise<User>;
@@ -106,9 +108,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const connectWallet = useCallback(async () => {
     const connector = pickReadyConnector(connectors);
-    if (!connector) return;
+    if (!connector) {
+      throw new Error(
+        "Ready X not found. Install Ready X in Chrome (Smart Wallet + Private), or open Philoxenia in the Ready X app browser on iPhone."
+      );
+    }
     await connectAsync({ connector });
   }, [connectAsync, connectors]);
+
+  /**
+   * Force a fresh Ready session. Plain connect is a no-op when already
+   * connected — Private STRK needs a real re-approve so wallet API ≥ 0.10
+   * is rediscovered.
+   */
+  const reconnectWallet = useCallback(async () => {
+    const connector = pickReadyConnector(connectors);
+    if (!connector) {
+      throw new Error(
+        "Ready X not found. Install Ready X in Chrome (Smart Wallet + Private), or open Philoxenia in the Ready X app browser on iPhone."
+      );
+    }
+    try {
+      disconnectWallet();
+    } catch {
+      // already disconnected
+    }
+    await new Promise((r) => setTimeout(r, 350));
+    await connectAsync({ connector });
+  }, [connectAsync, connectors, disconnectWallet]);
 
   const refreshUser = useCallback(async () => {
     const fresh = await api.get<User>("/auth/me");
@@ -270,6 +297,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       openSignIn,
       closeSignIn,
       connectWallet,
+      reconnectWallet,
       disconnect,
       signIn,
       refreshUser,
@@ -284,6 +312,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       openSignIn,
       closeSignIn,
       connectWallet,
+      reconnectWallet,
       disconnect,
       signIn,
       refreshUser,

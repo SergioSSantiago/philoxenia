@@ -115,7 +115,7 @@ function notCapableReason(versions: string[], hadWallet: boolean): string {
   if (versions.length === 0) {
     return fx
       ? "Ready connected but did not report wallet API versions. Firefox has no Ready X — use Chrome + Ready X with Smart Wallet + Private, or the Ready X app browser on iPhone."
-      : "Ready connected but did not report wallet API versions. Enable Smart Wallet + Private in Ready X (Chrome), or open Philoxenia in the Ready X app browser on iPhone.";
+      : "Ready is connected for login, but Private STRK needs Ready X with Smart Wallet + Private enabled (wallet API ≥ 0.10). Unlock Ready X, turn those on, then tap Reconnect Ready. If it still fails, refresh this page.";
   }
 
   return `Ready wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private). Update Ready X${fx ? " — Firefox has no Ready X; switch to Chrome or the Ready X app browser" : ""}, enable Smart Wallet + Private, and reconnect.`;
@@ -159,7 +159,7 @@ export async function resolvePrivacyWallet(
 
   if (!selected) return null;
 
-  // Wake the extension before version probe (helps Firefox).
+  // Wake the extension before version probe (helps Firefox / cold inject).
   try {
     await walletV6.requestAccounts(selected);
   } catch {
@@ -167,12 +167,23 @@ export async function resolvePrivacyWallet(
   }
 
   let walletApiVersions: string[] = [];
-  try {
-    walletApiVersions = (await walletV6.supportedWalletApi(selected)).map(
-      String
-    );
-  } catch {
-    walletApiVersions = [];
+  for (let attempt = 0; attempt < 4; attempt++) {
+    try {
+      walletApiVersions = (await walletV6.supportedWalletApi(selected)).map(
+        String
+      );
+      if (walletApiVersions.length > 0) break;
+    } catch {
+      walletApiVersions = [];
+    }
+    if (attempt < 3) {
+      await new Promise((r) => setTimeout(r, 280 * (attempt + 1)));
+      try {
+        await walletV6.requestAccounts(selected);
+      } catch {
+        // retry versions
+      }
+    }
   }
 
   const privacyCapable = isStrk20WalletApi(walletApiVersions);

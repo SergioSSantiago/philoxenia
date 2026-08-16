@@ -39,8 +39,8 @@ Only friends can message each other. Each user publishes `messagePublicKey` (dev
 
 ## Web
 
-- `/messages` — sealed inbox list
-- `/messages/[friendId]` — sealed composer + pay sheet
+- `/messages` — sealed inbox list. Tap **name** or **wallet** → friend’s listings (`/friends/[id]`); tap preview or › → chat.
+- `/messages/[friendId]` — sealed composer + pay sheet. Header name/wallet → same friend profile (share listings as connector).
 - Keys live in `localStorage` per wallet (`philoxenia_msg_priv_*`); never uploaded
 
 ## On-chain (Phase B)
@@ -54,6 +54,7 @@ Optional checkbox in the thread UI anchors a ciphertext hash via Ready → priva
 ## Related
 
 - [social-graph.md](./social-graph.md)
+- [connectors.md](./connectors.md) — share that friend’s listings and earn
 - [bookings.md](./bookings.md)
 - [payments.md](./payments.md)
 - [message-mailbox.md](./message-mailbox.md)

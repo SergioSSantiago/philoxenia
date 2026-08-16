@@ -93,7 +93,7 @@ function NewBookingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const listingId = searchParams.get("listing") ?? "";
-  const { token, user, connectWallet } = useAuth();
+  const { token, user, reconnectWallet } = useAuth();
   const { account, address } = useAccount();
   const [listing, setListing] = useState<Listing | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -219,7 +219,7 @@ function NewBookingForm() {
     setReconnecting(true);
     setError("");
     try {
-      await connectWallet();
+      await reconnectWallet();
     } catch (err) {
       setError(
         err instanceof Error

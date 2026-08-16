@@ -25,9 +25,11 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 
 - A **social trust network** for private stays
 - **Friend-based discovery** — see listings from friends, not strangers
-- **Connector introductions** — friends share listings with people outside the network
+- **Connectors (key growth loop)** — friends introduce guests to host listings and **earn a % when the stay settles**; this is how the private network expands without a public marketplace
 - **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct bookings)
 - **Payment privacy** — STRK20 when Ready X has Smart Wallet + Private enabled
+- **Sealed chat + peer pay** — E2E messages between friends; public or private peer transfers
+- **STRK ↔ DAI swap** — public AVNU swap on Profile (and from Home)
 
 ## What Philoxenia is not
 
@@ -35,6 +37,14 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - No public marketplace, followers, or open search
 - No protocol token or NFTs
 - No custodial wallets or internal balances
+
+## Why connectors matter
+
+Philoxenia has no public listing directory. **Growth is introductions.** A connector is a friend of the host who shares an invite link with someone they trust. When that guest books through the link, the connector is paid on settle.
+
+That loop is the product: hosts fill nights, connectors earn for good intros, guests arrive with a social vouch — and Philoxenia only takes a cut of the connector reward (never of direct host↔guest stays).
+
+See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend profiles, share surfaces, and fee examples.
 
 ## How you sign in
 
@@ -58,17 +68,19 @@ On iPhone you **must** use the browser inside the **Ready X** wallet app. Openin
 
 | Role | Description |
 |------|-------------|
-| **Host** | Creates listings; receives accommodation payment on settlement |
+| **Host** | Creates listings; sets connector %; receives accommodation payment on settlement |
 | **Guest** | Books and funds stays; must be friends with the host (or become friends after an invite) |
-| **Connector** | A friend who shares a listing; earns a configurable % of the booking total |
+| **Connector** | **Key role** — a friend who shares a listing invite; earns the host’s configured % of the booking total, paid to their wallet on settle |
+
+One person can be host on their places, guest on friends’ places, and connector when they introduce others.
 
 ## Core flow (acceptance scenario)
 
-1. Bob lists an apartment in Florence (**DAI**/night, 5% connector reward) and opens nights on the calendar.
-2. Alice (Bob's friend) shares the listing with Carlos via invite link.
+1. Bob lists an apartment in Florence (**DAI**/night, **5% connector reward**) and opens nights on the calendar.
+2. Alice (Bob's friend) opens **Earnings** or Bob’s friend profile, taps **Share invite & earn**, and sends the link to Carlos.
 3. Carlos creates an account, requests friendship with Bob, Bob accepts.
 4. Carlos selects nights (need not be consecutive) and pays in **STRK** (live FX) or **DAI** (1:1).
-5. Pay = fund + settle in one tx → host (+ connector) receive immediately; booking is `completed`.
+5. Pay = fund + settle in one tx → host (+ connector) receive immediately; booking is `completed`. Alice sees the reward under `/connector`.
 6. Cancel is social (Messages + voluntary peer return); nights are freed when marked cancelled.
 
 ## Fee model
@@ -99,13 +111,16 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 
 - Wallet authentication via **Ready X in-app browser** (SNIP-12) — ideal path for privacy pay
 - Friend requests and friendships (search by wallet address)
-- Profile: display name + STRK/DAI balances
+- Friend profile (`/friends/[id]`): listings + share-as-connector; name/wallet links from Friends & Messages
+- **Earnings (`/connector`)**: how connectors earn, shareable friend listings, reward history
+- Profile: display name, STRK/DAI balances, shield/unshield, **AVNU STRK ↔ DAI swap**
 - Private listings (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution
 - Payment initiation: **Private** (STRK20 anonymizer, default when wallet API ≥ 0.10) or **Public** ERC-20
 - Settle is atomic with pay (host + connector paid immediately)
-- Shield / unshield on Profile (Ready X / wallet API ≥ 0.10 — not legacy Firefox Ready)
+- Sealed E2E chat + peer transfers (public or private STRK)
+- On-chain verify before booking confirm; rate limits + audit logs
 
 **On-chain (mainnet):** `BookingEscrow` + `BookingEscrowAnonymizer` — see [deploy-escrow.md](./deploy-escrow.md) and [booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md).
 
@@ -114,10 +129,12 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 ## Related docs
 
 - [brand.md](./brand.md)
+- [connectors.md](./connectors.md) — **earn as a connector (key loop)**
 - [social-graph.md](./social-graph.md)
 - [listings.md](./listings.md)
 - [invitations.md](./invitations.md)
 - [bookings.md](./bookings.md)
+- [messages.md](./messages.md)
 - [payments.md](./payments.md)
 - [privacy.md](./privacy.md)
 - [strk20.md](./strk20.md)

@@ -70,14 +70,17 @@ philoxenia/
 | `/` | Landing. Brand-first hero + live network stats; header brand links here |
 | `/home` | App home: compact wallet/balances + interactive globe of accessible listings |
 | `/auth` | Legacy redirect to `/home` |
-| `/profile` | Display name, STRK/DAI balances, disconnect |
-| `/friends` | Friends; search by wallet address only |
-| `/messages`, `/messages/[friendId]` | Chat + voluntary peer DAI/STRK |
+| `/profile` | Display name, STRK/DAI balances, shield/unshield, AVNU STRK ↔ DAI swap |
+| `/friends` | Friends; search by wallet; tap name/wallet → friend listings |
+| `/friends/[id]` | Friend profile: their listings + share-as-connector |
+| `/messages`, `/messages/[friendId]` | Sealed chat + peer pay; name/wallet → friend listings |
 | `/my-listings`, `/listings/new` | Host listing CRUD + map + availability calendar |
-| `/listings/[id]` | Listing detail (authorized viewers) |
+| `/listings/[id]` | Listing detail (authorized viewers) + share |
 | `/invite/[token]` | Invitation landing |
 | `/bookings`, `/bookings/new`, `/bookings/[id]` | Book nights (non-contiguous OK); pay STRK or DAI |
-| `/connector` | Connector earnings |
+| `/connector` | **Earn as connector** — explain model, share friend listings, reward history |
+
+Shell: header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`).
 
 ## Shared types (`packages/shared`)
 

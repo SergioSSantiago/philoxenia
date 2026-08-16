@@ -46,7 +46,7 @@ function BalanceRow({
 
 function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
   const { address, isConnected } = useAccount();
-  const { user, connectWallet } = useAuth();
+  const { user, reconnectWallet } = useAuth();
 
   // Public ERC20 balances only need an address. Prefer the live Ready
   // connection; fall back to the Philoxenia session wallet (JWT can outlive
@@ -112,19 +112,17 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         error={Boolean(dai.error)}
       />
       {!isConnected && user && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
-          Showing public balances from your Philoxenia session. Ready is not
-          connected for signing — reconnect to shield, pay privately, or settle.
-          <div className="mt-2">
-            <button
-              type="button"
-              className="font-medium text-accent underline-offset-2 hover:underline"
-              onClick={() => void connectWallet()}
-            >
-              Connect Ready X
-            </button>
-          </div>
-        </div>
+        <p className="text-xs leading-relaxed text-muted">
+          Public balances from your session.{" "}
+          <button
+            type="button"
+            className="font-medium text-accent underline-offset-2 hover:underline"
+            onClick={() => void reconnectWallet()}
+          >
+            Connect Ready X
+          </button>{" "}
+          only when you need to sign (shield, private pay, settle).
+        </p>
       )}
       {compact && STRK20_PRIVACY_ENABLED && (
         <p className="text-xs text-muted">STRK20 privacy enabled for STRK</p>

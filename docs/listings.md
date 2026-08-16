@@ -15,7 +15,7 @@ Hosts create **private listings** visible only to themselves and their friends.
 | `pricePerNight` | Default DAI price; nights can override per day on the calendar |
 | `minStay`, `maxStay` | Derived from open nights (not host-entered) |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow) |
-| `connectorRewardPercent` | 0–100; connector's share when an introduction exists |
+| `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Hosts: set > 0 so friends have a reason to share ([connectors.md](./connectors.md)) |
 | `photos` | 1–8 compressed images (data URLs or https) |
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar |
 | `availability` | Legacy contiguous windows (still accepted) |
@@ -52,11 +52,14 @@ Everyone else ──► 404 (listing unavailable)
 | POST | `/my-listings` | Yes | Create listing (map pin + photos required) |
 | GET | `/my-listings` | Yes | Host's own listings |
 | GET | `/my-network/listings` | Yes | Friends' listings |
+| GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
 | GET | `/shared-listings` | Yes | Listings shared with user via introductions |
 | GET | `/listings/:id` | Yes | Detail (if authorized) |
-| POST | `/listings/:id/share` | Yes | Generate invite link |
+| POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
+| GET | `/connector/earnings` | Yes | Your connector reward history |
 
 ## Related
 
+- [connectors.md](./connectors.md) — share friends’ places and earn
 - [invitations.md](./invitations.md)
 - [bookings.md](./bookings.md)

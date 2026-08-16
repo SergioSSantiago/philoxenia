@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAccount } from "@starknet-react/core";
 import { ActionNotice } from "@/components/action-notice";
 import { Button } from "@/components/ui";
@@ -10,6 +10,16 @@ import { diagnosePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 import { STRK20_PRIVACY_ENABLED } from "@/lib/tokens";
 import { formatWalletError } from "@/lib/wallet-errors";
 
+type NoticeState = {
+  title: string;
+  body: string;
+  tone: "warn" | "error" | "info";
+  primaryLabel?: string;
+  secondaryLabel?: string;
+  /** Secondary closes notice unless reload is set. */
+  reloadOnSecondary?: boolean;
+};
+
 /**
  * Shield / unshield STRK via Ready WalletAccountV6.
  * Deposit amounts are public ERC-20 legs — labeled honestly.
@@ -17,7 +27,7 @@ import { formatWalletError } from "@/lib/wallet-errors";
  */
 export function Strk20PrivacyPanel() {
   const { account, address } = useAccount();
-  const { user, connectWallet } = useAuth();
+  const { reconnectWallet } = useAuth();
   const [capable, setCapable] = useState(false);
   const [hint, setHint] = useState("");
   const [privateBal, setPrivateBal] = useState<string | null>(null);
@@ -25,13 +35,7 @@ export function Strk20PrivacyPanel() {
   const [busy, setBusy] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
   const [msg, setMsg] = useState("");
-  const [notice, setNotice] = useState<{
-    title: string;
-    body: string;
-    tone: "warn" | "error" | "info";
-    primaryLabel?: string;
-  } | null>(null);
-  const autoConnectTried = useRef(false);
+  const [notice, setNotice] = useState<NoticeState | null>(null);
 
   const walletReady = Boolean(account && address);
 
@@ -40,7 +44,7 @@ export function Strk20PrivacyPanel() {
       setCapable(false);
       setHint("");
       setPrivateBal(null);
-      return;
+      return { capable: false, reason: null as string | null };
     }
     const provider = createStrk20Provider(account, "STRK");
     const diag = await diagnosePrivacyWallet(address);
@@ -52,6 +56,7 @@ export function Strk20PrivacyPanel() {
     } else {
       setPrivateBal(null);
     }
+    return { capable: diag.capable, reason: diag.reason };
   }, [account, address]);
 
   useEffect(() => {
@@ -63,39 +68,60 @@ export function Strk20PrivacyPanel() {
     setReconnecting(true);
     setMsg("");
     setNotice({
-      title: "Connecting Ready",
-      body: "Approve the connection in Ready X (unlock if needed). Shielded STRK needs a live signing session — Philoxenia login alone cannot manage private balances.",
+      title: "Reconnecting Ready",
+      body: "Approve the connection in Ready X (unlock if asked). We disconnect first so Private STRK can rediscover wallet API ≥ 0.10 — a silent reconnect does nothing when Ready is already linked.",
       tone: "info",
     });
     try {
-      await connectWallet();
-      setNotice({
-        title: "Ready connected",
-        body: "You can shield and unshield STRK now.",
-        tone: "info",
-        primaryLabel: "Got it",
-      });
+      await reconnectWallet();
+      // starknet-react + extension inject settle after connectAsync
+      let lastReason: string | null = null;
+      let ok = false;
+      for (let i = 0; i < 12; i++) {
+        await new Promise((r) => setTimeout(r, 280));
+        const diag = await diagnosePrivacyWallet();
+        lastReason = diag.reason;
+        if (diag.capable) {
+          ok = true;
+          break;
+        }
+      }
+      const refreshed = await refreshPrivate();
+      ok = ok || refreshed.capable;
+      lastReason = refreshed.reason ?? lastReason;
+
+      if (ok) {
+        setNotice({
+          title: "Private STRK ready",
+          body: "Ready X reported a privacy-capable session. You can shield and unshield now.",
+          tone: "info",
+          primaryLabel: "Got it",
+        });
+      } else {
+        setNotice({
+          title: "Still not privacy-capable",
+          body:
+            lastReason ??
+            "Ready connected, but Private STRK needs Ready X with Smart Wallet + Private (API ≥ 0.10).",
+          tone: "warn",
+          primaryLabel: "Try again",
+          secondaryLabel: "Refresh page",
+          reloadOnSecondary: true,
+        });
+      }
     } catch (err) {
       setNotice({
-        title: "Could not connect Ready",
+        title: "Could not reconnect Ready",
         body: formatWalletError(err),
         tone: "error",
         primaryLabel: "Try again",
+        secondaryLabel: "Refresh page",
+        reloadOnSecondary: true,
       });
     } finally {
       setReconnecting(false);
     }
-  }, [connectWallet]);
-
-  // If the user is signed into Philoxenia but Ready is idle, force reconnect once.
-  useEffect(() => {
-    if (!STRK20_PRIVACY_ENABLED) return;
-    if (!user) return;
-    if (walletReady) return;
-    if (autoConnectTried.current) return;
-    autoConnectTried.current = true;
-    void reconnectReady();
-  }, [user, walletReady, reconnectReady]);
+  }, [reconnectWallet, refreshPrivate]);
 
   async function run(action: "shield" | "unshield") {
     if (!account || !address) {
@@ -126,7 +152,9 @@ export function Strk20PrivacyPanel() {
         title: needsReconnect ? "Ready session needed" : "STRK20 action failed",
         body,
         tone: "error",
-        primaryLabel: needsReconnect ? "Connect Ready" : "Dismiss",
+        primaryLabel: needsReconnect ? "Reconnect Ready" : "Dismiss",
+        secondaryLabel: needsReconnect ? "Refresh page" : "Dismiss",
+        reloadOnSecondary: needsReconnect,
       });
     } finally {
       setBusy(false);
@@ -162,18 +190,32 @@ export function Strk20PrivacyPanel() {
           </div>
         ) : !capable ? (
           <div className="space-y-3">
-            <p className="text-xs leading-relaxed text-muted">
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
               {hint ||
-                "This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10). Use Public ERC-20 on booking pay, or update Ready X with Smart Wallet + Private."}
-            </p>
-            <Button
-              type="button"
-              variant="secondary"
-              disabled={reconnecting}
-              onClick={() => void reconnectReady()}
-            >
-              {reconnecting ? "Reconnecting…" : "Reconnect Ready"}
-            </Button>
+                "This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10)."}
+            </div>
+            <ol className="list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted">
+              <li>Unlock Ready X in Chrome (not Firefox).</li>
+              <li>Enable Smart Wallet and Private.</li>
+              <li>Tap Reconnect Ready and approve again.</li>
+            </ol>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button
+                type="button"
+                disabled={reconnecting}
+                onClick={() => void reconnectReady()}
+              >
+                {reconnecting ? "Reconnecting…" : "Reconnect Ready"}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={reconnecting}
+                onClick={() => window.location.reload()}
+              >
+                Refresh page
+              </Button>
+            </div>
           </div>
         ) : (
           <>
@@ -195,7 +237,7 @@ export function Strk20PrivacyPanel() {
               <Button
                 type="button"
                 className="min-h-10 px-4 text-xs"
-                disabled={busy}
+                disabled={busy || reconnecting}
                 onClick={() => void run("shield")}
               >
                 Shield
@@ -204,7 +246,7 @@ export function Strk20PrivacyPanel() {
                 type="button"
                 variant="secondary"
                 className="min-h-10 px-4 text-xs"
-                disabled={busy}
+                disabled={busy || reconnecting}
                 onClick={() => void run("unshield")}
               >
                 Unshield
@@ -222,17 +264,26 @@ export function Strk20PrivacyPanel() {
         tone={notice?.tone ?? "warn"}
         busy={reconnecting || busy}
         primaryLabel={notice?.primaryLabel}
+        secondaryLabel={notice?.secondaryLabel ?? "Dismiss"}
         onPrimary={() => {
+          const label = notice?.primaryLabel;
           if (
-            notice?.primaryLabel === "Connect Ready" ||
-            notice?.primaryLabel === "Try again"
+            label === "Connect Ready" ||
+            label === "Reconnect Ready" ||
+            label === "Try again"
           ) {
             void reconnectReady();
             return;
           }
           setNotice(null);
         }}
-        onSecondary={() => setNotice(null)}
+        onSecondary={() => {
+          if (notice?.reloadOnSecondary) {
+            window.location.reload();
+            return;
+          }
+          setNotice(null);
+        }}
       />
     </>
   );

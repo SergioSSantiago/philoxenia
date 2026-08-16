@@ -126,8 +126,8 @@ export default function MessagesPage() {
               : "Preparing sealed keys…"}
           </p>
           <p className="mt-0.5 text-muted">
-            Content stays E2E. Friend links still live in Philoxenia’s social
-            graph until on-chain mailbox discovery (STRK20 Phase B/C).
+            Messages are sealed on your device. Who you chat with still comes
+            from your Philoxenia friends list.
           </p>
           {sealErr && (
             <p className="mt-1 text-red-700">{sealErr}</p>

@@ -41,7 +41,7 @@ Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow
 
 ## Swap STRK ↔ DAI (Profile)
 
-Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile**. Ready must be connected to sign. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
+Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (also linked from Home). Ready must be connected to sign. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
 
 Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.  
 Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/tokens.ts`.
@@ -69,3 +69,10 @@ Friends can send DAI or STRK directly from chat (`peer-transfer.ts`) — used fo
 ## Live FX
 
 `GET /rates/strk-dai` (optional `?fresh=1`) — CoinGecko USD prices → `strkPerDai = usdDai / usdStrk`. Quote and pay refresh with `fresh: true`.
+
+## Related
+
+- [connectors.md](./connectors.md) — connector rewards paid on settle
+- [bookings.md](./bookings.md)
+- [strk20.md](./strk20.md)
+- [deploy-escrow.md](./deploy-escrow.md)

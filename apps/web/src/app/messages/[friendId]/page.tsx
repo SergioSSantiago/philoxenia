@@ -47,7 +47,7 @@ type DisplayMessage = ChatMessage & {
 export default function ChatThreadPage() {
   const params = useParams<{ friendId: string }>();
   const router = useRouter();
-  const { token, user, connectWallet } = useAuth();
+  const { token, user, reconnectWallet } = useAuth();
   const { account, address } = useAccount();
   const { ready: sealedReady, ensure: ensureSealed } = useSealedMessaging();
   const [conversation, setConversation] = useState<ChatConversation | null>(
@@ -198,7 +198,7 @@ export default function ChatThreadPage() {
       tone: "info",
     });
     try {
-      await connectWallet();
+      await reconnectWallet();
       setNotice({
         title: "Ready connected",
         body: pendingPayRef.current

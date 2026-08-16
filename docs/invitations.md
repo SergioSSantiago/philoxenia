@@ -6,6 +6,8 @@
 
 Connectors introduce guests to host listings via **opaque share links**. Several people can share the same listing; each link carries its own connector.
 
+Introductions are the growth engine of Philoxenia — see **[connectors.md](./connectors.md)** for why earning as a connector matters and where to share in the UI.
+
 ## Flow
 
 ```
@@ -40,12 +42,22 @@ Host or friend of host
 | Status | `active`, `expired`, or `revoked` |
 | URL | `/invite/{token}` |
 
+## Where users create shares (web)
+
+| Route | Action |
+|-------|--------|
+| `/connector` | Share any friend listing with earn % highlighted |
+| `/friends/[id]` | Share that friend’s listings |
+| `/listings/[id]` | Share this listing (host or friend) |
+
 ## API
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | POST | `/listings/:id/share` | Yes | Create share; returns `hasConnector` |
 | GET | `/invite/:token` | Optional | Resolve invite; records introduction if logged in |
+| GET | `/connector/earnings` | Yes | Connector reward history |
+| GET | `/friends/:id` | Yes | Friend + their listings (share from profile) |
 
 ## Invite gate
 
@@ -56,5 +68,6 @@ Host or friend of host
 
 ## Related
 
+- [connectors.md](./connectors.md) — earn as a connector
 - [social-graph.md](./social-graph.md)
 - [bookings.md](./bookings.md)

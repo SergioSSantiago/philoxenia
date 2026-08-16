@@ -28,8 +28,10 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 
 - A social trust network for private hospitality
 - Friend-based discovery (no public listing directory)
-- Trustless settlement via Cairo escrow (optional connector; Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
+- **Connectors** — friends introduce guests and **earn a % on settle**; the growth loop of the product ([docs/connectors.md](./docs/connectors.md))
+- Trustless settlement via Cairo escrow (Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
 - STRK20 private payments with **Ready X** (Smart Wallet + Private enabled)
+- Sealed chat, peer transfers, AVNU STRK ↔ DAI swap
 - Wallet paths that work: **Chrome + Ready X extension** (desktop), or **Ready X app browser** (especially iPhone)
 
 ## What it is not
@@ -175,15 +177,18 @@ Key variables:
 
 ## Acceptance scenario
 
-Bob lists an apartment in Florence (150 STRK/night, 5% connector reward).
-Alice (Bob's friend) shares the listing with Carlos.
+Bob lists an apartment in Florence (DAI/night, **5% connector reward**).
+Alice (Bob's friend) opens **Earnings** or Bob’s friend profile and shares an invite with Carlos.
 Carlos creates an account, requests friendship with Bob, Bob accepts.
-Carlos books 5 nights (750 STRK total).
-Settlement: Host 712.5 STRK, Connector 33.75 STRK, Philoxenia 3.75 STRK (10% of connector reward). Direct bookings (no connector): host gets 100%, protocol 0%.
+Carlos books and pays (STRK or DAI).
+Settlement example at 750 total: Host **712.5**, Connector **33.75**, Philoxenia **3.75** (10% of connector reward). Direct bookings (no connector): host 100%, protocol **0%**.
+
+See [docs/connectors.md](./docs/connectors.md).
 
 ## Documentation
 
 - [docs/](./docs/) — full docs index
+- [docs/connectors.md](./docs/connectors.md) — **earn as a connector (key loop)**
 - [docs/deploy-escrow.md](./docs/deploy-escrow.md) — **BookingEscrow mainnet address**
 - [docs/smart-contracts.md](./docs/smart-contracts.md) — escrow interface and fees
 - [docs/brand.md](./docs/brand.md) — logo and header

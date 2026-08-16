@@ -48,7 +48,8 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 ## Trust model
 
 - **Social trust** — Users discover listings through friends or connector invitations, not a public directory.
-- **Settlement trust** — Escrow holds guest funds until settlement or refund; the protocol takes 0% commission.
+- **Connectors (growth loop)** — Friends of hosts share invite links and earn a listing % on settle; Philoxenia’s protocol fee is only 10% of that connector reward. See [docs/connectors.md](./docs/connectors.md).
+- **Settlement trust** — Escrow holds guest funds until settlement or refund; direct bookings have **0%** protocol fee.
 - **Connector rewards** — Configured per listing (0–100%); paid from the guest total on settlement.
 
 ## Implementation status
@@ -59,12 +60,15 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 | Wallet auth on Firefox / desktop legacy Ready | Partial — Public pay may work; **no STRK20 privacy** without API ≥ 0.10 |
 | Wallet auth via system mobile browser → Ready | **Blocked** — deep-link sign unreliable |
 | Friends, listings, shares, bookings API | Shipped |
+| Friend profile + connector share UI (`/friends/[id]`, `/connector`) | Shipped |
 | Profile (display name) + wallet-only friend search | Shipped |
+| AVNU public STRK ↔ DAI swap | Shipped (Profile / Home) |
 | `BookingEscrow` + anonymizer (connector + 10% of connector reward) | **Live mainnet** — [docs/deploy-escrow.md](./docs/deploy-escrow.md) |
 | Public ERC20 path (create + approve + fund + settle multicall) | Shipped |
 | STRK20 shield / unshield / private balances (Ready ≥ 0.10) | Shipped |
 | Private booking fund via anonymizer | Shipped — [PRIVACY.md](./PRIVACY.md), [docs/strk20.md](./docs/strk20.md) |
 | `privacyMode` on payments / booking API/UI | Shipped |
+| Sealed E2E chat + peer transfers | Shipped |
 
 ## Key design constraints
 
@@ -76,6 +80,7 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 ## Further reading
 
 - [docs/brand.md](./docs/brand.md) — logo and header
+- [docs/connectors.md](./docs/connectors.md) — earn as a connector
 - [docs/architecture.md](./docs/architecture.md) — detailed component breakdown
 - [docs/smart-contracts.md](./docs/smart-contracts.md) — escrow interface and lifecycle
 - [docs/product.md](./docs/product.md) — user-facing flows

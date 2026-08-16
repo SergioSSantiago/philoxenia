@@ -20,7 +20,7 @@ import { formatWalletError } from "@/lib/wallet-errors";
  */
 export function TokenSwapPanel() {
   const { account, address } = useAccount();
-  const { user, connectWallet } = useAuth();
+  const { user, reconnectWallet } = useAuth();
   const [sellAsset, setSellAsset] = useState<PaymentAsset>("STRK");
   const buyAsset: PaymentAsset = sellAsset === "STRK" ? "DAI" : "STRK";
   const [amount, setAmount] = useState("");
@@ -79,7 +79,7 @@ export function TokenSwapPanel() {
       tone: "info",
     });
     try {
-      await connectWallet();
+      await reconnectWallet();
       setNotice({
         title: "Ready connected",
         body: "You can quote and swap STRK ↔ DAI now.",
@@ -96,7 +96,7 @@ export function TokenSwapPanel() {
     } finally {
       setReconnecting(false);
     }
-  }, [connectWallet]);
+  }, [reconnectWallet]);
 
   function flipDirection() {
     setSellAsset((prev) => (prev === "STRK" ? "DAI" : "STRK"));
