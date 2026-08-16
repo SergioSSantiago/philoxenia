@@ -20,11 +20,9 @@ npm run typecheck -w @philoxenia/web
 
 ## Auth
 
-Sign-in is a modal on `/home` (Ready X **desktop extension**). `/auth` redirects to `/home`. Disconnect returns to `/home` with the same modal.
+Sign-in is a modal on `/home`. **Ideal:** open this app in the **Ready X in-app browser** (private pay). `/auth` redirects to `/home`. Disconnect returns to `/home` with the same modal.
 
-### Smartphone — blocked
-
-Mobile login is **not supported**. WalletConnect may open Ready for connect, but the login signature approve sheet often never appears (Ready X / Ready Mobile deep-link gap; iOS gesture limits). Use desktop Ready X only.
+Firefox / desktop legacy Ready: Public pay only when wallet API &lt; 0.10. System Safari/Chrome → Ready deep-link is unreliable for login — use Ready X’s built-in browser.
 
 ## Layout
 

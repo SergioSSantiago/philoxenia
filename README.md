@@ -19,8 +19,8 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - A social trust network for private hospitality
 - Friend-based discovery (no public listing directory)
 - Trustless settlement via Cairo escrow (optional connector; Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
-- STRK20 private payments where wallet support exists
-- Ready X for wallet connect on **desktop** (browser extension)
+- STRK20 private payments where Ready supports wallet API ≥ 0.10
+- **Ideal wallet path:** open Philoxenia inside the **Ready X** in-app browser
 
 ## What it is not
 
@@ -48,7 +48,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 | Frontend | Next.js 15, React, TypeScript, Tailwind CSS |
 | Backend | Fastify, Drizzle ORM, PostgreSQL |
 | Contracts | Cairo 2.12, Scarb, Starknet Foundry |
-| Wallet | Ready X via `@starknet-react/core`, `starknetkit`, starknet.js **10.7** |
+| Wallet | Ready X (in-app browser ideal) via `@starknet-react/core`, `starknetkit`, starknet.js **10.7** |
 | Privacy | STRK20 Wallet API + BookingEscrow anonymizer (mainnet) |
 
 ## Quick start
@@ -58,7 +58,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 - Node.js 20+
 - Docker (for PostgreSQL)
 - Scarb 2.12+ and Starknet Foundry (for contracts)
-- [Ready X](https://www.ready.co/) browser extension (desktop)
+- [Ready X](https://www.ready.co/) — open the live app in Ready X’s **in-app browser** for privacy pay
 
 ## Deploy (production — Vercel)
 
@@ -133,11 +133,15 @@ scarb test
 
 There is no `/auth` page. The header brand goes to `/` (landing). Connect / disconnect opens a **Ready X** modal on `/home`.
 
-**Supported today: desktop web with the Ready X browser extension.** Friends find each other by **wallet address only**. Display names are editable in Profile and are not searchable.
+**Ideal:** open https://philoxenia-iota.vercel.app inside the **Ready X in-app browser**. That is the path where SNIP-12 login and **STRK20 private payments** work reliably. Friends find each other by **wallet address only**.
 
-### Known limitation — smartphone blocked
+### Firefox / desktop browser tabs
 
-**Phone / mobile Safari (and Chrome on Android) login does not work reliably.** After WalletConnect opens Ready, the second step — the SNIP-12 login signature — often never shows an approve sheet in the wallet (Ready X vs Ready Mobile deep-link mismatch, and iOS blocking programmatic re-open of the app). Until that is fixed upstream or with a supported Ready mobile path, **Philoxenia is desktop-only for sign-in and payments.** Do not treat smartphone as a supported client.
+Outside Ready X you typically only get the **legacy Ready Wallet extension**. It often lacks wallet API ≥ 0.10 → **no Private / shield**. Public ERC-20 pay may still work if the extension can sign. Prefer Ready X’s built-in browser for the full product.
+
+### System mobile browsers — blocked
+
+Safari / Chrome on the phone deep-linking out to Ready is unreliable for the login signature. Use Ready X’s in-app browser instead.
 
 ## Environment variables
 

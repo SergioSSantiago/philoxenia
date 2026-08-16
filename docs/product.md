@@ -31,14 +31,20 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 
 ## How you sign in
 
-- Wallet: **Ready X** browser extension on **desktop**. Braavos is not offered.
+**Ideal client: Ready X in-app browser.** Open Philoxenia inside the browser that **Ready X** ships with the wallet app. That is the supported path for connect, SNIP-12 login, and **STRK20 private payments** (wallet API ≥ 0.10).
+
+- Braavos is not offered.
 - There is no `/auth` page. Connect is a modal on `/home`.
 - Disconnect returns to `/home` and shows the same modal.
 - Display name is optional at sign-in and editable later in `/profile`. Friends add you by **wallet address only**.
 
-### Smartphone — blocked
+### Desktop browsers & Firefox — legacy Ready only
 
-**Mobile is not a supported client right now.** Login with Ready on a phone is blocked: WalletConnect may open the app for “connect”, but the follow-up **login signature** (`signMessage` / SNIP-12) often never surfaces an approve UI in Ready (deep-link / Ready X vs Ready Mobile mismatch; Safari often cannot re-open the wallet for the second request). Product work continues on **desktop web** until Ready provides a reliable mobile approve path for dapp sign-in.
+On **Firefox** and typical **desktop browser tabs** (Chrome/Brave/Safari outside Ready X), you usually only get the **older Ready Wallet extension** (formerly Argent). That build often **does not expose wallet API ≥ 0.10**, so **Private / shield / unshield are unavailable**. You can still use Philoxenia with **Public ERC-20** pay if the extension connects for signing — but privacy payments require Ready X’s in-app browser (or a Ready build that reports API ≥ 0.10).
+
+### External mobile Safari / Chrome — blocked
+
+Opening Philoxenia in the phone’s system browser and deep-linking out to Ready is **not** reliable: WalletConnect may connect, but the login signature approve sheet often never appears. Prefer the **Ready X in-app browser**, not Safari/Chrome → Ready.
 
 ## Roles
 
@@ -83,15 +89,15 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 
 **Implemented (off-chain + UI):**
 
-- Wallet authentication (Ready X extension on desktop, SNIP-12) — **not smartphone**
+- Wallet authentication via **Ready X in-app browser** (SNIP-12) — ideal path for privacy pay
 - Friend requests and friendships (search by wallet address)
 - Profile: display name + STRK/DAI balances
 - Private listings (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution
-- Payment initiation: **Private** (STRK20 anonymizer, default) or **Public** ERC-20
+- Payment initiation: **Private** (STRK20 anonymizer, default when wallet API ≥ 0.10) or **Public** ERC-20
 - Settle is atomic with pay (host + connector paid immediately)
-- Shield / unshield on Profile (Ready ≥ 0.10)
+- Shield / unshield on Profile (Ready X / wallet API ≥ 0.10 — not legacy Firefox Ready)
 
 **On-chain (mainnet):** `BookingEscrow` + `BookingEscrowAnonymizer` — see [deploy-escrow.md](./deploy-escrow.md) and [booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md).
 

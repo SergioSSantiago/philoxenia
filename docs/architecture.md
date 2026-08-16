@@ -58,7 +58,7 @@ philoxenia/
 ## Web (`apps/web`)
 
 - **Framework:** Next.js 15 (App Router), React, Tailwind CSS
-- **Wallet:** Ready X only on **desktop** (`@starknet-react/core` injected `argentX`). **Smartphone login is blocked** (Ready WalletConnect connect/sign deep-link does not complete reliably).
+- **Wallet:** Ready X — **ideal path is the Ready X in-app browser** (`isInArgentMobileAppBrowser`). Firefox / desktop tabs usually inject only legacy Ready (no STRK20 API ≥ 0.10). System mobile browsers deep-linking to Ready are unreliable for SNIP-12.
 - **State:** React context for auth (`auth-context.tsx`); JWT in localStorage
 - **API client:** `lib/api.ts` (Bearer JWT)
 - **Brand:** `components/brand-lockup.tsx` → `/`; landing hero shows live `LandingNetworkStats`

@@ -61,9 +61,11 @@ Starknet Privacy includes auditor selective disclosure by design. Philoxenia inh
 
 ## User-facing guidance (honest)
 
-- Prefer Private when Ready supports wallet API ≥ 0.10 and you have shielded balance  
+- Prefer Private when Ready supports wallet API ≥ 0.10 (Ready X in-app browser)
+- On Firefox / desktop legacy Ready, use Public ERC-20 — Private will not activate
 - Expect guest/host/amounts to remain readable on the escrow contract  
 - Treat shield/unshield amounts as public  
+- Keep some **public** STRK for gas when paying Public after shielding most of your balance
 
 ## Related
 

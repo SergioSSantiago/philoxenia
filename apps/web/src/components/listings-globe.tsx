@@ -17,27 +17,28 @@ type GlobePoint = {
 };
 
 const KIND_RGB: Record<PointKind, [number, number, number]> = {
-  mine: [0.71, 0.33, 0.04],
-  friend: [0.47, 0.44, 0.42],
-  shared: [0.66, 0.64, 0.62],
+  mine: [0.88, 0.42, 0.12],
+  friend: [0.22, 0.28, 0.32],
+  shared: [0.45, 0.42, 0.38],
 };
 
 const KIND_HEX: Record<PointKind, string> = {
-  mine: "#b45309",
-  friend: "#78716c",
-  shared: "#a8a29e",
+  mine: "#e06a28",
+  friend: "#2c3640",
+  shared: "#7a7168",
 };
 
+/** Larger cobe markers so places read from a distance. */
 const MARKER_SIZE: Record<PointKind, number> = {
-  mine: 0.011,
-  friend: 0.009,
-  shared: 0.008,
+  mine: 0.055,
+  friend: 0.045,
+  shared: 0.04,
 };
 
-const SCALE_MIN = 0.9;
-const SCALE_MAX = 2.9;
-/** Screen distance under which pins merge into one clickable cluster. */
-const CLUSTER_GAP = 16;
+const SCALE_MIN = 1.0;
+const SCALE_MAX = 2.85;
+const CLUSTER_GAP = 28;
+const AUTO_SPIN = 0.00055;
 
 function toPoints(
   mine: Listing[],
@@ -84,7 +85,7 @@ function projectPoint(
   scale: number,
   width: number,
   height: number,
-  elevation = 0.04
+  elevation = 0.06
 ): { x: number; y: number; visible: boolean } {
   const [x0, y0, z0] = latLngToXYZ(lat, lng);
   const r = 0.8 + elevation;
@@ -101,7 +102,7 @@ function projectPoint(
   const aspect = width / Math.max(height, 1);
   const x = ((c / aspect) * scale + 1) / 2;
   const y = (-s * scale + 1) / 2;
-  const visible = z >= 0 || c * c + s * s >= 0.64;
+  const visible = z >= -0.05;
   return { x: x * width, y: y * height, visible };
 }
 
@@ -113,7 +114,6 @@ type ScreenPin = {
   items: GlobePoint[];
 };
 
-/** Union-find style clustering by projected pixel distance. */
 function clusterPins(
   points: GlobePoint[],
   projected: { x: number; y: number; visible: boolean }[],
@@ -162,7 +162,6 @@ function clusterPins(
     }
     x /= idxs.length;
     y /= idxs.length;
-    // Prefer mine color priority in multi
     items.sort((a, b) => {
       const rank = (k: PointKind) =>
         k === "mine" ? 0 : k === "friend" ? 1 : 2;
@@ -180,12 +179,12 @@ function clusterPins(
 }
 
 function focusAngles(points: GlobePoint[]): { phi: number; theta: number } {
-  if (points.length === 0) return { phi: 0.4, theta: 0.2 };
+  if (points.length === 0) return { phi: 0.4, theta: 0.18 };
   const avgLat = points.reduce((s, p) => s + p.lat, 0) / points.length;
   const avgLng = points.reduce((s, p) => s + p.lng, 0) / points.length;
   return {
     phi: (-avgLng * Math.PI) / 180,
-    theta: (avgLat * Math.PI) / 180 / 2.2,
+    theta: (avgLat * Math.PI) / 180 / 2.4,
   };
 }
 
@@ -194,8 +193,7 @@ function kindLabel(kind: PointKind) {
 }
 
 /**
- * Interactive globe: true lat/lng markers, clustered when they would overlap,
- * tap opens listing (or picker for a stack).
+ * Interactive globe: high-contrast pins, gentle drag/zoom, explicit controls.
  */
 export function ListingsGlobe({
   myListings,
@@ -212,21 +210,22 @@ export function ListingsGlobe({
   const tipRef = useRef<HTMLDivElement>(null);
   const tipTitleRef = useRef<HTMLParagraphElement>(null);
   const tipMetaRef = useRef<HTMLParagraphElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   const phiRef = useRef(0.35);
   const thetaRef = useRef(0.2);
-  const scaleRef = useRef(1.25);
+  const scaleRef = useRef(1.45);
   const dragging = useRef(false);
+  const moved = useRef(false);
   const lastPtr = useRef({ x: 0, y: 0 });
   const autoSpin = useRef(true);
-  const sizeRef = useRef({ w: 640, h: 420 });
+  const sizeRef = useRef({ w: 640, h: 440 });
   const hoverKeyRef = useRef<string | null>(null);
   const pinEls = useRef<Map<string, HTMLButtonElement>>(new Map());
   const pointsRef = useRef<GlobePoint[]>([]);
   const clustersRef = useRef<ScreenPin[]>([]);
   const focusedOnce = useRef(false);
   const menuOpenRef = useRef(false);
+  const resumeSpinAt = useRef(0);
 
   const points = useMemo(
     () => toPoints(myListings, networkListings, sharedListings),
@@ -234,7 +233,7 @@ export function ListingsGlobe({
   );
   pointsRef.current = points;
 
-  const [height, setHeight] = useState(420);
+  const [height, setHeight] = useState(440);
   const [clusterKeys, setClusterKeys] = useState<string[]>([]);
   const [menu, setMenu] = useState<{
     x: number;
@@ -243,13 +242,41 @@ export function ListingsGlobe({
   } | null>(null);
   menuOpenRef.current = Boolean(menu);
 
+  function pauseSpin(ms = 8000) {
+    autoSpin.current = false;
+    resumeSpinAt.current = performance.now() + ms;
+  }
+
+  function bumpScale(factor: number) {
+    pauseSpin();
+    setMenu(null);
+    scaleRef.current = Math.min(
+      SCALE_MAX,
+      Math.max(SCALE_MIN, scaleRef.current * factor)
+    );
+  }
+
+  function resetView() {
+    pauseSpin(12000);
+    setMenu(null);
+    const focus = focusAngles(pointsRef.current);
+    phiRef.current = focus.phi;
+    thetaRef.current = focus.theta;
+    scaleRef.current =
+      pointsRef.current.length <= 2
+        ? 1.85
+        : pointsRef.current.length <= 5
+          ? 1.6
+          : 1.45;
+  }
+
   useEffect(() => {
     if (points.length === 0 || focusedOnce.current) return;
     const focus = focusAngles(points);
     phiRef.current = focus.phi;
     thetaRef.current = focus.theta;
     scaleRef.current =
-      points.length <= 2 ? 1.65 : points.length <= 5 ? 1.4 : 1.25;
+      points.length <= 2 ? 1.85 : points.length <= 5 ? 1.6 : 1.45;
     focusedOnce.current = true;
   }, [points]);
 
@@ -260,7 +287,7 @@ export function ListingsGlobe({
 
     const measure = () => {
       const w = wrap.clientWidth || 640;
-      const h = Math.round(Math.min(Math.max(w * 0.68, 300), 460));
+      const h = Math.round(Math.min(Math.max(w * 0.72, 320), 520));
       sizeRef.current = { w, h };
       setHeight(h);
       canvas.style.width = `${w}px`;
@@ -276,14 +303,14 @@ export function ListingsGlobe({
       theta: thetaRef.current,
       scale: scaleRef.current,
       dark: 0,
-      diffuse: 1.12,
-      mapSamples: 14000,
-      mapBrightness: 5.4,
-      mapBaseBrightness: 0.07,
-      baseColor: [0.95, 0.93, 0.9],
-      markerColor: KIND_RGB.friend,
-      glowColor: [0.93, 0.91, 0.87],
-      markerElevation: 0.03,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 4.8,
+      mapBaseBrightness: 0.05,
+      baseColor: [0.93, 0.9, 0.86],
+      markerColor: KIND_RGB.mine,
+      glowColor: [0.9, 0.87, 0.82],
+      markerElevation: 0.05,
       markers: [],
     });
 
@@ -293,8 +320,16 @@ export function ListingsGlobe({
 
     const tick = () => {
       if (!alive) return;
+      const now = performance.now();
+      if (
+        !dragging.current &&
+        !menuOpenRef.current &&
+        now >= resumeSpinAt.current
+      ) {
+        autoSpin.current = true;
+      }
       if (autoSpin.current && !dragging.current && !menuOpenRef.current) {
-        phiRef.current += 0.0016;
+        phiRef.current += AUTO_SPIN;
       }
 
       const pts = pointsRef.current;
@@ -332,7 +367,6 @@ export function ListingsGlobe({
       const sig = clusters.map((c) => c.key).join(";");
       if (sig !== lastClusterSig) {
         lastClusterSig = sig;
-        // Force React to sync cluster buttons when set changes
         setClusterKeys(clusters.map((c) => c.key));
       }
 
@@ -354,7 +388,6 @@ export function ListingsGlobe({
         }
       }
 
-      // Hide stale buttons
       for (const [key, el] of pinEls.current) {
         if (!clusters.some((c) => c.key === key)) {
           el.style.visibility = "hidden";
@@ -367,7 +400,7 @@ export function ListingsGlobe({
         if (tipVisible && !menuOpenRef.current) {
           tip.style.opacity = "1";
           tip.style.left = `${tipX}px`;
-          tip.style.top = `${Math.max(10, tipY - 48)}px`;
+          tip.style.top = `${Math.max(12, tipY - 56)}px`;
         } else {
           tip.style.opacity = "0";
         }
@@ -378,10 +411,11 @@ export function ListingsGlobe({
     raf = requestAnimationFrame(tick);
 
     const onWheelNative = (e: WheelEvent) => {
+      // Only zoom when pointer is over the globe; don't steal page scroll.
       e.preventDefault();
-      autoSpin.current = false;
+      pauseSpin();
       setMenu(null);
-      const next = scaleRef.current * (e.deltaY > 0 ? 0.93 : 1.07);
+      const next = scaleRef.current * (e.deltaY > 0 ? 0.94 : 1.06);
       scaleRef.current = Math.min(SCALE_MAX, Math.max(SCALE_MIN, next));
     };
     wrap.addEventListener("wheel", onWheelNative, { passive: false });
@@ -401,7 +435,9 @@ export function ListingsGlobe({
   function isInteractiveTarget(target: EventTarget | null) {
     return (
       target instanceof Element &&
-      Boolean(target.closest("[data-globe-pin], [data-globe-menu]"))
+      Boolean(
+        target.closest("[data-globe-pin], [data-globe-menu], [data-globe-ctrl]")
+      )
     );
   }
 
@@ -409,7 +445,8 @@ export function ListingsGlobe({
     if (isInteractiveTarget(e.target)) return;
     setMenu(null);
     dragging.current = true;
-    autoSpin.current = false;
+    moved.current = false;
+    pauseSpin();
     lastPtr.current = { x: e.clientX, y: e.clientY };
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }
@@ -418,17 +455,20 @@ export function ListingsGlobe({
     if (!dragging.current) return;
     const dx = e.clientX - lastPtr.current.x;
     const dy = e.clientY - lastPtr.current.y;
+    if (Math.hypot(dx, dy) > 2) moved.current = true;
     lastPtr.current = { x: e.clientX, y: e.clientY };
-    const sens = 0.0042 / Math.max(scaleRef.current, 0.85);
+    // Lower sensitivity + inertia-feel: less twitchy than before
+    const sens = 0.0028 / Math.max(scaleRef.current * 0.9, 0.9);
     phiRef.current += dx * sens;
     thetaRef.current = Math.max(
-      -1.05,
-      Math.min(1.05, thetaRef.current - dy * sens)
+      -0.95,
+      Math.min(0.95, thetaRef.current - dy * sens)
     );
   }
 
   function onPointerUp() {
     dragging.current = false;
+    if (moved.current) pauseSpin(10000);
   }
 
   function showTip(cluster: ScreenPin) {
@@ -453,6 +493,7 @@ export function ListingsGlobe({
   }
 
   function onPinClick(cluster: ScreenPin) {
+    pauseSpin(12000);
     if (cluster.items.length === 1) {
       setMenu(null);
       router.push(`/listings/${cluster.items[0].id}`);
@@ -461,16 +502,15 @@ export function ListingsGlobe({
     setMenu({ x: cluster.x, y: cluster.y, items: cluster.items });
   }
 
-  // Resolve cluster objects for current keys from live ref each render
   const liveClusters = clusterKeys
     .map((key) => clustersRef.current.find((c) => c.key === key))
     .filter((c): c is ScreenPin => Boolean(c));
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-[#f2efe9]">
+    <div className="overflow-hidden rounded-2xl border border-border bg-[#ebe6dc]">
       <div
         ref={wrapRef}
-        className="relative w-full select-none touch-none"
+        className="relative w-full cursor-grab select-none touch-none active:cursor-grabbing"
         style={{ height }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -480,6 +520,33 @@ export function ListingsGlobe({
         aria-label="Interactive globe of places you can access"
       >
         <canvas ref={canvasRef} className="block h-full w-full" />
+
+        <div
+          data-globe-ctrl
+          className="absolute right-2.5 top-2.5 z-20 flex flex-col gap-1.5"
+        >
+          {(
+            [
+              ["+", () => bumpScale(1.14), "Zoom in"],
+              ["−", () => bumpScale(0.88), "Zoom out"],
+              ["⊙", resetView, "Reset view"],
+            ] as const
+          ).map(([label, action, aria]) => (
+            <button
+              key={aria}
+              type="button"
+              aria-label={aria}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border/80 bg-surface/95 text-base font-medium text-foreground shadow-sm backdrop-blur-sm transition hover:bg-surface active:scale-95"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                action();
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
         <div className="pointer-events-none absolute inset-0">
           {liveClusters.map((cluster) => {
@@ -499,7 +566,7 @@ export function ListingsGlobe({
                     ? `${cluster.items.length} listings`
                     : `Open ${lead.title}`
                 }
-                className="group pointer-events-auto absolute z-10 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-transparent focus-visible:outline-none"
+                className="group pointer-events-auto absolute z-10 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 style={{ visibility: "hidden" }}
                 onPointerDown={(e) => e.stopPropagation()}
                 onPointerEnter={(e) => {
@@ -513,15 +580,21 @@ export function ListingsGlobe({
                   onPinClick(cluster);
                 }}
               >
-                <span
-                  className={`relative block rounded-full border border-white/90 shadow-[0_1px_2px_rgba(0,0,0,0.22)] transition-transform duration-150 group-hover:scale-125 ${
-                    multi ? "h-2.5 w-2.5" : "h-1.5 w-1.5"
-                  }`}
-                  style={{ background: KIND_HEX[lead.kind] }}
-                  aria-hidden
-                >
+                <span className="relative flex items-center justify-center">
+                  <span
+                    className="absolute h-7 w-7 animate-pulse rounded-full opacity-35"
+                    style={{ background: KIND_HEX[lead.kind] }}
+                    aria-hidden
+                  />
+                  <span
+                    className={`relative z-[1] block rounded-full border-[2.5px] border-white shadow-[0_2px_8px_rgba(0,0,0,0.35)] transition-transform duration-150 group-hover:scale-110 group-active:scale-95 ${
+                      multi ? "h-4 w-4" : "h-3.5 w-3.5"
+                    }`}
+                    style={{ background: KIND_HEX[lead.kind] }}
+                    aria-hidden
+                  />
                   {multi ? (
-                    <span className="absolute -right-2 -top-2 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-foreground px-0.5 text-[8px] font-medium leading-none text-surface">
+                    <span className="absolute -right-2.5 -top-2.5 z-[2] flex h-5 min-w-5 items-center justify-center rounded-full bg-foreground px-1 text-[10px] font-semibold leading-none text-surface shadow-sm">
                       {cluster.items.length}
                     </span>
                   ) : null}
@@ -533,53 +606,52 @@ export function ListingsGlobe({
 
         <div
           ref={tipRef}
-          className="pointer-events-none absolute z-20 w-[min(200px,72%)] -translate-x-1/2 rounded-lg border border-border/80 bg-surface/95 px-2.5 py-1.5 opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-150"
+          className="pointer-events-none absolute z-20 w-[min(220px,78%)] -translate-x-1/2 rounded-xl border border-border bg-surface/95 px-3 py-2 opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-150"
         >
           <p
             ref={tipTitleRef}
-            className="truncate text-[11px] font-medium leading-snug text-foreground"
+            className="truncate text-xs font-medium leading-snug text-foreground"
           />
           <p
             ref={tipMetaRef}
-            className="mt-0.5 truncate text-[9px] leading-tight text-muted"
+            className="mt-0.5 truncate text-[10px] leading-tight text-muted"
           />
         </div>
 
         {menu ? (
           <div
-            ref={menuRef}
             data-globe-menu
             data-open="true"
-            className="absolute z-30 w-[min(220px,78%)] -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-surface shadow-lg"
+            className="absolute z-30 w-[min(240px,82%)] -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-surface shadow-lg"
             style={{
               left: menu.x,
-              top: Math.min(menu.y + 14, height - 120),
+              top: Math.min(menu.y + 18, height - 140),
             }}
             onPointerDown={(e) => e.stopPropagation()}
           >
             <p className="border-b border-border px-3 py-2 text-[10px] uppercase tracking-[0.1em] text-muted">
               Choose listing
             </p>
-            <ul className="max-h-40 overflow-auto py-1">
+            <ul className="max-h-44 overflow-auto py-1">
               {menu.items.map((item) => (
                 <li key={item.id}>
                   <button
                     type="button"
-                    className="flex w-full items-start gap-2 px-3 py-2 text-left hover:bg-background"
+                    className="flex w-full items-start gap-2.5 px-3 py-2.5 text-left hover:bg-background"
                     onClick={() => {
                       setMenu(null);
                       router.push(`/listings/${item.id}`);
                     }}
                   >
                     <span
-                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                      className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border border-white shadow-sm"
                       style={{ background: KIND_HEX[item.kind] }}
                     />
                     <span className="min-w-0">
-                      <span className="block truncate text-[12px] font-medium text-foreground">
+                      <span className="block truncate text-[13px] font-medium text-foreground">
                         {item.title}
                       </span>
-                      <span className="block truncate text-[10px] text-muted">
+                      <span className="block truncate text-[11px] text-muted">
                         {kindLabel(item.kind)} · {item.location}
                       </span>
                     </span>
@@ -591,13 +663,13 @@ export function ListingsGlobe({
         ) : null}
       </div>
 
-      <div className="flex items-center justify-between gap-2 border-t border-border/60 px-2.5 py-1.5">
-        <p className="min-w-0 truncate text-[9px] tracking-wide text-muted">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 px-3 py-2">
+        <p className="min-w-0 text-[11px] leading-snug text-muted">
           {points.length === 0
             ? "No mapped places yet"
-            : `${points.length} · drag · scroll · tap pin`}
+            : `${points.length} place${points.length === 1 ? "" : "s"} · drag to spin · +/− to zoom · tap a pin`}
         </p>
-        <div className="flex shrink-0 items-center gap-2.5">
+        <div className="flex shrink-0 items-center gap-3">
           {(
             [
               ["mine", "Yours"],
@@ -607,10 +679,10 @@ export function ListingsGlobe({
           ).map(([kind, label]) => (
             <span
               key={kind}
-              className="inline-flex items-center gap-1 text-[9px] text-muted"
+              className="inline-flex items-center gap-1.5 text-[11px] text-muted"
             >
               <span
-                className="inline-block h-1 w-1 rounded-full"
+                className="inline-block h-2.5 w-2.5 rounded-full border border-white/80 shadow-sm"
                 style={{ background: KIND_HEX[kind] }}
               />
               {label}

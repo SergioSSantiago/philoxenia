@@ -88,7 +88,7 @@ cd apps/web && vercel --prod
 
 Each push to `main` on GitHub redeploys if Git Integration is enabled.
 
-The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home` (**desktop extension**).
+The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home`. **Ideal:** Ready X in-app browser (see [product.md](./product.md)).
 
 **Smartphone blocked:** mobile Ready login does not complete the signature step reliably; it is not a supported client until that is fixed.
 

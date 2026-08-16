@@ -9,7 +9,7 @@ Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustle
 | Doc | Topic |
 |-----|--------|
 | [brand.md](./brand.md) | Logo (sleeping-head cameo) and header → `/` |
-| [product.md](./product.md) | Product, roles, sign-in (Ready X **desktop**; smartphone blocked) |
+| [product.md](./product.md) | Product, roles, sign-in (**Ready X in-app browser**; Firefox/desktop legacy Ready lacks privacy) |
 | [architecture.md](./architecture.md) | Monorepo, pages, data flow |
 | [social-graph.md](./social-graph.md) | Friends; search by wallet only |
 | [listings.md](./listings.md) | Private listings |

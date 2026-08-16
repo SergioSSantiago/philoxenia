@@ -31,6 +31,10 @@ Before scroll, the landing shows only:
 Stats fade as the brand docks into the header on scroll.
 ## Wallet
 
-Philoxenia connects **Ready X** only via the **desktop browser extension**. Braavos is not supported.
+Philoxenia connects **Ready X** only. Braavos is not supported.
 
-**Smartphone is blocked:** mobile login with Ready does not complete reliably (connect may open the app, but the login signature approve sheet often never appears). Use desktop until that is fixed. Ready Mobile (the card app) is a different product and is not the supported path either.
+**Ideal:** open the app inside the **Ready X in-app browser**. That surface exposes STRK20 (wallet API ≥ 0.10) for Private pay, shield, and unshield.
+
+**Firefox / desktop browser tabs:** usually only the **legacy Ready Wallet extension** is available — it typically **cannot** do privacy payments. Public ERC-20 may still work.
+
+**System mobile browsers** (Safari/Chrome → deep-link Ready) are unreliable for login signatures; use Ready X’s built-in browser instead.

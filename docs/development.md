@@ -128,11 +128,15 @@ npm run db:generate -w @philoxenia/api   # if script exists
 - Sign-in UI: `apps/web/src/components/auth-modal.tsx` on `/home`
 - Brand lockup: `apps/web/src/components/brand-lockup.tsx` → `/`
 
-Connect with the [Ready X](https://www.ready.co/) **browser extension** on desktop (Starknet mainnet) for auth and payment testing.
+Connect with [Ready X](https://www.ready.co/) — open the app in Ready X’s **in-app browser** for auth and STRK20 private payments. Firefox / desktop legacy Ready is Public-pay only when privacy API is missing.
 
-### Smartphone testing — do not expect login to work
+### Wallet clients
 
-Mobile sign-in is **blocked / unsupported**. Ready may open for WalletConnect “connect”, but the second-step login signature often never prompts in the wallet. Develop and QA on desktop only until this is resolved.
+| Client | Auth | Private STRK20 |
+|--------|------|----------------|
+| Ready X **in-app browser** | Supported (ideal) | Yes (API ≥ 0.10) |
+| Firefox / desktop legacy Ready extension | Often works | Usually **no** |
+| System Safari/Chrome → Ready deep-link | Unreliable | N/A |
 
 ## Common issues
 
@@ -141,8 +145,9 @@ Mobile sign-in is **blocked / unsupported**. Ready may open for WalletConnect �
 | API connection refused | Check `docker compose ps`; verify `DATABASE_URL` |
 | CORS errors | Match `CORS_ORIGIN` to web URL |
 | Payment fails | Set `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS`; ensure on-chain booking exists |
-| Wallet auth fails (desktop) | Use Ready X extension on Starknet mainnet; set `ALCHEMY_API_KEY`; check chain id `SN_MAIN` |
-| Wallet auth fails (phone) | Expected — smartphone login is blocked; use desktop Ready X |
+| Wallet auth fails (Ready X in-app) | Mainnet; `ALCHEMY_API_KEY`; chain `SN_MAIN` |
+| Wallet auth fails (phone system browser) | Expected — use Ready X in-app browser |
+| Private pay blocked on Firefox | Expected — use Ready X in-app or Public ERC-20 |
 
 ## Related
 

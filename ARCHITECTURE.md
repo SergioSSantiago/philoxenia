@@ -8,7 +8,7 @@ Philoxenia is a private peer-to-peer hospitality protocol on Starknet. It is **n
 
 The brand mark (sleeping head on joined hands) sits in the header and always goes to `/`. Sign-in is a Ready X modal on `/home`, not a dedicated auth page.
 
-**Supported client:** desktop browser + Ready X extension. **Smartphone is blocked** — mobile Ready login does not complete the signature step reliably (see [docs/product.md](./docs/product.md)).
+**Ideal client:** open Philoxenia in the **Ready X in-app browser** (wallet API ≥ 0.10 → private pay). **Firefox / desktop tabs** usually only have the legacy Ready extension without privacy. External mobile Safari/Chrome deep-links are unreliable — see [docs/product.md](./docs/product.md).
 
 ## System overview
 
@@ -55,8 +55,9 @@ Philoxenia does **not** put social relationships or listing content on-chain. On
 
 | Component | Status |
 |-----------|--------|
-| Wallet auth (Ready X extension, SNIP-12) — desktop | Shipped |
-| Wallet auth on smartphone | **Blocked** — Ready connect/sign deep-link unreliable |
+| Wallet auth via Ready X **in-app browser** | Shipped (ideal path) |
+| Wallet auth on Firefox / desktop legacy Ready | Partial — Public pay may work; **no STRK20 privacy** without API ≥ 0.10 |
+| Wallet auth via system mobile browser → Ready | **Blocked** — deep-link sign unreliable |
 | Friends, listings, shares, bookings API | Shipped |
 | Profile (display name) + wallet-only friend search | Shipped |
 | `BookingEscrow` + anonymizer (connector + 10% of connector reward) | **Live mainnet** — [docs/deploy-escrow.md](./docs/deploy-escrow.md) |
