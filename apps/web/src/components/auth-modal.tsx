@@ -20,14 +20,16 @@ import { ReadyWalletNotice } from "@/components/ready-wallet-notice";
 import {
   isMobileBrowser,
   isReadyInAppBrowser,
+  philoxeniaOpenUrl,
+  readyLegacySignRequestHref,
   readyMobileStoreHref,
   readySignRequestHref,
-  readyXSignRequestHref,
 } from "@/lib/ready-mobile";
 
 /**
  * Standard StarknetKit connect flow (official demo pattern).
- * Mobile needs two steps: Connect (WC session) then Sign in (WC request).
+ * iPhone Safari/Chrome: do NOT WalletConnect — that opens legacy Ready via argent://.
+ * Supported path: open Philoxenia inside the Ready X in-app browser, then connect.
  */
 export function AuthModal() {
   const { address, account, isConnected } = useAccount();
@@ -46,6 +48,8 @@ export function AuthModal() {
   const [onMobile, setOnMobile] = useState(false);
   const [inReadyApp, setInReadyApp] = useState(false);
   const [storeHref, setStoreHref] = useState(readyMobileStoreHref());
+  const [openUrl, setOpenUrl] = useState(philoxeniaOpenUrl());
+  const [copied, setCopied] = useState(false);
   const [signing, setSigning] = useState(false);
 
   const { starknetkitConnectModal } = useStarknetkitConnectModal({
@@ -54,18 +58,27 @@ export function AuthModal() {
   });
 
   const open = signInOpen && !user;
+  /** Safari / system Chrome on phone — WC deep-links to legacy Ready, not Ready X. */
+  const mobileOutsideWallet = onMobile && !inReadyApp;
 
   useEffect(() => {
     setOnMobile(isMobileBrowser());
     setInReadyApp(isReadyInAppBrowser());
     setStoreHref(readyMobileStoreHref());
+    setOpenUrl(philoxeniaOpenUrl());
   }, [open]);
 
   async function connectWallet() {
     setError("");
+    if (isMobileBrowser() && !isReadyInAppBrowser()) {
+      setError(
+        "On iPhone, open Philoxenia inside the Ready X app browser — Safari cannot complete login."
+      );
+      return;
+    }
     setBusy(true);
     try {
-      if (isInArgentMobileAppBrowser() || isMobileBrowser()) {
+      if (isInArgentMobileAppBrowser()) {
         const connector = pickReadyConnector(connectors);
         if (!connector) throw new Error("Ready connector not available");
         await connectAsync({ connector });
@@ -96,6 +109,16 @@ export function AuthModal() {
     }
   }
 
+  async function copyOpenUrl() {
+    try {
+      await navigator.clipboard.writeText(openUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError("Could not copy. Paste this URL in Ready X: " + openUrl);
+    }
+  }
+
   useEffect(() => {
     if (!open || isConnected) return;
     if (isReadyInAppBrowser()) {
@@ -123,6 +146,7 @@ export function AuthModal() {
       setDisplayName("");
       setBusy(false);
       setSigning(false);
+      setCopied(false);
     }
   }, [open]);
 
@@ -152,13 +176,11 @@ export function AuthModal() {
               Welcome
             </h2>
             <p className="mt-2 text-sm text-muted leading-relaxed">
-              {isConnected
-                ? onMobile && !inReadyApp
-                  ? "Step 2 of 2: Sign in opens Ready again to approve the login signature."
-                  : "Approve the login signature in Ready."
-                : onMobile && !inReadyApp
-                  ? "Step 1 of 2: Connect links your wallet. Signing comes next."
-                  : "Connect Ready to join Philoxenia."}
+              {mobileOutsideWallet
+                ? "iPhone login only works inside the Ready X app browser — not Safari."
+                : isConnected
+                  ? "Approve the login signature in Ready X."
+                  : "Connect Ready X to join Philoxenia."}
             </p>
           </div>
           <button
@@ -174,25 +196,56 @@ export function AuthModal() {
         <div className="mt-6 space-y-4">
           <ReadyWalletNotice compact />
 
-          {!isConnected ? (
+          {mobileOutsideWallet && !isConnected ? (
+            <>
+              <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-foreground">
+                <li>
+                  Install{" "}
+                  <a
+                    href={storeHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-accent underline-offset-2 hover:underline"
+                  >
+                    Ready X
+                  </a>{" "}
+                  (not the older “Ready” / Crypto Card app).
+                </li>
+                <li>Open Ready X → use its in-app browser.</li>
+                <li>Paste the Philoxenia link below, then Connect + Sign in there.</li>
+              </ol>
+              <div className="rounded-xl border border-border bg-background p-3">
+                <p className="break-all font-mono text-xs text-muted">{openUrl}</p>
+                <Button
+                  className="mt-3 w-full"
+                  type="button"
+                  onClick={() => void copyOpenUrl()}
+                >
+                  {copied ? "Copied!" : "Copy link for Ready X"}
+                </Button>
+              </div>
+              <a
+                href={storeHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-center text-sm text-accent underline-offset-2 hover:underline"
+              >
+                Get Ready X on the App Store
+              </a>
+              <p className="pt-1 text-center text-xs text-muted">
+                Connecting from Safari opens the old Ready app and never returns
+                a signature — that path is disabled on purpose.
+              </p>
+            </>
+          ) : !isConnected ? (
             <>
               <Button
                 className="w-full"
                 disabled={waiting}
                 onClick={() => void connectWallet()}
               >
-                {waiting ? "Connecting…" : "Connect Ready"}
+                {waiting ? "Connecting…" : "Connect Ready X"}
               </Button>
-              {onMobile && !inReadyApp ? (
-                <a
-                  href={storeHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-center text-sm text-accent underline-offset-2 hover:underline"
-                >
-                  Get Ready for mobile
-                </a>
-              ) : null}
               <p className="pt-1 text-center text-xs text-muted">
                 Connecting does not sign you in yet. Philoxenia never custodies
                 your funds or keys.
@@ -223,7 +276,7 @@ export function AuthModal() {
                 onClick={() => void handleSignIn()}
               >
                 {signing || (waiting && challengeReady)
-                  ? "Approve in Ready…"
+                  ? "Approve in Ready X…"
                   : !account
                     ? "Wallet loading…"
                     : !challengeReady
@@ -233,27 +286,25 @@ export function AuthModal() {
               {onMobile && !inReadyApp && (signing || waiting) ? (
                 <div className="space-y-2 text-center text-sm">
                   <p className="text-muted">
-                    If Ready did not open the approve sheet, tap below:
+                    If Ready X did not open the approve sheet, tap below:
                   </p>
                   <a
                     href={readySignRequestHref()}
                     className="block font-medium text-accent underline-offset-2 hover:underline"
                   >
-                    Open Ready to approve
+                    Open Ready X to approve
                   </a>
                   <a
-                    href={readyXSignRequestHref()}
+                    href={readyLegacySignRequestHref()}
                     className="block text-xs text-muted underline-offset-2 hover:underline"
                   >
-                    Try Ready X deep link
+                    Legacy Ready deep link (unsupported)
                   </a>
                 </div>
               ) : null}
               <p className="pt-1 text-center text-xs text-muted">
-                {onMobile && !inReadyApp
-                  ? "Ready must open a second time to show the sign request."
-                  : "Ready will ask you to sign in."}{" "}
-                Philoxenia never custodies your funds or keys.
+                Ready X will ask you to sign in. Philoxenia never custodies your
+                funds or keys.
               </p>
             </>
           )}

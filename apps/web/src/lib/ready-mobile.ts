@@ -8,39 +8,63 @@ export function isMobileBrowser(): boolean {
   return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 }
 
-/** Ready in-app browser (injects starknet_argentX). */
+/** Ready / Ready X in-app browser (injects starknet_argentX with isInAppBrowser). */
 export function isReadyInAppBrowser(): boolean {
   return isInArgentMobileAppBrowser();
 }
 
+/**
+ * App Store / Play links for **Ready X** (STRK20), not the legacy Ready Crypto Card.
+ * Safari WalletConnect still deep-links `argent://` → old app; that path is unsupported.
+ */
 export function readyMobileStoreHref(): string {
   if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
+    // Ready X Android listing; legacy package redirects / may coexist.
     return "https://play.google.com/store/apps/details?id=im.argent.contractwalletclient";
   }
-  return "https://apps.apple.com/us/app/ready-crypto-card/id1358741926";
+  return "https://apps.apple.com/us/app/ready-x/id6744935604";
+}
+
+/** Canonical production URL to paste into the Ready X in-app browser. */
+export function philoxeniaOpenUrl(): string {
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return `${window.location.origin}/home`;
+  }
+  return "https://philoxenia-iota.vercel.app/home";
 }
 
 /**
- * Deep link Ready uses for an already-open WalletConnect session request
- * (sign / tx approval). starknetkit sets mobileUrl to argent:// on mainnet.
- * @see starknetkit ArgentMobile showApprovalModal
+ * Deep link for an already-open WalletConnect session request.
+ * Prefer `ready://` (Ready X); `argent://` opens the legacy Ready app.
  */
 export function readySignRequestHref(): string {
   const href = encodeURIComponent(
-    typeof window !== "undefined" ? window.location.href : "https://philoxenia-iota.vercel.app"
-  );
-  return `argent://app/wc/request?href=${href}&device=mobile`;
-}
-
-/** Alternate scheme used by newer Ready builds. */
-export function readyXSignRequestHref(): string {
-  const href = encodeURIComponent(
-    typeof window !== "undefined" ? window.location.href : "https://philoxenia-iota.vercel.app"
+    typeof window !== "undefined"
+      ? window.location.href
+      : "https://philoxenia-iota.vercel.app"
   );
   return `ready://app/wc/request?href=${href}&device=mobile`;
 }
 
-/** Best-effort reopen of Ready for a pending WC sign request. */
+/** Legacy scheme — only as last-resort fallback. */
+export function readyLegacySignRequestHref(): string {
+  const href = encodeURIComponent(
+    typeof window !== "undefined"
+      ? window.location.href
+      : "https://philoxenia-iota.vercel.app"
+  );
+  return `argent://app/wc/request?href=${href}&device=mobile`;
+}
+
+/** @deprecated Use readySignRequestHref (ready://). Kept for callers expecting Ready X name. */
+export function readyXSignRequestHref(): string {
+  return readySignRequestHref();
+}
+
+/**
+ * Best-effort reopen of Ready for a pending WC sign request.
+ * Only useful inside flows that already established WC — not for first login from Safari.
+ */
 export function openReadyForSignRequest(): void {
   if (typeof window === "undefined") return;
   if (isInArgentMobileAppBrowser()) return;

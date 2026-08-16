@@ -51,8 +51,8 @@ See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend
 ### What you must do (checklist)
 
 1. **Desktop:** Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** (not Firefox). Enable **Smart Wallet** and **Private**.
-2. **iPhone:** Open https://philoxenia-iota.vercel.app inside the **Ready X wallet app browser** — not Safari or Chrome on iOS.
-3. Connect Ready → Sign in (approve SNIP-12).
+2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older “Ready” / Crypto Card app). Open https://philoxenia-iota.vercel.app **inside the Ready X in-app browser** — not Safari. Safari → Connect opens the legacy wallet via `argent://` and never completes sign-in.
+3. Connect Ready X → Sign in (approve SNIP-12).
 
 Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home`. Display name is optional; friends add you by **wallet address only**.
 
