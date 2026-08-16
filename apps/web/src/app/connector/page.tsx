@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Booking, Listing } from "@philoxenia/shared";
 import { formatDaiPrice, formatTokenAmount } from "@philoxenia/shared";
 import { Shell, SectionTitle, EmptyState, Card, Button } from "@/components/ui";
+import { CopyInviteButton } from "@/components/copy-invite-button";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import {
@@ -87,19 +88,6 @@ export default function ConnectorPage() {
         },
       }));
     }
-  }
-
-  async function copyInviteAgain(listingId: string) {
-    const share = shareByListing[listingId];
-    if (!share) return;
-    const copied = await copyText(share.url);
-    setShareByListing((prev) => ({
-      ...prev,
-      [listingId]: {
-        ...share,
-        status: inviteReadyStatus(copied, true),
-      },
-    }));
   }
 
   const earnable =
@@ -237,14 +225,18 @@ export default function ConnectorPage() {
                             {share.url}
                           </p>
                           <div className="flex flex-col gap-2 sm:flex-row">
-                            <Button
-                              type="button"
-                              variant="secondary"
-                              className="w-full sm:w-auto"
-                              onClick={() => void copyInviteAgain(listing.id)}
-                            >
-                              Copy link
-                            </Button>
+                            <CopyInviteButton
+                              url={share.url}
+                              onCopied={(ok) =>
+                                setShareByListing((prev) => ({
+                                  ...prev,
+                                  [listing.id]: {
+                                    ...share,
+                                    status: inviteReadyStatus(ok, true),
+                                  },
+                                }))
+                              }
+                            />
                             <Button
                               type="button"
                               variant="ghost"

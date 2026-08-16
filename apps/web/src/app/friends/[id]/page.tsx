@@ -12,6 +12,7 @@ import {
   Card,
   Button,
 } from "@/components/ui";
+import { CopyInviteButton } from "@/components/copy-invite-button";
 import { WalletAddress } from "@/components/wallet-address";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -99,19 +100,6 @@ export default function FriendProfilePage() {
         },
       }));
     }
-  }
-
-  async function copyInviteAgain(listingId: string, asConnector: boolean) {
-    const share = shareByListing[listingId];
-    if (!share) return;
-    const copied = await copyText(share.url);
-    setShareByListing((prev) => ({
-      ...prev,
-      [listingId]: {
-        ...share,
-        status: inviteReadyStatus(copied, asConnector),
-      },
-    }));
   }
 
   if (error && !profile) {
@@ -276,16 +264,18 @@ export default function FriendProfilePage() {
                           {share.url}
                         </p>
                         <div className="flex flex-col gap-2 sm:flex-row">
-                          <Button
-                            type="button"
-                            variant="secondary"
-                            className="w-full sm:w-auto"
-                            onClick={() =>
-                              void copyInviteAgain(listing.id, canEarn)
+                          <CopyInviteButton
+                            url={share.url}
+                            onCopied={(ok) =>
+                              setShareByListing((prev) => ({
+                                ...prev,
+                                [listing.id]: {
+                                  ...share,
+                                  status: inviteReadyStatus(ok, canEarn),
+                                },
+                              }))
                             }
-                          >
-                            Copy link
-                          </Button>
+                          />
                           <Button
                             type="button"
                             variant="ghost"

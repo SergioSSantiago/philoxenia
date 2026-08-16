@@ -9,6 +9,7 @@ import { UserBadge } from "@/components/user-badge";
 import { AvailabilityCalendar } from "@/components/availability-calendar";
 import { GuestNightCalendar } from "@/components/guest-night-calendar";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { CopyInviteButton } from "@/components/copy-invite-button";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import {
@@ -154,12 +155,6 @@ export default function ListingPage() {
     } finally {
       setShareBusy(false);
     }
-  }
-
-  async function copyShareLink() {
-    if (!shareUrl) return;
-    const copied = await copyText(shareUrl);
-    setShareStatus(inviteReadyStatus(copied, shareHasConnector));
   }
 
   async function shareViaSystem() {
@@ -420,14 +415,13 @@ export default function ListingPage() {
                 {shareUrl}
               </p>
               <div className="flex flex-col gap-2 sm:flex-row">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="w-full sm:w-auto"
-                  onClick={copyShareLink}
-                >
-                  Copy invite link
-                </Button>
+                <CopyInviteButton
+                  url={shareUrl}
+                  label="Copy invite link"
+                  onCopied={(ok) =>
+                    setShareStatus(inviteReadyStatus(ok, shareHasConnector))
+                  }
+                />
                 <Button
                   type="button"
                   variant="ghost"
