@@ -68,9 +68,7 @@ export const rootMetadata: Metadata = {
     apple: "/philoxenia-mark.png",
   },
   category: "travel",
-  // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the content= value from
-  // Search Console → Balise meta HTML (more reliable than the HTML file on Vercel).
-  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
-    : undefined,
+  verification: {
+    google: "TeawpssVmF3RttfQltFkW2bjWRkyNT9Mw_ZMyMuPRK4",
+  },
 };

@@ -27,16 +27,15 @@ Public marketing surface is the landing page. Authenticated app routes are not m
 
 ## Google Search Console verification
 
-HTML file (file method): served at `/googlecbfc040f934ed5ea.html` (route + `public/` copy).
+Meta tag (active): `google-site-verification` =
+`TeawpssVmF3RttfQltFkW2bjWRkyNT9Mw_ZMyMuPRK4` via Next.js `metadata.verification`
+in `src/lib/seo.ts` (emitted on every page `<head>`, including the homepage).
 
-Preferred fallback — **Balise meta HTML**:
-
-1. In Search Console choose *Balise meta* (not fichier HTML).
-2. Copy only the `content="…"` value.
-3. Set Vercel env `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` on the **philoxenia** web project.
-4. Redeploy, then click Valider.
+HTML file method is also still served at `/googlecbfc040f934ed5ea.html` as a backup.
 
 Property URL must be exactly: `https://philoxenia-iota.vercel.app` (https, no `www`).
+
+After deploy: confirm the meta appears in View Source on `/`, then click **Valider** in Search Console. Then submit sitemap `https://philoxenia-iota.vercel.app/sitemap.xml`.
 
 
 ## Related
