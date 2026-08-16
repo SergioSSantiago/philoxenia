@@ -337,9 +337,12 @@ export default function ChatThreadPage() {
             ←
           </Link>
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-xl leading-tight text-foreground sm:text-2xl">
+            <Link
+              href={`/friends/${conversation.friend.id}`}
+              className="block truncate text-xl leading-tight text-foreground underline-offset-2 hover:underline touch-manipulation sm:text-2xl"
+            >
               {conversation.friend.displayName}
-            </h1>
+            </Link>
             <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted">
               <span className="inline-flex items-center gap-1 text-accent">
                 <LockIcon />
@@ -348,10 +351,14 @@ export default function ChatThreadPage() {
               <span className="hidden sm:inline" aria-hidden>
                 ·
               </span>
-              <span className="truncate font-mono text-[10px] opacity-80 sm:text-xs">
+              <Link
+                href={`/friends/${conversation.friend.id}`}
+                className="truncate font-mono text-[10px] opacity-80 underline-offset-2 hover:underline touch-manipulation sm:text-xs"
+                title={`${conversation.friend.displayName}'s listings`}
+              >
                 {conversation.friend.walletAddress.slice(0, 6)}…
                 {conversation.friend.walletAddress.slice(-4)}
-              </span>
+              </Link>
             </p>
           </div>
           <Button

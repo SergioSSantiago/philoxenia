@@ -104,8 +104,8 @@ export default function MessagesPage() {
         </p>
         <h1 className="mt-1 text-3xl text-foreground sm:text-4xl">Messages</h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-          Sealed notes decrypt only on your device. The API stores ciphertext —
-          not your words.
+          Sealed notes decrypt only on your device. Tap a name or wallet to see
+          their listings and share invites; open the preview or › to chat.
         </p>
       </header>
 
@@ -154,23 +154,26 @@ export default function MessagesPage() {
             const sealed = t.lastMessage?.body
               ? isSealedBody(t.lastMessage.body)
               : false;
+            const profileHref = `/friends/${t.friend.id}`;
             return (
-              <li key={t.friend.id}>
-                <Link
-                  href={`/messages/${t.friend.id}`}
-                  className="flex items-center gap-3 px-4 py-3.5 transition hover:bg-accent-soft/35 active:bg-accent-soft/50 touch-manipulation"
-                >
-                  <span
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent/25 to-accent/5 text-sm font-semibold text-accent"
-                    aria-hidden
+              <li key={t.friend.id} className="flex items-stretch">
+                <div className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3.5">
+                  <Link
+                    href={profileHref}
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent/25 to-accent/5 text-sm font-semibold text-accent transition hover:from-accent/35 hover:to-accent/10 touch-manipulation"
+                    aria-label={`View ${t.friend.displayName}'s listings`}
+                    title="View listings"
                   >
                     {initials(t.friend.displayName)}
-                  </span>
+                  </Link>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline justify-between gap-2">
-                      <p className="truncate font-medium text-foreground">
+                      <Link
+                        href={profileHref}
+                        className="truncate font-medium text-foreground underline-offset-2 hover:underline touch-manipulation"
+                      >
                         {t.friend.displayName}
-                      </p>
+                      </Link>
                       <time
                         className="shrink-0 text-[11px] tabular-nums text-muted"
                         dateTime={t.lastMessage?.createdAt}
@@ -178,7 +181,18 @@ export default function MessagesPage() {
                         {formatThreadTime(t.lastMessage?.createdAt)}
                       </time>
                     </div>
-                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-sm text-muted">
+                    <Link
+                      href={profileHref}
+                      className="mt-0.5 block truncate font-mono text-[10px] text-muted underline-offset-2 hover:underline touch-manipulation sm:text-xs"
+                      title={t.friend.walletAddress}
+                    >
+                      {t.friend.walletAddress.slice(0, 10)}…
+                      {t.friend.walletAddress.slice(-6)}
+                    </Link>
+                    <Link
+                      href={`/messages/${t.friend.id}`}
+                      className="mt-1 flex items-center gap-1.5 truncate text-sm text-muted touch-manipulation"
+                    >
                       {sealed && (
                         <span
                           className="inline-flex shrink-0 text-accent"
@@ -189,11 +203,15 @@ export default function MessagesPage() {
                         </span>
                       )}
                       <span className="truncate">{t.preview}</span>
-                    </p>
+                    </Link>
                   </div>
-                  <span className="text-muted" aria-hidden>
-                    ›
-                  </span>
+                </div>
+                <Link
+                  href={`/messages/${t.friend.id}`}
+                  className="flex shrink-0 items-center px-3 text-muted transition hover:bg-accent-soft/35 hover:text-foreground touch-manipulation"
+                  aria-label={`Open chat with ${t.friend.displayName}`}
+                >
+                  ›
                 </Link>
               </li>
             );

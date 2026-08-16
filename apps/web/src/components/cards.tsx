@@ -85,17 +85,35 @@ export function BookingCard({ booking }: { booking: Booking }) {
 export function UserRow({
   user,
   action,
+  profileHref,
 }: {
   user: User;
   action?: React.ReactNode;
+  /** When set, name + wallet open this friend’s listings. */
+  profileHref?: string;
 }) {
+  const name = profileHref ? (
+    <Link
+      href={profileHref}
+      className="font-medium text-foreground underline-offset-2 hover:underline touch-manipulation"
+    >
+      {user.displayName}
+    </Link>
+  ) : (
+    <p className="font-medium text-foreground">{user.displayName}</p>
+  );
+
   return (
     <div className="rounded-xl border border-border px-4 py-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-foreground">{user.displayName}</p>
+          {name}
           <div className="mt-2">
-            <WalletAddress address={user.walletAddress} compact />
+            <WalletAddress
+              address={user.walletAddress}
+              compact
+              href={profileHref}
+            />
           </div>
         </div>
         {action && (

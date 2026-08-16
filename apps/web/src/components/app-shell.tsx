@@ -54,7 +54,9 @@ export function Shell({
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const widthClass = wide ? "max-w-6xl" : "max-w-4xl";
+  /** Content column only; header/nav always use the wide rail. */
+  const contentWidth = wide ? "max-w-6xl" : "max-w-4xl";
+  const headerWidth = "max-w-6xl";
 
   function handleConnect() {
     openSignIn();
@@ -82,7 +84,7 @@ export function Shell({
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b border-border bg-surface/90 backdrop-blur-sm">
         <div
-          className={`mx-auto flex items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 ${widthClass}`}
+          className={`mx-auto flex items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 ${headerWidth}`}
         >
           <BrandLockup />
 
@@ -151,7 +153,7 @@ export function Shell({
               onClick={() => setMenuOpen(false)}
             />
             <nav
-              className={`relative z-50 border-t border-border bg-surface px-4 py-3 lg:hidden ${widthClass} mx-auto`}
+              className={`relative z-50 mx-auto border-t border-border bg-surface px-4 py-3 lg:hidden ${headerWidth}`}
             >
               {user && (
                 <Link
@@ -180,7 +182,7 @@ export function Shell({
         )}
       </header>
 
-      <main className={`mx-auto px-4 py-8 sm:px-6 sm:py-10 ${widthClass}`}>
+      <main className={`mx-auto px-4 py-8 sm:px-6 sm:py-10 ${contentWidth}`}>
         {children}
       </main>
     </div>

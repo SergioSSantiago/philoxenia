@@ -844,6 +844,34 @@ export async function getNetworkListings(userId: string) {
   return rows.map((l) => mapListing(l, l.host ?? undefined));
 }
 
+/** Friend profile: identity + their listings (viewer must be friends). */
+export async function getFriendProfile(viewerId: string, friendId: string) {
+  if (viewerId === friendId) {
+    throw new Error("Open your own listings from Home or My listings.");
+  }
+
+  const friends = await areFriends(viewerId, friendId);
+  if (!friends) {
+    throw new Error("Not friends with this user");
+  }
+
+  const friend = await getUserById(friendId);
+  if (!friend) {
+    throw new Error("User not found");
+  }
+
+  const rows = await db.query.listings.findMany({
+    where: eq(schema.listings.hostId, friendId),
+    with: { host: true },
+    orderBy: [desc(schema.listings.createdAt)],
+  });
+
+  return {
+    friend,
+    listings: rows.map((l) => mapListing(l, l.host ?? undefined)),
+  };
+}
+
 export async function getSharedWithMeListings(userId: string) {
   const introductions = await db.query.shareIntroductions.findMany({
     where: eq(schema.shareIntroductions.guestId, userId),

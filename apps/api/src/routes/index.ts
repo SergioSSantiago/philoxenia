@@ -283,6 +283,31 @@ export async function registerRoutes(app: FastifyInstance) {
   );
 
   app.get(
+    "/friends/:id",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const params = z
+        .object({ id: z.string().uuid() })
+        .parse(request.params);
+
+      try {
+        return await social.getFriendProfile(
+          request.user.userId,
+          params.id
+        );
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Request failed";
+        const status = message.includes("not found")
+          ? 404
+          : message.includes("Not friends")
+            ? 403
+            : 400;
+        return reply.status(status).send({ error: message });
+      }
+    }
+  );
+
+  app.get(
     "/notifications",
     { preHandler: [authenticate] },
     async (request) => {

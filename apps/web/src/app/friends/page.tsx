@@ -333,7 +333,7 @@ export default function FriendsPage() {
       <section>
         <SectionTitle
           title="Your friends"
-          subtitle="Remove ends the friendship for both of you"
+          subtitle="Tap a name or wallet to see their listings. Remove ends the friendship for both of you."
         />
         {data.friends.length === 0 ? (
           <EmptyState message="No friends yet." />
@@ -343,6 +343,7 @@ export default function FriendsPage() {
               <UserRow
                 key={friend.id}
                 user={friend}
+                profileHref={`/friends/${friend.id}`}
                 action={
                   <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                     <Button

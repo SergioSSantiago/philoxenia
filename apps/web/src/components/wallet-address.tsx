@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import Link from "next/link";
 
 function truncateAddress(address: string): string {
   if (address.length <= 16) return address;
@@ -11,10 +12,13 @@ export function WalletAddress({
   address,
   compact = false,
   label = "Wallet address",
+  href,
 }: {
   address: string;
   compact?: boolean;
   label?: string;
+  /** Optional link target for the address text (e.g. friend profile). */
+  href?: string;
 }) {
   const [copied, setCopied] = useState(false);
   const [shareError, setShareError] = useState("");
@@ -48,6 +52,10 @@ export function WalletAddress({
     await copy();
   }, [address, copy]);
 
+  const addressClass = `font-mono text-foreground break-all select-all ${
+    compact ? "text-xs" : "text-sm leading-relaxed"
+  }${href ? " underline-offset-2 hover:underline touch-manipulation" : ""}`;
+
   return (
     <div className="space-y-2">
       {!compact && (
@@ -55,14 +63,15 @@ export function WalletAddress({
           {label}
         </p>
       )}
-      <p
-        className={`font-mono text-foreground break-all select-all ${
-          compact ? "text-xs" : "text-sm leading-relaxed"
-        }`}
-        title={address}
-      >
-        {compact ? truncateAddress(address) : address}
-      </p>
+      {href ? (
+        <Link href={href} className={addressClass} title={address}>
+          {compact ? truncateAddress(address) : address}
+        </Link>
+      ) : (
+        <p className={addressClass} title={address}>
+          {compact ? truncateAddress(address) : address}
+        </p>
+      )}
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
