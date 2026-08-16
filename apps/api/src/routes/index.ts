@@ -780,6 +780,7 @@ export async function registerRoutes(app: FastifyInstance) {
           amount: z.string().min(1),
           asset: z.enum(["STRK", "DAI"]),
           txHash: z.string().min(10),
+          privacyMode: z.enum(["private", "public"]).optional(),
         })
         .parse(request.body);
       try {

@@ -169,6 +169,7 @@ export async function recordTransferMessage(
     amount: string;
     asset: "STRK" | "DAI";
     txHash: string;
+    privacyMode?: "private" | "public";
   }
 ) {
   await requireFriendship(senderId, recipientId);
@@ -181,7 +182,11 @@ export async function recordTransferMessage(
     throw new Error("Transaction hash required");
   }
 
-  const body = `Sent ${amount} ${input.asset}`;
+  const mode = input.privacyMode === "private" ? "private" : "public";
+  const body =
+    mode === "private"
+      ? `Sent ${amount} ${input.asset} (private)`
+      : `Sent ${amount} ${input.asset}`;
 
   const [row] = await db
     .insert(schema.directMessages)
@@ -200,7 +205,10 @@ export async function recordTransferMessage(
     userId: recipientId,
     type: "transfer",
     title: `Received ${amount} ${input.asset}`,
-    body: "A friend sent you tokens in chat.",
+    body:
+      mode === "private"
+        ? "A friend sent you a private STRK20 transfer."
+        : "A friend sent you tokens in chat.",
     href: `/messages/${senderId}`,
   });
 

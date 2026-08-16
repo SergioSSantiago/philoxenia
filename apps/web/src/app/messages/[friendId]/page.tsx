@@ -31,7 +31,10 @@ import {
   messageMailboxAddress,
   tryPostSealedOnChain,
 } from "@/lib/payments/message-mailbox";
-import { transferToFriend } from "@/lib/payments/peer-transfer";
+import {
+  transferToFriend,
+  transferToFriendPrivate,
+} from "@/lib/payments/peer-transfer";
 
 type DisplayMessage = ChatMessage & {
   displayBody: string;
@@ -55,7 +58,9 @@ export default function ChatThreadPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [showPay, setShowPay] = useState(false);
+  const [payMode, setPayMode] = useState<"private" | "public">("private");
   const [anchorOnChain, setAnchorOnChain] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [onChainNote, setOnChainNote] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLTextAreaElement>(null);
@@ -178,16 +183,25 @@ export default function ChatThreadPage() {
     setBusy(true);
     setError("");
     try {
-      const txHash = await transferToFriend(
-        account,
-        conversation.friend.walletAddress,
-        amount,
-        asset
-      );
+      const txHash =
+        payMode === "private"
+          ? await transferToFriendPrivate(
+              account,
+              conversation.friend.walletAddress,
+              amount,
+              asset
+            )
+          : await transferToFriend(
+              account,
+              conversation.friend.walletAddress,
+              amount,
+              asset
+            );
       await api.post(`/messages/${params.friendId}/transfer`, {
         amount,
         asset,
         txHash,
+        privacyMode: payMode,
       });
       setAmount("");
       setShowPay(false);
@@ -259,13 +273,44 @@ export default function ChatThreadPage() {
           <div className="border-b border-border bg-background/80 px-4 py-4">
             <form onSubmit={sendTransfer} className="space-y-3">
               <p className="text-sm text-muted">
-                Public on-chain transfer to{" "}
+                Send{" "}
                 <span className="font-medium text-foreground">
                   {conversation.friend.displayName}
-                </span>
-                . For private amounts, use a privacy-pool withdraw (coming with
-                mailbox Phase B).
+                </span>{" "}
+                STRK or DAI from chat — same friend wallet as booking pay.
               </p>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPayMode("private")}
+                  className={`rounded-full px-4 py-2 text-sm transition ${
+                    payMode === "private"
+                      ? "bg-accent text-white"
+                      : "border border-border bg-surface text-muted hover:text-foreground"
+                  }`}
+                >
+                  Private
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPayMode("public")}
+                  className={`rounded-full px-4 py-2 text-sm transition ${
+                    payMode === "public"
+                      ? "bg-accent text-white"
+                      : "border border-border bg-surface text-muted hover:text-foreground"
+                  }`}
+                >
+                  Public
+                </button>
+              </div>
+
+              <p className="text-xs leading-relaxed text-muted">
+                {payMode === "private"
+                  ? "From your shielded balance via STRK20 (Ready X · Smart Wallet + Private). Amount stays private; you need enough shielded funds (Profile → Shield)."
+                  : "Normal ERC-20 transfer. Amount and both wallet addresses are visible on-chain."}
+              </p>
+
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="block text-sm">
                   Amount
@@ -290,7 +335,11 @@ export default function ChatThreadPage() {
                 </label>
               </div>
               <Button type="submit" disabled={busy || !amount}>
-                {busy ? "Sending…" : `Send ${asset}`}
+                {busy
+                  ? "Sending…"
+                  : payMode === "private"
+                    ? `Send ${asset} privately`
+                    : `Send ${asset} publicly`}
               </Button>
             </form>
           </div>
@@ -351,15 +400,29 @@ export default function ChatThreadPage() {
             </Button>
           </div>
           {mailboxReady && (
-            <label className="mt-2 flex cursor-pointer items-center gap-2 text-xs text-muted">
-              <input
-                type="checkbox"
-                className="rounded border-border"
-                checked={anchorOnChain}
-                onChange={(e) => setAnchorOnChain(e.target.checked)}
-              />
-              Also anchor ciphertext hash on-chain (Ready Private · MessageMailbox)
-            </label>
+            <details
+              className="mt-2 text-xs text-muted"
+              open={showAdvanced}
+              onToggle={(e) =>
+                setShowAdvanced((e.target as HTMLDetailsElement).open)
+              }
+            >
+              <summary className="cursor-pointer select-none text-muted hover:text-foreground">
+                Advanced
+              </summary>
+              <label className="mt-2 flex cursor-pointer items-start gap-2 leading-snug">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 rounded border-border"
+                  checked={anchorOnChain}
+                  onChange={(e) => setAnchorOnChain(e.target.checked)}
+                />
+                <span>
+                  Anchor ciphertext hash on-chain (MessageMailbox). Optional
+                  proof-of-existence — not needed for normal chat.
+                </span>
+              </label>
+            </details>
           )}
           <div className="mt-1.5 flex justify-between gap-2 text-[10px] text-muted">
             <span>Enter to send · Shift+Enter for newline</span>
@@ -417,6 +480,16 @@ function MessageBubble({
       >
         {isTransfer ? (
           <>
+            {message.body.includes("(private)") && (
+              <p
+                className={`mb-1 flex items-center gap-1 text-[10px] uppercase tracking-wide ${
+                  mine ? "text-white/70" : "text-accent"
+                }`}
+              >
+                <LockIcon />
+                Private transfer
+              </p>
+            )}
             <p className="font-medium">
               {mine ? "You sent" : "Received"}{" "}
               {message.amount && message.asset

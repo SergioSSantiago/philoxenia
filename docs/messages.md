@@ -22,7 +22,7 @@ See [PRIVATE_MESSAGING_PLAN.md](../PRIVATE_MESSAGING_PLAN.md) and the Cairo `Mes
 | Kind | Description |
 |------|-------------|
 | `text` | Sealed body (`phx1.…`). Plaintext never stored. Limit ~900 chars plaintext. |
-| `transfer` | Public ERC-20 STRK/DAI to the friend’s wallet, then recorded in chat |
+| `transfer` | Public ERC-20 **or** private STRK20 transfer to the friend’s wallet, then recorded in chat |
 | `booking` | System notice when a guest books the host’s listing |
 
 Only friends can message each other. Each user publishes `messagePublicKey` (device ECDH P-256) via `PATCH /users/me` when they open Messages.
