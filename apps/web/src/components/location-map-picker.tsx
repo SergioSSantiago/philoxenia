@@ -192,7 +192,7 @@ export function LocationMapPicker({
         <p className="text-sm font-medium text-foreground">Location on map</p>
         <p className="mt-0.5 text-xs text-muted">
           Search an address, then click the map or drag the pin. Friends see
-          this pin on Home — it is not a public directory.
+          this pin on Home to Book & pay — it is not a public directory.
         </p>
       </div>
 

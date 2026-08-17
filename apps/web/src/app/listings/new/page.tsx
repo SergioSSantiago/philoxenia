@@ -24,7 +24,7 @@ export default function CreateListingPage() {
   const [pricePerNight, setPricePerNight] = useState("");
   const [connectorRewardPercent, setConnectorRewardPercent] = useState(5);
   const [cancellationTerms, setCancellationTerms] = useState(
-    "Full refund if cancelled at least 7 days before check-in. Within 7 days, refund is at the host’s discretion."
+    "Cancel frees the nights only. Book & pay already paid the host (and connector) on-chain — any money return is agreed in Messages with Send STRK or DAI. No automatic clawback."
   );
   const [photos, setPhotos] = useState<string[]>([]);
   const [mapLocation, setMapLocation] = useState<MapLocationValue | null>(null);
@@ -175,7 +175,8 @@ export default function CreateListingPage() {
             <h2 className="text-lg text-foreground">Availability</h2>
             <p className="text-xs text-muted leading-relaxed">
               Same calendar as when you edit a listing: tap nights one by one,
-              or add a range, and set per-night DAI prices.
+              or add a range, and set per-night DAI list prices. Guests Book &amp;
+              pay those nights in STRK or DAI.
             </p>
             {!pricePerNight || Number(pricePerNight) <= 0 ? (
               <p className="text-sm text-muted">
@@ -200,8 +201,9 @@ export default function CreateListingPage() {
           <section className="space-y-3">
             <h2 className="text-lg text-foreground">Cancellation terms</h2>
             <p className="text-xs text-muted leading-relaxed">
-              Off-chain policy only. After payment, host and connector already
-              have the funds — resolve changes in Messages. Write clear terms
+              Off-chain policy only — escrow does not enforce it. After Book &amp;
+              pay, host and connector already have the funds. Cancel frees
+              nights; any return is Send STRK or DAI in Messages. Write terms
               your network will honour.
             </p>
             <textarea

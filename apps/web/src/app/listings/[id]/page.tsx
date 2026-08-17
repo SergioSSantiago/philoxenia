@@ -336,9 +336,9 @@ export default function ListingPage() {
           </div>
 
           <p className="mt-4 text-sm text-muted leading-relaxed">
-            Cancellation: {listing.cancellationTerms}. After payment, host and
-            connector already have the funds — resolve changes in Messages and
-            return money voluntarily if you agree.
+            Cancellation: {listing.cancellationTerms}. After Book & pay, host
+            and connector already have the funds — cancel frees nights; any
+            return is Send STRK or DAI in Messages.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

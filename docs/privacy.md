@@ -22,7 +22,7 @@ Philoxenia minimizes **public discovery** of hospitality offers and offers an op
 
 - Friendships stored in PostgreSQL
 - API operator can read all relationships
-- User search is by wallet address only
+- User search is by **Ready X wallet** address only
 
 **Mitigation:** Self-host the API and database.
 

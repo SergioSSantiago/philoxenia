@@ -4,17 +4,17 @@
 
 # Listings
 
-Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**.
+Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**.
 
 ## Listing fields
 
 | Field | Description |
 |-------|-------------|
 | `title`, `description` | Basic listing info |
-| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home — not a public directory. Listing detail **Open on OpenStreetMap** is an external OSM tab |
+| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home to **Book & pay** — not a public directory. Listing detail **Open on OpenStreetMap** is an external OSM tab |
 | `pricePerNight` | Default DAI price; nights can override per day on the calendar. Guests choose **STRK** (live FX) or **DAI** (1:1) at pay time — listing detail copy says both |
 | `minStay`, `maxStay` | Derived from open nights (not host-entered) |
-| `cancellationTerms` | Off-chain policy text (not enforced by escrow). Listing detail: cancel frees nights, no clawback; money return in Messages |
+| `cancellationTerms` | Off-chain policy text (not enforced by escrow). Create-listing default: cancel frees nights; **Book & pay** already paid host/connector; money return is **Send STRK or DAI** in Messages. Listing detail matches |
 | `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Create-listing UI default is **5%** and explains 3–10% typical when they **Book & pay**; Philoxenia takes 10% of that reward only; **Direct Book & pay** stays 0% protocol ([connectors.md](./connectors.md)) |
 | `photos` | 1–8 images (JPEG/PNG/WebP/HEIC); browser compresses to JPEG data URLs (~1600px). Uploader copy lists iPhone HEIC |
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests **Book & pay STRK or DAI** |
@@ -30,12 +30,9 @@ Allowed when there are **no active paid bookings** (funded / confirmed / complet
 
 ## Cancellation vs escrow
 
-`cancellationTerms` are **not** encoded in `BookingEscrow`. On-chain, after funding:
+`cancellationTerms` are **not** encoded in `BookingEscrow`. Current **Book & pay** is fund + settle in one tx, so there is **no clawback**. Honouring written terms is social: cancel frees nights; any money return is **Send STRK or DAI** in Messages.
 
-- Guest (or owner) calls `settle_booking`
-- Host (or owner) calls `refund_booking`
-
-Honouring the written policy is social/off-chain until automated rules are added.
+Legacy on-chain `refund_booking` only applies if a booking never settled (`funded`). The web UI does not offer that after immediate settle.
 
 ## Visibility
 
