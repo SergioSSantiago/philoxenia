@@ -16,7 +16,7 @@ Built with [Cursor](https://cursor.com) AI-assisted development (disclosed, not 
 (<a href="https://www.ready.co/" style="color:#b91c1c;">ready.co</a>).
 In Ready X, enable <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/><br/>
 <strong>2. iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604" style="color:#b91c1c;">Ready X</a>.
-Safari can <strong>Connect</strong> via WalletConnect (`ready://`). For <strong>Private STRK</strong>, open the same URL in the <strong>Ready X in-app browser</strong>.<br/><br/>
+Safari can <strong>Connect</strong> via WalletConnect (`ready://`). For <strong>Private STRK or DAI</strong>, open the same URL in the <strong>Ready X in-app browser</strong>.<br/><br/>
 <strong>3. Firefox:</strong> Ready X is <strong>not available</strong> — only the legacy Ready Wallet, which <strong>cannot</strong> do private payments. Use Chrome + Ready X (desktop) or the Ready X app browser (iPhone).
 </p>
 
@@ -94,7 +94,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 | Protocol fee | **10% of connector reward** (0% if no connector) | same | — |
 | Voyager | ABI + source verified | same class | ABI + source verified |
 
-List prices are in **DAI**. Guests pay in **STRK** (live FX) or **DAI** (1:1). Private STRK pay uses the anonymizer. Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
+List prices are in **DAI**. Guests pay in **STRK** (live FX) or **DAI** (1:1). Private pay (STRK or DAI) uses the anonymizer. Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
 
 Repo: https://github.com/SergioSSantiago/philoxenia · Vercel guide: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
 

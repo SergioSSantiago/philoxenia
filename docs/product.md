@@ -13,7 +13,7 @@ The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.55;">
 <strong style="color:#7f1d1d;">⚠ Required: Ready X setup (read this first)</strong><br/><br/>
 <strong>Desktop:</strong> <strong>Chrome</strong> + <strong>Ready X</strong> extension, with <strong>Smart Wallet</strong> and <strong>Private</strong> turned on.<br/><br/>
-<strong>iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604">Ready X</a>. Safari can <strong>Connect</strong> via WalletConnect redirect into Ready X (StarknetKit mobile system browser mode). For <strong>Private STRK</strong>, prefer opening Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
+<strong>iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604">Ready X</a>. Safari can <strong>Connect</strong> via WalletConnect redirect into Ready X (StarknetKit mobile system browser mode). For <strong>Private STRK or DAI</strong>, prefer opening Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
 <strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears — <strong>no private payments</strong>.
 </p>
 
@@ -27,7 +27,7 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - **Friend-based discovery** — see listings from friends, not strangers
 - **Connectors (key growth loop)** — friends introduce guests to host listings and **earn a % when the stay settles**; this is how the private network expands without a public marketplace
 - **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct bookings)
-- **Payment privacy** — STRK20 when Ready X has Smart Wallet + Private enabled
+- **Payment privacy** — STRK20 for STRK and DAI when Ready X has Smart Wallet + Private enabled
 - **Sealed chat + peer pay** — E2E messages between friends; public or private peer transfers
 - **STRK ↔ DAI swap** — public AVNU swap on Profile (and from Home)
 
@@ -51,7 +51,7 @@ See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend
 ### What you must do (checklist)
 
 1. **Desktop:** Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** (not Firefox). Enable **Smart Wallet** and **Private**.
-2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For Private STRK, open the same URL in the **Ready X in-app browser**.
+2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For Private STRK or DAI, open the same URL in the **Ready X in-app browser**.
 3. Connect Ready X → Sign in (approve SNIP-12). On mobile Safari this is two steps: Connect, then Sign in (second open of Ready X).
 
 Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home` (`ReadyWalletNotice` compact in the modal; full notice on the landing). Display name is optional; friends add you by **wallet address only**.
@@ -64,7 +64,7 @@ Firefox does **not** list the Ready X extension. Users only see the **legacy Rea
 
 ### iPhone — Safari vs in-app
 
-| Path | Login | Private STRK |
+| Path | Login | Private STRK/DAI |
 |------|--------|----------------|
 | Safari → Connect → Ready X (`ready://`) | Supported (WC redirect) | Unreliable — needs wallet API ≥ 0.10 |
 | Ready X in-app browser | Supported (injected) | Supported when Smart Wallet + Private on |
