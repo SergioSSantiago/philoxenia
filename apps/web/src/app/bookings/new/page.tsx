@@ -27,6 +27,12 @@ import {
   escrowAddressForAsset,
   tokenAddressForAsset,
 } from "@/lib/tokens";
+import {
+  confirmPaidBookingWithRetry,
+  extractTxHashFromError,
+  loadPendingPaidBooking,
+  savePendingPaidBooking,
+} from "@/lib/payments/pending-paid-booking";
 
 function dayKey(d: string): string {
   return d.slice(0, 10);
@@ -106,11 +112,27 @@ function NewBookingForm() {
   const [loadError, setLoadError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
+  const [recording, setRecording] = useState(false);
 
-  // JWT can outlive the Ready connector (common on Firefox). Public and
-  // Private both need a live account to sign — surface reconnect, don't
-  // leave Pay grey with no reason.
   const walletReady = Boolean(account && address);
+
+  useEffect(() => {
+    const pending = loadPendingPaidBooking();
+    if (!pending || !token) return;
+    setRecording(true);
+    void confirmPaidBookingWithRetry(pending)
+      .then((booking) => {
+        router.push(`/bookings/${booking.id}`);
+      })
+      .catch((err) => {
+        setError(
+          err instanceof Error
+            ? `${err.message} Payment already landed on-chain — refresh this page to record it, or check Bookings.`
+            : "Could not record the on-chain payment. Refresh this page to retry."
+        );
+      })
+      .finally(() => setRecording(false));
+  }, [token, router]);
 
   useEffect(() => {
     if (!address || !STRK20_PRIVACY_ENABLED) {
@@ -288,43 +310,58 @@ function NewBookingForm() {
         );
       }
 
-      const result = await provider.fundBooking({
-        bookingId,
-        escrowAddress,
-        tokenAddress,
-        amount: payAmount,
-        asset: paymentAsset,
-        guestAddress: address,
-        hostAddress: listing.host.walletAddress,
-        connectorAddress: liveQuote.connectorWallet,
-        connectorRewardPercent: liveQuote.connectorRewardPercent,
-        onChainBookingId,
-        onChainListingId,
-      });
+      const result = await (async () => {
+        try {
+          return await provider.fundBooking({
+            bookingId,
+            escrowAddress,
+            tokenAddress,
+            amount: payAmount,
+            asset: paymentAsset,
+            guestAddress: address,
+            hostAddress: listing.host.walletAddress,
+            connectorAddress: liveQuote.connectorWallet,
+            connectorRewardPercent: liveQuote.connectorRewardPercent,
+            onChainBookingId,
+            onChainListingId,
+          });
+        } catch (err) {
+          const recovered = extractTxHashFromError(err);
+          if (recovered) {
+            return {
+              status: "pending" as const,
+              txHash: recovered,
+              privacyMode: fundMode,
+            };
+          }
+          throw err;
+        }
+      })();
 
       if (!result.txHash) {
         throw new Error("Payment did not return a transaction hash");
       }
 
-      const booking = await api.post<Booking>("/bookings/confirm", {
+      const pending = {
         bookingId,
         listingId: listing.id,
         nights: range.nights,
         fundTxHash: result.txHash,
         escrowBookingId: onChainBookingId,
-        privacyMode: result.privacyMode,
+        privacyMode: result.privacyMode ?? fundMode,
         paymentAsset,
         totalPrice: payAmount,
-        totalPriceStrk:
-          paymentAsset === "STRK" ? liveQuote.totalPriceStrk : undefined,
         fxRate: paymentAsset === "STRK" ? liveQuote.fxRate : "1",
-      });
-
+      };
+      savePendingPaidBooking(pending);
+      setRecording(true);
+      const booking = await confirmPaidBookingWithRetry(pending);
       router.push(`/bookings/${booking.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Payment failed");
     } finally {
       setSubmitting(false);
+      setRecording(false);
     }
   }
 
@@ -521,6 +558,12 @@ function NewBookingForm() {
             </Card>
           )}
 
+          {recording && (
+            <p className="text-sm text-amber-800 leading-relaxed">
+              Payment landed on-chain. Recording the booking in Philoxenia…
+            </p>
+          )}
+
           {error && <p className="text-sm text-red-700">{error}</p>}
 
           {!walletReady && quote && range.ok && (
@@ -552,24 +595,26 @@ function NewBookingForm() {
             ) : (
               <Button
                 type="button"
-                disabled={submitting || !quote || !range.ok}
+                disabled={submitting || recording || !quote || !range.ok}
                 onClick={payAndBook}
               >
-                {submitting
-                  ? fundMode === "private"
-                    ? "Proving & paying…"
-                    : "Paying…"
-                  : paymentAsset === "DAI"
-                    ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
-                        fundMode === "private"
-                          ? ` · ${privacyLabel("private")}`
-                          : ""
-                      }`
-                    : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
-                        fundMode === "private"
-                          ? ` · ${privacyLabel("private")}`
-                          : ""
-                      }`}
+                {recording
+                  ? "Recording booking…"
+                  : submitting
+                    ? fundMode === "private"
+                      ? "Proving & paying…"
+                      : "Paying…"
+                    : paymentAsset === "DAI"
+                      ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
+                          fundMode === "private"
+                            ? ` · ${privacyLabel("private")}`
+                            : ""
+                        }`
+                      : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
+                          fundMode === "private"
+                            ? ` · ${privacyLabel("private")}`
+                            : ""
+                        }`}
               </Button>
             )}
           </div>

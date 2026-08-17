@@ -18,6 +18,7 @@ import {
   fundBookingViaShadowAccount,
 } from "./private-escrow-fund";
 import { tokenAddressForAsset } from "@/lib/tokens";
+import { formatWalletError as formatUserFacingWalletError } from "@/lib/wallet-errors";
 
 function parseAmount(amount: string): bigint {
   const [whole, frac = ""] = amount.trim().split(".");
@@ -34,9 +35,11 @@ function toHexAmount(amount: string): string {
   return `0x${value.toString(16)}`;
 }
 
-/** Prefer paymaster/RPC execution_error when wallets wrap it. */
-function formatWalletError(err: unknown): string {
-  if (!(err instanceof Error)) return String(err);
+/** Prefer paymaster/RPC execution_error, then user-facing wallet copy. */
+function formatPrivatePayError(err: unknown): string {
+  if (!(err instanceof Error)) {
+    return formatUserFacingWalletError(err);
+  }
   const anyErr = err as Error & {
     baseError?: { data?: { execution_error?: string }; message?: string };
     data?: { execution_error?: string };
@@ -46,8 +49,10 @@ function formatWalletError(err: unknown): string {
     anyErr.baseError?.data?.execution_error ||
     anyErr.data?.execution_error ||
     anyErr.error?.data?.execution_error;
-  if (execution) return `${err.message}: ${execution}`;
-  return err.message;
+  if (execution) {
+    return formatUserFacingWalletError(new Error(execution));
+  }
+  return formatUserFacingWalletError(err);
 }
 
 function formatBalance(raw: string | number | bigint): string {
@@ -233,7 +238,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
           privacyMode: "private",
         };
       } catch (err) {
-        privateErrors.push(`anonymizer: ${formatWalletError(err)}`);
+        privateErrors.push(`anonymizer: ${formatPrivatePayError(err)}`);
       }
     }
 
@@ -252,7 +257,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
           privacyMode: "private",
         };
       } catch (err) {
-        const msg = formatWalletError(err);
+        const msg = formatPrivatePayError(err);
         if (
           /wallet_strk20ShadowAccountCommitment|Unknown request type/i.test(msg)
         ) {
@@ -265,9 +270,18 @@ export class Strk20PaymentProvider implements PaymentProvider {
       }
     }
 
-    throw new Error(
-      `Private payment failed (no public fallback). ${privateErrors.join(" | ")}. Shield enough balance on Profile, then retry.`
-    );
+    const detail = privateErrors.join(" | ");
+    if (/cancelled in Ready|USER_REFUSED/i.test(detail)) {
+      throw new Error(
+        "Private payment cancelled in Ready X. Approve the wallet request to continue, or choose Public."
+      );
+    }
+    if (/INSUFFICIENT_PRIVATE_BALANCE|insufficient private/i.test(detail)) {
+      throw new Error(
+        `Private payment failed (no public fallback). ${detail}. Shield enough ${this.asset} on Profile, then retry.`
+      );
+    }
+    throw new Error(`Private payment failed (no public fallback). ${detail}`);
   }
 }
 

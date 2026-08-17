@@ -8,7 +8,7 @@ Security model for the Philoxenia MVP. This document describes intended controls
 
 ## Authentication
 
-- **Wallet-based auth** — SNIP-12 typed-data signature (`Authentication { nonce }`, domain `Philoxenia`). **Desktop:** Chrome + Ready X (Smart Wallet + Private). **iPhone:** Safari can Connect via WalletConnect (`ready://`); Private STRK needs the Ready X in-app browser. Firefox has no Ready X / no privacy API.
+- **Wallet-based auth** — SNIP-12 typed-data signature (`Authentication { nonce }`, domain `Philoxenia`). **Desktop:** Chrome + Ready X (Smart Wallet + Private). **iPhone:** Safari can Connect via WalletConnect (`ready://`); Private STRK or DAI needs the Ready X in-app browser. Firefox has no Ready X / no privacy API.
 - **JWT sessions** — API issues 7-day JWTs after signature verification. Protect `JWT_SECRET` in production.
 - **Nonce replay protection** — Auth nonces expire after 5 minutes and are marked used after verification.
 

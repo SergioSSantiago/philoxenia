@@ -28,6 +28,8 @@ quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → 
 
 `/bookings/new` calendar copy: tap nights one by one; they need not be consecutive; pay STRK or DAI. If the JWT is live but the wallet is not, the page asks to **Connect Ready X** (Chrome or iPhone) — Public and Private both need a live session; Private also needs wallet API ≥ 0.10. Reconnect failures and Private pay errors name Ready X (not a generic Ready extension).
 
+After a successful on-chain pay, the client stores a pending row in `localStorage` (`philoxenia_pending_paid_booking`) and retries `POST /bookings/confirm` (Ready X sometimes throws after the tx already landed). Reopening Book & pay resumes **Recording booking…** until confirm succeeds.
+
 **Confirm verifies:**
 
 - Tx exists and `execution_status === SUCCEEDED`
