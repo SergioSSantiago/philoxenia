@@ -103,8 +103,8 @@ export default function ConnectorPage() {
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           Friends list places privately. When you introduce a guest with your
-          invite link and they book, you get a cut of the stay — paid straight
-          to your wallet when the booking settles.
+          invite link and they book, you get a cut of the stay — paid in the
+          same asset they used (STRK or DAI) when the booking settles.
         </p>
       </div>
 
@@ -125,8 +125,8 @@ export default function ConnectorPage() {
           <li>
             <span className="font-medium">3. They book &amp; pay</span>
             {" — "}
-            you receive the host&apos;s connector % on settle (Philoxenia takes
-            10% of that reward only).
+            you receive the host&apos;s connector % on settle in STRK or DAI
+            (Philoxenia takes 10% of that reward only).
           </li>
         </ol>
         <p className="text-xs leading-relaxed text-muted">

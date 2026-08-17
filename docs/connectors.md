@@ -32,7 +32,7 @@ Hosts who set a healthy connector % make their friends want to share. Connectors
 3. Tap **Share invite & earn** — creates an opaque `/invite/{token}` link with **you** as connector. The button shows **Copied!** when the clipboard succeeds.
 4. Send the link (WhatsApp, Messages, etc.). Do **not** send your wallet as the invite.
 5. Guest opens the link → attribution is saved (last link wins). They become friends with the host if needed, then book and pay.
-6. On settle, your reward hits your connected wallet. Track totals on `/connector`.
+6. On settle, your reward hits your connected wallet **in the same asset the guest paid** (STRK or DAI). Track totals on `/connector`.
 
 ```
 Friend of host ──share──► invite link (connector = you)

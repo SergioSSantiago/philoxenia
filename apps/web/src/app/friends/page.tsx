@@ -71,7 +71,7 @@ export default function FriendsPage() {
     const normalized = normalizeWalletQuery(query);
     if (normalized.length < 6) {
       setSearchError(
-        "Enter at least 4 characters of a wallet address (with 0x)."
+        "Enter at least 4 hex characters of a wallet (0x is added if missing)."
       );
       setResults([]);
       return;
@@ -168,8 +168,9 @@ export default function FriendsPage() {
           <div>
             <h3 className="text-lg">Add someone you trust</h3>
             <p className="mt-2 text-sm text-muted leading-relaxed">
-              Paste their Starknet wallet address. They must already have signed
-              in to Philoxenia once. Only add people you genuinely know.
+              Paste a Starknet address (0x optional). They must already have
+              signed in once. Only add people you genuinely know. Search needs
+              at least 4 hex characters.
             </p>
             <div className="mt-4 space-y-3">
               <TextInput
