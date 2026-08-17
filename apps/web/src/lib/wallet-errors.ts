@@ -1,12 +1,19 @@
 /** Map wallet / connector failures to short user-facing copy. */
+export function isWalletCancelled(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return (
+    msg.includes("USER_REFUSED_OP") ||
+    /user rejected|user abort|user cancelled|rejected by user|cancelled in Ready/i.test(
+      msg
+    )
+  );
+}
+
 export function formatWalletError(err: unknown): string {
   const msg = err instanceof Error ? err.message : String(err);
   const lower = msg.toLowerCase();
 
-  if (
-    msg.includes("USER_REFUSED_OP") ||
-    /user rejected|user abort|user cancelled|rejected by user/i.test(msg)
-  ) {
+  if (isWalletCancelled(err)) {
     return "Request cancelled in Ready X. Try again when ready to approve.";
   }
 

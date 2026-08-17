@@ -1046,6 +1046,9 @@ export async function quoteBooking(
     paymentAsset?: "STRK" | "DAI";
   }
 ) {
+  if (input.listingId) {
+    await absorbSettledPaysForListing(input.listingId);
+  }
   const prepared = await prepareBooking(guestId, input);
   const fx = await getStrkPerDai({ fresh: true });
   const totalPriceDai = prepared.amountsDai.totalPrice;

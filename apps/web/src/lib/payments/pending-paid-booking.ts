@@ -2,6 +2,53 @@ import type { Booking, PaymentAsset } from "@philoxenia/shared";
 import { api } from "@/lib/api";
 
 const KEY = "philoxenia_pending_paid_booking";
+const INFLIGHT_KEY = "philoxenia_pay_inflight";
+const INFLIGHT_MS = 20 * 60 * 1000;
+
+export type PayInflight = {
+  listingId: string;
+  nights: string[];
+  bookingId: string;
+  escrowBookingId: string;
+  startedAt: number;
+};
+
+export function nightsOverlap(a: string[], b: string[]): boolean {
+  const set = new Set(a.map((d) => d.slice(0, 10)));
+  return b.some((d) => set.has(d.slice(0, 10)));
+}
+
+export function savePayInflight(row: PayInflight) {
+  try {
+    sessionStorage.setItem(INFLIGHT_KEY, JSON.stringify(row));
+  } catch {
+    // ignore
+  }
+}
+
+export function loadPayInflight(): PayInflight | null {
+  try {
+    const raw = sessionStorage.getItem(INFLIGHT_KEY);
+    if (!raw) return null;
+    const row = JSON.parse(raw) as PayInflight;
+    if (!row?.listingId || !Array.isArray(row.nights)) return null;
+    if (Date.now() - row.startedAt > INFLIGHT_MS) {
+      clearPayInflight();
+      return null;
+    }
+    return row;
+  } catch {
+    return null;
+  }
+}
+
+export function clearPayInflight() {
+  try {
+    sessionStorage.removeItem(INFLIGHT_KEY);
+  } catch {
+    // ignore
+  }
+}
 
 export type PendingPaidBooking = {
   bookingId: string;

@@ -28,12 +28,17 @@ import {
   tokenAddressForAsset,
 } from "@/lib/tokens";
 import {
+  clearPayInflight,
   clearPendingPaidBooking,
   confirmPaidBookingWithRetry,
   extractTxHashFromError,
+  loadPayInflight,
   loadPendingPaidBooking,
+  nightsOverlap,
+  savePayInflight,
   savePendingPaidBooking,
 } from "@/lib/payments/pending-paid-booking";
+import { isWalletCancelled } from "@/lib/wallet-errors";
 
 function dayKey(d: string): string {
   return d.slice(0, 10);
@@ -121,40 +126,62 @@ function NewBookingForm() {
   useEffect(() => {
     if (!token) return;
     const pending = loadPendingPaidBooking();
-    if (!pending?.fundTxHash) return;
+    const inflight = loadPayInflight();
+    if (!pending?.fundTxHash && !inflight) return;
     let cancelled = false;
     setRecording(true);
     void (async () => {
       try {
         const rows = await api.get<Booking[]>("/bookings");
         if (cancelled) return;
-        const recorded = rows.find((b) => {
-          try {
-            return (
-              Boolean(b.fundTxHash) &&
-              BigInt(b.fundTxHash as string) === BigInt(pending.fundTxHash)
-            );
-          } catch {
-            return b.fundTxHash === pending.fundTxHash;
+        if (pending?.fundTxHash) {
+          const recorded = rows.find((b) => {
+            try {
+              return (
+                Boolean(b.fundTxHash) &&
+                BigInt(b.fundTxHash as string) === BigInt(pending.fundTxHash)
+              );
+            } catch {
+              return b.fundTxHash === pending.fundTxHash;
+            }
+          });
+          if (recorded) {
+            clearPendingPaidBooking();
+            clearPayInflight();
+            router.push(`/bookings/${recorded.id}`);
+            return;
           }
-        });
-        if (recorded) {
-          clearPendingPaidBooking();
-          router.push(`/bookings/${recorded.id}`);
+          const booking = await confirmPaidBookingWithRetry(pending);
+          if (!cancelled) router.push(`/bookings/${booking.id}`);
           return;
         }
-        const booking = await confirmPaidBookingWithRetry(pending);
-        if (!cancelled) router.push(`/bookings/${booking.id}`);
+        const hit = inflight
+          ? rows.find(
+              (b) =>
+                b.listingId === inflight.listingId &&
+                nightsOverlap(b.selectedNights ?? [], inflight.nights)
+            )
+          : undefined;
+        if (hit) {
+          clearPayInflight();
+          router.push(`/bookings/${hit.id}`);
+        }
       } catch (err) {
-        if (!cancelled) {
+        if (!cancelled && (pending?.fundTxHash || inflight)) {
           setError(
             err instanceof Error
-              ? `${err.message} Payment already landed on-chain — refresh to record it. Do not pay again.`
-              : "Payment already landed on-chain — refresh to record it. Do not pay again."
+              ? `${err.message} Do not pay again — open My bookings.`
+              : "Do not pay again — open My bookings."
           );
         }
       } finally {
-        if (!cancelled) setRecording(false);
+        if (
+          !cancelled &&
+          !loadPendingPaidBooking()?.fundTxHash &&
+          !loadPayInflight()
+        ) {
+          setRecording(false);
+        }
       }
     })();
     return () => {
@@ -295,6 +322,46 @@ function NewBookingForm() {
     }
     const hostWallet = listing.host.walletAddress;
 
+    const existingPending = loadPendingPaidBooking();
+    if (
+      existingPending?.fundTxHash &&
+      existingPending.listingId === listing.id &&
+      nightsOverlap(existingPending.nights, range.nights)
+    ) {
+      setRecording(true);
+      setError(
+        "These nights are already paid on-chain. Recording the stay — do not pay again."
+      );
+      try {
+        const booking = await confirmPaidBookingWithRetry(existingPending);
+        router.push(`/bookings/${booking.id}`);
+      } catch {
+        router.push("/bookings");
+      }
+      return;
+    }
+
+    const inflight = loadPayInflight();
+    if (
+      inflight &&
+      inflight.listingId === listing.id &&
+      nightsOverlap(inflight.nights, range.nights)
+    ) {
+      setRecording(true);
+      setError(
+        "A payment for these nights is already in progress. Do not pay again."
+      );
+      void api.get<Booking[]>("/bookings").then((rows) => {
+        const hit = rows.find(
+          (b) =>
+            b.listingId === listing.id &&
+            nightsOverlap(b.selectedNights ?? [], range.nights)
+        );
+        if (hit) router.push(`/bookings/${hit.id}`);
+      });
+      return;
+    }
+
     setSubmitting(true);
     setError("");
     try {
@@ -323,6 +390,13 @@ function NewBookingForm() {
       const bookingId = crypto.randomUUID();
       const onChainBookingId = onChainIdFromUuid(bookingId);
       const onChainListingId = onChainIdFromUuid(listing.id);
+      savePayInflight({
+        listingId: listing.id,
+        nights: range.nights,
+        bookingId,
+        escrowBookingId: onChainBookingId,
+        startedAt: Date.now(),
+      });
       const tokenAddress = tokenAddressForAsset(paymentAsset);
       const provider = createPaymentProvider(
         paymentAsset,
@@ -383,49 +457,64 @@ function NewBookingForm() {
         fxRate: paymentAsset === "STRK" ? liveQuote.fxRate : "1",
       };
       savePendingPaidBooking(pending);
+      clearPayInflight();
       setRecording(true);
       const booking = await confirmPaidBookingWithRetry(pending);
       router.push(`/bookings/${booking.id}`);
     } catch (err) {
-      const pending = loadPendingPaidBooking();
-      if (pending?.fundTxHash) {
+      const recovered = extractTxHashFromError(err);
+      const inflightNow = loadPayInflight();
+      if (recovered && inflightNow && !loadPendingPaidBooking()?.fundTxHash) {
+        savePendingPaidBooking({
+          bookingId: inflightNow.bookingId,
+          listingId: inflightNow.listingId,
+          nights: inflightNow.nights,
+          fundTxHash: recovered,
+          escrowBookingId: inflightNow.escrowBookingId,
+          privacyMode: fundMode,
+          paymentAsset,
+          totalPrice:
+            paymentAsset === "DAI"
+              ? quote?.totalPriceDai ?? "0"
+              : quote?.totalPriceStrk ?? "0",
+        });
+      }
+      const paid = loadPendingPaidBooking();
+      if (paid?.fundTxHash) {
+        clearPayInflight();
         setRecording(true);
         setError(
           "Payment landed on Starknet. Recording the stay — do not pay again."
         );
-        void confirmPaidBookingWithRetry(pending)
+        void confirmPaidBookingWithRetry(paid)
           .then((booking) => router.push(`/bookings/${booking.id}`))
-          .catch(async () => {
-            try {
-              const rows = await api.get<Booking[]>("/bookings");
-              const hit = rows.find((b) => {
-                try {
-                  return (
-                    Boolean(b.fundTxHash) &&
-                    BigInt(b.fundTxHash as string) ===
-                      BigInt(pending.fundTxHash)
-                  );
-                } catch {
-                  return b.fundTxHash === pending.fundTxHash;
-                }
-              });
-              if (hit) {
-                clearPendingPaidBooking();
-                router.push(`/bookings/${hit.id}`);
-                return;
-              }
-            } catch {
-              // keep locked
-            }
-            setError(
-              "Payment landed on Starknet. Open My bookings — do not pay again."
-            );
-          });
+          .catch(() => router.push("/bookings"));
         return;
       }
-      setError(err instanceof Error ? err.message : "Payment failed");
+      if (isWalletCancelled(err)) {
+        clearPayInflight();
+        setError(
+          err instanceof Error ? err.message : "Payment cancelled in Ready X."
+        );
+        return;
+      }
+      setRecording(true);
+      setError(
+        "If Ready charged you, the stay is being recorded. Do not pay again — open My bookings."
+      );
+      void api.get<Booking[]>("/bookings").then((rows) => {
+        const hit = rows.find(
+          (b) =>
+            b.listingId === listing.id &&
+            nightsOverlap(b.selectedNights ?? [], range.nights)
+        );
+        if (hit) {
+          clearPayInflight();
+          router.push(`/bookings/${hit.id}`);
+        }
+      });
     } finally {
-      if (!loadPendingPaidBooking()?.fundTxHash) {
+      if (!loadPendingPaidBooking()?.fundTxHash && !loadPayInflight()) {
         setSubmitting(false);
         setRecording(false);
       }
