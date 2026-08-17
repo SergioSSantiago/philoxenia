@@ -143,9 +143,12 @@ export default function HomePage() {
         </section>
 
         <section>
-          <SectionTitle title="My listings" />
+          <SectionTitle
+            title="My listings"
+            subtitle="Priced in DAI. Set a connector % so friends can share and earn."
+          />
           {data.myListings.length === 0 ? (
-            <EmptyState message="You haven't listed a place yet." />
+            <EmptyState message="You haven't listed a place yet. Use List your place in the nav — friends only see what you publish." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.myListings.map((l) => (

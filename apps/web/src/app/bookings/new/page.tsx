@@ -351,8 +351,8 @@ function NewBookingForm() {
       <h1 className="mb-2 text-4xl">Book & pay</h1>
       <p className="mb-2 text-muted">{listing.title}</p>
       <p className="mb-8 text-sm text-muted leading-relaxed">
-        Use the calendar: tap each night you want. One tap selects, another
-        deselects. Then pay in STRK or DAI.
+        Use the calendar: tap each night you want (they need not be consecutive).
+        One tap selects, another deselects. Then pay in STRK or DAI.
       </p>
 
       {isOwnListing ? (

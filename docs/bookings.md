@@ -22,9 +22,11 @@ quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → 
 
 ## Creating a booking
 
-1. `POST /bookings/quote` — nights + amounts  
+1. `POST /bookings/quote` — nights (need not be consecutive) + amounts  
 2. Client pays on-chain (public multicall or STRK20 anonymizer)  
 3. `POST /bookings/confirm` with `{ bookingId, listingId, nights, fundTxHash, escrowBookingId, … }`
+
+`/bookings/new` calendar copy: tap nights one by one; they need not be consecutive; pay STRK or DAI.
 
 **Confirm verifies:**
 

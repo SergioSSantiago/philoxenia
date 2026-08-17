@@ -45,6 +45,8 @@ Friend of host ──► can view + share
 Everyone else ──► 404 (listing unavailable)
 ```
 
+`GET /my-listings` powers `/my-listings`: subtitle reminds hosts of DAI pricing + connector %; **List your place** goes to `/listings/new`.
+
 ## Home globe
 
 `/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Tap a pin to open the listing.

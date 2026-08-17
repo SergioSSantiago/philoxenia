@@ -39,7 +39,7 @@ Only friends can message each other. Each user publishes `messagePublicKey` (dev
 
 ## Web
 
-- `/messages` — sealed inbox list. Tap **name** or **wallet** → friend’s listings (`/friends/[id]`); tap preview or › → chat.
+- `/messages` — sealed inbox list. Copy mentions peer STRK/DAI send. Tap **name** or **wallet** → friend’s listings (`/friends/[id]`); tap preview or › → chat.
 - `/messages/[friendId]` — sealed composer + pay sheet (Private default: shielded STRK/DAI; Public ERC-20). Header name/wallet → friend profile. Optional **Also anchor on-chain** posts a ciphertext hash to MessageMailbox.
 - Keys live in `localStorage` per wallet (`philoxenia_msg_priv_*`); never uploaded
 

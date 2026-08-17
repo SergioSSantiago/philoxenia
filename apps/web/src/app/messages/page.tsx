@@ -104,7 +104,8 @@ export default function MessagesPage() {
         </p>
         <h1 className="mt-1 text-3xl text-foreground sm:text-4xl">Messages</h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-          Sealed notes decrypt only on your device. Tap a name or wallet to see
+          Sealed notes decrypt only on your device. From a thread you can also
+          send STRK or DAI (Public or Private). Tap a name or wallet to see
           their listings and share invites; open the preview or › to chat.
         </p>
       </header>
