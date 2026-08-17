@@ -45,11 +45,11 @@ Friend of host ──► can view + share
 Everyone else ──► 404 (listing unavailable)
 ```
 
-`GET /my-listings` powers `/my-listings`: subtitle reminds hosts of DAI pricing + connector %; **List your place** goes to `/listings/new`.
+`GET /my-listings` powers `/my-listings`: subtitle reminds hosts of DAI list prices, guests pay STRK or DAI, and connector %. **List your place** goes to `/listings/new`.
 
 ## Home globe
 
-`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Empty: “listings need a map pin.” Tap a pin to open the listing.
+`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Empty: listings need a map pin — add friends by wallet or list a place. Tap a pin to open the listing.
 
 ## API endpoints
 
@@ -61,7 +61,7 @@ Everyone else ──► 404 (listing unavailable)
 | GET | `/my-network/listings` | Yes | Friends' listings |
 | GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
 | GET | `/shared-listings` | Yes | Listings shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized) |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest CTA is **Book & pay** |
 | POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 

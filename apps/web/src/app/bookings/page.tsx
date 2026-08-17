@@ -33,7 +33,7 @@ export default function BookingsPage() {
       {bookings == null ? (
         <p className="text-sm text-muted">Loading bookings…</p>
       ) : bookings.length === 0 ? (
-        <EmptyState message="No bookings yet. Book a friend’s place, or wait for a guest after a connector invite." />
+        <EmptyState message="No bookings yet. Book & pay a friend’s place, or wait for a guest after a connector invite." />
       ) : (
         <div className="space-y-4">
           {bookings.map((b) => (

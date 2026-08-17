@@ -161,7 +161,7 @@ export default function HomePage() {
         <section>
           <SectionTitle title="My bookings" />
           {data.myBookings.length === 0 ? (
-            <EmptyState message="No bookings yet. Book a friend’s place, or wait for a guest after a connector invite." />
+            <EmptyState message="No bookings yet. Book & pay a friend’s place, or wait for a guest after a connector invite." />
           ) : (
             <div className="space-y-4">
               {data.myBookings.slice(0, 5).map((b) => (
