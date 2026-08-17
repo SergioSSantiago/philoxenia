@@ -103,8 +103,8 @@ export default function ConnectorPage() {
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           Friends list places privately. When you introduce a guest with your
-          invite link and they book, you get a cut of the stay — paid in the
-          same asset they used (STRK or DAI) when the booking settles.
+          invite link and they Book & pay, you get a cut of the stay — paid in
+          the same asset they used (STRK or DAI) to your Ready X wallet.
         </p>
       </div>
 
@@ -196,7 +196,7 @@ export default function ConnectorPage() {
                           <span className="font-medium text-accent">
                             You earn {listing.connectorRewardPercent}%
                           </span>
-                          <span className="text-muted"> if they book</span>
+                          <span className="text-muted"> if they Book & pay</span>
                         </p>
                       </div>
                       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">

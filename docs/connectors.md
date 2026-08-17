@@ -16,8 +16,8 @@ Roles overview (Host · Guest · Connector): **[roles.md](./roles.md)**
 
 | You | Get |
 |-----|-----|
-| Share a friend’s listing with someone you trust | A **host-set % of the booking total** when they book through your invite |
-| Paid on settle | Funds go **straight to your wallet** (same asset the guest paid: STRK or DAI) |
+| Share a friend’s listing with someone you trust | A **host-set % of the booking total** when they Book & pay through your invite |
+| Paid on settle | Funds go **straight to your Ready X wallet** (same asset the guest paid: STRK or DAI) |
 | No inventory, no hosting | You don’t list a place — you introduce guests |
 | Aligned with the protocol | Philoxenia only earns **10% of your connector reward** (not of the whole stay). Direct bookings stay **0%** protocol |
 
@@ -31,8 +31,8 @@ Hosts who set a healthy connector % make their friends want to share. Connectors
 2. Open **Earnings** (`/connector`), that friend’s profile (`/friends/[id]`), or the listing itself.
 3. Tap **Share invite & earn** — creates an opaque `/invite/{token}` link with **you** as connector. The button shows **Copied!** when the clipboard succeeds.
 4. Send the link (WhatsApp, Messages, etc.). Do **not** send your wallet as the invite.
-5. Guest opens the link → attribution is saved (last link wins). They become friends with the host if needed, then book and pay.
-6. On settle, your reward hits your connected wallet **in the same asset the guest paid** (STRK or DAI). Track totals on `/connector`.
+5. Guest opens the link → attribution is saved (last link wins). They become friends with the host if needed, then Book & pay.
+6. On settle, your reward hits your Ready X wallet **in the same asset the guest paid** (STRK or DAI). Track totals on `/connector`.
 
 ```
 Friend of host ──share──► invite link (connector = you)

@@ -156,8 +156,9 @@ export default function CreateListingPage() {
               />
               <span className="mt-1 block text-xs text-muted">
                 A friend who shares your listing earns this % of the stay (3–10%
-                is typical). Philoxenia takes 10% of that connector reward only.
-                Direct bookings stay 0% protocol.
+                is typical) when a guest Books & pays in STRK or DAI. Philoxenia
+                takes 10% of that connector reward only. Direct bookings stay 0%
+                protocol.
               </span>
             </label>
           </section>

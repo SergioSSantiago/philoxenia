@@ -152,7 +152,7 @@ class WalletBalancesErrorBoundary extends Component<
     if (this.state.failed) {
       return (
         <p className="text-sm text-muted">
-          Balances unavailable right now. Your wallet is still connected.
+          Balances unavailable right now. Ready X is still connected.
         </p>
       );
     }

@@ -225,7 +225,7 @@ export default function FriendProfilePage() {
                             <span className="font-medium text-accent">
                               You earn {listing.connectorRewardPercent}%
                             </span>
-                            <span className="text-muted"> if they book</span>
+                            <span className="text-muted"> if they Book & pay</span>
                           </>
                         ) : (
                           <>
