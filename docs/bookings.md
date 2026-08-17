@@ -54,8 +54,8 @@ Fake or unrelated hashes are rejected.
 | POST | `/bookings/:id/fund` | Legacy — verified |
 | POST | `/bookings/:id/settle` | Legacy — verified |
 | POST | `/bookings/:id/refund` | Legacy funded-only — verified |
-| GET | `/bookings` | List — empty copy points to booking a friend or waiting on an invite; cards show **You host** / **You stay** |
-| GET | `/bookings/:id` | Detail — listing title + Open listing; host/guest profile |
+| GET | `/bookings` | List — empty copy points to booking a friend or waiting on an invite; cards show **You host** / **You stay**. If nights are gapped, the card lists those dates (or “not consecutive”) instead of a contiguous check-in–out range |
+| GET | `/bookings/:id` | Detail — listing title + Open listing; host/guest profile. Gapped `selectedNights` note that check-in/out is only the bounding window |
 
 ## Related
 

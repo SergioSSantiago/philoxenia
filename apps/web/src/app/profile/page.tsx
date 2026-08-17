@@ -122,7 +122,7 @@ export default function ProfilePage() {
         <Card>
           <h3 className="text-lg text-foreground">Session</h3>
           <p className="mt-2 text-sm text-muted">
-            Disconnect your wallet from this browser.
+            Disconnect Ready X from this browser.
           </p>
           <Button
             variant="secondary"
@@ -132,7 +132,7 @@ export default function ProfilePage() {
               router.replace("/home");
             }}
           >
-            Disconnect wallet
+            Disconnect Ready X
           </Button>
         </Card>
       </div>

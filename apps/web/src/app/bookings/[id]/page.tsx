@@ -83,6 +83,18 @@ export default function BookingDetailPage() {
     booking.status
   );
   const alreadySettled = ["completed", "cancelled"].includes(booking.status);
+  const selectedNightKeys = (booking.selectedNights ?? [])
+    .map((d) => d.slice(0, 10))
+    .sort();
+  const nightsHaveGaps = (() => {
+    if (selectedNightKeys.length < 2) return false;
+    const first = new Date(`${selectedNightKeys[0]}T12:00:00.000Z`).getTime();
+    const last = new Date(
+      `${selectedNightKeys[selectedNightKeys.length - 1]}T12:00:00.000Z`
+    ).getTime();
+    const span = Math.round((last - first) / 86_400_000) + 1;
+    return span > selectedNightKeys.length;
+  })();
 
   return (
     <Shell>
@@ -151,11 +163,11 @@ export default function BookingDetailPage() {
           <div>
             <p className="text-muted">Nights</p>
             <p>{booking.nights}</p>
-            {booking.selectedNights && booking.selectedNights.length > 0 && (
+            {selectedNightKeys.length > 0 && (
               <p className="mt-1 text-xs text-muted leading-relaxed">
-                {booking.selectedNights
+                {selectedNightKeys
                   .map((d) =>
-                    new Date(`${d.slice(0, 10)}T12:00:00.000Z`).toLocaleDateString(
+                    new Date(`${d}T12:00:00.000Z`).toLocaleDateString(
                       undefined,
                       {
                         month: "short",
@@ -165,6 +177,9 @@ export default function BookingDetailPage() {
                     )
                   )
                   .join(" · ")}
+                {nightsHaveGaps
+                  ? " — not consecutive (check-in/out is the bounding window)."
+                  : ""}
               </p>
             )}
           </div>

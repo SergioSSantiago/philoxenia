@@ -17,7 +17,7 @@ Hosts create **private listings** visible only to themselves and their friends. 
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow). Listing detail: cancel frees nights, no clawback; money return in Messages |
 | `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Create-listing UI default is **5%** and explains 3–10% typical; Philoxenia takes 10% of that reward only ([connectors.md](./connectors.md)) |
 | `photos` | 1–8 images (JPEG/PNG/WebP/HEIC); browser compresses to JPEG data URLs (~1600px). Uploader copy lists iPhone HEIC |
-| `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar |
+| `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests may pay STRK or DAI |
 | `availability` | Legacy contiguous windows (still accepted) |
 
 Paid guest nights stay in inventory as **locked** (`booked`): host cannot remove them or change their price; social cancel frees them again.

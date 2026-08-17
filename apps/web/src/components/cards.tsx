@@ -3,6 +3,41 @@ import { formatDaiPrice, formatTokenAmount } from "@philoxenia/shared";
 import Link from "next/link";
 import { WalletAddress } from "@/components/wallet-address";
 
+function dayKey(iso: string): string {
+  return iso.slice(0, 10);
+}
+
+function formatStayDay(iso: string): string {
+  return new Date(`${dayKey(iso)}T12:00:00.000Z`).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function selectedStayNights(booking: Booking): string[] {
+  return (booking.selectedNights ?? []).map(dayKey).filter(Boolean).sort();
+}
+
+function stayNightsHaveGaps(nights: string[]): boolean {
+  if (nights.length < 2) return false;
+  const first = new Date(`${nights[0]}T12:00:00.000Z`).getTime();
+  const last = new Date(`${nights[nights.length - 1]}T12:00:00.000Z`).getTime();
+  const spanDays = Math.round((last - first) / 86_400_000) + 1;
+  return spanDays > nights.length;
+}
+
+function bookingStayRangeLabel(booking: Booking): string {
+  const nights = selectedStayNights(booking);
+  if (stayNightsHaveGaps(nights)) {
+    if (nights.length <= 5) {
+      return nights.map(formatStayDay).join(" · ");
+    }
+    return `${formatStayDay(nights[0])} – ${formatStayDay(nights[nights.length - 1])} · not consecutive`;
+  }
+  return `${new Date(booking.checkIn).toLocaleDateString()} – ${new Date(booking.checkOut).toLocaleDateString()}`;
+}
+
 export function ListingCard({ listing }: { listing: Listing }) {
   const photo = listing.photos[0];
 
@@ -124,11 +159,13 @@ export function BookingCard({
             href={`/bookings/${booking.id}`}
             className="block text-sm text-muted touch-manipulation hover:text-foreground"
           >
-            {new Date(booking.checkIn).toLocaleDateString()} –{" "}
-            {new Date(booking.checkOut).toLocaleDateString()}
+            {bookingStayRangeLabel(booking)}
             <span className="mt-1 block">
               {formatTokenAmount(booking.totalPrice)} {booking.paymentAsset} ·{" "}
               {booking.nights} nights
+              {stayNightsHaveGaps(selectedStayNights(booking))
+                ? " · not consecutive"
+                : ""}
               {booking.privacyMode === "private"
                 ? " · Private"
                 : booking.privacyMode === "public"
