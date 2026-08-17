@@ -25,7 +25,7 @@ Users cannot send duplicate pending requests to the same person or request thems
 
 ## Notifications
 
-In-app notifications (polled ~2.5s while the tab is visible) for friend request lifecycle:
+Bell empty state: “Friend requests appear here.” Polled ~2.5s while the tab is visible.
 
 | Type | Recipient |
 |------|-----------|

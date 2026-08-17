@@ -73,7 +73,7 @@ export function NotificationBell() {
           <div className="max-h-80 overflow-y-auto">
             {items.length === 0 ? (
               <p className="px-4 py-6 text-sm text-muted">
-                No notifications yet.
+                No notifications yet. Friend requests appear here.
               </p>
             ) : (
               items.map((n) => (

@@ -132,7 +132,7 @@ export default function HomePage() {
         <section>
           <SectionTitle title="Shared with me" />
           {data.sharedListings.length === 0 ? (
-            <EmptyState message="No shared listings yet." />
+            <EmptyState message="No shared listings yet. Open a friend’s invite link — last invite wins connector attribution." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.sharedListings.map((l) => (

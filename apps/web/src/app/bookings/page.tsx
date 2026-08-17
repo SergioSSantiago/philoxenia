@@ -25,10 +25,10 @@ export default function BookingsPage() {
     <Shell>
       <SectionTitle
         title="My bookings"
-        subtitle="Stays you book as guest and bookings on your listings as host."
+        subtitle="Cards show You host or You stay. Pay is STRK or DAI; cancel only frees nights."
       />
       {bookings.length === 0 ? (
-        <EmptyState message="No bookings yet." />
+        <EmptyState message="No bookings yet. Book a friend’s place, or wait for a guest after a connector invite." />
       ) : (
         <div className="space-y-4">
           {bookings.map((b) => (

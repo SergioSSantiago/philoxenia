@@ -76,7 +76,7 @@ Signed-in home uses `GET /home` (JWT): friends, network listings, shared listing
 | `/` | Landing. Brand-first hero + live network stats; header brand links here |
 | `/home` | Signed-in snapshot: compact wallet + STRK/DAI + swap link, globe of accessible listings, friends’ places, **Shared with me**, own listings, recent bookings (**You host** / **You stay**), friends count |
 | `/auth` | Legacy redirect to `/home` |
-| `/profile` | Display name, STRK/DAI balances, shield/unshield, AVNU STRK ↔ DAI swap |
+| `/profile` | Display name, public STRK/DAI, shield/unshield **STRK or DAI**, AVNU STRK ↔ DAI swap |
 | `/friends` | Friends; search by wallet; tap name/wallet → friend listings |
 | `/friends/[id]` | Friend profile: their listings + share-as-connector |
 | `/messages`, `/messages/[friendId]` | Sealed chat + peer pay; name/wallet → friend listings |
