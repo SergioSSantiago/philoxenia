@@ -29,7 +29,7 @@ Philoxenia does **not** implement the STRK20 protocol. It integrates via the **W
 
 ## Philoxenia paths (complete)
 
-1. **Wallet API** — shield / unshield / balances for STRK and DAI (`WalletAccountV6`, wallet API ≥ 0.10). **Ideal:** Ready X in-app browser. Firefox / desktop legacy Ready usually lacks ≥ 0.10 → Private unavailable.
+1. **Wallet API** — shield / unshield / balances for STRK and DAI (`WalletAccountV6`, wallet API ≥ 0.10). **Ideal:** Ready X in-app browser. Firefox / desktop legacy Ready usually lacks ≥ 0.10 → Private unavailable. When Profile cannot see ≥ 0.10, the shield panel lists Chrome + Ready X (not Firefox) **or** iPhone in-app browser, then Smart Wallet + Private, then Reconnect Ready X.
 2. **Anonymizer** — private booking fund via `BookingEscrowAnonymizer.privacy_invoke` ([booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md))
 
 ### Private fund actions (settle-all)

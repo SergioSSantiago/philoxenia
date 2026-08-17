@@ -155,7 +155,7 @@ export function Strk20PrivacyPanel() {
         title: needsReconnect ? "Ready session needed" : "STRK20 action failed",
         body,
         tone: "error",
-        primaryLabel: needsReconnect ? "Reconnect Ready" : "Dismiss",
+        primaryLabel: needsReconnect ? "Reconnect Ready X" : "Dismiss",
         secondaryLabel: needsReconnect ? "Refresh page" : "Dismiss",
         reloadOnSecondary: needsReconnect,
       });
@@ -190,7 +190,7 @@ export function Strk20PrivacyPanel() {
               disabled={reconnecting}
               onClick={() => void reconnectReady()}
             >
-              {reconnecting ? "Connecting Ready…" : "Connect Ready"}
+              {reconnecting ? "Connecting Ready X…" : "Connect Ready X"}
             </Button>
           </div>
         ) : !capable ? (
@@ -200,9 +200,12 @@ export function Strk20PrivacyPanel() {
                 "This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10)."}
             </div>
             <ol className="list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted">
-              <li>Unlock Ready X in Chrome (not Firefox).</li>
+              <li>
+                Desktop: unlock Ready X in Chrome (not Firefox). iPhone: open
+                Philoxenia in the Ready X in-app browser for Private.
+              </li>
               <li>Enable Smart Wallet and Private.</li>
-              <li>Tap Reconnect Ready and approve again.</li>
+              <li>Tap Reconnect Ready X and approve again.</li>
             </ol>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Button
@@ -210,7 +213,7 @@ export function Strk20PrivacyPanel() {
                 disabled={reconnecting}
                 onClick={() => void reconnectReady()}
               >
-                {reconnecting ? "Reconnecting…" : "Reconnect Ready"}
+                {reconnecting ? "Reconnecting…" : "Reconnect Ready X"}
               </Button>
               <Button
                 type="button"
@@ -294,7 +297,9 @@ export function Strk20PrivacyPanel() {
           const label = notice?.primaryLabel;
           if (
             label === "Connect Ready" ||
+            label === "Connect Ready X" ||
             label === "Reconnect Ready" ||
+            label === "Reconnect Ready X" ||
             label === "Try again"
           ) {
             void reconnectReady();
