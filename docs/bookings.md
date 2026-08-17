@@ -36,7 +36,7 @@ After a successful on-chain pay, the client stores a pending row in `localStorag
 - Escrow emitted `BookingSettled` for `escrowBookingId`
 - `fundTxHash` not already used on another payment
 
-Fake or unrelated hashes are rejected.
+Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **Book & pay for “…”** (host: **New Book & pay**, guest: **Book & pay complete**). Social cancel tells the other party to **Send STRK or DAI** in Messages (not “Send DAI/STRK”).
 
 ## Cancel & refund (honest)
 

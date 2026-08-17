@@ -666,7 +666,7 @@ export function ListingsGlobe({
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 px-3 py-2">
         <p className="min-w-0 text-[11px] leading-snug text-muted">
           {points.length === 0
-            ? "No mapped places yet — listings need a map pin. Add friends by wallet or list a place."
+            ? "No mapped places yet — listings need a map pin. Add friends by Ready X wallet or list a place to Book & pay."
             : `${points.length} place${points.length === 1 ? "" : "s"} · drag to spin · +/− to zoom · tap a pin`}
         </p>
         <div className="flex shrink-0 items-center gap-3">

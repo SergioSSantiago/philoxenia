@@ -227,7 +227,7 @@ export async function postBookingChatNotice(input: {
 }) {
   const checkInDay = input.checkIn.slice(0, 10);
   const checkOutDay = input.checkOut.slice(0, 10);
-  const body = `Booking paid for “${input.listingTitle}”: ${checkInDay} → ${checkOutDay} · ${input.totalPrice} ${input.paymentAsset} (host & connector paid now)`;
+  const body = `Book & pay for “${input.listingTitle}”: ${checkInDay} → ${checkOutDay} · ${input.totalPrice} ${input.paymentAsset} (host & connector paid now)`;
 
   const [row] = await db
     .insert(schema.directMessages)
@@ -245,7 +245,7 @@ export async function postBookingChatNotice(input: {
   await createNotification({
     userId: input.hostId,
     type: "booking",
-    title: "New booking",
+    title: "New Book & pay",
     body,
     href: `/bookings/${input.bookingId}`,
   });
@@ -253,7 +253,7 @@ export async function postBookingChatNotice(input: {
   await createNotification({
     userId: input.guestId,
     type: "booking",
-    title: "Booking created",
+    title: "Book & pay complete",
     body,
     href: `/bookings/${input.bookingId}`,
   });

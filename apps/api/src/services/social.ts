@@ -2050,7 +2050,7 @@ export async function socialCancelBooking(
   const otherId =
     userId === booking.guestId ? booking.hostId : booking.guestId;
   const title = booking.listing?.title ?? "listing";
-  const body = `Booking for “${title}” marked cancelled. Nights are free again. Funds already settled on-chain — any money return is voluntary via Messages (Send DAI/STRK).`;
+  const body = `Booking for “${title}” marked cancelled. Nights are free again. Funds already settled on-chain — any money return is voluntary via Messages (Send STRK or DAI).`;
 
   try {
     const { sendTextMessage } = await import("./chat.js");

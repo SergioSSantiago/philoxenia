@@ -25,7 +25,7 @@ Incoming empty: “They appear when someone adds your wallet.” Outgoing empty 
 
 ## Notifications
 
-Bell empty: friend requests, messages, and bookings. Polled ~2.5s while the tab is visible.
+Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer links: **Friends**, **Messages**, **Bookings**. Polled ~2.5s while the tab is visible.
 
 | Type | Recipient |
 |------|-----------|
@@ -36,7 +36,7 @@ Bell empty: friend requests, messages, and bookings. Polled ~2.5s while the tab 
 | `friend_removed` | Other party |
 | `message` | Friend who received a sealed note |
 | `transfer` | Friend who received a peer STRK/DAI send |
-| `booking` | Host and guest on a new stay; the other party on social cancel |
+| `booking` | Host and guest on a new **Book & pay**; the other party on social cancel (Messages: **Send STRK or DAI**) |
 
 | Method | Path | Description |
 |--------|------|-------------|

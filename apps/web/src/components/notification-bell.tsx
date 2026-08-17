@@ -73,8 +73,8 @@ export function NotificationBell() {
           <div className="max-h-80 overflow-y-auto">
             {items.length === 0 ? (
               <p className="px-4 py-6 text-sm text-muted">
-                No notifications yet. Friend requests, messages, and bookings
-                appear here.
+                No notifications yet. Friend requests, sealed messages, and
+                Book & pay stays appear here.
               </p>
             ) : (
               items.map((n) => (
@@ -101,13 +101,27 @@ export function NotificationBell() {
               ))
             )}
           </div>
-          <div className="border-t border-border px-4 py-2">
+          <div className="flex flex-wrap gap-x-3 gap-y-1 border-t border-border px-4 py-2">
             <Link
               href="/friends"
               className="text-xs text-muted hover:text-foreground"
               onClick={() => setOpen(false)}
             >
-              Open Friends →
+              Friends
+            </Link>
+            <Link
+              href="/messages"
+              className="text-xs text-muted hover:text-foreground"
+              onClick={() => setOpen(false)}
+            >
+              Messages
+            </Link>
+            <Link
+              href="/bookings"
+              className="text-xs text-muted hover:text-foreground"
+              onClick={() => setOpen(false)}
+            >
+              Bookings
             </Link>
           </div>
         </div>
