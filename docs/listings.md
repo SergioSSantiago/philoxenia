@@ -45,7 +45,7 @@ Friend of host ──► can view + share
 Everyone else ──► 404 (listing unavailable)
 ```
 
-`GET /my-listings` powers `/my-listings`: subtitle reminds hosts of DAI list prices, guests pay STRK or DAI, and connector %. **List your place** goes to `/listings/new`.
+`GET /my-listings` powers `/my-listings`: subtitle reminds hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. **List your place** goes to `/listings/new`.
 
 ## Home globe
 

@@ -110,7 +110,7 @@ export default function InvitePage() {
           . You must be friends with the host to view and Book & pay (STRK or
           DAI).
           {invite.hasConnector && invite.connector
-            ? " If you book through this link, the connector reward goes to their Ready X wallet."
+            ? " If you Book & pay through this link, the connector reward goes to their Ready X wallet."
             : " This host link has no connector reward."}
         </p>
 
