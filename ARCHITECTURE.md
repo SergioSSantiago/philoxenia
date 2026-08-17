@@ -66,7 +66,7 @@ Philoxenia does **not** put social relationships or listing content on-chain. Pa
 | AVNU public STRK ↔ DAI swap | Shipped (Profile / Home) |
 | `BookingEscrow` + anonymizer (connector + 10% of connector reward) | **Live mainnet** — [docs/deploy-escrow.md](./docs/deploy-escrow.md) |
 | Public ERC20 path (create + approve + fund + settle multicall) | Shipped |
-| STRK20 shield / unshield / private balances (Ready ≥ 0.10) | Shipped |
+| STRK20 shield / unshield / private balances for **STRK and DAI** (Ready ≥ 0.10) | Shipped (Profile) |
 | Private booking fund via anonymizer | Shipped — [PRIVACY.md](./PRIVACY.md), [docs/strk20.md](./docs/strk20.md) |
 | `privacyMode` on payments / booking API/UI | Shipped |
 | Sealed E2E chat + peer transfers | Shipped |

@@ -49,8 +49,8 @@ Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeS
 
 | Surface | Mode | Notes |
 |---------|------|--------|
-| `/home` | `compact` | Hint “Public · shield on Profile”; STRK20 badge as a one-liner |
-| `/profile` | full | Same public rows + `Strk20PrivacyPanel` (shield / unshield) + AVNU swap |
+| `/home` | `compact` | Public STRK **and DAI** hints “shield on Profile”; STRK20 line covers both assets |
+| `/profile` | full | Same public rows + `Strk20PrivacyPanel` (shield / unshield **STRK or DAI**) + AVNU swap |
 
 If the JWT session is still valid but Ready is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, private pay, settle, swap).
 

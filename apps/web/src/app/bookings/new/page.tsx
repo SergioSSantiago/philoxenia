@@ -507,7 +507,7 @@ function NewBookingForm() {
                   )}
                   <p className="text-xs text-muted leading-relaxed">
                     {fundMode === "private"
-                      ? "Pays from shielded balance via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield first on Profile — proofs can take a while."
+                      ? "Pays from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield the pay asset on Profile first — proofs can take a while."
                       : "Standard on-chain approve + fund. Visible on explorers."}
                   </p>
                 </div>

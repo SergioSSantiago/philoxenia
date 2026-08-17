@@ -101,7 +101,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
           STRK20_PRIVACY_ENABLED
             ? compact
               ? "Public · shield on Profile"
-              : "Public balance · shield on Profile for private STRK"
+              : "Public balance · shield STRK or DAI on Profile"
             : undefined
         }
       />
@@ -110,6 +110,13 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         amount={daiAmount}
         loading={dai.isLoading}
         error={Boolean(dai.error)}
+        hint={
+          STRK20_PRIVACY_ENABLED
+            ? compact
+              ? "Public · shield on Profile"
+              : "Public balance · shield on Profile for private DAI"
+            : undefined
+        }
       />
       {!isConnected && user && (
         <p className="text-xs leading-relaxed text-muted">
@@ -125,7 +132,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         </p>
       )}
       {compact && STRK20_PRIVACY_ENABLED && (
-        <p className="text-xs text-muted">STRK20 privacy enabled for STRK</p>
+        <p className="text-xs text-muted">STRK20 privacy enabled for STRK and DAI</p>
       )}
     </div>
   );

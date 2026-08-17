@@ -2,7 +2,7 @@
 
 Use **two Ready X wallets** (Chrome + Smart Wallet + Private, or Ready X on iPhone). Prefer **three** if demoing connectors (host / connector / guest).
 
-On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private STRK in section C, open Philoxenia in the **Ready X in-app browser**.
+On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private STRK/DAI in section C, open Philoxenia in the **Ready X in-app browser**.
 
 ## A. Social + listing
 
@@ -24,11 +24,11 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 
 ## C. Private pay (preferred)
 
-1. [ ] Guest shields enough STRK on Profile
+1. [ ] Guest shields enough **STRK or DAI** on Profile (match the pay asset)
 2. [ ] Books nights → Pay **Private**
 3. [ ] Confirm succeeds only after chain settle (fake txHash must fail)
 4. [ ] Booking shows `completed`, Voyager link, privacy = Private
-5. [ ] Host receives STRK; connector (if any) paid
+5. [ ] Host receives the pay asset; connector (if any) paid
 
 ## D. Public pay fallback
 

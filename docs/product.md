@@ -122,7 +122,7 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 - Friend requests and friendships (search by wallet address)
 - Friend profile (`/friends/[id]`): listings + share-as-connector; name/wallet links from Friends & Messages
 - **Earnings (`/connector`)**: how connectors earn, shareable friend listings, reward history
-- Profile: display name, STRK/DAI balances, shield/unshield, **AVNU STRK ↔ DAI swap**
+- Profile: display name, public STRK/DAI balances, shield/unshield **STRK or DAI**, **AVNU STRK ↔ DAI swap**
 - Private listings (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution
