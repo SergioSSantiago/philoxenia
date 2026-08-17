@@ -182,7 +182,7 @@ export function Strk20PrivacyPanel() {
         {!walletReady ? (
           <div className="space-y-3">
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
-              Ready is not connected for signing. Connect to view and manage
+              Ready X is not connected for signing. Connect to view and manage
               shielded STRK or DAI.
             </div>
             <Button

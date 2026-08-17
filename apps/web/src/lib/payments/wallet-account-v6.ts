@@ -106,19 +106,19 @@ function notCapableReason(versions: string[], hadWallet: boolean): string {
   if (!hadWallet) {
     if (keys.length === 0) {
       return fx
-        ? "Ready X is not available on Firefox. Use Chrome + Ready X (Smart Wallet + Private). On iPhone, Safari can Connect; Private STRK needs the Ready X in-app browser."
-        : "Ready X not detected. Install Ready X in Chrome, enable Smart Wallet + Private, refresh, and reconnect. On iPhone, Safari can Connect; Private STRK needs the Ready X in-app browser.";
+        ? "Ready X is not available on Firefox. Use Chrome + Ready X (Smart Wallet + Private). On iPhone, Safari can Connect; Private STRK or DAI needs the Ready X in-app browser."
+        : "Ready X not detected. Install Ready X in Chrome, enable Smart Wallet + Private, refresh, and reconnect. On iPhone, Safari can Connect; Private STRK or DAI needs the Ready X in-app browser.";
     }
     return "A Starknet object is injected but Wallet API discovery failed. Unlock Ready X, refresh this page, and reconnect.";
   }
 
   if (versions.length === 0) {
     return fx
-      ? "Ready connected but did not report wallet API versions. Firefox has no Ready X — use Chrome + Ready X with Smart Wallet + Private. On iPhone, Private STRK needs the Ready X in-app browser."
-      : "Ready is connected for login, but Private STRK/DAI needs Ready X with Smart Wallet + Private enabled (wallet API ≥ 0.10). Unlock Ready X, turn those on, then tap Reconnect Ready X. If it still fails, refresh this page.";
+      ? "Ready X connected but did not report wallet API versions. Firefox has no Ready X — use Chrome + Ready X with Smart Wallet + Private. On iPhone, Private STRK or DAI needs the Ready X in-app browser."
+      : "Ready X is connected for login, but Private STRK/DAI needs Smart Wallet + Private enabled (wallet API ≥ 0.10). Unlock Ready X, turn those on, then tap Reconnect Ready X. If it still fails, refresh this page.";
   }
 
-  return `Ready wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private). Update Ready X${fx ? " — Firefox has no Ready X; switch to Chrome, or the Ready X in-app browser on iPhone" : ""}, enable Smart Wallet + Private, and reconnect.`;
+  return `Ready X wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private). Update Ready X${fx ? " — Firefox has no Ready X; switch to Chrome, or the Ready X in-app browser on iPhone" : ""}, enable Smart Wallet + Private, and reconnect.`;
 }
 
 /**

@@ -148,7 +148,7 @@ export default function MessagesPage() {
           ))}
         </div>
       ) : threads.length === 0 ? (
-        <EmptyState message="No friends to message yet. Add friends first, then open a sealed thread." />
+        <EmptyState message="No friends yet. Add someone by wallet on Friends — each friend gets a sealed thread here, and you can send STRK or DAI in chat." />
       ) : (
         <ul className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm divide-y divide-border">
           {threads.map((t) => {

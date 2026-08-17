@@ -7,11 +7,11 @@ export function formatWalletError(err: unknown): string {
     msg.includes("USER_REFUSED_OP") ||
     /user rejected|user abort|user cancelled|rejected by user/i.test(msg)
   ) {
-    return "Request cancelled in Ready. Try again when ready to approve.";
+    return "Request cancelled in Ready X. Try again when ready to approve.";
   }
 
   if (msg.includes("Cannot sign the message from a different chainId")) {
-    return "Wrong network in Ready. Switch to Starknet mainnet and try again.";
+    return "Wrong network in Ready X. Switch to Starknet mainnet and try again.";
   }
 
   // Only connector discovery failures — NOT every RPC "… not found".
@@ -20,11 +20,11 @@ export function formatWalletError(err: unknown): string {
     (/ready|argent|wallet/.test(lower) &&
       /not (installed|available|found|detected)/i.test(msg))
   ) {
-    return "Ready is not available. Install or enable the Ready X extension, then reconnect.";
+    return "Ready X is not available. Install Ready X in Chrome, or open Philoxenia in the Ready X app on iPhone, then reconnect.";
   }
 
   if (/invalid signature|signature verification/i.test(msg)) {
-    return "Signature could not be verified. Confirm Ready is on Starknet mainnet, then Sign in again.";
+    return "Signature could not be verified. Confirm Ready X is on Starknet mainnet, then Sign in again.";
   }
 
   if (/invalid or expired authentication challenge/i.test(msg)) {
@@ -32,7 +32,7 @@ export function formatWalletError(err: unknown): string {
   }
 
   if (/contract.?not.?found|account.?not.?found/i.test(msg)) {
-    return "Starknet could not read this account (RPC). Check mainnet in Ready and try Sign in again.";
+    return "Starknet could not read this account (RPC). Check mainnet in Ready X and try Sign in again.";
   }
 
   return msg || "Could not complete the wallet request.";

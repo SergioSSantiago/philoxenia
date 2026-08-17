@@ -193,14 +193,14 @@ export default function ChatThreadPage() {
     setReconnecting(true);
     setError("");
     setNotice({
-      title: "Connecting Ready",
-      body: "Approve the connection in the Ready X extension (or unlock the wallet). Private and public sends both need a live signing session — Philoxenia login alone is not enough.",
+      title: "Connecting Ready X",
+      body: "Approve in Ready X (Chrome extension or iPhone app). Private and public sends both need a live signing session — Philoxenia login alone is not enough.",
       tone: "info",
     });
     try {
       await reconnectWallet();
       setNotice({
-        title: "Ready connected",
+        title: "Ready X connected",
         body: pendingPayRef.current
           ? "Finishing your transfer…"
           : "Wallet is ready to sign. You can send now.",
@@ -210,7 +210,7 @@ export default function ChatThreadPage() {
     } catch (err) {
       pendingPayRef.current = null;
       setNotice({
-        title: "Could not connect Ready",
+        title: "Could not connect Ready X",
         body: formatWalletError(err),
         tone: "error",
         primaryLabel: "Try again",
@@ -282,7 +282,7 @@ export default function ChatThreadPage() {
     pendingPayRef.current = null;
     setNotice({
       title: "Sending…",
-      body: "Ready is connected — completing your transfer. Approve in the wallet if prompted.",
+      body: "Ready X is connected — completing your transfer. Approve in the wallet if prompted.",
       tone: "info",
     });
     void executeTransfer(account, pending.amount, pending.asset, pending.mode);
@@ -414,8 +414,9 @@ export default function ChatThreadPage() {
 
               {!walletReady && (
                 <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
-                  Philoxenia is signed in, but Ready is not connected for
-                  signing. Connect Ready X before sending (Public or Private).
+                  Philoxenia is signed in, but Ready X is not connected for
+                  signing. Connect Ready X (Chrome or iPhone) before sending
+                  (Public or Private).
                 </div>
               )}
 
