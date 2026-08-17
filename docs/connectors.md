@@ -39,14 +39,14 @@ Friend of host ──share──► invite link (connector = you)
                               │
 Guest opens link ──► share_introduction (last-touch)
                               │
-Guest books + pays ──► escrow settles ──► you + host + (10% of your reward → protocol)
+Guest Book & pay ──► escrow settles ──► you + host + (10% of your reward → protocol)
 ```
 
 ## Where to share in the app
 
 | Surface | What you do |
 |---------|-------------|
-| **`/connector` (Earnings)** | Explains the model, lists **friends’ listings** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` |
+| **`/connector` (Earnings)** | Explains the model, lists **friends’ listings** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id`. Empty rewards: they **Book & pay** through your invite |
 | **`/friends/[id]`** | Friend’s listings + share; open from name or wallet on Friends / Messages |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their listings |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → listings; preview / › → chat |

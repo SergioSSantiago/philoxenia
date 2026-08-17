@@ -28,7 +28,7 @@ export default function BookingsPage() {
     <Shell>
       <SectionTitle
         title="My bookings"
-        subtitle="Cards show You host or You stay. Pay is STRK or DAI; cancel only frees nights."
+        subtitle="Cards show You host or You stay. Book & pay is STRK or DAI; cancel only frees nights."
       />
       {bookings == null ? (
         <p className="text-sm text-muted">Loading bookings…</p>

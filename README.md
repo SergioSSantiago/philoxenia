@@ -94,7 +94,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 | Protocol fee | **10% of connector reward** (0% if no connector) | same | — |
 | Voyager | ABI + source verified | same class | ABI + source verified |
 
-List prices are in **DAI**. Guests pay in **STRK** (live FX) or **DAI** (1:1). Private pay (STRK or DAI) uses the anonymizer. Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
+List prices are in **DAI**. Guests **Book & pay** in **STRK** (live FX) or **DAI** (1:1). Private pay (STRK or DAI) uses the anonymizer. Details: [docs/deploy-escrow.md](./docs/deploy-escrow.md) · [docs/smart-contracts.md](./docs/smart-contracts.md)
 
 Repo: https://github.com/SergioSSantiago/philoxenia · Vercel guide: [docs/deployment-vercel.md](./docs/deployment-vercel.md)
 

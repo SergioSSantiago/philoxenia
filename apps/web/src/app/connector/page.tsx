@@ -303,7 +303,7 @@ export default function ConnectorPage() {
       <section>
         <SectionTitle
           title="Your rewards"
-          subtitle="Paid to your Ready X wallet when a guest you introduced completes payment."
+          subtitle="Paid to your Ready X wallet when they Book & pay through your invite."
         />
 
         {data && (
@@ -321,7 +321,7 @@ export default function ConnectorPage() {
         {!data ? (
           <p className="text-muted">Loading rewards…</p>
         ) : data.bookings.length === 0 ? (
-          <EmptyState message="No rewards yet. Share a friend listing above — when someone books through your invite, it shows up here." />
+          <EmptyState message="No rewards yet. Share a friend listing above — when they Book & pay through your invite, it shows up here." />
         ) : (
           <div className="space-y-4">
             {data.bookings.map((b) => (
