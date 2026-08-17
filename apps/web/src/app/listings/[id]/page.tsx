@@ -184,7 +184,7 @@ export default function ListingPage() {
   if (!listing) {
     return (
       <Shell>
-        <p className="text-muted">Loading…</p>
+        <p className="text-muted">Loading listing…</p>
       </Shell>
     );
   }

@@ -77,7 +77,7 @@ Signed-in home uses `GET /home` (JWT): friends, network listings, shared listing
 | `/home` | Signed-in snapshot: compact **Ready X wallet** + STRK/DAI + **Shield & swap** to Profile, globe of accessible listings, friends’ places, **Shared with me**, own listings, recent bookings (**You host** / **You stay**), friends count |
 | `/auth` | Legacy redirect to `/home` |
 | `/profile` | Display name, public STRK/DAI, shield/unshield **STRK or DAI**, AVNU STRK ↔ DAI swap |
-| `/friends` | Friends; search by wallet; tap name/wallet → friend listings |
+| `/friends` | Friends; search by **Ready X wallet**; tap name/wallet → friend listings |
 | `/friends/[id]` | Friend profile: their listings + share-as-connector |
 | `/messages`, `/messages/[friendId]` | Sealed chat + peer pay; name/wallet → friend listings |
 | `/my-listings`, `/listings/new` | Host listing CRUD + map + availability calendar |

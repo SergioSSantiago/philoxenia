@@ -119,10 +119,10 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 **Implemented (off-chain + UI):**
 
 - Wallet authentication via Ready X (SNIP-12): Chrome extension, iPhone Safari WalletConnect, or **in-app browser** (ideal for privacy pay)
-- Friend requests and friendships (search by wallet address)
+- Friend requests and friendships (search by **Ready X wallet** address)
 - Friend profile (`/friends/[id]`): listings + share-as-connector; name/wallet links from Friends & Messages
 - **Earnings (`/connector`)**: how connectors earn, shareable friend listings, reward history
-- Profile: display name, public STRK/DAI balances, shield/unshield **STRK or DAI**, **AVNU STRK ↔ DAI swap**
+- Profile: display name, public STRK/DAI balances, shield/unshield **STRK or DAI**, **AVNU STRK ↔ DAI swap**. Subtitle: friends add you by **Ready X wallet**
 - Private listings (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution

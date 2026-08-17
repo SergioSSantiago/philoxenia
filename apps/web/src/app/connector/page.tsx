@@ -144,7 +144,7 @@ export default function ConnectorPage() {
         {networkListings === null ? (
           <p className="text-muted">Loading listings…</p>
         ) : networkListings.length === 0 ? (
-          <EmptyState message="No friend listings yet. Add friends who host — their places will show up here so you can share and earn." />
+          <EmptyState message="No friend listings yet. Add friends by Ready X wallet who host — their places will show up here so you can share and earn." />
         ) : (
           <div className="space-y-4">
             {shareError && (

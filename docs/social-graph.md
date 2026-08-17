@@ -9,7 +9,7 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 ## Model
 
 - Users are identified by Starknet wallet address (normalized) and a display name.
-- Display names are shown to friends but **are not searchable**. Add someone by wallet address only. `WalletAddress` truncates in compact mode; **Copy** flashes **Copied!** for 2s (Share uses the native sheet, then copy).
+- Display names are shown to friends but **are not searchable**. Add someone by **Ready X wallet** address only. `WalletAddress` truncates in compact mode; **Copy** flashes **Copied!** for 2s (Share uses the native sheet, then copy). `/friends` CTA is **Add friend by Ready X wallet**.
 - Friendships are **mutual** — created when a friend request is accepted.
 - Stored as ordered pairs `(userAId, userBId)` to prevent duplicates.
 
@@ -21,7 +21,7 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 | `accepted` | Becomes a friendship |
 | `rejected` | Closed; sender may request again later |
 
-Incoming empty: “They appear when someone adds your wallet.” Outgoing empty explains Cancel.
+Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoing empty explains Cancel. Friends empty: add by **Ready X wallet** address (0x optional).
 
 ## Notifications
 
@@ -65,7 +65,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 
 Opened by tapping **name** or **wallet** on:
 
-- `/friends` (accepted friends) — empty list: add by wallet (0x optional)
+- `/friends` (accepted friends) — empty list: add by **Ready X wallet** (0x optional)
 - `/messages` inbox
 - `/messages/[friendId]` chat header
 

@@ -69,7 +69,7 @@ export default function BookingDetailPage() {
   if (!booking) {
     return (
       <Shell>
-        <p className="text-muted">Loading…</p>
+        <p className="text-muted">Loading booking…</p>
       </Shell>
     );
   }

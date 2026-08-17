@@ -64,7 +64,7 @@ export default function HomePage() {
   if (!data) {
     return (
       <Shell>
-        <p className="text-muted">Loading…</p>
+        <p className="text-muted">Loading home…</p>
       </Shell>
     );
   }
@@ -119,7 +119,7 @@ export default function HomePage() {
             subtitle="Book & pay STRK or DAI through your trust network"
           />
           {data.networkListings.length === 0 ? (
-            <EmptyState message="No listings from friends yet. Add someone by wallet on Friends to discover places you can Book & pay." />
+            <EmptyState message="No listings from friends yet. Add someone by Ready X wallet on Friends to discover places you can Book & pay." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.networkListings.map((l) => (
@@ -181,7 +181,7 @@ export default function HomePage() {
             }
           />
           {data.friends.length === 0 ? (
-            <EmptyState message="Add people you trust by wallet address — they must have signed in once." />
+            <EmptyState message="Add people you trust by Ready X wallet — they must have signed in once." />
           ) : (
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-muted">{data.friends.length} friends</p>

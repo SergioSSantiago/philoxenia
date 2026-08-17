@@ -118,7 +118,7 @@ export default function FriendProfilePage() {
   if (!profile) {
     return (
       <Shell>
-        <p className="text-muted">Loading…</p>
+        <p className="text-muted">Loading friend…</p>
       </Shell>
     );
   }

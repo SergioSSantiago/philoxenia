@@ -134,7 +134,7 @@ export default function FriendsPage() {
   if (!data) {
     return (
       <Shell>
-        <p className="text-muted">Loading…</p>
+        <p className="text-muted">Loading friends…</p>
       </Shell>
     );
   }
@@ -143,7 +143,7 @@ export default function FriendsPage() {
     <Shell>
       <SectionTitle
         title="Friends"
-        subtitle="Add people by wallet address only — display names are not searchable."
+        subtitle="Add people by Ready X wallet address only — display names are not searchable."
       />
 
       {user && (
@@ -162,13 +162,13 @@ export default function FriendsPage() {
       <Card className="mb-8">
         {!showAdd ? (
           <Button className="w-full sm:w-auto" onClick={() => setShowAdd(true)}>
-            Add friend by wallet
+            Add friend by Ready X wallet
           </Button>
         ) : (
           <div>
             <h3 className="text-lg">Add someone you trust</h3>
             <p className="mt-2 text-sm text-muted leading-relaxed">
-              Paste a Starknet address (0x optional). They must already have
+              Paste a Ready X wallet address (0x optional). They must already have
               signed in once. Only add people you genuinely know. Search needs
               at least 4 hex characters.
             </p>
@@ -243,7 +243,7 @@ export default function FriendsPage() {
           subtitle="Accept or reject requests sent to you"
         />
         {data.pendingIncoming.length === 0 ? (
-          <EmptyState message="No incoming requests. They appear when someone adds your wallet." />
+          <EmptyState message="No incoming requests. They appear when someone adds your Ready X wallet." />
         ) : (
           <div className="space-y-2">
             {data.pendingIncoming.map((r) => {
@@ -337,7 +337,7 @@ export default function FriendsPage() {
           subtitle="Tap a name or wallet to see their listings. Remove ends the friendship for both of you."
         />
         {data.friends.length === 0 ? (
-          <EmptyState message="No friends yet. Add someone by wallet address (0x optional) — they must have signed in once." />
+          <EmptyState message="No friends yet. Add someone by Ready X wallet address (0x optional) — they must have signed in once." />
         ) : (
           <div className="space-y-2">
             {data.friends.map((friend) => (
