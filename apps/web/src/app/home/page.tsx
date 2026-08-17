@@ -52,10 +52,10 @@ export default function HomePage() {
         <div className="mb-8 sm:mb-10">
           <h1 className="text-3xl sm:text-4xl">Your private network</h1>
           <p className="mt-2 text-sm text-muted sm:text-base">
-            Connect your wallet to see places from people you trust.
+            Connect your Ready X wallet to see places from people you trust.
           </p>
         </div>
-        <Button onClick={openSignIn}>Connect wallet</Button>
+        <Button onClick={openSignIn}>Connect Ready X</Button>
         <AuthModal />
       </Shell>
     );

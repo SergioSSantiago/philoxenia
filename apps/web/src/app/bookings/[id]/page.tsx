@@ -176,7 +176,7 @@ export default function BookingDetailPage() {
             <p className="text-muted">Payment privacy</p>
             <p>
               {booking.privacyMode === "private"
-                ? "Private (STRK20)"
+                ? "Private (STRK20 · STRK or DAI)"
                 : booking.privacyMode === "public"
                   ? "Public ERC-20"
                   : "—"}

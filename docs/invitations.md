@@ -66,7 +66,7 @@ Host or friend of host
 1. Guest opens link.
 2. If already friends with host → listing opens.
 3. If not → request friendship with host; after accept, listing unlocks. While pending, `/invite/[token]` polls every **3s** and redirects when `canViewListing` becomes true.
-4. Display name is cosmetic; rewards always go to the connector **wallet**.
+4. Display name is cosmetic; rewards always go to the connector **wallet**. Unsigned guests tap **Connect Ready X to continue** on `/invite/[token]`.
 
 ## Related
 

@@ -69,13 +69,14 @@ export default function LandingPage() {
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
             Share a friend&apos;s listing invite. When your guest books, you
-            receive the host&apos;s connector % on settle — paid to your wallet.
-            No inventory required. Hosts win filled nights; guests arrive with a
-            vouch; you get paid for the introduction.
+            receive the host&apos;s connector % on settle — paid in STRK or DAI
+            (same asset the guest used). No inventory required. Hosts win filled
+            nights; guests arrive with a vouch; you get paid for the
+            introduction.
           </p>
           <div className="mt-6">
             <Link href="/home">
-              <Button>Connect wallet &amp; open Earnings</Button>
+              <Button>Connect Ready X &amp; open Earnings</Button>
             </Link>
           </div>
         </div>

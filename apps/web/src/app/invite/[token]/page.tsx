@@ -138,7 +138,7 @@ export default function InvitePage() {
                 await signIn();
               }}
             >
-              Connect wallet to continue
+              Connect Ready X to continue
             </Button>
           </div>
         ) : invite.friendshipPending ? (

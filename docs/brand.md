@@ -32,6 +32,8 @@ Stats fade as the brand docks into the header on scroll.
 
 Below the fold: tagline **Direct stays: 0% protocol fee.** (`whitespace-nowrap` on `0% protocol fee` so the phrase does not wrap mid-line). Footer: fee recap, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
 
+Landing CTAs: **Connect Ready X & open Earnings**, Explore, List your place. Unsigned `/home` and invite pages use **Connect Ready X** (not a generic “Connect wallet”).
+
 ## Wallet
 
 Philoxenia connects **Ready X** only. Braavos is not supported.
