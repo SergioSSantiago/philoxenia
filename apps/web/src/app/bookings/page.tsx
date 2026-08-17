@@ -31,10 +31,7 @@ export default function BookingsPage() {
         subtitle="Cards show You host or You stay. Pay is STRK or DAI; cancel only frees nights."
       />
       {bookings == null ? (
-        <p className="text-sm text-muted">
-          Checking on-chain payments and recording any stay that already
-          settled…
-        </p>
+        <p className="text-sm text-muted">Loading bookings…</p>
       ) : bookings.length === 0 ? (
         <EmptyState message="No bookings yet. Book a friend’s place, or wait for a guest after a connector invite." />
       ) : (

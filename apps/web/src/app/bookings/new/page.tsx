@@ -120,48 +120,41 @@ function NewBookingForm() {
 
   useEffect(() => {
     if (!token) return;
+    const pending = loadPendingPaidBooking();
+    if (!pending?.fundTxHash) return;
     let cancelled = false;
     setRecording(true);
     void (async () => {
       try {
         const rows = await api.get<Booking[]>("/bookings");
         if (cancelled) return;
-        const pending = loadPendingPaidBooking();
-        const recorded = pending?.fundTxHash
-          ? rows.find((b) => {
-              try {
-                return (
-                  Boolean(b.fundTxHash) &&
-                  BigInt(b.fundTxHash as string) === BigInt(pending.fundTxHash)
-                );
-              } catch {
-                return b.fundTxHash === pending.fundTxHash;
-              }
-            })
-          : undefined;
+        const recorded = rows.find((b) => {
+          try {
+            return (
+              Boolean(b.fundTxHash) &&
+              BigInt(b.fundTxHash as string) === BigInt(pending.fundTxHash)
+            );
+          } catch {
+            return b.fundTxHash === pending.fundTxHash;
+          }
+        });
         if (recorded) {
           clearPendingPaidBooking();
           router.push(`/bookings/${recorded.id}`);
           return;
         }
-        if (pending?.fundTxHash) {
-          const booking = await confirmPaidBookingWithRetry(pending);
-          if (!cancelled) router.push(`/bookings/${booking.id}`);
-          return;
-        }
+        const booking = await confirmPaidBookingWithRetry(pending);
+        if (!cancelled) router.push(`/bookings/${booking.id}`);
       } catch (err) {
-        if (!cancelled && loadPendingPaidBooking()?.fundTxHash) {
+        if (!cancelled) {
           setError(
             err instanceof Error
-              ? `${err.message} Payment already landed — stay is being recorded. Do not pay again.`
-              : "Payment already landed — stay is being recorded. Do not pay again."
+              ? `${err.message} Payment already landed on-chain — refresh to record it. Do not pay again.`
+              : "Payment already landed on-chain — refresh to record it. Do not pay again."
           );
-          return;
         }
       } finally {
-        if (!cancelled && !loadPendingPaidBooking()?.fundTxHash) {
-          setRecording(false);
-        }
+        if (!cancelled) setRecording(false);
       }
     })();
     return () => {

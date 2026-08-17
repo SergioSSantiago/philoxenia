@@ -354,8 +354,8 @@ export default function ListingPage() {
                 }}
               >
                 {guestSelected.length > 0
-                  ? `Book ${guestSelected.length} night${guestSelected.length === 1 ? "" : "s"}`
-                  : "Book"}
+                  ? `Book & pay ${guestSelected.length} night${guestSelected.length === 1 ? "" : "s"}`
+                  : "Book & pay"}
               </Button>
             )}
             <Button
