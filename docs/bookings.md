@@ -26,7 +26,7 @@ quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → 
 2. Client pays on-chain (public multicall or STRK20 anonymizer)  
 3. `POST /bookings/confirm` with `{ bookingId, listingId, nights, fundTxHash, escrowBookingId, … }`
 
-`/bookings/new` calendar copy: tap nights one by one; they need not be consecutive; pay STRK or DAI.
+`/bookings/new` calendar copy: tap nights one by one; they need not be consecutive; pay STRK or DAI. If the JWT is live but the wallet is not, the page asks to **Connect Ready X** (Chrome or iPhone) — Public and Private both need a live session; Private also needs wallet API ≥ 0.10.
 
 **Confirm verifies:**
 

@@ -502,7 +502,7 @@ function NewBookingForm() {
                   {!privacyCapable && fundMode === "private" && (
                     <p className="text-xs text-amber-800 leading-relaxed">
                       {privacyHint ||
-                        "Ready wallet API ≥ 0.10 is required for Private. Update or reconnect Ready — we will not fall back to a public pay silently."}
+                        "Ready X wallet API ≥ 0.10 is required for Private. Update or tap Connect Ready X — we will not fall back to a public pay silently."}
                     </p>
                   )}
                   <p className="text-xs text-muted leading-relaxed">
@@ -525,8 +525,9 @@ function NewBookingForm() {
 
           {!walletReady && quote && range.ok && (
             <p className="text-sm text-amber-800 leading-relaxed">
-              Ready is signed in for Philoxenia but not connected for
-              transactions. Reconnect the extension to pay (Public or Private).
+              Ready X is signed in for Philoxenia but not connected for
+              transactions. Tap Connect Ready X (Chrome or iPhone) to pay
+              Public or Private.
             </p>
           )}
 

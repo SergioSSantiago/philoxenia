@@ -83,8 +83,8 @@ export function PhotoUploader({
         <div>
           <p className="text-sm font-medium text-foreground">Photos</p>
           <p className="mt-0.5 text-xs text-muted">
-            Upload 1–{MAX_PHOTOS} photos from your device. They are compressed
-            automatically.
+            Upload 1–{MAX_PHOTOS} photos. They are compressed to JPEG in the
+            browser (iPhone HEIC included on Safari).
           </p>
         </div>
         <button
@@ -112,7 +112,7 @@ export function PhotoUploader({
           className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-background px-4 py-10 text-sm text-muted transition hover:border-accent hover:text-foreground"
         >
           <span>Tap to add photos of the place</span>
-          <span className="text-xs">JPEG, PNG or WebP</span>
+          <span className="text-xs">JPEG, PNG, WebP, or iPhone HEIC</span>
         </button>
       ) : (
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">

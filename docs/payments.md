@@ -31,7 +31,7 @@ Located in `apps/web/src/lib/payments/`:
 | `Strk20PaymentProvider` | STRK/DAI with `NEXT_PUBLIC_STRK20_PRIVACY !== "false"` |
 | `PublicPaymentProvider` | Privacy off, wallet without STRK20, or user chose Public |
 
-Private fund (default when Ready wallet API ≥ 0.10):
+Private fund (default when Ready X wallet API ≥ 0.10):
 
 1. **Anonymizer (live)** — `withdraw` to helper + `privacy_invoke` (no silent public fallback)
 2. Shadow-account backup only if `NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1` (Ready lacks it by default)
@@ -52,7 +52,7 @@ Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeS
 | `/home` | `compact` | Public STRK **and DAI** hints “shield on Profile”; STRK20 line covers both assets |
 | `/profile` | full | Same public rows + `Strk20PrivacyPanel` (shield / unshield **STRK or DAI**) + AVNU swap |
 
-If the JWT session is still valid but Ready is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, private pay, settle, swap).
+If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, private pay, settle, swap). `/bookings/new` says the same when Pay is blocked.
 
 Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.  
 Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/tokens.ts`.
