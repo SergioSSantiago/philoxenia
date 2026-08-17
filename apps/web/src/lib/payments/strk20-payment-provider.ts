@@ -157,7 +157,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
     const session = await resolvePrivacyWallet(this.account.address);
     if (!session?.privacyCapable) {
       throw new Error(
-        "Ready wallet with STRK20 (wallet API ≥ 0.10) is required to shield"
+        "Ready X with STRK20 (wallet API ≥ 0.10) is required to shield"
       );
     }
 
@@ -180,7 +180,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
     const session = await resolvePrivacyWallet(this.account.address);
     if (!session?.privacyCapable) {
       throw new Error(
-        "Ready wallet with STRK20 (wallet API ≥ 0.10) is required to unshield"
+        "Ready X with STRK20 (wallet API ≥ 0.10) is required to unshield"
       );
     }
 
@@ -206,14 +206,14 @@ export class Strk20PaymentProvider implements PaymentProvider {
     const capable = await this.detectPrivacySupport();
     if (!capable) {
       throw new Error(
-        "Private pay needs Ready with STRK20 (wallet API ≥ 0.10). Update Ready, shield on Profile, then retry — or choose Public."
+        "Private pay needs Ready X with STRK20 (wallet API ≥ 0.10). Update Ready X, shield on Profile, then retry — or choose Public."
       );
     }
 
     const session = await resolvePrivacyWallet(this.account.address);
     if (!session?.privacyCapable) {
       throw new Error(
-        "Could not open a STRK20 wallet session. Reconnect Ready and try again."
+        "Could not open a STRK20 wallet session. Reconnect Ready X and try again."
       );
     }
 

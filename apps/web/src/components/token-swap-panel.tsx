@@ -74,21 +74,21 @@ export function TokenSwapPanel() {
   const reconnectReady = useCallback(async () => {
     setReconnecting(true);
     setNotice({
-      title: "Connecting Ready",
-      body: "Approve the connection in Ready X. Swaps need a live signing session.",
+      title: "Connecting Ready X",
+      body: "Approve in Ready X (Chrome or iPhone). Swaps need a live signing session.",
       tone: "info",
     });
     try {
       await reconnectWallet();
       setNotice({
-        title: "Ready connected",
+        title: "Ready X connected",
         body: "You can quote and swap STRK ↔ DAI now.",
         tone: "info",
         primaryLabel: "Got it",
       });
     } catch (err) {
       setNotice({
-        title: "Could not connect Ready",
+        title: "Could not connect Ready X",
         body: formatWalletError(err),
         tone: "error",
         primaryLabel: "Try again",
@@ -123,7 +123,7 @@ export function TokenSwapPanel() {
         });
         setQuote(live);
       }
-      setMsg("Approve in Ready to execute the AVNU swap…");
+      setMsg("Approve in Ready X to execute the AVNU swap…");
       const { transactionHash } = await executeAvnuSwap({
         account,
         quote: live,
@@ -142,7 +142,7 @@ export function TokenSwapPanel() {
       const needsReconnect =
         /not connected|reconnect|Ready|signing|session|wallet/i.test(body);
       setNotice({
-        title: needsReconnect ? "Ready session needed" : "Swap failed",
+        title: needsReconnect ? "Ready X session needed" : "Swap failed",
         body,
         tone: "error",
         primaryLabel: needsReconnect ? "Connect Ready X" : "Dismiss",

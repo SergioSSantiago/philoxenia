@@ -224,7 +224,7 @@ function NewBookingForm() {
       setError(
         err instanceof Error
           ? err.message
-          : "Could not reconnect Ready. Open the extension and try again."
+          : "Could not reconnect Ready X. Open Ready X (Chrome or iPhone) and try again."
       );
     } finally {
       setReconnecting(false);

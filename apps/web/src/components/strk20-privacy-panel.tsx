@@ -70,8 +70,8 @@ export function Strk20PrivacyPanel() {
     setReconnecting(true);
     setMsg("");
     setNotice({
-      title: "Reconnecting Ready",
-      body: "Approve the connection in Ready X (unlock if asked). We disconnect first so Private STRK/DAI can rediscover wallet API ≥ 0.10 — a silent reconnect does nothing when Ready is already linked.",
+      title: "Reconnecting Ready X",
+      body: "Approve in Ready X (unlock if asked). We disconnect first so Private STRK/DAI can rediscover wallet API ≥ 0.10 — a silent reconnect does nothing when Ready X is already linked.",
       tone: "info",
     });
     try {
@@ -103,7 +103,7 @@ export function Strk20PrivacyPanel() {
           title: "Still not privacy-capable",
           body:
             lastReason ??
-            "Ready connected, but Private needs Ready X with Smart Wallet + Private (API ≥ 0.10).",
+            "Ready X connected, but Private needs Smart Wallet + Private (API ≥ 0.10).",
           tone: "warn",
           primaryLabel: "Try again",
           secondaryLabel: "Refresh page",
@@ -112,7 +112,7 @@ export function Strk20PrivacyPanel() {
       }
     } catch (err) {
       setNotice({
-        title: "Could not reconnect Ready",
+        title: "Could not reconnect Ready X",
         body: formatWalletError(err),
         tone: "error",
         primaryLabel: "Try again",
