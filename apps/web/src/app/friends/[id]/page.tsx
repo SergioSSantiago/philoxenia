@@ -143,7 +143,8 @@ export default function FriendProfilePage() {
           </h1>
           <p className="mt-1 text-sm text-muted">
             Places they host in your trust network — open one to book, or share
-            an invite to earn as connector.
+            an invite to earn as connector (STRK or DAI, same asset the guest
+            pays).
           </p>
         </div>
         <WalletAddress address={friend.walletAddress} compact />

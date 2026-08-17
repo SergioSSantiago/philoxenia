@@ -337,7 +337,7 @@ export default function FriendsPage() {
           subtitle="Tap a name or wallet to see their listings. Remove ends the friendship for both of you."
         />
         {data.friends.length === 0 ? (
-          <EmptyState message="No friends yet." />
+          <EmptyState message="No friends yet. Add someone by wallet address (0x optional) — they must have signed in once." />
         ) : (
           <div className="space-y-2">
             {data.friends.map((friend) => (

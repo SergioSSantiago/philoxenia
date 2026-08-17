@@ -103,7 +103,7 @@ export function LandingFrame({ children }: { children: ReactNode }) {
             <BrandLockup size="large" />
           </div>
           <Link href="/home">
-            <Button variant="secondary">Connect</Button>
+            <Button variant="secondary">Connect Ready X</Button>
           </Link>
         </div>
       </header>

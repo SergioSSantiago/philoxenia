@@ -25,8 +25,8 @@ The brand lockup always goes to **`/`** (the landing page), never `/home`.
 Before scroll, the landing shows only:
 
 1. **Philoxenia** lockup (oversized / centered)
-2. **Connect** (top right)
-3. Live network totals under the brand (`LandingNetworkStats`): users, countries (normalized from address country, e.g. Suiza→switzerland), listings open, nights booked, DAI booked, STRK booked — polled from `GET /stats/network`
+2. **Connect Ready X** (top right → `/home`)
+3. Live network totals under the brand (`LandingNetworkStats`): users, countries (normalized from address country, e.g. Suiza→switzerland), listings open, nights booked, DAI booked, STRK booked — polled from `GET /stats/network` every **20s**
 
 Stats fade as the brand docks into the header on scroll.
 

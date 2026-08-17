@@ -57,11 +57,11 @@ In-app notifications (polled ~2.5s while the tab is visible) for friend request 
 
 ## Friend profile (web)
 
-`/friends/[id]` — identity, wallet, listings from that friend, and **Share invite & earn** when the listing has a connector %.
+`/friends/[id]` — identity, wallet, listings from that friend, and **Share invite & earn** when the listing has a connector % (payout STRK or DAI matching the guest).
 
 Opened by tapping **name** or **wallet** on:
 
-- `/friends` (accepted friends)
+- `/friends` (accepted friends) — empty list: add by wallet (0x optional)
 - `/messages` inbox
 - `/messages/[friendId]` chat header
 
