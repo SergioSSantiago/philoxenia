@@ -46,11 +46,11 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 1. [ ] Both open Messages once (publish sealed keys)
 2. [ ] Send sealed note; peer decrypts
 3. [ ] API/DB body starts with `phx1.`
-4. [ ] Optional: anchor on-chain checkbox (Ready Private)
+4. [ ] Optional: anchor on-chain checkbox (Ready X Private)
 
 ## G. Swap (optional)
 
-1. [ ] Profile → Swap STRK ↔ DAI (AVNU public) or Home → Swap shortcut
+1. [ ] Profile → Swap STRK ↔ DAI (AVNU public) or Home → Shield & swap
 
 ## H. Hardening smoke
 

@@ -21,7 +21,7 @@ Philoxenia has **no public marketplace**. The network grows only when someone in
 ### Why you should be a connector
 
 - **Earn without hosting** — no photos, no calendar, no guests in your home
-- **Paid on-chain** — when the guest settles, your cut hits your Ready wallet (STRK or DAI)
+- **Paid on-chain** — when the guest settles, your cut hits your Ready X wallet (STRK or DAI)
 - **Aligned incentives** — hosts who set 3–10% give friends a reason to share; you fill their nights
 - **Trust-native** — you only introduce people you actually know; guests arrive with a vouch, not a cold listing
 - **Protocol takes a thin cut of *your* reward only** — 10% of the connector share (never of direct host↔guest stays)

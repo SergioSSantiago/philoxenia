@@ -94,7 +94,7 @@ export default function HomePage() {
             <WalletBalances compact />
             <Link href="/profile" className="block">
               <Button variant="secondary" className="w-full text-xs">
-                Swap STRK ↔ DAI
+                Shield &amp; swap
               </Button>
             </Link>
             <Link href="/profile" className="block">

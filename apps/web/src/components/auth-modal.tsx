@@ -217,7 +217,7 @@ export function AuthModal() {
                   </a>
                   <p className="text-xs text-muted leading-relaxed">
                     Prefer the in-app browser? Copy the link and open it inside
-                    Ready X (best for Private STRK).
+                    Ready X (best for Private STRK or DAI).
                   </p>
                   <button
                     type="button"

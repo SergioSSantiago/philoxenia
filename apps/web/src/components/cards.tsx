@@ -38,6 +38,9 @@ export function ListingCard({ listing }: { listing: Listing }) {
               {listing.connectorRewardPercent}% connector
             </span>
           ) : null}
+          <span className="mt-1 block text-xs text-muted">
+            Guest pays STRK or DAI
+          </span>
         </p>
         {listing.host && (
           <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">
