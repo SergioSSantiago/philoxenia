@@ -1,7 +1,9 @@
-import { hash, num } from "starknet";
+import { CallData, cairo, hash, num } from "starknet";
 import {
   escrowAddressesForAsset,
   getRpcProvider,
+  MAINNET_DAI_ESCROW,
+  MAINNET_STRK_ESCROW,
   normalizeFeltAddress,
 } from "./rpc.js";
 
@@ -14,7 +16,7 @@ function normalizeTxHash(txHash: string): string {
   if (!/^0x[0-9a-f]{1,64}$/.test(h)) {
     throw new Error("Invalid transaction hash");
   }
-  return h;
+  return `0x${h.slice(2).padStart(64, "0")}`;
 }
 
 function feltEq(a: string, b: string): boolean {
@@ -212,4 +214,154 @@ export async function verifyEscrowRefundTx(input: {
   throw new Error(
     "Tx has no BookingRefunded event for this booking on Philoxenia escrow"
   );
+}
+
+export function uuidToOnChainId(uuid: string): bigint {
+  return BigInt(`0x${uuid.replace(/-/g, "").slice(0, 16)}`);
+}
+
+export function weiToTokenAmount(wei: bigint): string {
+  const whole = wei / 10n ** 18n;
+  const frac = (wei % 10n ** 18n)
+    .toString()
+    .padStart(18, "0")
+    .replace(/0+$/, "");
+  return frac ? `${whole}.${frac}` : whole.toString();
+}
+
+export function txHashVariants(txHash: string): string[] {
+  const hex = normalizeTxHash(txHash).replace(/^0x/, "");
+  const padded = `0x${hex.padStart(64, "0")}`;
+  const short = `0x${hex.replace(/^0+/, "") || "0"}`;
+  return [...new Set([`0x${hex}`, padded, short])];
+}
+
+function receiptSucceeded(receipt: {
+  execution_status?: string;
+  status?: string;
+  isSuccess?: () => boolean;
+}): boolean {
+  const exec = receipt.execution_status ?? receipt.status ?? "";
+  return (
+    exec === "SUCCEEDED" ||
+    exec === "ACCEPTED_ON_L2" ||
+    exec === "ACCEPTED_ON_L1" ||
+    receipt.isSuccess?.() === true
+  );
+}
+
+export type InspectedEscrowPayment = {
+  txHash: string;
+  paymentAsset: "STRK" | "DAI";
+  escrowBookingId: string;
+  listingOnChainId: string;
+  guest: string;
+  host: string;
+  totalAmount: string;
+  hostAmount: string;
+  connectorAmount: string;
+  protocolAmount: string;
+  fromEscrow: string;
+};
+
+/**
+ * Read a settled Philoxenia escrow payment from a tx (no client booking id required).
+ */
+export async function inspectEscrowSettledTx(
+  txHash: string
+): Promise<InspectedEscrowPayment> {
+  const normalized = normalizeTxHash(txHash);
+  const provider = getRpcProvider();
+  let receipt: Awaited<ReturnType<typeof provider.getTransactionReceipt>>;
+  try {
+    receipt = await provider.getTransactionReceipt(normalized);
+  } catch {
+    throw new Error(
+      "Transaction not found on Starknet yet — wait for confirmation and retry"
+    );
+  }
+
+  const exec =
+    (receipt as { execution_status?: string }).execution_status ??
+    (receipt as { status?: string }).status ??
+    "";
+  if (!receiptSucceeded(receipt as { execution_status?: string }) && exec) {
+    throw new Error(`Transaction did not succeed (status: ${exec})`);
+  }
+
+  const events =
+    (
+      receipt as {
+        events?: Array<{ from_address: string; keys: string[]; data: string[] }>;
+      }
+    ).events ?? [];
+
+  const allowed = new Set(
+    [...escrowAddressesForAsset("STRK"), ...escrowAddressesForAsset("DAI")].map(
+      normalizeFeltAddress
+    )
+  );
+  const daiEscrow = normalizeFeltAddress(MAINNET_DAI_ESCROW);
+  const strkEscrow = normalizeFeltAddress(MAINNET_STRK_ESCROW);
+
+  let settled: { from: string; bookingId: bigint; asset: "STRK" | "DAI" } | null =
+    null;
+  for (const ev of events) {
+    const from = normalizeFeltAddress(ev.from_address);
+    if (!allowed.has(from)) continue;
+    if (!ev.keys?.length) continue;
+    const selector = num.toHex(BigInt(ev.keys[0]));
+    if (!feltEq(selector, BOOKING_SETTLED)) continue;
+    const id = u256FromData(ev.data ?? [], 0);
+    if (id == null) continue;
+    settled = {
+      from,
+      bookingId: id,
+      asset: from === daiEscrow ? "DAI" : "STRK",
+    };
+    if (from === strkEscrow) settled.asset = "STRK";
+    break;
+  }
+
+  if (!settled) {
+    throw new Error(
+      "Tx has no BookingSettled event on the Philoxenia escrow"
+    );
+  }
+
+  const raw = await provider.callContract({
+    contractAddress: settled.from,
+    entrypoint: "get_booking",
+    calldata: CallData.compile({
+      booking_id: cairo.uint256(settled.bookingId),
+    }),
+  });
+  const r = Array.isArray(raw) ? raw : (raw as { result?: string[] }).result;
+  if (!r || r.length < 19) {
+    throw new Error("Could not read on-chain booking from escrow");
+  }
+
+  const listingOnChainId = BigInt(r[2]) + (BigInt(r[3]) << 128n);
+  const total = BigInt(r[7]) + (BigInt(r[8]) << 128n);
+  const hostAmt = BigInt(r[9]) + (BigInt(r[10]) << 128n);
+  const connectorAmt = BigInt(r[11]) + (BigInt(r[12]) << 128n);
+  const protocolAmt = BigInt(r[13]) + (BigInt(r[14]) << 128n);
+  const settledFlag = r[17] === "0x1" || r[17] === "1";
+  if (!settledFlag) {
+    throw new Error("On-chain booking is not settled");
+  }
+
+  return {
+    txHash: normalized,
+    paymentAsset: settled.asset,
+    escrowBookingId: settled.bookingId.toString(),
+    listingOnChainId: listingOnChainId.toString(),
+    guest: r[5],
+    host: r[4],
+    totalAmount: weiToTokenAmount(total),
+    hostAmount: weiToTokenAmount(hostAmt),
+    connectorAmount: weiToTokenAmount(connectorAmt),
+    protocolAmount: weiToTokenAmount(protocolAmt),
+    fromEscrow: settled.from,
+  };
 }

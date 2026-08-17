@@ -99,9 +99,8 @@ export async function confirmPaidBookingWithRetry(
     } catch (err) {
       lastErr = err;
       const msg = err instanceof Error ? err.message : String(err);
-      const retryable = /not found on Starknet yet|wait for confirmation/i.test(
-        msg
-      );
+      const retryable =
+        /not found on Starknet yet|wait for confirmation/i.test(msg);
       if (!retryable || i === attempts - 1) throw err;
       await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
     }

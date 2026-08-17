@@ -15,9 +15,13 @@ import {
 } from "../lib/utils.js";
 import { writeAuditLog } from "../lib/audit.js";
 import {
+  inspectEscrowSettledTx,
+  txHashVariants,
+  uuidToOnChainId,
   verifyEscrowPaymentTx,
   verifyEscrowRefundTx,
 } from "../lib/verify-booking-tx.js";
+import { randomUUID } from "node:crypto";
 import { toUserResponse } from "./auth.js";
 import { createNotification } from "./notifications.js";
 import { daiToStrk, getStrkPerDai } from "./rates.js";
@@ -1105,6 +1109,7 @@ export async function quoteBooking(
 /**
  * Creates a completed booking only after on-chain payment (fund+settle).
  * Client generates `bookingId` before the escrow multicall so ids match.
+ * Verifies the Starknet tx first so a landed pay is never rejected for FX drift.
  */
 export async function confirmPaidBooking(
   guestId: string,
@@ -1125,11 +1130,46 @@ export async function confirmPaidBooking(
     fxRate?: string;
   }
 ) {
+  const guest = await db.query.users.findFirst({
+    where: eq(schema.users.id, guestId),
+  });
+  if (!guest) {
+    throw new Error("Account not found");
+  }
+
   const existing = await db.query.bookings.findFirst({
     where: eq(schema.bookings.id, input.bookingId),
   });
   if (existing) {
+    if (
+      existing.guestId === guestId &&
+      existing.fundTxHash &&
+      sameFelt(existing.fundTxHash, input.fundTxHash)
+    ) {
+      return mapBooking(existing, undefined, input.privacyMode ?? "public");
+    }
     throw new Error("Booking already exists");
+  }
+
+  const inspected = await inspectEscrowSettledTx(input.fundTxHash);
+  if (!sameFelt(inspected.escrowBookingId, input.escrowBookingId)) {
+    throw new Error(
+      "Tx has no BookingSettled event for this booking on the Philoxenia escrow"
+    );
+  }
+  if (!sameFelt(guest.walletAddress, inspected.guest)) {
+    throw new Error("This payment was not made from your wallet");
+  }
+
+  const already = await findBookingForPayment(
+    inspected.txHash,
+    inspected.escrowBookingId
+  );
+  if (already) {
+    if (already.guestId === guestId) {
+      return mapBooking(already, undefined, input.privacyMode ?? "private");
+    }
+    throw new Error("This transaction was already used for another booking");
   }
 
   const prepared = await prepareBooking(guestId, {
@@ -1139,90 +1179,51 @@ export async function confirmPaidBooking(
     checkOut: input.checkOut,
   });
 
-  const paymentAsset = input.paymentAsset === "DAI" ? "DAI" : "STRK";
+  if (uuidToOnChainId(prepared.listing.id) !== BigInt(inspected.listingOnChainId)) {
+    throw new Error("This payment is for a different listing");
+  }
+
+  const paymentAsset = inspected.paymentAsset;
   const totalPriceDai = prepared.amountsDai.totalPrice;
-  const paidInput = input.totalPrice ?? input.totalPriceStrk;
+  const totalPrice = inspected.totalAmount;
+  const paid = Number(totalPrice);
+  const expectedDai = Number(totalPriceDai);
 
-  let totalPrice: string;
   let fxRateUsed: string | null;
-  let amounts: {
-    connectorRewardAmount: string;
-    protocolFeeAmount: string;
-    protocolFeePercent: number;
-    hostAmount: string;
-    connectorRewardPercentApplied: number;
-  };
-
   if (paymentAsset === "DAI") {
-    totalPrice = totalPriceDai;
-    if (paidInput && Number(paidInput) > 0) {
-      const paid = Number(paidInput);
-      const expected = Number(totalPriceDai);
-      if (expected > 0 && Math.abs(paid - expected) / expected > 0.01) {
-        throw new Error(
-          "DAI amount does not match the quote — refresh and try again"
-        );
-      }
-      totalPrice = paidInput;
+    if (expectedDai > 0 && Math.abs(paid - expectedDai) / expectedDai > 0.01) {
+      throw new Error(
+        "Selected nights do not match the DAI amount already paid"
+      );
     }
     fxRateUsed = "1";
-    amounts = {
-      connectorRewardAmount: prepared.amountsDai.connectorRewardAmount,
-      protocolFeeAmount: prepared.amountsDai.protocolFeeAmount,
-      protocolFeePercent: prepared.amountsDai.protocolFeePercent,
-      hostAmount: prepared.amountsDai.hostAmount,
-      connectorRewardPercentApplied:
-        prepared.amountsDai.connectorRewardPercentApplied,
-    };
   } else {
     const fx = await getStrkPerDai({ fresh: true });
-    const freshStrk = daiToStrk(totalPriceDai, fx.strkPerDai);
-    totalPrice = freshStrk;
-    fxRateUsed = String(fx.strkPerDai);
-    if (paidInput && Number(paidInput) > 0) {
-      const paid = Number(paidInput);
-      const fresh = Number(freshStrk);
-      if (fresh > 0 && Math.abs(paid - fresh) / fresh > 0.05) {
-        throw new Error(
-          "STRK amount drifted too far from the live rate — refresh quote and try again"
-        );
-      }
-      totalPrice = paidInput;
-      fxRateUsed =
-        input.fxRate && Number(input.fxRate) > 0
-          ? input.fxRate
-          : String(paid / Number(totalPriceDai));
+    const freshStrk = Number(daiToStrk(totalPriceDai, fx.strkPerDai));
+    if (
+      freshStrk > 0 &&
+      Math.abs(paid - freshStrk) / Math.max(paid, freshStrk) > 0.25
+    ) {
+      throw new Error(
+        "Selected nights do not match the amount already paid — pick the same nights as when you paid"
+      );
     }
-    const strkPerDai = Number(fxRateUsed);
-    amounts = {
-      connectorRewardAmount: daiToStrk(
-        prepared.amountsDai.connectorRewardAmount,
-        strkPerDai
-      ),
-      protocolFeeAmount: daiToStrk(
-        prepared.amountsDai.protocolFeeAmount,
-        strkPerDai
-      ),
-      protocolFeePercent: prepared.amountsDai.protocolFeePercent,
-      hostAmount: daiToStrk(prepared.amountsDai.hostAmount, strkPerDai),
-      connectorRewardPercentApplied:
-        prepared.amountsDai.connectorRewardPercentApplied,
-    };
+    fxRateUsed =
+      input.fxRate && Number(input.fxRate) > 0
+        ? input.fxRate
+        : expectedDai > 0
+          ? String(paid / expectedDai)
+          : String(fx.strkPerDai);
   }
 
-  const verified = await verifyEscrowPaymentTx({
-    txHash: input.fundTxHash,
-    escrowBookingId: input.escrowBookingId,
-    paymentAsset,
-    requireSettled: true,
-  });
-
-  const reused = await db.query.payments.findFirst({
-    where: eq(schema.payments.txHash, verified.txHash),
-  });
-  if (reused) {
-    throw new Error("This transaction was already used for another booking");
-  }
+  const amounts = {
+    connectorRewardAmount: inspected.connectorAmount,
+    protocolFeeAmount: inspected.protocolAmount,
+    protocolFeePercent: prepared.amountsDai.protocolFeePercent,
+    hostAmount: inspected.hostAmount,
+    connectorRewardPercentApplied:
+      prepared.amountsDai.connectorRewardPercentApplied,
+  };
 
   const [booking] = await db
     .insert(schema.bookings)
@@ -1246,9 +1247,9 @@ export async function confirmPaidBooking(
       hostAmount: amounts.hostAmount,
       paymentAsset,
       status: "completed",
-      fundTxHash: verified.txHash,
-      settleTxHash: verified.txHash,
-      escrowBookingId: input.escrowBookingId,
+      fundTxHash: inspected.txHash,
+      settleTxHash: inspected.txHash,
+      escrowBookingId: inspected.escrowBookingId,
     })
     .returning();
 
@@ -1256,7 +1257,7 @@ export async function confirmPaidBooking(
     bookingId: booking.id,
     amount: booking.totalPrice,
     asset: paymentAsset,
-    txHash: verified.txHash,
+    txHash: inspected.txHash,
     privacyMode: input.privacyMode ?? "public",
     status: "confirmed",
   });
@@ -1267,9 +1268,9 @@ export async function confirmPaidBooking(
     resourceType: "booking",
     resourceId: booking.id,
     meta: {
-      txHash: verified.txHash,
-      event: verified.matchedEvent,
-      escrow: verified.fromEscrow,
+      txHash: inspected.txHash,
+      event: "BookingSettled",
+      escrow: inspected.fromEscrow,
       privacyMode: input.privacyMode ?? "public",
       paymentAsset,
     },
@@ -1292,6 +1293,133 @@ export async function confirmPaidBooking(
   }
 
   return mapBooking(booking, undefined, input.privacyMode ?? "public");
+}
+
+function sameFelt(a: string, b: string): boolean {
+  try {
+    return BigInt(a) === BigInt(b);
+  } catch {
+    return a.toLowerCase() === b.toLowerCase();
+  }
+}
+
+async function findPaymentByTxHash(txHash: string) {
+  for (const variant of txHashVariants(txHash)) {
+    const row = await db.query.payments.findFirst({
+      where: eq(schema.payments.txHash, variant),
+    });
+    if (row) return row;
+  }
+  return null;
+}
+
+async function findBookingByEscrowId(escrowBookingId: string) {
+  const hex = `0x${BigInt(escrowBookingId).toString(16)}`;
+  for (const id of [escrowBookingId, hex, BigInt(escrowBookingId).toString()]) {
+    const row = await db.query.bookings.findFirst({
+      where: eq(schema.bookings.escrowBookingId, id),
+    });
+    if (row) return row;
+  }
+  return null;
+}
+
+async function findBookingForPayment(txHash: string, escrowBookingId: string) {
+  const pay = await findPaymentByTxHash(txHash);
+  if (pay) {
+    const booking = await db.query.bookings.findFirst({
+      where: eq(schema.bookings.id, pay.bookingId),
+    });
+    if (booking) return booking;
+  }
+  return findBookingByEscrowId(escrowBookingId);
+}
+
+async function findListingByOnChainId(onChainId: bigint) {
+  const listings = await db.select().from(schema.listings);
+  return (
+    listings.find((listing) => uuidToOnChainId(listing.id) === onChainId) ??
+    null
+  );
+}
+
+export async function inspectPaidBookingTx(
+  guestId: string,
+  fundTxHash: string
+) {
+  const guest = await db.query.users.findFirst({
+    where: eq(schema.users.id, guestId),
+  });
+  if (!guest) {
+    throw new Error("Account not found");
+  }
+
+  const inspected = await inspectEscrowSettledTx(fundTxHash);
+  if (!sameFelt(guest.walletAddress, inspected.guest)) {
+    throw new Error("This payment was not made from your wallet");
+  }
+
+  const listing = await findListingByOnChainId(
+    BigInt(inspected.listingOnChainId)
+  );
+  if (!listing) {
+    throw new Error("Listing for this payment was not found");
+  }
+
+  const authorized = await canViewListing(
+    guestId,
+    listing.id,
+    listing.hostId
+  );
+  if (!authorized) {
+    throw new Error(LISTING_UNAVAILABLE);
+  }
+
+  const existing = await findBookingForPayment(
+    inspected.txHash,
+    inspected.escrowBookingId
+  );
+
+  return {
+    fundTxHash: inspected.txHash,
+    listingId: listing.id,
+    listingTitle: listing.title,
+    paymentAsset: inspected.paymentAsset,
+    totalPrice: inspected.totalAmount,
+    escrowBookingId: inspected.escrowBookingId,
+    alreadyRecorded: Boolean(existing && existing.guestId === guestId),
+    existingBookingId:
+      existing && existing.guestId === guestId ? existing.id : null,
+  };
+}
+
+export async function recoverPaidBooking(
+  guestId: string,
+  input: {
+    fundTxHash: string;
+    nights: string[];
+    listingId?: string;
+    privacyMode?: "private" | "public";
+  }
+) {
+  const inspected = await inspectPaidBookingTx(guestId, input.fundTxHash);
+  if (inspected.alreadyRecorded && inspected.existingBookingId) {
+    return getBookingById(inspected.existingBookingId, guestId);
+  }
+  if (input.listingId && input.listingId !== inspected.listingId) {
+    throw new Error("This payment is for a different listing");
+  }
+
+  return confirmPaidBooking(guestId, {
+    bookingId: randomUUID(),
+    listingId: inspected.listingId,
+    nights: input.nights,
+    fundTxHash: inspected.fundTxHash,
+    escrowBookingId: inspected.escrowBookingId,
+    privacyMode: input.privacyMode ?? "private",
+    paymentAsset: inspected.paymentAsset,
+    totalPrice: inspected.totalPrice,
+  });
 }
 
 async function prepareBooking(

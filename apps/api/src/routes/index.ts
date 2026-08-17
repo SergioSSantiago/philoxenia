@@ -597,6 +597,58 @@ export async function registerRoutes(app: FastifyInstance) {
   );
 
   app.post(
+    "/bookings/inspect-payment",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const body = z
+        .object({
+          fundTxHash: z.string().min(1),
+        })
+        .parse(request.body);
+
+      try {
+        return await social.inspectPaidBookingTx(
+          request.user.userId,
+          body.fundTxHash
+        );
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Could not read payment";
+        const status = /unavailable/i.test(message) ? 404 : 400;
+        return reply.status(status).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    "/bookings/recover",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const body = z
+        .object({
+          fundTxHash: z.string().min(1),
+          nights: z.array(z.string()).min(1),
+          listingId: z.string().uuid().optional(),
+          privacyMode: z.enum(["private", "public"]).optional(),
+        })
+        .parse(request.body);
+
+      try {
+        const booking = await social.recoverPaidBooking(
+          request.user.userId,
+          body
+        );
+        return reply.status(201).send(booking);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Recover booking failed";
+        const status = /unavailable/i.test(message) ? 404 : 400;
+        return reply.status(status).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
     "/bookings",
     { preHandler: [authenticate] },
     async (_request, reply) => {

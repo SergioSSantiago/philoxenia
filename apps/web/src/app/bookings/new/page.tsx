@@ -99,6 +99,7 @@ function NewBookingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const listingId = searchParams.get("listing") ?? "";
+  const recoverHash = (searchParams.get("recover") ?? "").trim();
   const { token, user, reconnectWallet } = useAuth();
   const { account, address } = useAccount();
   const [listing, setListing] = useState<Listing | null>(null);
@@ -113,12 +114,62 @@ function NewBookingForm() {
   const [submitting, setSubmitting] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
   const [recording, setRecording] = useState(false);
+  const [recoverInfo, setRecoverInfo] = useState<{
+    totalPrice: string;
+    paymentAsset: PaymentAsset;
+    listingTitle: string;
+  } | null>(null);
 
   const walletReady = Boolean(account && address);
+  const recovering = Boolean(recoverHash);
+
+  useEffect(() => {
+    if (!token || !recoverHash) return;
+    let cancelled = false;
+    void api
+      .post<{
+        fundTxHash: string;
+        listingId: string;
+        listingTitle: string;
+        paymentAsset: PaymentAsset;
+        totalPrice: string;
+        alreadyRecorded: boolean;
+        existingBookingId: string | null;
+      }>("/bookings/inspect-payment", { fundTxHash: recoverHash })
+      .then((info) => {
+        if (cancelled) return;
+        if (info.alreadyRecorded && info.existingBookingId) {
+          router.push(`/bookings/${info.existingBookingId}`);
+          return;
+        }
+        setRecoverInfo({
+          totalPrice: info.totalPrice,
+          paymentAsset: info.paymentAsset,
+          listingTitle: info.listingTitle,
+        });
+        if (info.listingId && info.listingId !== listingId) {
+          router.replace(
+            `/bookings/new?listing=${info.listingId}&recover=${encodeURIComponent(recoverHash)}`
+          );
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Could not read that payment on Starknet"
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [token, recoverHash, listingId, router]);
 
   useEffect(() => {
     const pending = loadPendingPaidBooking();
-    if (!pending || !token) return;
+    if (!pending || !token || recoverHash) return;
     setRecording(true);
     void confirmPaidBookingWithRetry(pending)
       .then((booking) => {
@@ -160,6 +211,7 @@ function NewBookingForm() {
       return;
     }
     if (!listingId) {
+      if (recoverHash) return;
       setLoadError("Missing listing.");
       return;
     }
@@ -265,6 +317,7 @@ function NewBookingForm() {
       setError("Host wallet missing");
       return;
     }
+    const hostWallet = listing.host.walletAddress;
 
     setSubmitting(true);
     setError("");
@@ -319,7 +372,7 @@ function NewBookingForm() {
             amount: payAmount,
             asset: paymentAsset,
             guestAddress: address,
-            hostAddress: listing.host.walletAddress,
+            hostAddress: hostWallet,
             connectorAddress: liveQuote.connectorWallet,
             connectorRewardPercent: liveQuote.connectorRewardPercent,
             onChainBookingId,
@@ -365,6 +418,29 @@ function NewBookingForm() {
     }
   }
 
+  async function recordRecoveredPayment() {
+    if (!listing || !range.ok || range.nights.length === 0 || !recoverHash) {
+      return;
+    }
+    setRecording(true);
+    setError("");
+    try {
+      const booking = await api.post<Booking>("/bookings/recover", {
+        fundTxHash: recoverHash,
+        nights: range.nights,
+        listingId: listing.id,
+        privacyMode: "private",
+      });
+      router.push(`/bookings/${booking.id}`);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not record the payment"
+      );
+    } finally {
+      setRecording(false);
+    }
+  }
+
   if (loadError) {
     return (
       <Shell>
@@ -376,7 +452,10 @@ function NewBookingForm() {
   if (!listing) {
     return (
       <Shell>
-        <p className="text-muted">Loading…</p>
+        <p className="text-muted">
+          {recovering ? "Looking up on-chain payment…" : "Loading…"}
+        </p>
+        {error && <p className="mt-3 text-sm text-red-700">{error}</p>}
       </Shell>
     );
   }
@@ -388,8 +467,9 @@ function NewBookingForm() {
       <h1 className="mb-2 text-4xl">Book & pay</h1>
       <p className="mb-2 text-muted">{listing.title}</p>
       <p className="mb-8 text-sm text-muted leading-relaxed">
-        Use the calendar: tap each night you want (they need not be consecutive).
-        One tap selects, another deselects. Then pay in STRK or DAI.
+        {recovering
+          ? "This payment already settled on Starknet. Select the same nights as when you paid, then record the booking — you will not be charged again."
+          : "Use the calendar: tap each night you want (they need not be consecutive). One tap selects, another deselects. Then pay in STRK or DAI."}
       </p>
 
       {isOwnListing ? (
@@ -507,7 +587,7 @@ function NewBookingForm() {
                     : `${formatTokenAmount(quote.totalPriceStrk)} STRK`}
                 </span>
               </div>
-              {STRK20_PRIVACY_ENABLED && (
+              {STRK20_PRIVACY_ENABLED && !recovering && (
                 <div className="space-y-2 pt-1">
                   <p className="text-xs font-medium text-foreground">
                     Payment privacy
@@ -566,7 +646,7 @@ function NewBookingForm() {
 
           {error && <p className="text-sm text-red-700">{error}</p>}
 
-          {!walletReady && quote && range.ok && (
+          {!walletReady && quote && range.ok && !recovering && (
             <p className="text-sm text-amber-800 leading-relaxed">
               Ready X is signed in for Philoxenia but not connected for
               transactions. Tap Connect Ready X (Chrome or iPhone) to pay
@@ -584,7 +664,21 @@ function NewBookingForm() {
                 Clear
               </Button>
             )}
-            {!walletReady ? (
+            {recovering ? (
+              <Button
+                type="button"
+                disabled={recording || !quote || !range.ok}
+                onClick={() => void recordRecoveredPayment()}
+              >
+                {recording
+                  ? "Recording booking…"
+                  : `Record ${
+                      recoverInfo
+                        ? `${formatTokenAmount(recoverInfo.totalPrice)} ${recoverInfo.paymentAsset}`
+                        : "on-chain"
+                    } payment`}
+              </Button>
+            ) : !walletReady ? (
               <Button
                 type="button"
                 disabled={reconnecting || !quote || !range.ok}
