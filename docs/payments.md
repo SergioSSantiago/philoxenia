@@ -4,7 +4,7 @@
 
 # Payments
 
-Philoxenia supports STRK and DAI payments with optional STRK20 privacy for STRK.
+Philoxenia supports STRK and DAI payments with optional STRK20 privacy for **both** assets.
 
 List prices are always **DAI**. At pay time the guest chooses:
 
@@ -41,7 +41,7 @@ Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow
 
 ## Swap STRK ↔ DAI (Profile)
 
-Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (also linked from Home). Ready must be connected to sign. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
+Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (also linked from Home). Ready X must be connected to sign (**Connect Ready X to swap**). Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
 
 ## Balances (Home vs Profile)
 
@@ -75,7 +75,7 @@ See [strk20.md](./strk20.md). Private selection does **not** fall back to public
 
 ## Peer transfers (Messages)
 
-Friends can send DAI or STRK directly from chat (`peer-transfer.ts`) — used for voluntary returns after social cancel. Not escrow.
+Friends can send DAI or STRK directly from chat (`peer-transfer.ts`) — used for voluntary returns after social cancel. Not escrow. Chat and booking pay both say **Connect Ready X** when the JWT is live but the wallet is not.
 
 ## Live FX
 

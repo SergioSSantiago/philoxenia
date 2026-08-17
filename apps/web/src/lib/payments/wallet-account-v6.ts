@@ -115,7 +115,7 @@ function notCapableReason(versions: string[], hadWallet: boolean): string {
   if (versions.length === 0) {
     return fx
       ? "Ready connected but did not report wallet API versions. Firefox has no Ready X — use Chrome + Ready X with Smart Wallet + Private. On iPhone, Private STRK needs the Ready X in-app browser."
-      : "Ready is connected for login, but Private STRK needs Ready X with Smart Wallet + Private enabled (wallet API ≥ 0.10). Unlock Ready X, turn those on, then tap Reconnect Ready. If it still fails, refresh this page.";
+      : "Ready is connected for login, but Private STRK/DAI needs Ready X with Smart Wallet + Private enabled (wallet API ≥ 0.10). Unlock Ready X, turn those on, then tap Reconnect Ready X. If it still fails, refresh this page.";
   }
 
   return `Ready wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private). Update Ready X${fx ? " — Firefox has no Ready X; switch to Chrome, or the Ready X in-app browser on iPhone" : ""}, enable Smart Wallet + Private, and reconnect.`;

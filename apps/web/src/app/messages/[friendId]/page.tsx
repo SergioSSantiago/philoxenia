@@ -266,7 +266,7 @@ export default function ChatThreadPage() {
           title: needsReconnect ? "Ready session needed" : "Transfer failed",
           body: msg,
           tone: "error",
-          primaryLabel: needsReconnect ? "Connect Ready" : "Dismiss",
+          primaryLabel: needsReconnect ? "Connect Ready X" : "Dismiss",
         });
         setError(msg);
       } finally {
@@ -415,7 +415,7 @@ export default function ChatThreadPage() {
               {!walletReady && (
                 <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
                   Philoxenia is signed in, but Ready is not connected for
-                  signing. Connect Ready before sending (Public or Private).
+                  signing. Connect Ready X before sending (Public or Private).
                 </div>
               )}
 
@@ -456,7 +456,7 @@ export default function ChatThreadPage() {
                     void reconnectReady();
                   }}
                 >
-                  {reconnecting ? "Connecting Ready…" : "Connect Ready to send"}
+                  {reconnecting ? "Connecting Ready X…" : "Connect Ready X to send"}
                 </Button>
               ) : (
                 <Button type="submit" disabled={busy || !amount.trim()}>
@@ -574,7 +574,7 @@ export default function ChatThreadPage() {
         busy={reconnecting || busy}
         primaryLabel={notice?.primaryLabel}
         onPrimary={() => {
-          if (notice?.primaryLabel === "Connect Ready" || notice?.primaryLabel === "Try again") {
+          if (notice?.primaryLabel === "Connect Ready" || notice?.primaryLabel === "Connect Ready X" || notice?.primaryLabel === "Try again") {
             void reconnectReady();
             return;
           }

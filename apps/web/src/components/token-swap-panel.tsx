@@ -145,7 +145,7 @@ export function TokenSwapPanel() {
         title: needsReconnect ? "Ready session needed" : "Swap failed",
         body,
         tone: "error",
-        primaryLabel: needsReconnect ? "Connect Ready" : "Dismiss",
+        primaryLabel: needsReconnect ? "Connect Ready X" : "Dismiss",
       });
       setMsg(body);
     } finally {
@@ -178,14 +178,14 @@ export function TokenSwapPanel() {
 
         {!walletReady && (
           <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
-            Connect Ready to quote and swap.
+            Connect Ready X to quote and swap.
             <div className="mt-2">
               <Button
                 type="button"
                 disabled={reconnecting}
                 onClick={() => void reconnectReady()}
               >
-                {reconnecting ? "Connecting…" : "Connect Ready"}
+                {reconnecting ? "Connecting…" : "Connect Ready X"}
               </Button>
             </div>
           </div>
@@ -249,7 +249,7 @@ export function TokenSwapPanel() {
           onClick={() => void onSwap()}
         >
           {!walletReady
-            ? "Connect Ready to swap"
+            ? "Connect Ready X to swap"
             : busy
               ? "Swapping…"
               : `Swap ${sellAsset} → ${buyAsset}`}
@@ -270,6 +270,7 @@ export function TokenSwapPanel() {
         onPrimary={() => {
           if (
             notice?.primaryLabel === "Connect Ready" ||
+            notice?.primaryLabel === "Connect Ready X" ||
             notice?.primaryLabel === "Try again"
           ) {
             void reconnectReady();

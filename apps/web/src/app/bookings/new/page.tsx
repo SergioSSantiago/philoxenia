@@ -235,7 +235,7 @@ function NewBookingForm() {
     if (!listing || !range.ok || range.nights.length === 0) return;
     if (!account || !address) {
       setError(
-        "Ready is not connected for signing. Tap Connect Ready, then Pay again — Public and Private both need a live wallet session."
+        "Ready X is not connected for signing. Tap Connect Ready X, then Pay again — Public and Private both need a live wallet session."
       );
       return;
     }
@@ -546,7 +546,7 @@ function NewBookingForm() {
                 disabled={reconnecting || !quote || !range.ok}
                 onClick={() => void reconnectForPay()}
               >
-                {reconnecting ? "Connecting Ready…" : "Connect Ready to pay"}
+                {reconnecting ? "Connecting Ready X…" : "Connect Ready X to pay"}
               </Button>
             ) : (
               <Button
