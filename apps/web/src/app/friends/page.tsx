@@ -243,7 +243,7 @@ export default function FriendsPage() {
           subtitle="Accept or reject requests sent to you"
         />
         {data.pendingIncoming.length === 0 ? (
-          <EmptyState message="No incoming requests." />
+          <EmptyState message="No incoming requests. They appear when someone adds your wallet." />
         ) : (
           <div className="space-y-2">
             {data.pendingIncoming.map((r) => {

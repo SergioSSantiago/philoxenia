@@ -21,7 +21,7 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 | `accepted` | Becomes a friendship |
 | `rejected` | Closed; sender may request again later |
 
-Users cannot send duplicate pending requests to the same person or request themselves. The sender can **cancel** a pending request (`POST /friends/cancel/:id`). Incoming Accept/Reject update both parties via notifications.
+Incoming empty: “They appear when someone adds your wallet.” Outgoing empty explains Cancel.
 
 ## Notifications
 

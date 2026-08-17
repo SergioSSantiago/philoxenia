@@ -49,7 +49,7 @@ Everyone else ──► 404 (listing unavailable)
 
 ## Home globe
 
-`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Tap a pin to open the listing.
+`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Empty: “listings need a map pin.” Tap a pin to open the listing.
 
 ## API endpoints
 
