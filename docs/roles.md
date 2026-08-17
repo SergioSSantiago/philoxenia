@@ -4,7 +4,7 @@
 
 # Roles
 
-Philoxenia has three roles. **The same wallet can wear all three** — host one weekend, guest the next, connector whenever you introduce someone you trust.
+Landing role cards (`/`): Host (connector % + 0% direct), Connector (STRK/DAI, 10% of that reward), Guest (STRK or DAI, Public or Private).
 
 | Role | What you do | How you get paid |
 |------|-------------|------------------|
