@@ -19,7 +19,7 @@ Roles overview (Host · Guest · Connector): **[roles.md](./roles.md)**
 | Share a friend’s listing with someone you trust | A **host-set % of the booking total** when they Book & pay through your invite |
 | Paid on settle | Funds go **straight to your Ready X wallet** (same asset the guest paid: STRK or DAI) |
 | No inventory, no hosting | You don’t list a place — you introduce guests |
-| Aligned with the protocol | Philoxenia only earns **10% of your connector reward** (not of the whole stay). Direct bookings stay **0%** protocol |
+| Aligned with the protocol | Philoxenia only earns **10% of your connector reward** (not of the whole stay). Direct **Book & pay** stays **0%** protocol |
 
 **Example:** guest pays **1,000 DAI**, host set **5%** connector → you receive **45 DAI**, protocol **5 DAI**, host **950 DAI**.
 

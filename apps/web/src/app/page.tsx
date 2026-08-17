@@ -86,7 +86,7 @@ export default function LandingPage() {
         {[
           {
             title: "Host",
-            body: "List privately for friends. Set a connector % so your network wants to bring guests. Direct bookings stay 0% protocol.",
+            body: "List privately for friends. Set a connector % so your network wants to bring guests. Direct Book & pay stays 0% protocol.",
           },
           {
             title: "Connector",

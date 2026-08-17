@@ -338,7 +338,7 @@ export function AvailabilityCalendar({
         <div className="space-y-3 rounded-xl border border-border bg-background p-4 text-sm">
           <p className="text-muted leading-relaxed">
             Tap a day to open/close it. Tap a night in the list (or long-press /
-            right-click a day) to set a custom DAI list price (guests may pay
+            right-click a day) to set a custom DAI list price (guests Book & pay
             STRK or DAI).{" "}
             <span className="text-foreground">Paid nights stay locked</span> —
             you can’t remove them or change their price.

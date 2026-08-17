@@ -35,12 +35,12 @@ export function landingJsonLd() {
           price: "0",
           priceCurrency: "USD",
           description:
-            "Direct host↔guest bookings: 0% protocol fee. Connectors earn a host-set %; Philoxenia takes 10% of that connector reward only.",
+            "Direct host↔guest Book & pay: 0% protocol fee. Connectors earn a host-set %; Philoxenia takes 10% of that connector reward only.",
         },
         featureList: [
           "Private friend-based hospitality",
           "Host listings for trusted network",
-          "Guest bookings with Starknet escrow",
+          "Guest Book & pay with Starknet escrow",
           "Connector introductions that earn on settle",
           "STRK20 private payments with Ready X",
           "Guests Book & pay STRK or DAI",

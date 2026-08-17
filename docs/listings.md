@@ -15,9 +15,9 @@ Hosts create **private listings** visible only to themselves and their friends. 
 | `pricePerNight` | Default DAI price; nights can override per day on the calendar. Guests choose **STRK** (live FX) or **DAI** (1:1) at pay time — listing detail copy says both |
 | `minStay`, `maxStay` | Derived from open nights (not host-entered) |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow). Listing detail: cancel frees nights, no clawback; money return in Messages |
-| `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Create-listing UI default is **5%** and explains 3–10% typical; Philoxenia takes 10% of that reward only ([connectors.md](./connectors.md)) |
+| `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Create-listing UI default is **5%** and explains 3–10% typical when they **Book & pay**; Philoxenia takes 10% of that reward only; **Direct Book & pay** stays 0% protocol ([connectors.md](./connectors.md)) |
 | `photos` | 1–8 images (JPEG/PNG/WebP/HEIC); browser compresses to JPEG data URLs (~1600px). Uploader copy lists iPhone HEIC |
-| `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests may pay STRK or DAI |
+| `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests **Book & pay STRK or DAI** |
 | `availability` | Legacy contiguous windows (still accepted) |
 
 Paid guest nights stay in inventory as **locked** (`booked`): host cannot remove them or change their price; social cancel frees them again.
@@ -45,7 +45,7 @@ Friend of host ──► can view + share
 Everyone else ──► 404 (listing unavailable)
 ```
 
-`GET /my-listings` powers `/my-listings` and Home **My listings**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. **List your place** goes to `/listings/new`. Home **Places from my friends** empty state points to Friends, then Book & pay. **Shared with me** empty: open a friend’s invite to **Book & pay**.
+`GET /my-listings` powers `/my-listings` and Home **My listings**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new`. Home **Places from my friends** empty state points to Friends, then Book & pay. **Shared with me** empty: open a friend’s invite to **Book & pay**.
 
 ## Home globe
 

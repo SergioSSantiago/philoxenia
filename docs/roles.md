@@ -48,7 +48,7 @@ Hosts: set a connector % people will actually share. At **0%**, friends can stil
 - Create a listing (`/listings/new`): map pin, photos, open nights, DAI prices. Intro copy reminds hosts to set a connector % so friends can share and earn.
 - Choose **`connectorRewardPercent`** (0–100%). Use **> 0** if you want friends motivated to bring guests.
 - Friends see your place on Home / network; they can share invites (and become connectors).
-- You receive the host amount on settle. Direct bookings (no connector) → you get **100%**, Philoxenia **0%**.
+- You receive the host amount on settle. Direct **Book & pay** (no connector) → you get **100%**, Philoxenia **0%**.
 
 ## Guest
 

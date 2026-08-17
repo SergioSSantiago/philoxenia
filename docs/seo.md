@@ -22,7 +22,7 @@ Public marketing surface is the landing page. Authenticated app routes are not m
 | `src/app/robots.ts` | Allow `/`; disallow app paths; points to sitemap |
 | `src/lib/site.ts` | `SITE_URL` / description (guests Book & pay STRK or DAI; override with `NEXT_PUBLIC_SITE_URL`) |
 | `src/lib/seo.ts` | Root metadata: Open Graph, Twitter, keywords, canonical |
-| `src/lib/json-ld.ts` | JSON-LD Organization + WebSite + SoftwareApplication (feature list includes STRK or DAI) |
+| `src/lib/json-ld.ts` | JSON-LD Organization + WebSite + SoftwareApplication (feature list: **Guest Book & pay** STRK or DAI; 0% on direct Book & pay) |
 | `src/app/page.tsx` | Landing copy + connector incentive + JSON-LD script |
 
 ## Google Search Console verification
