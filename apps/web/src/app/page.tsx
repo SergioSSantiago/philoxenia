@@ -90,11 +90,11 @@ export default function LandingPage() {
           },
           {
             title: "Connector",
-            body: "Introduce someone you trust to a friend’s place. Earn a host-set % in STRK or DAI when they book — Philoxenia takes 10% of that reward only.",
+            body: "Introduce someone you trust to a friend’s place. Earn a host-set % in STRK or DAI when they Book & pay — Philoxenia takes 10% of that reward only.",
           },
           {
             title: "Guest",
-            body: "Book through friendship or an invite. Pay STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
+            body: "Book & pay through friendship or an invite. Pay STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
           },
         ].map((item) => (
           <div key={item.title}>

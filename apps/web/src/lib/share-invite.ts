@@ -40,7 +40,7 @@ export async function shareInviteNative(opts: {
 export function inviteReadyStatus(copied: boolean, asConnector: boolean): string {
   if (copied) {
     return asConnector
-      ? "Invite copied — paste it to someone you trust. You earn if they book."
+      ? "Invite copied — paste it to someone you trust. You earn if they Book & pay."
       : "Invite copied — paste it wherever you like.";
   }
   return "Invite ready — select the link below and copy it.";

@@ -443,8 +443,8 @@ export default function ListingPage() {
                 <p className="text-muted leading-relaxed">
                   You are the connector for this link. When someone opens it,
                   Philoxenia saves that attribution. If they become friends with
-                  the host and book, your reward is paid in STRK or DAI (same
-                  asset they paid) to your connected wallet on settle — not by
+                  the host and Book & pay, your reward is paid in STRK or DAI (same
+                  asset they paid) to your Ready X wallet on settle — not by
                   sharing the wallet address.
                 </p>
               ) : (
@@ -453,7 +453,7 @@ export default function ListingPage() {
                   <span className="font-medium text-foreground">
                     no connector
                   </span>
-                  . Guests who book through it do not create a connector reward.
+                  . Guests who Book & pay through it do not create a connector reward.
                   Friends who share your listing become connectors on their own
                   links.
                 </p>

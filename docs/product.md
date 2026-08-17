@@ -77,7 +77,7 @@ Philoxenia has three roles — **Host**, **Guest**, and **Connector**. One walle
 |------|-------------|
 | **Host** | Creates listings; sets connector %; receives accommodation payment on settlement |
 | **Guest** | Books and funds stays; must be friends with the host (or become friends after an invite) |
-| **Connector** | **Start here to grow the network** — a friend who shares a listing invite; earns the host’s configured % of the booking total, paid to their wallet on settle |
+| **Connector** | **Start here to grow the network** — a friend who shares a listing invite; earns the host’s configured % of the booking total, paid to their Ready X wallet on settle |
 
 **Be a connector:** open **Earnings** (`/connector`), share a friend’s listing, earn when they book. No need to host. Details: **[roles.md](./roles.md)** · **[connectors.md](./connectors.md)**
 
