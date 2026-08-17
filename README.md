@@ -32,7 +32,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - Trustless settlement via Cairo escrow (Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
 - STRK20 private payments with **Ready X** (Smart Wallet + Private enabled)
 - Sealed chat, peer transfers, AVNU STRK ↔ DAI swap
-- Wallet paths: **Chrome + Ready X** (desktop); **iPhone Safari** for login (WalletConnect); **Ready X in-app browser** for Private STRK
+- Wallet paths: **Chrome + Ready X** (desktop); **iPhone Safari** for login (WalletConnect); **Ready X in-app browser** for Private STRK or DAI
 
 ## What it is not
 
@@ -41,7 +41,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - No custodial wallets or internal balances
 - No Braavos or other wallet connectors
 - **Not Firefox** for Ready X / private pay (legacy Ready only there)
-- **Not iPhone Safari for Private STRK** — login can redirect into Ready X; private pay needs the in-app browser
+- **Not iPhone Safari for Private STRK or DAI** — login can redirect into Ready X; private pay needs the in-app browser
 
 ## Architecture
 
@@ -149,7 +149,7 @@ There is no `/auth` page. The header brand goes to `/` (landing). Connect / disc
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
 <strong>Desktop:</strong> Chrome + Ready X with <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/>
-<strong>iPhone:</strong> Safari can Connect (WalletConnect → Ready X). For Private STRK, use the <strong>Ready X in-app browser</strong>.<br/>
+<strong>iPhone:</strong> Safari can Connect (WalletConnect → Ready X). For Private STRK or DAI, use the <strong>Ready X in-app browser</strong>.<br/>
 <strong>Firefox:</strong> no Ready X extension → no private pay.
 </p>
 
@@ -157,7 +157,7 @@ Friends find each other by **wallet address only**.
 
 ### iPhone — Safari vs in-app
 
-| Path | Login | Private STRK |
+| Path | Login | Private STRK or DAI |
 |------|--------|----------------|
 | Safari → Connect → Ready X (`ready://`) | Supported (WC redirect; Connect then Sign in) | Unreliable — needs wallet API ≥ 0.10 |
 | Ready X in-app browser | Supported (injected) | Supported when Smart Wallet + Private on |

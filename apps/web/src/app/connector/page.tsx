@@ -303,7 +303,7 @@ export default function ConnectorPage() {
       <section>
         <SectionTitle
           title="Your rewards"
-          subtitle="Paid to your wallet when a guest you introduced completes payment."
+          subtitle="Paid to your Ready X wallet when a guest you introduced completes payment."
         />
 
         {data && (

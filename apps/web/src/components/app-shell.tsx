@@ -119,7 +119,7 @@ export function Shell({
                 onClick={handleConnect}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-accent/90 touch-manipulation"
               >
-                Connect
+                Connect Ready X
               </button>
             )}
             {user && (

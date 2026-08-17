@@ -86,7 +86,7 @@ Signed-in home uses `GET /home` (JWT): friends, network listings, shared listing
 | `/bookings`, `/bookings/new`, `/bookings/[id]` | Book nights (non-contiguous OK); pay STRK or DAI |
 | `/connector` | **Earn as connector** — explain model, share friend listings, reward history |
 
-Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`).
+Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`).
 
 ## Shared types (`packages/shared`)
 
