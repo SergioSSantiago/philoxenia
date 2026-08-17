@@ -1445,7 +1445,8 @@ export async function recoverPaidBooking(
 }
 
 const ORPHAN_LISTING_ID = "56f4c573-5f7b-46b7-b1ba-7416a6eea403";
-const ORPHAN_NIGHT = "2026-08-31";
+/** 29–30 were already reserved; 31 is the Private double-pay. Never drop any of these. */
+const ORPHAN_NIGHTS = ["2026-08-29", "2026-08-30", "2026-08-31"];
 
 export async function recoverMinePaidBookings(guestId: string) {
   const guest = await db.query.users.findFirst({
@@ -1502,7 +1503,7 @@ async function absorbSettledPayment(
   if (!listing) return;
 
   const forcedNights =
-    listing.id === ORPHAN_LISTING_ID ? [ORPHAN_NIGHT] : null;
+    listing.id === ORPHAN_LISTING_ID ? ORPHAN_NIGHTS : null;
 
   const prior = await db.query.bookings.findFirst({
     where: and(
@@ -1514,6 +1515,10 @@ async function absorbSettledPayment(
   });
 
   if (already || prior) {
+    const row = already ?? prior;
+    if (row && forcedNights) {
+      await ensureBookingNights(row, forcedNights);
+    }
     if (already) return;
     if (prior) {
       await attachDuplicateSettledPayment(prior, inspected, guestId);
@@ -1554,6 +1559,34 @@ async function absorbSettledPayment(
     totalPrice: inspected.totalAmount,
     settledRecovery: true,
   });
+}
+
+/** Add nights to a stay; never remove nights already on the booking. */
+async function ensureBookingNights(
+  booking: typeof schema.bookings.$inferSelect,
+  extraNights: string[]
+) {
+  const current = (booking.selectedNights ?? []).map(toDayKey);
+  const merged = [...new Set([...current, ...extraNights.map(toDayKey)])].sort();
+  if (
+    merged.length === current.length &&
+    merged.every((d, i) => d === [...current].sort()[i])
+  ) {
+    return;
+  }
+  const checkInDay = merged[0];
+  const last = merged[merged.length - 1];
+  const checkOut = dayUtcNoon(last);
+  checkOut.setUTCDate(checkOut.getUTCDate() + 1);
+  await db
+    .update(schema.bookings)
+    .set({
+      selectedNights: merged,
+      checkIn: dayUtcNoon(checkInDay),
+      checkOut,
+      nights: merged.length,
+    })
+    .where(eq(schema.bookings.id, booking.id));
 }
 
 async function attachDuplicateSettledPayment(
