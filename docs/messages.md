@@ -22,7 +22,7 @@ See [PRIVATE_MESSAGING_PLAN.md](../PRIVATE_MESSAGING_PLAN.md) and the Cairo `Mes
 | Kind | Description |
 |------|-------------|
 | `text` | Sealed body (`phx1.…`). Plaintext never stored. Limit ~900 chars plaintext. |
-| `transfer` | Public ERC-20 **or** private STRK20 transfer to the friend’s wallet, then recorded in chat |
+| `transfer` | Public ERC-20 **or** private STRK20 send of **STRK or DAI** to the friend’s wallet, then recorded in chat |
 | `booking` | System notice when a guest books the host’s listing |
 
 Only friends can message each other. Each user publishes `messagePublicKey` (device ECDH P-256) via `PATCH /users/me` when they open Messages.
@@ -40,7 +40,7 @@ Only friends can message each other. Each user publishes `messagePublicKey` (dev
 ## Web
 
 - `/messages` — sealed inbox list. Tap **name** or **wallet** → friend’s listings (`/friends/[id]`); tap preview or › → chat.
-- `/messages/[friendId]` — sealed composer + pay sheet. Header name/wallet → same friend profile (share listings as connector).
+- `/messages/[friendId]` — sealed composer + pay sheet (Private default: shielded STRK/DAI; Public ERC-20). Header name/wallet → friend profile. Optional **Also anchor on-chain** posts a ciphertext hash to MessageMailbox.
 - Keys live in `localStorage` per wallet (`philoxenia_msg_priv_*`); never uploaded
 
 ## On-chain (Phase B)

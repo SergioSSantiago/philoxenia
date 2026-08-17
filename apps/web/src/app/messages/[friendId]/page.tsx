@@ -408,7 +408,7 @@ export default function ChatThreadPage() {
 
               <p className="text-xs leading-relaxed text-muted">
                 {payMode === "private"
-                  ? "From your shielded balance via STRK20 (Ready X · Smart Wallet + Private). Amount stays private; you need enough shielded funds (Profile → Shield)."
+                  ? "From your shielded STRK or DAI via STRK20 (Ready X · Smart Wallet + Private). Amount stays private; shield that asset on Profile first."
                   : "Normal ERC-20 transfer. Amount and both wallet addresses are visible on-chain."}
               </p>
 

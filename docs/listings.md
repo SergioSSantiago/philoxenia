@@ -12,7 +12,7 @@ Hosts create **private listings** visible only to themselves and their friends.
 |-------|-------------|
 | `title`, `description` | Basic listing info |
 | `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84) |
-| `pricePerNight` | Default DAI price; nights can override per day on the calendar |
+| `pricePerNight` | Default DAI price; nights can override per day on the calendar. Guests choose **STRK** (live FX) or **DAI** (1:1) at pay time — listing detail copy says both |
 | `minStay`, `maxStay` | Derived from open nights (not host-entered) |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow) |
 | `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Create-listing UI default is **5%** and explains 3–10% typical; Philoxenia takes 10% of that reward only ([connectors.md](./connectors.md)) |
