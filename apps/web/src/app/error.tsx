@@ -30,8 +30,8 @@ export default function Error({
       <Card className="w-full max-w-md text-center">
         <h1 className="text-2xl">Something went wrong</h1>
         <p className="mt-3 text-sm text-muted leading-relaxed">
-          Philoxenia hit a client error. Try again, or sign in fresh if the
-          problem persists.
+          Philoxenia hit a client error. Try again, or Connect Ready X if the
+          session is stuck.
         </p>
         {error?.message ? (
           <p className="mt-3 break-words rounded-lg bg-background px-3 py-2 text-left text-xs text-red-700">
@@ -43,10 +43,10 @@ export default function Error({
             Try again
           </Button>
           <Button variant="secondary" className="w-full" onClick={clearSession}>
-            Clear session & sign in
+            Clear session & Connect Ready X
           </Button>
-          <Link href="/" className="text-sm text-muted hover:text-foreground">
-            Back to home
+          <Link href="/home" className="text-sm text-muted hover:text-foreground">
+            Back to Home
           </Link>
         </div>
       </Card>

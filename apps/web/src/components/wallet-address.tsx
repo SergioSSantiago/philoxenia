@@ -11,7 +11,7 @@ function truncateAddress(address: string): string {
 export function WalletAddress({
   address,
   compact = false,
-  label = "Wallet address",
+  label = "Ready X wallet",
   href,
 }: {
   address: string;
@@ -35,7 +35,7 @@ export function WalletAddress({
 
   const share = useCallback(async () => {
     setShareError("");
-    const shareText = `My Philoxenia wallet address:\n${address}`;
+    const shareText = `My Philoxenia Ready X wallet:\n${address}`;
 
     if (typeof navigator.share === "function") {
       try {

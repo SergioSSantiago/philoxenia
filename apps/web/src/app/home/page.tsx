@@ -83,10 +83,7 @@ export default function HomePage() {
           </div>
           <Card className="min-w-0 space-y-3 overflow-hidden p-4 sm:p-4">
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-[0.12em] text-muted">
-                Ready X wallet
-              </p>
-              <div className="mt-1.5 min-w-0 origin-left scale-95">
+              <div className="min-w-0 origin-left scale-95">
                 <WalletAddress address={user.walletAddress} />
               </div>
             </div>

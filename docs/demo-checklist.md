@@ -8,7 +8,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 
 1. [ ] Wallet A signs in; set display name
 2. [ ] Wallet B signs in
-3. [ ] A adds B by wallet address → B accepts
+3. [ ] A adds B by Ready X wallet → B accepts
 4. [ ] A creates listing with open nights + **connector % > 0** (e.g. 5%)
 5. [ ] B sees listing on home / friends path
 6. [ ] Tap B’s **name or wallet** on Friends → `/friends/[id]` shows A’s listing
@@ -18,7 +18,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 1. [ ] B opens **Earnings** (`/connector`) — sees how connectors earn + A’s listing with earn %
 2. [ ] B taps **Share invite & earn** → copies/sends invite link
 3. [ ] Guest C opens invite → requests friendship with A → A accepts
-4. [ ] C books + pays through that attribution
+4. [ ] C Book & pay through that attribution
 5. [ ] On settle: A (host) + B (connector) paid; B sees reward under `/connector`
 6. [ ] From Messages, tap name/wallet → same friend listings path
 
@@ -39,7 +39,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 
 1. [ ] Open booking → read cancel policy box
 2. [ ] Free nights → status `cancelled`; nights bookable again
-3. [ ] Money stays settled; Messages for voluntary return
+3. [ ] Money stays settled; Messages **Send STRK or DAI** for voluntary return
 
 ## F. Sealed chat
 

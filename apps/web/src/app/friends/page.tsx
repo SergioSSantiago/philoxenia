@@ -83,7 +83,7 @@ export default function FriendsPage() {
       setResults(users);
       if (users.length === 0) {
         setSearchError(
-          "No Philoxenia user with that wallet. They must sign in once before you can add them."
+          "No Philoxenia user with that Ready X wallet. They must Connect Ready X once before you can add them."
         );
       }
     } catch (err) {
@@ -175,7 +175,7 @@ export default function FriendsPage() {
             <div className="mt-4 space-y-3">
               <TextInput
                 className="font-mono text-sm"
-                placeholder="0x… wallet address"
+                placeholder="0x… Ready X wallet"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && search()}

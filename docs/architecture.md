@@ -52,7 +52,7 @@ philoxenia/
 |-------|---------|
 | `GET /health` | Liveness |
 | `GET /rates/strk-dai` | Live STRK per DAI (CoinGecko) |
-| `GET /stats/network` | Landing totals: users, countries, listings open, nights booked, DAI/STRK booked |
+| `GET /stats/network` | Landing totals: users, countries, listings open, paid nights, DAI/STRK paid |
 | `GET /invite/:token` | Resolve a share token (404 if invalid; does not leak listings) |
 | `POST /auth/challenge` | SNIP-12 nonce for a wallet |
 | `POST /auth/verify` | Signature → JWT |
@@ -86,7 +86,7 @@ Signed-in home uses `GET /home` (JWT): friends, network listings, shared listing
 | `/bookings`, `/bookings/new`, `/bookings/[id]` | Book & pay nights (non-contiguous OK); STRK or DAI. If Ready X already charged you, do not pay twice |
 | `/connector` | **Earn as connector** — explain model, share friend listings, reward history |
 
-Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`).
+Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`). Client error boundary (`error.tsx`): **Clear session & Connect Ready X**; **Back to Home** is `/home` (not the landing).
 
 ## Shared types (`packages/shared`)
 

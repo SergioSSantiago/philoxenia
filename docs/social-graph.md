@@ -9,7 +9,7 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 ## Model
 
 - Users are identified by Starknet wallet address (normalized) and a display name.
-- Display names are shown to friends but **are not searchable**. Add someone by **Ready X wallet** address only. `WalletAddress` truncates in compact mode; **Copy** flashes **Copied!** for 2s (Share uses the native sheet, then copy). `/friends` CTA is **Add friend by Ready X wallet**.
+- Display names are shown to friends but **are not searchable**. Add someone by **Ready X wallet** address only. `WalletAddress` label is **Ready X wallet**; Share text is `My Philoxenia Ready X wallet`; **Copy** flashes **Copied!** for 2s. `/friends` CTA is **Add friend by Ready X wallet**. Search miss: they must **Connect Ready X** once.
 - Friendships are **mutual** — created when a friend request is accepted.
 - Stored as ordered pairs `(userAId, userBId)` to prevent duplicates.
 

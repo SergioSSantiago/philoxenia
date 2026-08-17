@@ -26,7 +26,7 @@ Before scroll, the landing shows only:
 
 1. **Philoxenia** lockup (oversized / centered)
 2. **Connect Ready X** (top right → `/home`)
-3. Live network totals under the brand (`LandingNetworkStats`): users, countries (normalized from address country, e.g. Suiza→switzerland), listings open, nights booked, DAI booked, STRK booked — polled from `GET /stats/network` every **20s**
+3. Live network totals under the brand (`LandingNetworkStats`): users, countries (normalized from address country, e.g. Suiza→switzerland), listings open, **paid nights**, **DAI paid**, **STRK paid** — polled from `GET /stats/network` every **20s**. Labels say paid because **Book & pay** settles in the same tx.
 
 Stats fade as the brand docks into the header on scroll.
 

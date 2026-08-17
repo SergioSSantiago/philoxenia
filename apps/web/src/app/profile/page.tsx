@@ -115,7 +115,8 @@ export default function ProfilePage() {
         <Card>
           <WalletAddress address={user.walletAddress} />
           <p className="mt-4 text-sm text-muted leading-relaxed">
-            Share this address so trusted friends can add you on Philoxenia.
+            Share this Ready X wallet so trusted friends can add you. They Book
+            & pay in STRK or DAI.
           </p>
         </Card>
 

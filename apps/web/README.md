@@ -31,7 +31,7 @@ Firefox: no Ready X → no private pay.
 | `/` | Landing. Header brand → here |
 | `/home` | App home + connect modal if signed out |
 | `/profile` | Display name, balances, disconnect |
-| `/friends` | Friends; search by wallet address only |
+| `/friends` | Friends; search by Ready X wallet only |
 | `/listings/*`, `/bookings/*`, `/connector` | Hosted stays, payments, earnings |
 | `/invite/[token]` | Connector invitation |
 

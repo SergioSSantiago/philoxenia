@@ -67,15 +67,15 @@ export function LandingNetworkStats({
       value: stats ? formatCount(stats.listingsOpen) : "—",
     },
     {
-      label: "nights booked",
+      label: "paid nights",
       value: stats ? formatCount(stats.nightsBooked) : "—",
     },
     {
-      label: "DAI booked",
+      label: "DAI paid",
       value: stats ? formatTokenAmount(stats.transferredDai, 2) : "—",
     },
     {
-      label: "STRK booked",
+      label: "STRK paid",
       value: stats ? formatTokenAmount(stats.transferredStrk, 2) : "—",
     },
   ];
