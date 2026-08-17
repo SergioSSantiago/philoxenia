@@ -367,17 +367,15 @@ export async function inspectEscrowSettledTx(
 }
 
 /** Known settled pays that never got a DB row. */
-const SEEDED_SETTLED_TXS = [
+export const SEEDED_SETTLED_TXS = [
   "0x05bac436e2a9775719de94e0ec1ea62f1cbc9737b23dd780230df66a53cc7813",
   "0x04902a7a2702b9533cf8992f5bf6953947e0d9616f8dbc9bc5b1976e0082f494",
 ];
 const SEEDED_GUEST =
   "0x04912f27036fd23f51cb9cfe719ea0d875bfc462b5f2af8f110a3b1832bb2f59";
 
-const EVENT_LOOKBACK_BLOCKS = 20_000;
-
 /**
- * Recent BookingSettled txs on Philoxenia escrows, plus known orphans.
+ * Recent BookingSettled txs — seeded orphans only (no event scan; that timed out GET /bookings).
  */
 export async function listSettledEscrowTxHashes(
   guestWallet?: string
@@ -391,49 +389,8 @@ export async function listSettledEscrowTxHashes(
       // skip
     }
   };
-  if (
-    guestWallet &&
-    feltEq(guestWallet, SEEDED_GUEST)
-  ) {
+  if (!guestWallet || feltEq(guestWallet, SEEDED_GUEST)) {
     for (const h of SEEDED_SETTLED_TXS) add(h);
   }
-
-  const provider = getRpcProvider();
-  let latest = 0;
-  try {
-    const block = await provider.getBlockLatestAccepted();
-    latest = Number(block.block_number);
-  } catch {
-    return [...found.values()];
-  }
-  const from = Math.max(0, latest - EVENT_LOOKBACK_BLOCKS);
-  const escrows = [
-    normalizeFeltAddress(MAINNET_STRK_ESCROW),
-    normalizeFeltAddress(MAINNET_DAI_ESCROW),
-  ];
-
-  for (const address of escrows) {
-    let continuationToken: string | undefined;
-    for (let page = 0; page < 3; page++) {
-      try {
-        const res = await provider.getEvents({
-          address,
-          from_block: { block_number: from },
-          to_block: { block_number: latest },
-          keys: [[BOOKING_SETTLED]],
-          chunk_size: 100,
-          continuation_token: continuationToken,
-        });
-        for (const ev of res.events ?? []) {
-          if (ev.transaction_hash) add(ev.transaction_hash);
-        }
-        continuationToken = res.continuation_token;
-        if (!continuationToken) break;
-      } catch {
-        break;
-      }
-    }
-  }
-
   return [...found.values()];
 }
