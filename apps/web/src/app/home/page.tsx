@@ -145,7 +145,7 @@ export default function HomePage() {
         <section>
           <SectionTitle
             title="My listings"
-            subtitle="Priced in DAI. Set a connector % so friends can share and earn."
+            subtitle="Priced in DAI. Guests pay STRK or DAI. Set a connector % so friends can share and earn."
           />
           {data.myListings.length === 0 ? (
             <EmptyState message="You haven't listed a place yet. Use List your place in the nav — friends only see what you publish." />

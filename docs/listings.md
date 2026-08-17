@@ -11,7 +11,7 @@ Hosts create **private listings** visible only to themselves and their friends. 
 | Field | Description |
 |-------|-------------|
 | `title`, `description` | Basic listing info |
-| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home — not a public directory |
+| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home — not a public directory. Listing detail **Open on OpenStreetMap** is an external OSM tab |
 | `pricePerNight` | Default DAI price; nights can override per day on the calendar. Guests choose **STRK** (live FX) or **DAI** (1:1) at pay time — listing detail copy says both |
 | `minStay`, `maxStay` | Derived from open nights (not host-entered) |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow). Listing detail: cancel frees nights, no clawback; money return in Messages |

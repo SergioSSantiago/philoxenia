@@ -115,7 +115,7 @@ export default function InvitePage() {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {invite.hasConnector && invite.connector ? (
-            <UserBadge user={invite.connector} role="Connector (reward wallet)" />
+            <UserBadge user={invite.connector} role="Connector (Ready X payout)" />
           ) : (
             <div className="rounded-xl border border-border bg-background p-4">
               <p className="text-xs font-medium uppercase tracking-wide text-muted">

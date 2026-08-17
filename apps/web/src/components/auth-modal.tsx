@@ -237,7 +237,7 @@ export function AuthModal() {
             <>
               {address ? (
                 <div className="rounded-xl border border-border bg-background p-4">
-                  <WalletAddress address={address} label="Connected wallet" />
+                  <WalletAddress address={address} label="Connected Ready X" />
                 </div>
               ) : null}
               <label className="block text-sm">

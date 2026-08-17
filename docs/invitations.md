@@ -68,7 +68,7 @@ Listing cards (`ListingCard`) show `{n}% connector` next to the DAI price when t
 1. Guest opens link.
 2. If already friends with host → listing opens.
 3. If not → request friendship with host; after accept, listing unlocks. While pending, `/invite/[token]` polls every **3s** and redirects when `canViewListing` becomes true.
-4. Display name is cosmetic; rewards always go to the connector **wallet**. Unsigned guests tap **Connect Ready X to continue** on `/invite/[token]`.
+4. Display name is cosmetic; rewards always go to the connector **wallet**. Unsigned guests tap **Connect Ready X to continue** on `/invite/[token]`. Connector badge: **Connector (Ready X payout)**.
 
 ## Related
 

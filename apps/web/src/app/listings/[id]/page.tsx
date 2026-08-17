@@ -250,9 +250,10 @@ export default function ListingPage() {
               href={mapUrl}
               target="_blank"
               rel="noreferrer"
+              title="Opens OpenStreetMap in a new tab (external; not a public Philoxenia directory)"
               className="mt-2 inline-block text-sm text-accent underline-offset-2 hover:underline"
             >
-              Open on map
+              Open on OpenStreetMap
             </a>
           )}
 

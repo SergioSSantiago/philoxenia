@@ -40,7 +40,7 @@ Only friends can message each other. Each user publishes `messagePublicKey` (dev
 ## Web
 
 - `/messages` — sealed inbox list. Empty inbox means **no friends** (API returns one thread per friend even before the first note). Copy points to adding by wallet on Friends; you can also send STRK or DAI in chat. Tap **name** or **wallet** → friend’s listings (`/friends/[id]`); tap preview or › → chat.
-- `/messages/[friendId]` — sealed composer + pay sheet (Private default: shielded STRK/DAI; Public ERC-20). If JWT is live but the wallet is not, notices say **Connect Ready X** (Chrome or iPhone) — not a generic Ready extension. Header name/wallet → friend profile. Optional **Also anchor on-chain** posts a ciphertext hash to MessageMailbox.
+- `/messages/[friendId]` — sealed composer + pay sheet (Private default: shielded STRK/DAI; Public ERC-20). Header button is **Send STRK or DAI**. If JWT is live but the wallet is not, notices say **Connect Ready X** (Chrome or iPhone) — not a generic Ready extension. Header name/wallet → friend profile. Optional **Also anchor on-chain** posts a ciphertext hash to MessageMailbox.
 - Keys live in `localStorage` per wallet (`philoxenia_msg_priv_*`); never uploaded
 
 ## On-chain (Phase B)

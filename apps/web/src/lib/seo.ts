@@ -18,6 +18,8 @@ export const rootMetadata: Metadata = {
     "connector",
     "peer-to-peer lodging",
     "STRK20",
+    "STRK",
+    "DAI",
     "Ready X",
     "trust network",
     "earn as connector",
