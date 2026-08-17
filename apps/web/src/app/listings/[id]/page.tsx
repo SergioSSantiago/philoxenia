@@ -263,9 +263,9 @@ export default function ListingPage() {
           </p>
 
           <p className="mt-4 rounded-xl bg-accent-soft/60 px-4 py-3 text-sm">
-            Listed in DAI (price can vary by night) · guest pays STRK or DAI
+            Listed in DAI (price can vary by night) · Book & pay STRK or DAI
             to host & connector · cancel frees nights (no clawback) — money
-            return is in Messages
+            return is Send STRK or DAI in Messages
           </p>
 
           <p className="mt-8 text-muted leading-relaxed">{listing.description}</p>

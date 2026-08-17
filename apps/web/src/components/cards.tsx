@@ -74,7 +74,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
             </span>
           ) : null}
           <span className="mt-1 block text-xs text-muted">
-            Guest pays STRK or DAI
+            Guest Book & pay: STRK or DAI
           </span>
         </p>
         {listing.host && (

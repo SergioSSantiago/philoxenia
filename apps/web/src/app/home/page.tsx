@@ -116,7 +116,7 @@ export default function HomePage() {
         <section>
           <SectionTitle
             title="Places from my friends"
-            subtitle="Listings visible through your trust network"
+            subtitle="Book & pay STRK or DAI through your trust network"
           />
           {data.networkListings.length === 0 ? (
             <EmptyState message="No listings from friends yet. Add someone by wallet on Friends to discover places." />

@@ -4,7 +4,7 @@
 
 # Listings
 
-Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states that friends can share and earn if a connector % is set. `ListingCard` shows that % next to the DAI nightly price and that **guests pay STRK or DAI**.
+Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**.
 
 ## Listing fields
 

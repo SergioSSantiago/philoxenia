@@ -96,8 +96,8 @@ export default function CreateListingPage() {
     <Shell>
       <h1 className="mb-2 text-3xl sm:text-4xl">List your place</h1>
       <p className="mb-8 text-sm text-muted sm:text-base">
-        Only friends can see this listing. Price is in DAI; guests pay DAI or
-        STRK. Set a connector % so friends can share an invite and earn.
+        Only friends can see this listing. Price is in DAI; guests Book & pay
+        STRK or DAI. Set a connector % so friends can share an invite and earn.
       </p>
 
       <Card>
