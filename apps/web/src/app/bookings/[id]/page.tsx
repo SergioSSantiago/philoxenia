@@ -35,7 +35,7 @@ export default function BookingDetailPage() {
     const agreed = window.confirm(
       "This only frees the nights in Philoxenia.\n\n" +
         "Host/connector were already paid on-chain at booking time. " +
-        "Any money return must be agreed in Messages and sent with Send DAI/STRK.\n\n" +
+        "Any money return must be agreed in Messages and sent with Send STRK or DAI.\n\n" +
         "Continue?"
     );
     if (!agreed) return;
@@ -262,7 +262,7 @@ export default function BookingDetailPage() {
             Pay settles immediately (host + connector paid in the same tx). There
             is <span className="text-foreground">no escrow clawback</span> after
             settlement. Cancelling only frees nights. Refunds are social: agree
-            in Messages, then Send DAI/STRK.
+            in Messages, then Send STRK or DAI.
           </p>
         </div>
 

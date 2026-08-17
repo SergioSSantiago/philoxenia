@@ -46,7 +46,7 @@ Guest books + pays ──► escrow settles ──► you + host + (10% of your 
 
 | Surface | What you do |
 |---------|-------------|
-| **`/connector` (Earnings)** | Explains the model, lists **friends’ listings** with your earn %, one-tap share, reward history |
+| **`/connector` (Earnings)** | Explains the model, lists **friends’ listings** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` |
 | **`/friends/[id]`** | Friend’s listings + share; open from name or wallet on Friends / Messages |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their listings |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → listings; preview / › → chat |

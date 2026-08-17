@@ -76,7 +76,7 @@ export default function ConnectorPage() {
     if (!share) return;
     const result = await shareInviteNative({
       title,
-      text: `Stay at ${title} via Philoxenia — open this invite to book.`,
+      text: `Stay at ${title} via Philoxenia — open this invite to Book & pay (STRK or DAI).`,
       url: share.url,
     });
     if (result === "shared") {
@@ -325,18 +325,22 @@ export default function ConnectorPage() {
         ) : (
           <div className="space-y-4">
             {data.bookings.map((b) => (
-              <Card key={b.id}>
-                <p className="font-medium text-foreground">
-                  {b.listing?.title ?? "Booking"}
-                </p>
-                <p className="mt-1 text-sm text-muted">
-                  Reward: {formatTokenAmount(b.connectorRewardAmount)}{" "}
-                  {b.paymentAsset}
-                  {b.connectorRewardPercent
-                    ? ` (${b.connectorRewardPercent}%)`
-                    : ""}
-                </p>
-              </Card>
+              <Link key={b.id} href={`/bookings/${b.id}`} className="block">
+                <Card className="transition hover:shadow-sm">
+                  <p className="font-medium text-foreground">
+                    {b.listing?.title ?? "Booking"}
+                  </p>
+                  <p className="mt-1 text-sm text-muted">
+                    Reward: {formatTokenAmount(b.connectorRewardAmount)}{" "}
+                    {b.paymentAsset}
+                    {b.connectorRewardPercent
+                      ? ` (${b.connectorRewardPercent}%)`
+                      : ""}
+                    {" · "}
+                    open stay
+                  </p>
+                </Card>
+              </Link>
             ))}
           </div>
         )}

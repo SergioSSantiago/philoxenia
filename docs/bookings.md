@@ -43,7 +43,7 @@ Fake or unrelated hashes are rejected.
 | Action | Effect |
 |--------|--------|
 | **Free nights** (`POST …/social-cancel`) | Confirm dialog: nights free, **no** on-chain clawback; money return via Messages |
-| **Money return** | Voluntary peer transfer in Messages (Send DAI/STRK) |
+| **Money return** | Voluntary peer transfer in Messages (**Send STRK or DAI**) |
 | **On-chain `refund_booking`** | Only if booking never settled (`funded`); UI does not offer this after immediate settle |
 
 ## API

@@ -81,9 +81,9 @@ Signed-in home uses `GET /home` (JWT): friends, network listings, shared listing
 | `/friends/[id]` | Friend profile: their listings + share-as-connector |
 | `/messages`, `/messages/[friendId]` | Sealed chat + peer pay; name/wallet → friend listings |
 | `/my-listings`, `/listings/new` | Host listing CRUD + map + availability calendar |
-| `/listings/[id]` | Listing detail (authorized viewers) + share |
+| `/listings/[id]` | Listing detail (authorized viewers) + share; guest CTA **Book & pay** |
 | `/invite/[token]` | Invitation landing |
-| `/bookings`, `/bookings/new`, `/bookings/[id]` | Book nights (non-contiguous OK); pay STRK or DAI |
+| `/bookings`, `/bookings/new`, `/bookings/[id]` | Book nights (non-contiguous OK); pay STRK or DAI. If Ready X already charged you, do not pay twice |
 | `/connector` | **Earn as connector** — explain model, share friend listings, reward history |
 
 Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`).
