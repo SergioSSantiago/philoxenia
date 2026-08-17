@@ -70,7 +70,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
   if (!balanceAddress) {
     return (
       <p className="text-sm text-muted">
-        Connect your wallet to see STRK and DAI balances.
+        Connect Ready X to see STRK and DAI balances.
       </p>
     );
   }

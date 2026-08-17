@@ -25,7 +25,7 @@ Incoming empty: “They appear when someone adds your wallet.” Outgoing empty 
 
 ## Notifications
 
-Bell empty state: “Friend requests appear here.” Polled ~2.5s while the tab is visible.
+Bell empty: friend requests, messages, and bookings. Polled ~2.5s while the tab is visible.
 
 | Type | Recipient |
 |------|-----------|
@@ -33,6 +33,10 @@ Bell empty state: “Friend requests appear here.” Polled ~2.5s while the tab 
 | `friend_accepted` | Original sender |
 | `friend_rejected` | Original sender |
 | `friend_cancelled` | Target user |
+| `friend_removed` | Other party |
+| `message` | Friend who received a sealed note |
+| `transfer` | Friend who received a peer STRK/DAI send |
+| `booking` | Host and guest on a new stay; the other party on social cancel |
 
 | Method | Path | Description |
 |--------|------|-------------|

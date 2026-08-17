@@ -59,7 +59,7 @@ function readyExtensionConnector() {
   return new InjectedConnector({
     options: {
       id: "argentX",
-      name: "Ready Wallet (formerly Argent)",
+      name: "Ready X",
     },
   }) as Connector;
 }
