@@ -68,7 +68,7 @@ export default function LandingPage() {
             Be a connector — grow the network and earn
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Share a friend&apos;s listing invite. When your guest books, you
+            Share a friend&apos;s listing invite. When they Book &amp; pay, you
             receive the host&apos;s connector % on settle — paid in STRK or DAI
             (same asset the guest used). No inventory required. Hosts win filled
             nights; guests arrive with a vouch; you get paid for the
@@ -94,7 +94,7 @@ export default function LandingPage() {
           },
           {
             title: "Guest",
-            body: "Book & pay through friendship or an invite. Pay STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
+            body: "Book & pay through friendship or an invite. STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
           },
         ].map((item) => (
           <div key={item.title}>

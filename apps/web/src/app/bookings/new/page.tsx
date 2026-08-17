@@ -546,7 +546,7 @@ function NewBookingForm() {
       <p className="mb-2 text-muted">{listing.title}</p>
       <p className="mb-8 text-sm text-muted leading-relaxed">
         Use the calendar: tap each night you want (they need not be consecutive).
-        One tap selects, another deselects. Then pay in STRK or DAI. If Ready X
+        One tap selects, another deselects. Then Book & pay in STRK or DAI. If Ready X
         already charged you, wait for Recording booking… — do not pay twice;
         open My bookings.
       </p>
@@ -554,7 +554,7 @@ function NewBookingForm() {
       {isOwnListing ? (
         <Card className="space-y-4">
           <p className="text-sm text-muted">
-            You cannot book your own listing.
+            You cannot Book & pay your own listing.
           </p>
           <Button
             type="button"

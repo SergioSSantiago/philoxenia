@@ -26,7 +26,7 @@ quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → 
 2. Client pays on-chain (public multicall or STRK20 anonymizer)  
 3. `POST /bookings/confirm` with `{ bookingId, listingId, nights, fundTxHash, escrowBookingId, … }`
 
-`/bookings/new` calendar copy: tap nights one by one; they need not be consecutive; pay STRK or DAI. If the JWT is live but the wallet is not, the page asks to **Connect Ready X** (Chrome or iPhone) — Public and Private both need a live session; Private also needs wallet API ≥ 0.10. Reconnect failures and Private pay errors name Ready X (not a generic Ready extension).
+`/bookings/new` calendar copy: tap nights one by one; they need not be consecutive; then **Book & pay** in STRK or DAI. Own listing: **You cannot Book & pay your own listing.** If the JWT is live but the wallet is not, the page asks to **Connect Ready X** (Chrome or iPhone) — Public and Private both need a live session; Private also needs wallet API ≥ 0.10. Reconnect failures and Private pay errors name Ready X (not a generic Ready extension).
 
 After a successful on-chain pay, the client stores a pending row in `localStorage` (`philoxenia_pending_paid_booking`) and retries `POST /bookings/confirm` (Ready X sometimes throws after the tx already landed). **Recording booking…** only appears when that pending row (or an in-flight pay) exists — a normal Book & pay visit is not locked. Intro copy: if Ready X already charged you, do not pay twice; open My bookings. Reopening the page resumes confirm until it succeeds; `/bookings` loading copy is just **Loading bookings…**. Subtitle: **Book & pay is STRK or DAI**; cancel only frees nights.
 

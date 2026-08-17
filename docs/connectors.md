@@ -56,7 +56,7 @@ Header nav width stays consistent across pages (`max-w-6xl`); only page content 
 
 ## Host tip — set a reward people will share
 
-When creating a listing, pick a connector % that makes introductions worthwhile (often **3–10%**). At **0%**, friends can still share for discovery, but they earn nothing — `/connector` calls that out.
+When creating a listing, pick a connector % that makes introductions worthwhile (often **3–10%**). At **0%**, friends can still share for discovery, but they earn nothing — `/connector` says you earn when they **Book & pay** through your invite once a % is set.
 
 ## API
 
