@@ -66,7 +66,7 @@ export default function ProfilePage() {
     <Shell>
       <SectionTitle
         title="Profile"
-        subtitle="Friends add you by wallet. Shield STRK or DAI here for Private pay; swap is public AVNU."
+        subtitle="Friends add you by wallet. Shield STRK or DAI here for Private Book & pay; swap is public AVNU."
       />
 
       <div className="space-y-6">

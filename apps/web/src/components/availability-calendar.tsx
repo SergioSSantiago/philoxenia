@@ -329,7 +329,8 @@ export function AvailabilityCalendar({
 
       {mode === "guest" && !onSelectRange && (
         <p className="text-xs text-muted leading-relaxed">
-          Open nights show their DAI price. Tap Book to choose dates and pay.
+          Open nights show their DAI list price. Tap Book & pay to choose nights
+          (STRK or DAI).
         </p>
       )}
 
