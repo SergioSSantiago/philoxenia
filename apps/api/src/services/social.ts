@@ -1511,18 +1511,6 @@ async function absorbSettledPayment(
   });
 
   if (already || prior) {
-    const row = already ?? prior;
-    if (row && forcedNights && !nightsInclude(row, ORPHAN_NIGHT)) {
-      await db
-        .update(schema.bookings)
-        .set({
-          selectedNights: forcedNights,
-          checkIn: dayUtcNoon(ORPHAN_NIGHT),
-          checkOut: dayUtcNoon("2026-09-01"),
-          nights: 1,
-        })
-        .where(eq(schema.bookings.id, row.id));
-    }
     if (already) return;
     if (prior) {
       await attachDuplicateSettledPayment(prior, inspected, guestId);
@@ -1563,17 +1551,6 @@ async function absorbSettledPayment(
     totalPrice: inspected.totalAmount,
     settledRecovery: true,
   });
-}
-
-function nightsInclude(
-  booking: typeof schema.bookings.$inferSelect,
-  day: string
-): boolean {
-  const selected = (booking.selectedNights ?? []).map(toDayKey);
-  if (selected.includes(day)) return true;
-  const start = toDayKey(booking.checkIn);
-  const end = toDayKey(booking.checkOut);
-  return day >= start && day < end;
 }
 
 async function attachDuplicateSettledPayment(
