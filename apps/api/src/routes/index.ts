@@ -663,7 +663,23 @@ export async function registerRoutes(app: FastifyInstance) {
     "/bookings",
     { preHandler: [authenticate] },
     async (request) => {
-      return social.getMyBookings(request.user.userId);
+      try {
+        return await social.recoverMinePaidBookings(request.user.userId);
+      } catch {
+        return social.getMyBookings(request.user.userId);
+      }
+    }
+  );
+
+  app.post(
+    "/bookings/recover-mine",
+    { preHandler: [authenticate] },
+    async (request) => {
+      try {
+        return await social.recoverMinePaidBookings(request.user.userId);
+      } catch {
+        return social.getMyBookings(request.user.userId);
+      }
     }
   );
 

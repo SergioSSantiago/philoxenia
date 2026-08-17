@@ -28,6 +28,7 @@ import {
   tokenAddressForAsset,
 } from "@/lib/tokens";
 import {
+  clearPendingPaidBooking,
   confirmPaidBookingWithRetry,
   extractTxHashFromError,
   loadPendingPaidBooking,
@@ -99,7 +100,6 @@ function NewBookingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const listingId = searchParams.get("listing") ?? "";
-  const recoverHash = (searchParams.get("recover") ?? "").trim();
   const { token, user, reconnectWallet } = useAuth();
   const { account, address } = useAccount();
   const [listing, setListing] = useState<Listing | null>(null);
@@ -114,75 +114,59 @@ function NewBookingForm() {
   const [submitting, setSubmitting] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
   const [recording, setRecording] = useState(false);
-  const [recoverInfo, setRecoverInfo] = useState<{
-    totalPrice: string;
-    paymentAsset: PaymentAsset;
-    listingTitle: string;
-  } | null>(null);
 
   const walletReady = Boolean(account && address);
-  const recovering = Boolean(recoverHash);
+  const payLocked = submitting || recording;
 
   useEffect(() => {
-    if (!token || !recoverHash) return;
+    if (!token) return;
     let cancelled = false;
-    void api
-      .post<{
-        fundTxHash: string;
-        listingId: string;
-        listingTitle: string;
-        paymentAsset: PaymentAsset;
-        totalPrice: string;
-        alreadyRecorded: boolean;
-        existingBookingId: string | null;
-      }>("/bookings/inspect-payment", { fundTxHash: recoverHash })
-      .then((info) => {
+    setRecording(true);
+    void (async () => {
+      try {
+        const rows = await api.get<Booking[]>("/bookings");
         if (cancelled) return;
-        if (info.alreadyRecorded && info.existingBookingId) {
-          router.push(`/bookings/${info.existingBookingId}`);
+        const pending = loadPendingPaidBooking();
+        const recorded = pending?.fundTxHash
+          ? rows.find((b) => {
+              try {
+                return (
+                  Boolean(b.fundTxHash) &&
+                  BigInt(b.fundTxHash as string) === BigInt(pending.fundTxHash)
+                );
+              } catch {
+                return b.fundTxHash === pending.fundTxHash;
+              }
+            })
+          : undefined;
+        if (recorded) {
+          clearPendingPaidBooking();
+          router.push(`/bookings/${recorded.id}`);
           return;
         }
-        setRecoverInfo({
-          totalPrice: info.totalPrice,
-          paymentAsset: info.paymentAsset,
-          listingTitle: info.listingTitle,
-        });
-        if (info.listingId && info.listingId !== listingId) {
-          router.replace(
-            `/bookings/new?listing=${info.listingId}&recover=${encodeURIComponent(recoverHash)}`
-          );
+        if (pending?.fundTxHash) {
+          const booking = await confirmPaidBookingWithRetry(pending);
+          if (!cancelled) router.push(`/bookings/${booking.id}`);
+          return;
         }
-      })
-      .catch((err) => {
-        if (!cancelled) {
+      } catch (err) {
+        if (!cancelled && loadPendingPaidBooking()?.fundTxHash) {
           setError(
             err instanceof Error
-              ? err.message
-              : "Could not read that payment on Starknet"
+              ? `${err.message} Payment already landed — stay is being recorded. Do not pay again.`
+              : "Payment already landed — stay is being recorded. Do not pay again."
           );
+          return;
         }
-      });
+      } finally {
+        if (!cancelled && !loadPendingPaidBooking()?.fundTxHash) {
+          setRecording(false);
+        }
+      }
+    })();
     return () => {
       cancelled = true;
     };
-  }, [token, recoverHash, listingId, router]);
-
-  useEffect(() => {
-    const pending = loadPendingPaidBooking();
-    if (!pending || !token || recoverHash) return;
-    setRecording(true);
-    void confirmPaidBookingWithRetry(pending)
-      .then((booking) => {
-        router.push(`/bookings/${booking.id}`);
-      })
-      .catch((err) => {
-        setError(
-          err instanceof Error
-            ? `${err.message} Payment already landed on-chain — refresh this page to record it, or check Bookings.`
-            : "Could not record the on-chain payment. Refresh this page to retry."
-        );
-      })
-      .finally(() => setRecording(false));
   }, [token, router]);
 
   useEffect(() => {
@@ -211,7 +195,6 @@ function NewBookingForm() {
       return;
     }
     if (!listingId) {
-      if (recoverHash) return;
       setLoadError("Missing listing.");
       return;
     }
@@ -411,33 +394,48 @@ function NewBookingForm() {
       const booking = await confirmPaidBookingWithRetry(pending);
       router.push(`/bookings/${booking.id}`);
     } catch (err) {
+      const pending = loadPendingPaidBooking();
+      if (pending?.fundTxHash) {
+        setRecording(true);
+        setError(
+          "Payment landed on Starknet. Recording the stay — do not pay again."
+        );
+        void confirmPaidBookingWithRetry(pending)
+          .then((booking) => router.push(`/bookings/${booking.id}`))
+          .catch(async () => {
+            try {
+              const rows = await api.get<Booking[]>("/bookings");
+              const hit = rows.find((b) => {
+                try {
+                  return (
+                    Boolean(b.fundTxHash) &&
+                    BigInt(b.fundTxHash as string) ===
+                      BigInt(pending.fundTxHash)
+                  );
+                } catch {
+                  return b.fundTxHash === pending.fundTxHash;
+                }
+              });
+              if (hit) {
+                clearPendingPaidBooking();
+                router.push(`/bookings/${hit.id}`);
+                return;
+              }
+            } catch {
+              // keep locked
+            }
+            setError(
+              "Payment landed on Starknet. Open My bookings — do not pay again."
+            );
+          });
+        return;
+      }
       setError(err instanceof Error ? err.message : "Payment failed");
     } finally {
-      setSubmitting(false);
-      setRecording(false);
-    }
-  }
-
-  async function recordRecoveredPayment() {
-    if (!listing || !range.ok || range.nights.length === 0 || !recoverHash) {
-      return;
-    }
-    setRecording(true);
-    setError("");
-    try {
-      const booking = await api.post<Booking>("/bookings/recover", {
-        fundTxHash: recoverHash,
-        nights: range.nights,
-        listingId: listing.id,
-        privacyMode: "private",
-      });
-      router.push(`/bookings/${booking.id}`);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Could not record the payment"
-      );
-    } finally {
-      setRecording(false);
+      if (!loadPendingPaidBooking()?.fundTxHash) {
+        setSubmitting(false);
+        setRecording(false);
+      }
     }
   }
 
@@ -452,9 +450,7 @@ function NewBookingForm() {
   if (!listing) {
     return (
       <Shell>
-        <p className="text-muted">
-          {recovering ? "Looking up on-chain payment…" : "Loading…"}
-        </p>
+        <p className="text-muted">Loading…</p>
         {error && <p className="mt-3 text-sm text-red-700">{error}</p>}
       </Shell>
     );
@@ -467,9 +463,8 @@ function NewBookingForm() {
       <h1 className="mb-2 text-4xl">Book & pay</h1>
       <p className="mb-2 text-muted">{listing.title}</p>
       <p className="mb-8 text-sm text-muted leading-relaxed">
-        {recovering
-          ? "This payment already settled on Starknet. Select the same nights as when you paid, then record the booking — you will not be charged again."
-          : "Use the calendar: tap each night you want (they need not be consecutive). One tap selects, another deselects. Then pay in STRK or DAI."}
+        Use the calendar: tap each night you want (they need not be consecutive).
+        One tap selects, another deselects. Then pay in STRK or DAI.
       </p>
 
       {isOwnListing ? (
@@ -587,7 +582,7 @@ function NewBookingForm() {
                     : `${formatTokenAmount(quote.totalPriceStrk)} STRK`}
                 </span>
               </div>
-              {STRK20_PRIVACY_ENABLED && !recovering && (
+              {STRK20_PRIVACY_ENABLED && (
                 <div className="space-y-2 pt-1">
                   <p className="text-xs font-medium text-foreground">
                     Payment privacy
@@ -646,7 +641,7 @@ function NewBookingForm() {
 
           {error && <p className="text-sm text-red-700">{error}</p>}
 
-          {!walletReady && quote && range.ok && !recovering && (
+          {!walletReady && quote && range.ok && !payLocked && (
             <p className="text-sm text-amber-800 leading-relaxed">
               Ready X is signed in for Philoxenia but not connected for
               transactions. Tap Connect Ready X (Chrome or iPhone) to pay
@@ -664,19 +659,9 @@ function NewBookingForm() {
                 Clear
               </Button>
             )}
-            {recovering ? (
-              <Button
-                type="button"
-                disabled={recording || !quote || !range.ok}
-                onClick={() => void recordRecoveredPayment()}
-              >
-                {recording
-                  ? "Recording booking…"
-                  : `Record ${
-                      recoverInfo
-                        ? `${formatTokenAmount(recoverInfo.totalPrice)} ${recoverInfo.paymentAsset}`
-                        : "on-chain"
-                    } payment`}
+            {payLocked ? (
+              <Button type="button" disabled>
+                Recording booking…
               </Button>
             ) : !walletReady ? (
               <Button
@@ -689,7 +674,7 @@ function NewBookingForm() {
             ) : (
               <Button
                 type="button"
-                disabled={submitting || recording || !quote || !range.ok}
+                disabled={payLocked || !quote || !range.ok}
                 onClick={payAndBook}
               >
                 {recording

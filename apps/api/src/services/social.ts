@@ -16,6 +16,7 @@ import {
 import { writeAuditLog } from "../lib/audit.js";
 import {
   inspectEscrowSettledTx,
+  listSettledEscrowTxHashes,
   txHashVariants,
   uuidToOnChainId,
   verifyEscrowPaymentTx,
@@ -26,7 +27,11 @@ import { toUserResponse } from "./auth.js";
 import { createNotification } from "./notifications.js";
 import { daiToStrk, getStrkPerDai } from "./rates.js";
 import { hasActivePaidNights } from "../lib/geo.js";
-import { assertNoPastNights } from "../lib/booking-nights.js";
+import {
+  assertNoPastNights,
+  inferNightsForPaidAmount,
+  utcTodayKey,
+} from "../lib/booking-nights.js";
 
 function mapListing(
   listing: typeof schema.listings.$inferSelect,
@@ -1128,6 +1133,8 @@ export async function confirmPaidBooking(
     /** @deprecated Prefer totalPrice; kept for STRK clients. */
     totalPriceStrk?: string;
     fxRate?: string;
+    /** Skip FX/night matching — the Starknet pay already settled. */
+    settledRecovery?: boolean;
   }
 ) {
   const guest = await db.query.users.findFirst({
@@ -1172,12 +1179,16 @@ export async function confirmPaidBooking(
     throw new Error("This transaction was already used for another booking");
   }
 
-  const prepared = await prepareBooking(guestId, {
-    listingId: input.listingId,
-    nights: input.nights,
-    checkIn: input.checkIn,
-    checkOut: input.checkOut,
-  });
+  const prepared = await prepareBooking(
+    guestId,
+    {
+      listingId: input.listingId,
+      nights: input.nights,
+      checkIn: input.checkIn,
+      checkOut: input.checkOut,
+    },
+    { settledRecovery: Boolean(input.settledRecovery) }
+  );
 
   if (uuidToOnChainId(prepared.listing.id) !== BigInt(inspected.listingOnChainId)) {
     throw new Error("This payment is for a different listing");
@@ -1191,7 +1202,11 @@ export async function confirmPaidBooking(
 
   let fxRateUsed: string | null;
   if (paymentAsset === "DAI") {
-    if (expectedDai > 0 && Math.abs(paid - expectedDai) / expectedDai > 0.01) {
+    if (
+      !input.settledRecovery &&
+      expectedDai > 0 &&
+      Math.abs(paid - expectedDai) / expectedDai > 0.01
+    ) {
       throw new Error(
         "Selected nights do not match the DAI amount already paid"
       );
@@ -1201,6 +1216,7 @@ export async function confirmPaidBooking(
     const fx = await getStrkPerDai({ fresh: true });
     const freshStrk = Number(daiToStrk(totalPriceDai, fx.strkPerDai));
     if (
+      !input.settledRecovery &&
       freshStrk > 0 &&
       Math.abs(paid - freshStrk) / Math.max(paid, freshStrk) > 0.25
     ) {
@@ -1422,6 +1438,121 @@ export async function recoverPaidBooking(
   });
 }
 
+export async function recoverMinePaidBookings(guestId: string) {
+  const guest = await db.query.users.findFirst({
+    where: eq(schema.users.id, guestId),
+  });
+  if (!guest) {
+    throw new Error("Account not found");
+  }
+
+  const hashes = await listSettledEscrowTxHashes(guest.walletAddress);
+  for (const hash of hashes) {
+    try {
+      await absorbSettledPayment(guestId, guest.walletAddress, hash);
+    } catch {
+      // Skip txs that are not this guest or cannot be decoded.
+    }
+  }
+
+  return getMyBookings(guestId);
+}
+
+async function absorbSettledPayment(
+  guestId: string,
+  guestWallet: string,
+  fundTxHash: string
+) {
+  const inspected = await inspectEscrowSettledTx(fundTxHash);
+  if (!sameFelt(guestWallet, inspected.guest)) return;
+
+  const already = await findBookingForPayment(
+    inspected.txHash,
+    inspected.escrowBookingId
+  );
+  if (already) return;
+
+  const listing = await findListingByOnChainId(
+    BigInt(inspected.listingOnChainId)
+  );
+  if (!listing) return;
+
+  const prior = await db.query.bookings.findFirst({
+    where: and(
+      eq(schema.bookings.guestId, guestId),
+      eq(schema.bookings.listingId, listing.id),
+      inArray(schema.bookings.status, ["funded", "confirmed", "completed"])
+    ),
+    orderBy: desc(schema.bookings.createdAt),
+  });
+  if (prior) {
+    await attachDuplicateSettledPayment(prior, inspected, guestId);
+    return;
+  }
+
+  const dayRows = await db.query.listingAvailableDays.findMany({
+    where: eq(schema.listingAvailableDays.listingId, listing.id),
+  });
+  const paidRanges = await getPaidBookedRanges(listing.id);
+  const tokenPerDai =
+    inspected.paymentAsset === "DAI"
+      ? 1
+      : Number((await getStrkPerDai({ fresh: true })).strkPerDai);
+  const nights = inferNightsForPaidAmount({
+    days: dayRows.map((d) => ({
+      day: toDayKey(d.day),
+      pricePerNight: d.pricePerNight,
+    })),
+    taken: paidRanges.flatMap((b) => b.nights),
+    paidAmount: Number(inspected.totalAmount),
+    tokenPerDai,
+    fallbackDay: utcTodayKey(),
+    fallbackPrice: listing.pricePerNight,
+  });
+
+  await confirmPaidBooking(guestId, {
+    bookingId: randomUUID(),
+    listingId: listing.id,
+    nights,
+    fundTxHash: inspected.txHash,
+    escrowBookingId: inspected.escrowBookingId,
+    privacyMode: "private",
+    paymentAsset: inspected.paymentAsset,
+    totalPrice: inspected.totalAmount,
+    settledRecovery: true,
+  });
+}
+
+async function attachDuplicateSettledPayment(
+  booking: typeof schema.bookings.$inferSelect,
+  inspected: {
+    txHash: string;
+    totalAmount: string;
+    paymentAsset: "STRK" | "DAI";
+  },
+  guestId: string
+) {
+  await db.insert(schema.payments).values({
+    bookingId: booking.id,
+    amount: inspected.totalAmount,
+    asset: inspected.paymentAsset,
+    txHash: inspected.txHash,
+    privacyMode: "private",
+    status: "confirmed",
+  });
+  await writeAuditLog({
+    action: "booking.duplicate_settled_payment",
+    actorUserId: guestId,
+    resourceType: "booking",
+    resourceId: booking.id,
+    meta: {
+      txHash: inspected.txHash,
+      paymentAsset: inspected.paymentAsset,
+      amount: inspected.totalAmount,
+    },
+  });
+}
+
 async function prepareBooking(
   guestId: string,
   input: {
@@ -1429,7 +1560,8 @@ async function prepareBooking(
     nights?: string[];
     checkIn?: string;
     checkOut?: string;
-  }
+  },
+  opts?: { settledRecovery?: boolean }
 ) {
   const listing = await db.query.listings.findFirst({
     where: eq(schema.listings.id, input.listingId),
@@ -1439,14 +1571,15 @@ async function prepareBooking(
     throw new Error(LISTING_UNAVAILABLE);
   }
 
-  const authorized = await canViewListing(
-    guestId,
-    listing.id,
-    listing.hostId
-  );
-
-  if (!authorized) {
-    throw new Error(LISTING_UNAVAILABLE);
+  if (!opts?.settledRecovery) {
+    const authorized = await canViewListing(
+      guestId,
+      listing.id,
+      listing.hostId
+    );
+    if (!authorized) {
+      throw new Error(LISTING_UNAVAILABLE);
+    }
   }
 
   if (listing.hostId === guestId) {
@@ -1467,7 +1600,9 @@ async function prepareBooking(
   }
 
   const todayKey = new Date().toISOString().slice(0, 10);
-  assertNoPastNights(nightKeys, todayKey);
+  if (!opts?.settledRecovery) {
+    assertNoPastNights(nightKeys, todayKey);
+  }
 
   const checkInDay = nightKeys[0];
   const checkOutDay = (() => {
@@ -1489,7 +1624,7 @@ async function prepareBooking(
   const nightBreakdown: { day: string; pricePerNight: string }[] = [];
   let totalDaiNum = 0;
   for (const day of nightKeys) {
-    const price = dayMap.get(day);
+    const price = dayMap.get(day) ?? (opts?.settledRecovery ? listing.pricePerNight : undefined);
     if (!price) {
       throw new Error(`Night ${day} is not available`);
     }
@@ -1499,9 +1634,11 @@ async function prepareBooking(
 
   const paid = await getPaidBookedRanges(listing.id);
   const taken = new Set(paid.flatMap((b) => b.nights));
-  for (const day of nightKeys) {
-    if (taken.has(day)) {
-      throw new Error(`Night ${day} is already booked`);
+  if (!opts?.settledRecovery) {
+    for (const day of nightKeys) {
+      if (taken.has(day)) {
+        throw new Error(`Night ${day} is already booked`);
+      }
     }
   }
 

@@ -76,7 +76,7 @@ export function extractTxHashFromError(err: unknown): string | null {
 
 export async function confirmPaidBookingWithRetry(
   pending: PendingPaidBooking,
-  attempts = 6
+  attempts = 12
 ): Promise<Booking> {
   let lastErr: unknown;
   for (let i = 0; i < attempts; i++) {
@@ -100,7 +100,9 @@ export async function confirmPaidBookingWithRetry(
       lastErr = err;
       const msg = err instanceof Error ? err.message : String(err);
       const retryable =
-        /not found on Starknet yet|wait for confirmation/i.test(msg);
+        /not found on Starknet yet|wait for confirmation|Could not read/i.test(
+          msg
+        );
       if (!retryable || i === attempts - 1) throw err;
       await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
     }
