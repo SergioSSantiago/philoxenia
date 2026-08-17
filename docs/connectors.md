@@ -50,7 +50,7 @@ Guest books + pays ──► escrow settles ──► you + host + (10% of your 
 | **`/friends/[id]`** | Friend’s listings + share; open from name or wallet on Friends / Messages |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their listings |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → listings; preview / › → chat |
-| **`/listings/[id]`** | Share listing (friend → connector; host → no connector reward) |
+| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host → Share listing (no connector). Cards elsewhere show the % next to DAI price |
 
 Header nav width stays consistent across pages (`max-w-6xl`); only page content uses the narrow/wide shell.
 

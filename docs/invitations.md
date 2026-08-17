@@ -48,7 +48,9 @@ Host or friend of host
 |-------|--------|
 | `/connector` | Share any friend listing with earn % highlighted |
 | `/friends/[id]` | Share that friend’s listings |
-| `/listings/[id]` | Share this listing (host or friend) |
+| `/listings/[id]` | Friend + % > 0 → **Share invite & earn**; host share has no connector reward |
+
+Listing cards (`ListingCard`) show `{n}% connector` next to the DAI price when the host set a reward.
 
 **Copy UX:** `CopyInviteButton` (`apps/web/src/components/copy-invite-button.tsx`) writes the `/invite/{token}` URL via `copyText` in `lib/share-invite.ts` (Clipboard API, then `execCommand` fallback). On success the button reads **Copied!** for 2s and the status line says the invite is ready to paste (connector copy mentions you earn if they book). If both copy paths fail, the URL stays visible so the user can select it.
 

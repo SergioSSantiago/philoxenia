@@ -181,7 +181,7 @@ export default function HomePage() {
             }
           />
           {data.friends.length === 0 ? (
-            <EmptyState message="Add people you trust to build your network." />
+            <EmptyState message="Add people you trust by wallet address — they must have signed in once." />
           ) : (
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-muted">{data.friends.length} friends</p>

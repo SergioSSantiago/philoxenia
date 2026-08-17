@@ -236,7 +236,7 @@ export default function BookingDetailPage() {
 
         {booking.privacyMode === "private" && (
           <p className="text-xs text-muted leading-relaxed">
-            Paid from shielded balance via the privacy pool → Philoxenia
+            Paid from shielded STRK or DAI via the privacy pool → Philoxenia
             anonymizer. Escrow still stores guest, host, and amounts on-chain.
           </p>
         )}

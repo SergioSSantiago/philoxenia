@@ -4,7 +4,7 @@
 
 # Listings
 
-Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states that friends can share and earn if a connector % is set.
+Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states that friends can share and earn if a connector % is set. `ListingCard` shows that % next to the DAI nightly price.
 
 ## Listing fields
 

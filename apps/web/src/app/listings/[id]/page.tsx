@@ -363,7 +363,13 @@ export default function ListingPage() {
               disabled={shareBusy}
               onClick={shareListing}
             >
-              {shareBusy ? "Creating link…" : "Share listing"}
+              {shareBusy
+                ? "Creating link…"
+                : isHost
+                  ? "Share listing"
+                  : listing.connectorRewardPercent > 0
+                    ? "Share invite & earn"
+                    : "Share listing"}
             </Button>
             {isHost && (
               <Button
