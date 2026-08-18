@@ -176,7 +176,7 @@ export default function FriendProfilePage() {
       />
 
       {listings.length === 0 ? (
-        <EmptyState message="This friend hasn’t published a place yet. You can still open Messages; Book & pay when they list a place." />
+        <EmptyState message="This friend hasn’t published a place yet. You can still open Messages; Book & pay when they publish a place." />
       ) : (
         <div className="space-y-4">
           {listings.map((listing) => {

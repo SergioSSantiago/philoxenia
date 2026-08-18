@@ -388,7 +388,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return reply.status(201).send(listing);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not list this place";
+          err instanceof Error ? err.message : "Could not publish this place";
         return reply.status(400).send({ error: message });
       }
     }

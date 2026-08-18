@@ -86,7 +86,7 @@ export default function CreateListingPage() {
       });
       router.push(`/listings/${listing.id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not list this place");
+      setError(err instanceof Error ? err.message : "Could not publish this place");
     } finally {
       setSubmitting(false);
     }
@@ -222,7 +222,7 @@ export default function CreateListingPage() {
           )}
 
           <Button type="submit" disabled={submitting} className="w-full sm:w-auto">
-            {submitting ? "Publishing this place…" : "List this place"}
+            {submitting ? "Publishing this place…" : "Publish this place"}
           </Button>
         </form>
       </Card>
