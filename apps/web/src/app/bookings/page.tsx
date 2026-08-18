@@ -27,7 +27,7 @@ export default function BookingsPage() {
   return (
     <Shell>
       <SectionTitle
-        title="My bookings"
+        title="My stays"
         subtitle="Cards show You host or You stay. Book & pay is STRK or DAI; cancel only frees nights."
       />
       {bookings == null ? (

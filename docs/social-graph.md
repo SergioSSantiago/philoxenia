@@ -4,7 +4,7 @@
 
 # Social graph
 
-Friendships are **entirely off-chain**. They gate listing visibility and sharing permissions.
+Friendships are **entirely off-chain**. They gate place visibility and sharing permissions.
 
 ## Model
 
@@ -50,7 +50,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 |--------|------|-------------|
 | GET | `/friends` | Friends + pending incoming/outgoing |
 | GET | `/friends/search?q=` | Search by **Ready X wallet** only. Client prepends `0x` if missing and requires ≥4 hex chars of a **Ready X wallet** (normalized length ≥ 6). API minimum is 2 chars. |
-| GET | `/friends/:id` | Friend profile + their listings (must be friends) |
+| GET | `/friends/:id` | Friend profile + their places (must be friends) |
 | PATCH | `/users/me` | Update display name (1–64 chars) |
 | POST | `/friends/request` | Send request `{ toUserId }` |
 | POST | `/friends/accept/:id` | Accept incoming request |
@@ -61,7 +61,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 
 ## Friend profile (web)
 
-`/friends/[id]` — identity, **Ready X wallet**, listings from that friend. Intro: open one to **Book & pay**, or share an invite to earn (same asset they Book & pay). **Share invite & earn** when the listing has a connector %.
+`/friends/[id]` — identity, **Ready X wallet**, places from that friend. Intro: open one to **Book & pay**, or share an invite to earn (same asset they Book & pay). **Share invite & earn** when the place has a connector %.
 
 Opened by tapping **name** or **Ready X wallet** on:
 
@@ -77,24 +77,24 @@ Defined in `apps/api/src/lib/authorization.ts`:
 
 | Action | Rule |
 |--------|------|
-| View listing | Host, or friend of host |
-| Share listing | Host, or friend of host |
-| Book listing | Must be able to view listing |
-| Connector for booking | Last invite opened for that listing; null if host shared or connector no longer friend of host |
+| View place | Host, or friend of host |
+| Share place | Host, or friend of host |
+| Book & pay place | Must be able to view the place |
+| Connector for stay | Last invite opened for that place; null if host shared or connector no longer friend of host |
 
 ## Discovery
 
-- **Network listings** (`GET /my-network/listings`) — listings from friends only.
-- **Friend listings** (`GET /friends/:id`) — one friend’s places (same visibility rule).
-- **No global directory** — there is no endpoint to browse all listings.
+- **Network places** (`GET /my-network/listings`) — places from friends only.
+- **Friend places** (`GET /friends/:id`) — one friend’s places (same visibility rule).
+- **No global directory** — there is no endpoint to browse all places.
 
 ## Invitation interaction
 
 When a guest opens an invite but is not yet friends with the host:
 
-1. A `share_introductions` row links guest → listing (connector if a friend shared; null if the host shared).
-2. Guest must send (and host must accept) a friend request before viewing/booking.
-3. After friendship, attribution from the last opened link persists for booking reward calculation.
+1. A `share_introductions` row links guest → place (connector if a friend shared; null if the host shared).
+2. Guest must send (and host must accept) a friend request before viewing / Book & pay.
+3. After friendship, attribution from the last opened link persists for stay reward calculation.
 
 ## Implementation status
 
@@ -102,7 +102,7 @@ When a guest opens an invite but is not yet friends with the host:
 |---------|--------|
 | Friend requests + friendships | Implemented |
 | Search users | Implemented (**Ready X wallet** only) |
-| Friend profile + listings | Implemented (`/friends/[id]`) |
+| Friend profile + places | Implemented (`/friends/[id]`) |
 | Connector share from social surfaces | Implemented |
 | On-chain social graph | Not planned for MVP |
 | Block lists / privacy controls | Not implemented |

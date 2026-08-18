@@ -170,8 +170,8 @@ function NewBookingForm() {
         if (!cancelled && (pending?.fundTxHash || inflight)) {
           setError(
             err instanceof Error
-              ? `${err.message} Do not Book & pay again — open My bookings.`
-              : "Do not Book & pay again — open My bookings."
+              ? `${err.message} Do not Book & pay again — open My stays.`
+              : "Do not Book & pay again — open My stays."
           );
         }
       } finally {
@@ -500,7 +500,7 @@ function NewBookingForm() {
       }
       setRecording(true);
       setError(
-        "If Ready X charged you, the stay is being recorded. Do not Book & pay again — open My bookings."
+        "If Ready X charged you, the stay is being recorded. Do not Book & pay again — open My stays."
       );
       void api.get<Booking[]>("/bookings").then((rows) => {
         const hit = rows.find(
@@ -548,7 +548,7 @@ function NewBookingForm() {
         Use the calendar: tap each night you want (they need not be consecutive).
         One tap selects, another deselects. Then Book & pay in STRK or DAI. If Ready X
         already charged you, wait for Recording stay… — do not Book & pay
-        twice; open My bookings.
+        twice; open My stays.
       </p>
 
       {isOwnListing ? (

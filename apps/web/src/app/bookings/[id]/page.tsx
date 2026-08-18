@@ -52,7 +52,7 @@ export default function BookingDetailPage() {
         "Nights freed. Money was already settled on-chain — arrange any return in Messages."
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Cancel failed");
+      setError(err instanceof Error ? err.message : "Could not free nights");
     } finally {
       setBusy(false);
     }
@@ -275,7 +275,7 @@ export default function BookingDetailPage() {
               onClick={socialCancel}
             >
               {busy
-                ? "Updating…"
+                ? "Freeing nights…"
                 : alreadySettled
                   ? "Free nights (no on-chain refund)"
                   : "Mark cancelled (free nights)"}

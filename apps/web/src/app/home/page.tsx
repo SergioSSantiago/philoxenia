@@ -160,7 +160,7 @@ export default function HomePage() {
 
         <section>
           <SectionTitle
-            title="My bookings"
+            title="My stays"
             subtitle="Recent Book & pay stays — You host or You stay"
           />
           {data.myBookings.length === 0 ? (
