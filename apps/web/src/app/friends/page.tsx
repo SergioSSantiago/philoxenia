@@ -105,7 +105,7 @@ export default function FriendsPage() {
       setActionOk("Friend request sent — Book & pay after they accept.");
     } catch (err) {
       setActionError(
-        err instanceof Error ? err.message : "Could not send friend request"
+        err instanceof Error ? err.message : "Could not send friend request to Book & pay"
       );
     } finally {
       setBusyId(null);
@@ -186,7 +186,7 @@ export default function FriendsPage() {
               />
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button className="w-full sm:w-auto" onClick={search}>
-                  Search
+                  Search Ready X wallet
                 </Button>
                 <Button
                   variant="ghost"

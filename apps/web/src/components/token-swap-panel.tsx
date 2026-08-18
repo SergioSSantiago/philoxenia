@@ -145,7 +145,7 @@ export function TokenSwapPanel() {
         title: needsReconnect ? "Ready X session needed" : "Could not swap STRK or DAI",
         body,
         tone: "error",
-        primaryLabel: needsReconnect ? "Connect Ready X" : "Dismiss",
+        primaryLabel: needsReconnect ? "Connect Ready X" : "Got it",
       });
       setMsg(body);
     } finally {

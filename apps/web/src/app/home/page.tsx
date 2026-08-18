@@ -112,7 +112,7 @@ export default function HomePage() {
       <div className="space-y-12">
         <section>
           <SectionTitle
-            title="Places from my friends"
+            title="Places from friends to Book & pay"
             subtitle="Book & pay STRK or DAI through your trust network"
           />
           {data.networkListings.length === 0 ? (
@@ -128,8 +128,8 @@ export default function HomePage() {
 
         <section>
           <SectionTitle
-            title="Shared with me"
-            subtitle="Place invites to Book & pay — last place invite wins connector attribution"
+            title="Place invites to Book & pay"
+            subtitle="Last place invite wins connector attribution"
           />
           {data.sharedListings.length === 0 ? (
             <EmptyState message="No place invites yet. Open a friend’s place invite to Book & pay — last place invite wins connector attribution." />

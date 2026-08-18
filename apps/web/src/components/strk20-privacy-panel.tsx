@@ -155,8 +155,8 @@ export function Strk20PrivacyPanel() {
         title: needsReconnect ? "Ready X session needed" : "Could not shield or unshield STRK or DAI",
         body,
         tone: "error",
-        primaryLabel: needsReconnect ? "Reconnect Ready X" : "Dismiss",
-        secondaryLabel: needsReconnect ? "Refresh page" : "Dismiss",
+        primaryLabel: needsReconnect ? "Reconnect Ready X" : "Got it",
+        secondaryLabel: needsReconnect ? "Refresh page" : "Got it",
         reloadOnSecondary: needsReconnect,
       });
     } finally {
@@ -292,7 +292,7 @@ export function Strk20PrivacyPanel() {
         tone={notice?.tone ?? "warn"}
         busy={reconnecting || busy}
         primaryLabel={notice?.primaryLabel}
-        secondaryLabel={notice?.secondaryLabel ?? "Dismiss"}
+        secondaryLabel={notice?.secondaryLabel ?? "Got it"}
         onPrimary={() => {
           const label = notice?.primaryLabel;
           if (

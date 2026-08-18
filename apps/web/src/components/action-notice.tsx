@@ -12,7 +12,7 @@ export function ActionNotice({
   body,
   primaryLabel,
   onPrimary,
-  secondaryLabel = "Dismiss",
+  secondaryLabel = "Got it",
   onSecondary,
   busy = false,
   tone = "warn",
@@ -86,7 +86,7 @@ export function ActionNotice({
               onClick={onPrimary}
               className="w-full sm:w-auto"
             >
-              {busy ? "Working…" : primaryLabel}
+              {busy ? `${primaryLabel.replace(/\?$/, "")}…` : primaryLabel}
             </Button>
           ) : null}
         </div>

@@ -32,7 +32,7 @@ export function CopyInviteButton({
       className={className}
       onClick={() => void onClick()}
     >
-      {copied ? "Copied!" : label}
+      {copied ? "Place invite copied" : label}
     </Button>
   );
 }

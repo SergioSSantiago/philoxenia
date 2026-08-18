@@ -274,7 +274,7 @@ export default function ChatThreadPage() {
           title: needsReconnect ? "Ready X session needed" : "Could not send STRK or DAI",
           body: msg,
           tone: "error",
-          primaryLabel: needsReconnect ? "Connect Ready X" : "Dismiss",
+          primaryLabel: needsReconnect ? "Connect Ready X" : "Got it",
         });
         setError(msg);
       } finally {

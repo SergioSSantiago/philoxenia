@@ -287,7 +287,7 @@ export function AuthModal() {
               <p className="pt-1 text-center text-xs text-muted">
                 {mobileOutsideWallet
                   ? "Ready X must open a second time to show the sign request."
-                  : "Ready X will ask you to sign in."}{" "}
+                  : "Ready X will ask you to Approve in Ready X."}{" "}
                 Philoxenia never custodies your funds or keys.
               </p>
             </>

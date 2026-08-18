@@ -202,7 +202,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return reply.send(result);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not send friend request";
+          err instanceof Error ? err.message : "Could not send friend request to Book & pay";
         return reply.status(400).send({ error: message });
       }
     }
