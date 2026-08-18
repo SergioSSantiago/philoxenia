@@ -19,7 +19,7 @@ The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](
 
 ## Problem
 
-Traditional home-sharing platforms are public marketplaces with platform fees and broad data exposure. Philoxenia targets hosts and guests who already trust each other — or are one introduction away — and want trustless settlement without a public listing directory.
+Traditional home-sharing platforms are public marketplaces with platform fees and broad data exposure. Philoxenia targets hosts and guests who already trust each other — or are one introduction away — and want trustless settlement without a public directory of places.
 
 ## What Philoxenia is
 
@@ -40,7 +40,7 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 
 ## Why connectors matter
 
-Philoxenia has no public listing directory. **Growth is introductions.** A connector is a friend of the host who shares an invite link with someone they trust. When they Book & pay through the link, the connector is paid on settle.
+Philoxenia has no public directory of places. **Growth is introductions.** A connector is a friend of the host who shares an invite link with someone they trust. When they Book & pay through the link, the connector is paid on settle.
 
 That loop is the product: hosts fill nights, connectors earn for good intros, guests arrive with a social vouch — and Philoxenia only takes a cut of the connector reward (never of direct host↔guest stays).
 

@@ -4,7 +4,7 @@
 
 # Listings
 
-Hosts create **private places** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Submit busy: **Publishing this place…** (not a marketplace “Listing…”). Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). Host on place detail: **Book & pay is disabled for the host**. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**. Photo uploader alt: **Place photo**. Native share sheet: **Book & pay stay at …**.
+Hosts create **private places** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Submit busy: **Publishing this place…** (not a marketplace “Listing…”). Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). Host on place detail: **Book & pay is disabled for the host**. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**. Photo uploader alt: **Place photo**; fail: **Could not add this place photo**. Native share sheet: **Book & pay stay at …**.
 
 ## Listing fields
 

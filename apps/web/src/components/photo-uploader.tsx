@@ -68,7 +68,7 @@ export function PhotoUploader({
         }
         onChange([...photos, ...next]);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Upload failed");
+        setError(err instanceof Error ? err.message : "Could not add this place photo");
       } finally {
         setBusy(false);
         if (inputRef.current) inputRef.current.value = "";

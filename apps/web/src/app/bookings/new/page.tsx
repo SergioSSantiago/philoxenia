@@ -317,7 +317,7 @@ function NewBookingForm() {
       return;
     }
     if (!listing.host?.walletAddress) {
-      setError("Host wallet missing");
+      setError("Could not Book & pay — this host has no Ready X wallet.");
       return;
     }
     const hostWallet = listing.host.walletAddress;
@@ -484,7 +484,7 @@ function NewBookingForm() {
         clearPayInflight();
         setRecording(true);
         setError(
-          "Payment landed on Starknet. Recording the stay — do not Book & pay again."
+          "Book & pay landed on Starknet. Recording the stay — do not Book & pay again."
         );
         void confirmPaidBookingWithRetry(paid)
           .then((booking) => router.push(`/bookings/${booking.id}`))
@@ -703,7 +703,7 @@ function NewBookingForm() {
                   )}
                   <p className="text-xs text-muted leading-relaxed">
                     {fundMode === "private"
-                      ? "Pays from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield the Book & pay asset on Profile first — proofs can take a while."
+                      ? "Book & pay from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield the Book & pay asset on Profile first — proofs can take a while."
                       : "Standard on-chain approve + fund. Visible on explorers."}
                   </p>
                 </div>
@@ -719,7 +719,7 @@ function NewBookingForm() {
 
           {recording && (
             <p className="text-sm text-amber-800 leading-relaxed">
-              Payment landed on-chain. Recording the stay in Philoxenia —
+              Book & pay landed on-chain. Recording the stay in Philoxenia —
               do not tap Book & pay again.
             </p>
           )}
