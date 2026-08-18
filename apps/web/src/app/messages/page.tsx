@@ -128,7 +128,8 @@ export default function MessagesPage() {
           </p>
           <p className="mt-0.5 text-muted">
             Messages are sealed on your device. Who you chat with still comes
-            from your Philoxenia friends list.
+            from your Philoxenia friends list. Book & pay updates and Send STRK
+            or DAI live on the same thread.
           </p>
           {sealErr && (
             <p className="mt-1 text-red-700">{sealErr}</p>
@@ -148,7 +149,7 @@ export default function MessagesPage() {
           ))}
         </div>
       ) : threads.length === 0 ? (
-        <EmptyState message="No friends yet. Add someone by Ready X wallet on Friends — each friend gets a sealed thread here, and you can send STRK or DAI in chat." />
+        <EmptyState message="No friends yet. Add someone by Ready X wallet on Friends — each friend gets a sealed thread here. Send STRK or DAI in chat, and Book & pay updates show up on the thread." />
       ) : (
         <ul className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm divide-y divide-border">
           {threads.map((t) => {

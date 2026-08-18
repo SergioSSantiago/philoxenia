@@ -52,7 +52,7 @@ philoxenia/
 |-------|---------|
 | `GET /health` | Liveness |
 | `GET /rates/strk-dai` | Live STRK per DAI (CoinGecko) |
-| `GET /stats/network` | Landing totals: users, countries, listings open, paid nights, DAI/STRK paid |
+| `GET /stats/network` | Landing totals: users, countries, **places to Book & pay**, paid nights, DAI/STRK paid |
 | `GET /invite/:token` | Resolve a share token (404 if invalid; does not leak listings) |
 | `POST /auth/challenge` | SNIP-12 nonce for a wallet |
 | `POST /auth/verify` | Signature → JWT |

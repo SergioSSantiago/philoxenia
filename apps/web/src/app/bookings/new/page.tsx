@@ -236,7 +236,7 @@ function NewBookingForm() {
         }
       })
       .catch(() => {
-        if (!cancelled) setLoadError("Listing unavailable.");
+        if (!cancelled) setLoadError("This listing isn’t available to Book & pay.");
       });
     return () => {
       cancelled = true;
@@ -567,7 +567,7 @@ function NewBookingForm() {
       ) : openNights.length === 0 ? (
         <Card>
           <p className="text-sm text-muted">
-            No open nights. Ask the host to add availability on the listing.
+            No open nights. Ask the host to open nights you can Book & pay.
           </p>
         </Card>
       ) : (
@@ -581,7 +581,7 @@ function NewBookingForm() {
 
             <div className="mt-4 rounded-xl border border-border bg-background px-4 py-3 text-sm">
               {selected.length === 0 ? (
-                <p className="text-muted">No nights selected yet.</p>
+                <p className="text-muted">Tap nights to Book & pay.</p>
               ) : (
                 <div className="space-y-2">
                   <p className="text-foreground">

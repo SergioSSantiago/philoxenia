@@ -39,7 +39,7 @@ Only friends can message each other. Each user publishes `messagePublicKey` (dev
 
 ## Web
 
-- `/messages` — sealed inbox list. Empty inbox means **no friends** (API returns one thread per friend even before the first note). Copy points to adding by **Ready X wallet** on Friends; you can also send STRK or DAI in chat. Tap **name** or **Ready X wallet** → friend’s listings (`/friends/[id]`); tap preview or › → chat. Fallback previews: **STRK or DAI sent**, **Book & pay update**.
+- `/messages` — sealed inbox list. Empty inbox means **no friends** (API returns one thread per friend even before the first note). Copy points to adding by **Ready X wallet** on Friends; Send STRK or DAI in chat; **Book & pay** updates show up on the thread. Banner: same thread for Book & pay updates and Send STRK or DAI. Tap **name** or **Ready X wallet** → friend’s listings (`/friends/[id]`); tap preview or › → chat. Fallback previews: **STRK or DAI sent**, **Book & pay update**.
 - `/messages/[friendId]` — sealed composer + pay sheet (Private default: shielded STRK/DAI; Public ERC-20). Header button is **Send STRK or DAI**. Sheet copy: same friend wallet as **Book & pay**. System stay messages link **View stay**. If JWT is live but the wallet is not, notices say **Connect Ready X** (Chrome or iPhone) — not a generic Ready extension. Reconnect errors: **Ready X session needed**. Header name/wallet → friend profile. Optional **Also anchor on-chain** posts a ciphertext hash to MessageMailbox.
 - Keys live in `localStorage` per wallet (`philoxenia_msg_priv_*`); never uploaded
 

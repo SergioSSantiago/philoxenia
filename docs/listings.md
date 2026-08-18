@@ -46,7 +46,7 @@ Everyone else ──► 404 (listing unavailable)
 
 ## Home globe
 
-`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Aria: **Interactive globe of places you can Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: listings need a map pin — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the listing.
+`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **invite** (taupe). Pin/legend labels: **Yours** / **Friend** / **Invite**. Aria: **Interactive globe of places you can Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: listings need a map pin — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the listing.
 
 ## API endpoints
 
@@ -58,7 +58,7 @@ Everyone else ──► 404 (listing unavailable)
 | GET | `/my-network/listings` | Yes | Friends' listings |
 | GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
 | GET | `/shared-listings` | Yes | Listings shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay** |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This listing isn’t available to Book & pay.** |
 | POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 

@@ -48,7 +48,7 @@ export default function ListingPage() {
     api
       .get<Listing>(`/listings/${params.id}`)
       .then(setListing)
-      .catch(() => setError("Listing unavailable."));
+      .catch(() => setError("This listing isn’t available to Book & pay."));
   }, [token, params.id, router]);
 
   const hostCalendarDays: ListingAvailableDay[] = useMemo(() => {

@@ -63,7 +63,7 @@ export function LandingNetworkStats({
       value: stats ? formatCount(stats.countries) : "—",
     },
     {
-      label: "listings open",
+      label: "places to Book & pay",
       value: stats ? formatCount(stats.listingsOpen) : "—",
     },
     {
