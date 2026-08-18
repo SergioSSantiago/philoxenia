@@ -28,7 +28,7 @@ export default function BookingDetailPage() {
     api
       .get<Booking>(`/bookings/${params.id}`)
       .then(setBooking)
-      .catch(() => setError("Stay not found"));
+      .catch(() => setError("This stay isn’t available"));
   }, [token, params.id, router]);
 
   async function socialCancel() {

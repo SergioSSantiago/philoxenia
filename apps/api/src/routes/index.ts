@@ -836,7 +836,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return await chat.getConversation(request.user.userId, friendId);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Conversation unavailable";
+          err instanceof Error ? err.message : "This chat isn’t available";
         return reply.status(400).send({ error: message });
       }
     }

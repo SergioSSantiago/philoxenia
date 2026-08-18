@@ -129,7 +129,7 @@ export default function ChatThreadPage() {
       router.replace("/home");
       return;
     }
-    load().catch(() => setError("Conversation unavailable."));
+    load().catch(() => setError("This chat isn’t available."));
     const id = window.setInterval(() => {
       if (document.visibilityState === "visible") {
         load().catch(() => undefined);
@@ -183,7 +183,7 @@ export default function ChatThreadPage() {
 
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Send failed");
+      setError(err instanceof Error ? err.message : "Could not send this sealed note");
     } finally {
       setBusy(false);
     }
@@ -263,7 +263,7 @@ export default function ChatThreadPage() {
             msg
           );
         setNotice({
-          title: needsReconnect ? "Ready X session needed" : "Transfer failed",
+          title: needsReconnect ? "Ready X session needed" : "Could not send STRK or DAI",
           body: msg,
           tone: "error",
           primaryLabel: needsReconnect ? "Connect Ready X" : "Dismiss",

@@ -50,7 +50,7 @@ Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeS
 | Surface | Mode | Notes |
 |---------|------|--------|
 | `/home` | `compact` | Public STRK **and DAI** hints “shield for Private Book & pay” |
-| `/profile` | full | Same public rows + `Strk20PrivacyPanel` heading **Shield for Private Book & pay** (shield / unshield **STRK or DAI**). Notices: **Ready X session needed** (not a generic Ready session) |
+| `/profile` | full | Same public rows + `Strk20PrivacyPanel` heading **Shield for Private Book & pay** (shield / unshield **STRK or DAI**). Notices: **Ready X session needed** (not a generic Ready session); shield/unshield fail **Could not shield or unshield STRK or DAI** |
 
 If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, **Private Book & pay**, settle, swap). `/bookings/new` says the same when Book & pay is blocked.
 

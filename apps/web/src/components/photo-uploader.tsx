@@ -93,7 +93,7 @@ export function PhotoUploader({
           onClick={() => inputRef.current?.click()}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border bg-surface px-4 text-sm font-medium text-foreground disabled:opacity-50"
         >
-          {busy ? "Processing…" : "Add photos"}
+          {busy ? "Adding place photos…" : "Add place photos"}
         </button>
         <input
           ref={inputRef}

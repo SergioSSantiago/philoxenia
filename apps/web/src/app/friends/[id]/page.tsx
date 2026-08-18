@@ -49,7 +49,7 @@ export default function FriendProfilePage() {
       .get<FriendProfile>(`/friends/${params.id}`)
       .then(setProfile)
       .catch((err) => {
-        setError(err instanceof Error ? err.message : "Could not load friend");
+        setError(err instanceof Error ? err.message : "Could not load this friend’s places to Book & pay");
       });
   }, [token, router, params.id]);
 

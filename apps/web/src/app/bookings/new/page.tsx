@@ -370,7 +370,7 @@ function NewBookingForm() {
         escrowAddress = escrowAddressForAsset(paymentAsset);
       } catch (err) {
         throw new Error(
-          err instanceof Error ? err.message : "Escrow not configured"
+          err instanceof Error ? err.message : "Book & pay escrow is not configured"
         );
       }
 

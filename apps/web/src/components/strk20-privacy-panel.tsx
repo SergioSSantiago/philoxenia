@@ -152,7 +152,7 @@ export function Strk20PrivacyPanel() {
           body
         );
       setNotice({
-        title: needsReconnect ? "Ready X session needed" : "STRK20 action failed",
+        title: needsReconnect ? "Ready X session needed" : "Could not shield or unshield STRK or DAI",
         body,
         tone: "error",
         primaryLabel: needsReconnect ? "Reconnect Ready X" : "Dismiss",

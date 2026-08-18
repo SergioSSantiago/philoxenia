@@ -4,14 +4,14 @@
 
 # Listings
 
-Hosts create **private places** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Submit busy: **Publishing this place…** (not a marketplace “Listing…”). Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). Host on place detail: **Book & pay is disabled for the host**. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**. Photo uploader alt: **Place photo**; fail: **Could not add this place photo**. Native share sheet: **Book & pay stay at …**.
+Hosts create **private places** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Create headings: **About this place**, **Open nights guests can Book & pay** (not marketplace “Basics” / “Availability”). Submit busy: **Publishing this place…**. Fail: **Could not list this place**; missing cancel text: **Write cancellation terms for this place**. Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). Host on place detail: **Book & pay is disabled for the host**. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**. Photo uploader: **Add place photos** (busy **Adding place photos…**); alt **Place photo**; fail **Could not add this place photo**. Native share sheet: **Book & pay stay at …**.
 
 ## Listing fields
 
 | Field | Description |
 |-------|-------------|
-| `title`, `description` | Basic listing info |
-| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home to **Book & pay** — not a public directory. Listing detail **Open on OpenStreetMap** is an external OSM tab |
+| `title`, `description` | About this place |
+| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home to **Book & pay** — not a public directory. Map search fail: **Could not find that place**. Listing detail **Open on OpenStreetMap** is an external OSM tab |
 | `pricePerNight` | Default DAI price; nights can override per day on the calendar. Guests choose **STRK** (live FX) or **DAI** (1:1) at pay time — listing detail copy says both |
 | `minStay`, `maxStay` | Derived from open nights (not host-entered) |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow). Create-listing default: cancel frees nights; **Book & pay** already paid host/connector; money return is **Send STRK or DAI** in Messages. Listing detail matches |

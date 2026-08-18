@@ -27,7 +27,7 @@ async function searchPlaces(query: string): Promise<SearchHit[]> {
       Accept: "application/json",
     },
   });
-  if (!res.ok) throw new Error("Location search failed");
+  if (!res.ok) throw new Error("Could not find that place");
   return res.json();
 }
 
@@ -166,7 +166,7 @@ export function LocationMapPicker({
         setError("No places found — try a more specific address");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Search failed");
+      setError(err instanceof Error ? err.message : "Could not find that place");
       setHits([]);
     } finally {
       setSearching(false);

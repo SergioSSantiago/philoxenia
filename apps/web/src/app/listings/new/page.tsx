@@ -69,7 +69,7 @@ export default function CreateListingPage() {
         throw new Error("Open at least one night guests can Book & pay");
       }
       if (!cancellationTerms.trim()) {
-        throw new Error("Cancellation terms are required");
+        throw new Error("Write cancellation terms for this place");
       }
 
       const listing = await api.post<{ id: string }>("/my-listings", {
@@ -86,7 +86,7 @@ export default function CreateListingPage() {
       });
       router.push(`/listings/${listing.id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to list this place");
+      setError(err instanceof Error ? err.message : "Could not list this place");
     } finally {
       setSubmitting(false);
     }
@@ -103,7 +103,7 @@ export default function CreateListingPage() {
       <Card>
         <form onSubmit={handleSubmit} className="space-y-8">
           <section className="space-y-4">
-            <h2 className="text-lg text-foreground">Basics</h2>
+            <h2 className="text-lg text-foreground">About this place</h2>
             <label className="block text-sm">
               Title
               <TextInput
@@ -172,7 +172,7 @@ export default function CreateListingPage() {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-lg text-foreground">Availability</h2>
+            <h2 className="text-lg text-foreground">Open nights guests can Book & pay</h2>
             <p className="text-xs text-muted leading-relaxed">
               Same calendar as when you edit a place: tap nights one by one,
               or add a range, and set per-night DAI list prices. Guests Book &amp;

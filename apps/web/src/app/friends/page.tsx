@@ -87,7 +87,7 @@ export default function FriendsPage() {
         );
       }
     } catch (err) {
-      setSearchError(err instanceof Error ? err.message : "Search failed");
+      setSearchError(err instanceof Error ? err.message : "Could not find that Ready X wallet");
       setResults([]);
     }
   }
@@ -125,7 +125,7 @@ export default function FriendsPage() {
       await load();
       setActionOk(okMessage);
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Request failed");
+      setActionError(err instanceof Error ? err.message : "Could not update this friend request");
     } finally {
       setBusyId(null);
     }
