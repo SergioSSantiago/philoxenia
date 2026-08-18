@@ -219,7 +219,7 @@ export default function BookingDetailPage() {
             </div>
           )}
           <div className="flex justify-between">
-            <span className="text-muted">Host received</span>
+            <span className="text-muted">Host paid at Book & pay</span>
             <span>
               {formatTokenAmount(booking.hostAmount)} {booking.paymentAsset}
             </span>

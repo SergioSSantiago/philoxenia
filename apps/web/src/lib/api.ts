@@ -1,7 +1,7 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 /** Fallback when the API returns no error body. */
-export const API_GENERIC_ERROR = "Could not reach Philoxenia. Try again.";
+export const API_GENERIC_ERROR = "Could not reach Philoxenia. Try Philoxenia again.";
 
 export class ApiClient {
   constructor(private token: string | null = null) {}

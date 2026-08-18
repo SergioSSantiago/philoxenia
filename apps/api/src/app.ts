@@ -41,8 +41,8 @@ export async function buildApp() {
     app.log.error(error);
     const detail =
       process.env.NODE_ENV === "production"
-        ? "Philoxenia could not complete that. Try again."
-        : error.message || "Philoxenia could not complete that. Try again.";
+        ? "Philoxenia could not complete that. Try Philoxenia again."
+        : error.message || "Philoxenia could not complete that. Try Philoxenia again.";
     return reply.status(500).send({ error: detail });
   });
 

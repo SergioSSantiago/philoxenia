@@ -39,7 +39,7 @@ Friend of host ──share──► place invite (connector = you)
                               │
 Guest opens link ──► share_introduction (last-touch)
                               │
-Guest Book & pay ──► escrow settles ──► you + host + (10% of your reward → protocol)
+Book & pay ──► escrow settles ──► you + host + (10% of your reward → protocol)
 ```
 
 ## Where to share in the app
