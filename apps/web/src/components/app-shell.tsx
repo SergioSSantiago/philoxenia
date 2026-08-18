@@ -126,7 +126,7 @@ export function Shell({
               <button
                 type="button"
                 aria-expanded={menuOpen}
-                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                aria-label={menuOpen ? "Close Philoxenia menu" : "Open Philoxenia menu"}
                 onClick={() => setMenuOpen((open) => !open)}
                 className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border bg-surface text-foreground lg:hidden touch-manipulation"
               >
@@ -148,7 +148,7 @@ export function Shell({
           <>
             <button
               type="button"
-              aria-label="Close menu overlay"
+              aria-label="Close Philoxenia menu overlay"
               className="fixed inset-0 top-[57px] z-40 bg-foreground/20 lg:hidden"
               onClick={() => setMenuOpen(false)}
             />

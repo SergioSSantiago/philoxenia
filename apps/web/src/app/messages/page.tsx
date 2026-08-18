@@ -33,7 +33,7 @@ function formatThreadTime(iso: string | undefined) {
     d.getMonth() === yesterday.getMonth() &&
     d.getDate() === yesterday.getDate()
   ) {
-    return "Yesterday";
+    return "Yesterday in Messages";
   }
   return d.toLocaleDateString([], { month: "short", day: "numeric" });
 }

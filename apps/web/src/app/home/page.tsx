@@ -190,7 +190,7 @@ export default function HomePage() {
               <p className="text-muted">{data.friends.length} friends</p>
               <Link href="/friends">
                 <Button variant="secondary" className="w-full sm:w-auto">
-                  Manage friends
+                  Friends to Book & pay
                 </Button>
               </Link>
             </div>

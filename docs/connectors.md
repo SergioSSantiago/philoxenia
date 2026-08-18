@@ -4,7 +4,7 @@
 
 # Connectors
 
-**Connectors are how Philoxenia grows — and the best way to start using the app.** Hosts publish places privately; guests Book & pay privately; connectors bridge the gap — introducing trusted people to trusted places and **earning when a stay settles**.
+**Connectors are how Philoxenia grows — and the best way to start using the app.** Hosts publish places privately; friends Book & pay privately; connectors bridge the gap — introducing trusted people to trusted places and **earning when a stay settles**.
 
 You do not need to host a place to participate. Open **Earnings**, share a friend’s place, get paid on settle.
 
