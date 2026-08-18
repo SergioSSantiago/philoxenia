@@ -138,8 +138,8 @@ export default function CreateListingPage() {
                 required
               />
               <span className="mt-1 block text-xs text-muted">
-                Used when you open nights on the calendar. You can set a
-                different DAI price per night there.
+            Used when you open nights guests can Book & pay. You can set a
+            different DAI price per night there.
               </span>
             </label>
             <label className="block text-sm">

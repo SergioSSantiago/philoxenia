@@ -159,7 +159,10 @@ export default function HomePage() {
         </section>
 
         <section>
-          <SectionTitle title="My bookings" />
+          <SectionTitle
+            title="My bookings"
+            subtitle="Recent Book & pay stays — You host or You stay"
+          />
           {data.myBookings.length === 0 ? (
             <EmptyState message="No bookings yet. Book & pay a friend’s place, or wait for a guest after a connector invite." />
           ) : (

@@ -152,7 +152,7 @@ export function Strk20PrivacyPanel() {
           body
         );
       setNotice({
-        title: needsReconnect ? "Ready session needed" : "STRK20 action failed",
+        title: needsReconnect ? "Ready X session needed" : "STRK20 action failed",
         body,
         tone: "error",
         primaryLabel: needsReconnect ? "Reconnect Ready X" : "Dismiss",
@@ -174,8 +174,8 @@ export function Strk20PrivacyPanel() {
             Private STRK / DAI
           </p>
           <p className="mt-0.5 text-xs text-muted">
-            Shielded balances (wallet-mediated). Deposit/withdraw amounts are
-            public onchain.
+            Shielded balances for Private Book & pay (wallet-mediated).
+            Deposit/withdraw amounts are public onchain.
           </p>
         </div>
 
@@ -202,7 +202,7 @@ export function Strk20PrivacyPanel() {
             <ol className="list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted">
               <li>
                 Desktop: unlock Ready X in Chrome (not Firefox). iPhone: open
-                Philoxenia in the Ready X in-app browser for Private.
+                Philoxenia in the Ready X in-app browser for Private Book & pay.
               </li>
               <li>Enable Smart Wallet and Private.</li>
               <li>Tap Reconnect Ready X and approve again.</li>

@@ -50,9 +50,9 @@ Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeS
 | Surface | Mode | Notes |
 |---------|------|--------|
 | `/home` | `compact` | Public STRK **and DAI** hints “shield for Private Book & pay” |
-| `/profile` | full | Same public rows + `Strk20PrivacyPanel` (shield / unshield **STRK or DAI**) + AVNU swap |
+| `/profile` | full | Same public rows + `Strk20PrivacyPanel` (shield / unshield **STRK or DAI** for **Private Book & pay**). Notices: **Ready X session needed** (not a generic Ready session) |
 
-If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, private Book & pay, settle, swap). `/bookings/new` says the same when Book & pay is blocked.
+If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, **Private Book & pay**, settle, swap). `/bookings/new` says the same when Book & pay is blocked.
 
 Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.  
 Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/tokens.ts`.

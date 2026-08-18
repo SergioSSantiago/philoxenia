@@ -313,7 +313,7 @@ export default function ConnectorPage() {
               {formatTokenAmount(data.totalEarned)}
             </p>
             <p className="mt-1 text-xs text-muted">
-              Across settled introductions (asset shown per booking below)
+              Across settled introductions (asset shown per stay below)
             </p>
           </Card>
         )}
@@ -328,7 +328,7 @@ export default function ConnectorPage() {
               <Link key={b.id} href={`/bookings/${b.id}`} className="block">
                 <Card className="transition hover:shadow-sm">
                   <p className="font-medium text-foreground">
-                    {b.listing?.title ?? "Booking"}
+                    {b.listing?.title ?? "Book & pay stay"}
                   </p>
                   <p className="mt-1 text-sm text-muted">
                     Reward: {formatTokenAmount(b.connectorRewardAmount)}{" "}

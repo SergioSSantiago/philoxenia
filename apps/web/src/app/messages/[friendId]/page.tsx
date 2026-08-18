@@ -263,7 +263,7 @@ export default function ChatThreadPage() {
             msg
           );
         setNotice({
-          title: needsReconnect ? "Ready session needed" : "Transfer failed",
+          title: needsReconnect ? "Ready X session needed" : "Transfer failed",
           body: msg,
           tone: "error",
           primaryLabel: needsReconnect ? "Connect Ready X" : "Dismiss",
