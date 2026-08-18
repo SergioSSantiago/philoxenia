@@ -171,7 +171,7 @@ export function AuthModal() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 id="auth-modal-title" className="text-2xl sm:text-3xl">
-              Welcome
+              Connect Ready X
             </h2>
             <p className="mt-2 text-sm text-muted leading-relaxed">
               {isConnected

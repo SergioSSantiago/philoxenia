@@ -28,8 +28,8 @@ export function NotificationBell() {
         type="button"
         aria-label={
           unreadCount > 0
-            ? `${unreadCount} unread notifications`
-            : "Notifications"
+            ? `${unreadCount} unread friends, notes & stays`
+            : "Friends, notes & stays"
         }
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
@@ -59,7 +59,7 @@ export function NotificationBell() {
       {open && (
         <div className="absolute right-0 z-[60] mt-2 w-[min(100vw-2rem,22rem)] overflow-hidden rounded-2xl border border-border bg-surface shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <p className="text-sm font-medium text-foreground">Notifications</p>
+            <p className="text-sm font-medium text-foreground">Friends, notes & stays</p>
             {unreadCount > 0 && (
               <button
                 type="button"
@@ -73,8 +73,8 @@ export function NotificationBell() {
           <div className="max-h-80 overflow-y-auto">
             {items.length === 0 ? (
               <p className="px-4 py-6 text-sm text-muted">
-                No notifications yet. Friend requests, sealed notes, and
-                Book & pay stays appear here.
+                No friends, notes or Book & pay yet. Friend requests, sealed
+                notes, and Book & pay stays appear here.
               </p>
             ) : (
               items.map((n) => (

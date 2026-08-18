@@ -135,7 +135,7 @@ export function Strk20PrivacyPanel() {
       const provider = createStrk20Provider(account, asset);
       if (action === "shield") {
         setMsg(
-          `Approve ${asset} deposit (public amount), then the private proof…`
+          `Approve ${asset} shield (public amount), then the private proof…`
         );
         const { txHash } = await provider.shield(amount);
         setMsg(`Shielded ${asset}. Tx ${txHash.slice(0, 10)}…`);
