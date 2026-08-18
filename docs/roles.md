@@ -54,7 +54,7 @@ Hosts: set a connector % people will actually share. At **0%**, friends can stil
 
 - Must be friends with the host (or become friends after opening an invite).
 - Select nights, pay **Public** ERC-20 or **Private** STRK20 (Ready X + Smart Wallet + Private).
-- Pay = fund + settle; booking completes when the chain confirms.
+- **Book & pay** = fund + settle; booking completes when the chain confirms.
 - Cancel is social (Messages + voluntary peer return); nights free when marked cancelled — no automatic clawback.
 
 ## Role combinations (normal)

@@ -1,7 +1,7 @@
 # Bookings
 
 Bookings coordinate stay metadata off-chain and payment on-chain via escrow.
-**Pay = fund + settle in one transaction.** The API only records a booking after
+**Book & pay = fund + settle in one transaction.** The API only records a booking after
 Starknet receipt verification (`BookingSettled` on Philoxenia escrow).
 
 ## Lifecycle (current)
@@ -28,7 +28,7 @@ quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → 
 
 `/bookings/new` calendar copy: tap nights one by one; they need not be consecutive; then **Book & pay** in STRK or DAI. Quote labels **Book & pay with** (STRK or DAI) and **Book & pay now**. Primary button is **Book & pay {amount} STRK/DAI**; busy: **Book & pay…** or **Private Book & pay…**. Guest calendar: past nights cannot be added to Book & pay. Own listing: **You cannot Book & pay your own listing.** If the JWT is live but the wallet is not, the page asks to **Connect Ready X** (Chrome or iPhone) to **Book & pay** — Public and Private both need a live session; Private also needs wallet API ≥ 0.10. Reconnect failures and Private pay errors name Ready X (not a generic Ready extension). Recording copy: do not tap **Book & pay** again.
 
-After a successful on-chain pay, the client stores a pending row in `localStorage` (`philoxenia_pending_paid_booking`) and retries `POST /bookings/confirm` (Ready X sometimes throws after the tx already landed). **Recording booking…** only appears when that pending row (or an in-flight pay) exists — a normal Book & pay visit is not locked. Intro copy: if Ready X already charged you, do not **Book & pay** twice; open My bookings. Reopening the page resumes confirm until it succeeds; `/bookings` loading is **Loading bookings…**; stay detail **Loading booking…**; pay page **Loading listing…**. Subtitle: **Book & pay is STRK or DAI**; cancel only frees nights.
+After a successful on-chain pay, the client stores a pending row in `localStorage` (`philoxenia_pending_paid_booking`) and retries `POST /bookings/confirm` (Ready X sometimes throws after the tx already landed). **Recording booking…** only appears when that pending row (or an in-flight pay) exists — a normal Book & pay visit is not locked. Intro and recording errors: do not **Book & pay** again; open My bookings. Quote and stay detail label **Book & pay privacy** (Public / Private). Reopening the page resumes confirm until it succeeds; `/bookings` loading is **Loading bookings…**; stay detail **Loading booking…**; pay page **Loading listing…**. Subtitle: **Book & pay is STRK or DAI**; cancel only frees nights.
 
 **Confirm verifies:**
 

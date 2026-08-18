@@ -148,7 +148,8 @@ export default function InvitePage() {
             <span className="font-medium text-foreground">
               {invite.host.displayName}
             </span>
-            . When they accept, this page will open the listing automatically.
+            . When they accept, this page will open the listing so you can Book
+            & pay.
           </p>
         ) : (
           <Button

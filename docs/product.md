@@ -89,7 +89,7 @@ One person can be host on their places, guest on friends’ places, and connecto
 2. Alice (Bob's friend) opens **Earnings** or Bob’s friend profile, taps **Share invite & earn**, and sends the link to Carlos.
 3. Carlos creates an account, requests friendship with Bob, Bob accepts.
 4. Carlos selects nights (need not be consecutive) and **Book & pay** in **STRK** (live FX) or **DAI** (1:1).
-5. Pay = fund + settle in one tx → host (+ connector) receive immediately; booking is `completed`. Alice sees the reward under `/connector`.
+5. **Book & pay** is fund + settle in one tx → host (+ connector) receive immediately; booking is `completed`. Alice sees the reward under `/connector`.
 6. Cancel is social (Messages + voluntary peer return); nights are freed when marked cancelled.
 
 ## Fee model

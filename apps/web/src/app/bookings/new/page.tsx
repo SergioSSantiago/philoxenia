@@ -330,7 +330,7 @@ function NewBookingForm() {
     ) {
       setRecording(true);
       setError(
-        "These nights are already paid on-chain. Recording the stay — do not pay again."
+        "These nights are already paid on-chain. Recording the stay — do not Book & pay again."
       );
       try {
         const booking = await confirmPaidBookingWithRetry(existingPending);
@@ -484,7 +484,7 @@ function NewBookingForm() {
         clearPayInflight();
         setRecording(true);
         setError(
-          "Payment landed on Starknet. Recording the stay — do not pay again."
+          "Payment landed on Starknet. Recording the stay — do not Book & pay again."
         );
         void confirmPaidBookingWithRetry(paid)
           .then((booking) => router.push(`/bookings/${booking.id}`))
@@ -669,7 +669,7 @@ function NewBookingForm() {
               {STRK20_PRIVACY_ENABLED && (
                 <div className="space-y-2 pt-1">
                   <p className="text-xs font-medium text-foreground">
-                    Payment privacy
+                    Book & pay privacy
                   </p>
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <button

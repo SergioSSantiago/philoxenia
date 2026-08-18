@@ -142,9 +142,9 @@ export default function FriendProfilePage() {
             {friend.displayName}
           </h1>
           <p className="mt-1 text-sm text-muted">
-            Places they host in your trust network — open one to book, or share
-            an invite to earn as connector (STRK or DAI, same asset the guest
-            pays).
+            Places they host in your trust network — open one to Book &amp; pay,
+            or share an invite to earn as connector (STRK or DAI, same asset
+            they Book &amp; pay).
           </p>
         </div>
         <WalletAddress address={friend.walletAddress} compact />
@@ -170,7 +170,7 @@ export default function FriendProfilePage() {
         title="Their listings"
         subtitle={
           listings.length > 0
-            ? `${listings.length} place${listings.length === 1 ? "" : "s"} you can view or share`
+            ? `${listings.length} place${listings.length === 1 ? "" : "s"} you can Book & pay or share`
             : undefined
         }
       />

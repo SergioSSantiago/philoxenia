@@ -188,7 +188,7 @@ export default function BookingDetailPage() {
             <p className="capitalize">{booking.status}</p>
           </div>
           <div>
-            <p className="text-muted">Payment privacy</p>
+            <p className="text-muted">Book & pay privacy</p>
             <p>
               {booking.privacyMode === "private"
                 ? "Private (STRK20 · STRK or DAI)"
