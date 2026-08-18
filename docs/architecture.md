@@ -81,9 +81,9 @@ Signed-in home uses `GET /home` (JWT): friends, network places, shared places, o
 | `/friends/[id]` | Friend profile: their places + share-as-connector |
 | `/messages`, `/messages/[friendId]` | Sealed chat + peer pay; name/wallet → friend places |
 | `/my-listings`, `/listings/new` | Host place CRUD + map + availability calendar; submit busy **Publishing this place…** |
-| `/listings/[id]` | Place detail (authorized viewers) + share; guest CTA **Book & pay**. Share busy **Creating place invite…**; fail **Could not share this place**. Host nights busy **Saving open nights…** |
+| `/listings/[id]` | Place detail (authorized viewers) + share; guest CTA **Book & pay**. Share busy **Creating place invite…**; fail **Could not share this place**. Host nights busy **Saving open nights…** (fail **Could not save open nights**). Delete fail **Could not delete this place** |
 | `/invite/[token]` | Place invite landing; missing token **This place invite isn’t available to Book & pay.** |
-| `/bookings`, `/bookings/new`, `/bookings/[id]` | Book & pay nights (non-contiguous OK); STRK or DAI. List title **My stays**. Stay detail **Loading stay…**. Cancel busy **Freeing nights…**. If Ready X already charged you, do not Book & pay twice — open **My stays** |
+| `/bookings`, `/bookings/new`, `/bookings/[id]` | Book & pay nights (non-contiguous OK); STRK or DAI. List title **My stays**. Stay status **Book & pay complete** / **Nights freed** (not raw `completed`). Stay detail **Loading stay…**. Cancel busy **Freeing nights…**. If Ready X already charged you, do not Book & pay twice — open **My stays**. Quote fail **Could not quote Book & pay** |
 | `/connector` | **Earn as connector** — explain model, share friend places, reward history |
 
 Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Notification bell footer: Friends, Messages, Bookings, **Earnings**. Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`). Client error boundary (`error.tsx`): **Clear session & Connect Ready X**; **Connect Ready X to Book & pay** if the session is stuck; **Back to Home** is `/home` (not the landing). Home loaders: **Loading places to Book & pay…**. Host section title **My places**. Stay list title **My stays** (nav stays **Bookings**).

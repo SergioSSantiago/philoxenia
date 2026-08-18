@@ -58,7 +58,7 @@ Everyone else ──► 404 (place unavailable)
 | GET | `/my-network/listings` | Yes | Friends' places |
 | GET | `/friends/:id` | Yes | One friend’s places (must be friends) |
 | GET | `/shared-listings` | Yes | Places shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This place isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place**. Delete: **Delete this place**. Host nights busy **Saving open nights…** |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This place isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place**. Delete: **Delete this place** (fail **Could not delete this place**). Host nights busy **Saving open nights…** (fail **Could not save open nights**) |
 | POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 

@@ -284,7 +284,7 @@ function NewBookingForm() {
       .catch((err) => {
         if (!cancelled) {
           setQuote(null);
-          setError(err instanceof Error ? err.message : "Quote failed");
+          setError(err instanceof Error ? err.message : "Could not quote Book & pay");
         }
       });
     return () => {

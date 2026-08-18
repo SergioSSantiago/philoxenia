@@ -14,11 +14,11 @@ quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → 
 
 | Status | Meaning |
 |--------|---------|
-| `completed` | Payment verified on-chain; host/connector paid |
-| `cancelled` | Social cancel — nights free; **no** escrow clawback |
-| `funded` | Legacy intermediate (pre-settle path only) |
-| `refunded` | Legacy on-chain refund — only if still `funded` |
-| `pending` | Unused by current web pay path |
+| `completed` | Payment verified on-chain; host/connector paid. UI: **Book & pay complete** |
+| `cancelled` | Social cancel — nights free; **no** escrow clawback. UI: **Nights freed** |
+| `funded` | Legacy intermediate (pre-settle path only). UI: **Paid — recording stay** |
+| `refunded` | Legacy on-chain refund — only if still `funded`. UI: **Refunded** |
+| `pending` | Unused by current web pay path. UI: **Recording stay…** |
 
 ## Creating a booking
 
@@ -56,8 +56,8 @@ Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **
 | POST | `/bookings/:id/fund` | Legacy — verified |
 | POST | `/bookings/:id/settle` | Legacy — verified |
 | POST | `/bookings/:id/refund` | Legacy funded-only — verified |
-| GET | `/bookings` | List title **My stays** — empty **No Book & pay stays yet**; Home empty matches. Cards show **You host** / **You stay**. Home **My stays** subtitle: recent Book & pay stays. If nights are gapped, the card lists those dates (or “not consecutive”) instead of a contiguous check-in–out range |
-| GET | `/bookings/:id` | Detail eyebrow **Book & pay**. **Loading stay…**. **Direct Book & pay — no connector.** **Paid at Book & pay**. Title fallback **Private place** + **View place**; host/guest profile (**places to Book & pay**). Gapped `selectedNights` note that check-in/out is only the bounding window |
+| GET | `/bookings` | List title **My stays** — empty **No Book & pay stays yet**; Home empty matches. Cards show **You host** / **You stay** and stay status **Book & pay complete** / **Nights freed** (not raw `completed` / `cancelled`). Home **My stays** subtitle: recent Book & pay stays. If nights are gapped, the card lists those dates (or “not consecutive”) instead of a contiguous check-in–out range |
+| GET | `/bookings/:id` | Detail eyebrow **Book & pay**. **Loading stay…**. Stay field **Book & pay complete** / **Nights freed**. **Direct Book & pay — no connector.** **Paid at Book & pay**. Title fallback **Private place** + **View place**; host/guest profile (**places to Book & pay**). Gapped `selectedNights` note that check-in/out is only the bounding window. Quote fail: **Could not quote Book & pay** |
 
 ## Related
 

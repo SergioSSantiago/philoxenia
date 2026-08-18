@@ -1,4 +1,4 @@
-import type { Listing, Booking, User } from "@philoxenia/shared";
+import type { Listing, Booking, BookingStatus, User } from "@philoxenia/shared";
 import { formatDaiPrice, formatTokenAmount } from "@philoxenia/shared";
 import Link from "next/link";
 import { WalletAddress } from "@/components/wallet-address";
@@ -36,6 +36,25 @@ function bookingStayRangeLabel(booking: Booking): string {
     return `${formatStayDay(nights[0])} – ${formatStayDay(nights[nights.length - 1])} · not consecutive`;
   }
   return `${new Date(booking.checkIn).toLocaleDateString()} – ${new Date(booking.checkOut).toLocaleDateString()}`;
+}
+
+export function stayStatusLabel(status: BookingStatus): string {
+  switch (status) {
+    case "completed":
+      return "Book & pay complete";
+    case "cancelled":
+      return "Nights freed";
+    case "pending":
+      return "Recording stay…";
+    case "funded":
+      return "Paid — recording stay";
+    case "confirmed":
+      return "Confirmed";
+    case "refunded":
+      return "Refunded";
+    default:
+      return status;
+  }
 }
 
 export function ListingCard({ listing }: { listing: Listing }) {
@@ -123,9 +142,9 @@ export function BookingCard({
             ) : null}
             <Link
               href={`/bookings/${booking.id}`}
-              className="rounded-full border border-border px-2.5 py-0.5 text-xs capitalize text-muted touch-manipulation"
+              className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted touch-manipulation"
             >
-              {booking.status}
+              {stayStatusLabel(booking.status)}
             </Link>
           </div>
           <Link

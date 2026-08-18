@@ -7,6 +7,7 @@ import type { Booking } from "@philoxenia/shared";
 import { formatTokenAmount } from "@philoxenia/shared";
 import { Shell, Button, Card } from "@/components/ui";
 import { UserBadge } from "@/components/user-badge";
+import { stayStatusLabel } from "@/components/cards";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 
@@ -185,8 +186,8 @@ export default function BookingDetailPage() {
             )}
           </div>
           <div>
-            <p className="text-muted">Status</p>
-            <p className="capitalize">{booking.status}</p>
+            <p className="text-muted">Stay</p>
+            <p>{stayStatusLabel(booking.status)}</p>
           </div>
           <div>
             <p className="text-muted">Book & pay privacy</p>

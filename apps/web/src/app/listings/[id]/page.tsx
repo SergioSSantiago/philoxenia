@@ -109,7 +109,7 @@ export default function ListingPage() {
       setDeleteOpen(false);
       router.push("/my-listings");
     } catch (err) {
-      setDeleteError(err instanceof Error ? err.message : "Delete failed");
+      setDeleteError(err instanceof Error ? err.message : "Could not delete this place");
     } finally {
       setDeleteBusy(false);
     }
@@ -129,7 +129,7 @@ export default function ListingPage() {
       setDraftDays(null);
       setAvailMsg("Open nights saved — guests can Book & pay.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Update failed");
+      setError(err instanceof Error ? err.message : "Could not save open nights");
     } finally {
       setAvailBusy(false);
     }
