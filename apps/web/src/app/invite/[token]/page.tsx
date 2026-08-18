@@ -139,7 +139,7 @@ export default function InvitePage() {
                 await signIn();
               }}
             >
-              Connect Ready X to continue
+              Connect Ready X to Book & pay
             </Button>
           </div>
         ) : invite.friendshipPending ? (

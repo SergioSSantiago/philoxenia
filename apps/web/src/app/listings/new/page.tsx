@@ -66,7 +66,7 @@ export default function CreateListingPage() {
         throw new Error("Add at least one photo");
       }
       if (availableDays.length < 1) {
-        throw new Error("Open at least one night on the calendar");
+        throw new Error("Open at least one night guests can Book & pay");
       }
       if (!cancellationTerms.trim()) {
         throw new Error("Cancellation terms are required");

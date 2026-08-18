@@ -74,7 +74,7 @@ Signed-in home uses `GET /home` (JWT): friends, network listings, shared listing
 | Route | Purpose |
 |-------|---------|
 | `/` | Landing. Brand-first hero + live network stats; header brand links here |
-| `/home` | Signed-in snapshot: compact **Ready X wallet** + STRK/DAI + **Shield & swap** to Profile, globe of accessible listings, friends’ places, **Shared with me**, own listings, recent bookings (**You host** / **You stay**), friends count |
+| `/home` | Unsigned: **Connect Ready X to Book & pay places from people you trust.** Signed-in snapshot: compact **Ready X wallet** + STRK/DAI + **Shield & swap** to Profile, globe of accessible listings, friends’ places, **Shared with me** (invite Book & pay), own listings, recent bookings (**You host** / **You stay**), friends count |
 | `/auth` | Legacy redirect to `/home` |
 | `/profile` | Display name, public STRK/DAI, shield/unshield **STRK or DAI**, AVNU STRK ↔ DAI swap |
 | `/friends` | Friends; search by **Ready X wallet**; tap name/wallet → friend listings |

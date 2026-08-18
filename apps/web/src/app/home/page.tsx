@@ -52,7 +52,7 @@ export default function HomePage() {
         <div className="mb-8 sm:mb-10">
           <h1 className="text-3xl sm:text-4xl">Your private network</h1>
           <p className="mt-2 text-sm text-muted sm:text-base">
-            Connect your Ready X wallet to see places from people you trust.
+            Connect Ready X to Book & pay places from people you trust.
           </p>
         </div>
         <Button onClick={openSignIn}>Connect Ready X</Button>
@@ -127,7 +127,10 @@ export default function HomePage() {
         </section>
 
         <section>
-          <SectionTitle title="Shared with me" />
+          <SectionTitle
+            title="Shared with me"
+            subtitle="Invite links to Book & pay — last invite wins connector attribution"
+          />
           {data.sharedListings.length === 0 ? (
             <EmptyState message="No shared listings yet. Open a friend’s invite link to Book & pay — last invite wins connector attribution." />
           ) : (

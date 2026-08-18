@@ -72,5 +72,5 @@ export function normalizeWalletSignature(signature: unknown): string[] {
     return [toFelt(r), toFelt(s)];
   }
 
-  throw new Error("Unexpected signature format from Ready");
+  throw new Error("Unexpected signature format from Ready X");
 }

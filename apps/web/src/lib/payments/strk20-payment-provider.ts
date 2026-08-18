@@ -273,15 +273,15 @@ export class Strk20PaymentProvider implements PaymentProvider {
     const detail = privateErrors.join(" | ");
     if (/cancelled in Ready|USER_REFUSED/i.test(detail)) {
       throw new Error(
-        "Private payment cancelled in Ready X. Approve the wallet request to continue, or choose Public."
+        "Private Book & pay cancelled in Ready X. Approve the wallet request to continue, or choose Public."
       );
     }
     if (/INSUFFICIENT_PRIVATE_BALANCE|insufficient private/i.test(detail)) {
       throw new Error(
-        `Private payment failed (no public fallback). ${detail}. Shield enough ${this.asset} on Profile, then retry.`
+        `Private Book & pay failed (no public fallback). ${detail}. Shield enough ${this.asset} on Profile, then retry.`
       );
     }
-    throw new Error(`Private payment failed (no public fallback). ${detail}`);
+    throw new Error(`Private Book & pay failed (no public fallback). ${detail}`);
   }
 }
 
