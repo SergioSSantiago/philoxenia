@@ -16,7 +16,7 @@ import {
 import { formatWalletError } from "@/lib/wallet-errors";
 
 /**
- * Public STRK ↔ DAI swap via AVNU aggregator (Ready signs).
+ * Public STRK ↔ DAI swap via AVNU aggregator (Ready X signs).
  */
 export function TokenSwapPanel() {
   const { account, address } = useAccount();
@@ -193,7 +193,7 @@ export function TokenSwapPanel() {
 
         <div className="grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
           <label className="block text-sm">
-            You pay
+            You sell
             <div className="mt-1 flex gap-2">
               <TextInput
                 value={amount}

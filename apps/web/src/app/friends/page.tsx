@@ -169,7 +169,7 @@ export default function FriendsPage() {
             <h3 className="text-lg">Add someone you trust</h3>
             <p className="mt-2 text-sm text-muted leading-relaxed">
               Paste a Ready X wallet address (0x optional). They must already have
-              signed in once. Only add people you genuinely know. Search needs
+              connected Ready X once. Only add people you genuinely know. Search needs
               at least 4 hex characters.
             </p>
             <div className="mt-4 space-y-3">
@@ -337,7 +337,7 @@ export default function FriendsPage() {
           subtitle="Tap a name or wallet to see their listings. Remove ends the friendship for both of you."
         />
         {data.friends.length === 0 ? (
-          <EmptyState message="No friends yet. Add someone by Ready X wallet address (0x optional) — they must have signed in once." />
+          <EmptyState message="No friends yet. Add someone by Ready X wallet address (0x optional) — they must Connect Ready X once." />
         ) : (
           <div className="space-y-2">
             {data.friends.map((friend) => (

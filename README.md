@@ -153,7 +153,7 @@ There is no `/auth` page. The header brand goes to `/` (landing). Connect / disc
 <strong>Firefox:</strong> no Ready X extension → no private pay.
 </p>
 
-Friends find each other by **wallet address only**.
+Friends find each other by **Ready X wallet** only.
 
 ### iPhone — Safari vs in-app
 

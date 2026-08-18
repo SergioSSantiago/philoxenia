@@ -41,7 +41,7 @@ export default function HomePage() {
   if (isLoading) {
     return (
       <Shell>
-        <p className="text-muted">Loading…</p>
+        <p className="text-muted">Loading home…</p>
       </Shell>
     );
   }
@@ -178,7 +178,7 @@ export default function HomePage() {
             }
           />
           {data.friends.length === 0 ? (
-            <EmptyState message="Add people you trust by Ready X wallet — they must have signed in once." />
+            <EmptyState message="Add people you trust by Ready X wallet — they must Connect Ready X once." />
           ) : (
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-muted">{data.friends.length} friends</p>
