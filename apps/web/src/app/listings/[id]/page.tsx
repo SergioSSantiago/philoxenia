@@ -365,7 +365,7 @@ export default function ListingPage() {
               onClick={shareListing}
             >
               {shareBusy
-                ? "Creating link…"
+                ? "Creating invite…"
                 : isHost
                   ? "Share this place"
                   : listing.connectorRewardPercent > 0

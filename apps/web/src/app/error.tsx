@@ -30,8 +30,8 @@ export default function Error({
       <Card className="w-full max-w-md text-center">
         <h1 className="text-2xl">Something went wrong</h1>
         <p className="mt-3 text-sm text-muted leading-relaxed">
-          Philoxenia hit a client error. Try again, or Connect Ready X if the
-          session is stuck.
+          Philoxenia hit a client error. Try again, or Connect Ready X to Book
+          & pay if the session is stuck.
         </p>
         {error?.message ? (
           <p className="mt-3 break-words rounded-lg bg-background px-3 py-2 text-left text-xs text-red-700">

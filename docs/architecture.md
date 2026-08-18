@@ -86,7 +86,7 @@ Signed-in home uses `GET /home` (JWT): friends, network listings, shared listing
 | `/bookings`, `/bookings/new`, `/bookings/[id]` | Book & pay nights (non-contiguous OK); STRK or DAI. Stay detail **Loading stay…**. If Ready X already charged you, do not Book & pay twice |
 | `/connector` | **Earn as connector** — explain model, share friend listings, reward history |
 
-Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Notification bell footer: Friends, Messages, Bookings, **Earnings**. Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`). Client error boundary (`error.tsx`): **Clear session & Connect Ready X**; **Back to Home** is `/home` (not the landing).
+Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Notification bell footer: Friends, Messages, Bookings, **Earnings**. Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`). Client error boundary (`error.tsx`): **Clear session & Connect Ready X**; **Connect Ready X to Book & pay** if the session is stuck; **Back to Home** is `/home` (not the landing). Home loaders: **Loading places to Book & pay…**. Host section title **My places**.
 
 ## Shared types (`packages/shared`)
 

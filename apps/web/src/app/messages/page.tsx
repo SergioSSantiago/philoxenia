@@ -164,7 +164,7 @@ export default function MessagesPage() {
                     href={profileHref}
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent/25 to-accent/5 text-sm font-semibold text-accent transition hover:from-accent/35 hover:to-accent/10 touch-manipulation"
                     aria-label={`View ${t.friend.displayName}'s listings`}
-                    title="View listings to Book & pay"
+                    title="View places to Book & pay"
                   >
                     {initials(t.friend.displayName)}
                   </Link>

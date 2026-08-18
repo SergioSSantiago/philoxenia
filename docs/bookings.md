@@ -57,7 +57,7 @@ Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **
 | POST | `/bookings/:id/settle` | Legacy — verified |
 | POST | `/bookings/:id/refund` | Legacy funded-only — verified |
 | GET | `/bookings` | List — empty **No Book & pay stays yet**; Home empty matches. Cards show **You host** / **You stay**. Home **My bookings** subtitle: recent Book & pay stays. If nights are gapped, the card lists those dates (or “not consecutive”) instead of a contiguous check-in–out range |
-| GET | `/bookings/:id` | Detail eyebrow **Book & pay**. **Loading stay…**. **Direct Book & pay — no connector.** **Paid at Book & pay**. Listing title + **View listing**; host/guest profile (**places to Book & pay**). Gapped `selectedNights` note that check-in/out is only the bounding window |
+| GET | `/bookings/:id` | Detail eyebrow **Book & pay**. **Loading stay…**. **Direct Book & pay — no connector.** **Paid at Book & pay**. Listing title + **View place**; host/guest profile (**places to Book & pay**). Gapped `selectedNights` note that check-in/out is only the bounding window |
 
 ## Related
 

@@ -118,7 +118,7 @@ export default function FriendProfilePage() {
   if (!profile) {
     return (
       <Shell>
-        <p className="text-muted">Loading friend…</p>
+        <p className="text-muted">Loading places to Book & pay…</p>
       </Shell>
     );
   }
@@ -243,7 +243,7 @@ export default function FriendProfilePage() {
                           variant="secondary"
                           className="w-full sm:w-auto"
                         >
-                          View listing
+                          View place
                         </Button>
                       </Link>
                       <Button

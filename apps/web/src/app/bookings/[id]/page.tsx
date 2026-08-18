@@ -121,7 +121,7 @@ export default function BookingDetailPage() {
           <UserBadge user={counterparty} role={counterpartyRole} />
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
             <Link href={`/listings/${booking.listingId}`} className="block">
-              <Button className="w-full sm:w-auto">View listing</Button>
+              <Button className="w-full sm:w-auto">View place</Button>
             </Link>
             <Link href={`/friends/${counterparty.id}`} className="block">
               <Button variant="secondary" className="w-full sm:w-auto">
@@ -141,7 +141,7 @@ export default function BookingDetailPage() {
       {!counterparty && (
         <div className="mb-6 flex flex-col gap-2 sm:flex-row">
           <Link href={`/listings/${booking.listingId}`}>
-            <Button>View listing</Button>
+            <Button>View place</Button>
           </Link>
           <Link href={`/friends/${otherId}`}>
             <Button variant="secondary">

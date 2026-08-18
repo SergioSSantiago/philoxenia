@@ -41,7 +41,7 @@ export default function HomePage() {
   if (isLoading) {
     return (
       <Shell>
-        <p className="text-muted">Loading home…</p>
+        <p className="text-muted">Loading places to Book & pay…</p>
       </Shell>
     );
   }
@@ -64,7 +64,7 @@ export default function HomePage() {
   if (!data) {
     return (
       <Shell>
-        <p className="text-muted">Loading home…</p>
+        <p className="text-muted">Loading places to Book & pay…</p>
       </Shell>
     );
   }
@@ -116,7 +116,7 @@ export default function HomePage() {
             subtitle="Book & pay STRK or DAI through your trust network"
           />
           {data.networkListings.length === 0 ? (
-            <EmptyState message="No listings from friends yet. Add someone by Ready X wallet on Friends to discover places you can Book & pay." />
+            <EmptyState message="No places from friends yet. Add someone by Ready X wallet on Friends to discover places you can Book & pay." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.networkListings.map((l) => (
@@ -132,7 +132,7 @@ export default function HomePage() {
             subtitle="Invite links to Book & pay — last invite wins connector attribution"
           />
           {data.sharedListings.length === 0 ? (
-            <EmptyState message="No shared listings yet. Open a friend’s invite link to Book & pay — last invite wins connector attribution." />
+            <EmptyState message="No invite places yet. Open a friend’s invite link to Book & pay — last invite wins connector attribution." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.sharedListings.map((l) => (
@@ -144,7 +144,7 @@ export default function HomePage() {
 
         <section>
           <SectionTitle
-            title="My listings"
+            title="My places"
             subtitle="Priced in DAI. Guests Book & pay STRK or DAI. Set a connector % so friends can share and earn."
           />
           {data.myListings.length === 0 ? (

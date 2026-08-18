@@ -42,7 +42,7 @@ Friend of host ──► can view + share
 Everyone else ──► 404 (listing unavailable)
 ```
 
-`GET /my-listings` powers `/my-listings` and Home **My listings**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new` (submit **List this place**; validation: **Open at least one night guests can Book & pay**; default DAI price is used when you open those nights). Home **Places from my friends** empty state points to Friends, then Book & pay. **Shared with me** subtitle: invite links to **Book & pay**; empty: open a friend’s invite to **Book & pay**. Home **My bookings**: recent Book & pay stays.
+`GET /my-listings` powers `/my-listings` and Home **My places**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new` (submit **List this place**; validation: **Open at least one night guests can Book & pay**; default DAI price is used when you open those nights). Home **Places from my friends** empty: no places from friends yet. **Shared with me** empty: **No invite places yet**. Home **My bookings**: recent Book & pay stays. Home loaders: **Loading places to Book & pay…**.
 
 ## Home globe
 

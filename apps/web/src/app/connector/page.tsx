@@ -214,7 +214,7 @@ export default function ConnectorPage() {
                             variant="secondary"
                             className="w-full sm:w-auto"
                           >
-                            View listing
+                            View place
                           </Button>
                         </Link>
                       </div>

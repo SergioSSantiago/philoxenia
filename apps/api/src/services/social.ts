@@ -859,7 +859,7 @@ export async function getNetworkListings(userId: string) {
 /** Friend profile: identity + their listings (viewer must be friends). */
 export async function getFriendProfile(viewerId: string, friendId: string) {
   if (viewerId === friendId) {
-    throw new Error("Open your own listings from Home or My listings.");
+    throw new Error("Open your own places from Home or My places.");
   }
 
   const friends = await areFriends(viewerId, friendId);
