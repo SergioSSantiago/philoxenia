@@ -83,7 +83,7 @@ export function PhotoUploader({
         <div>
           <p className="text-sm font-medium text-foreground">Place photos</p>
           <p className="mt-0.5 text-xs text-muted">
-            Upload 1–{MAX_PHOTOS} photos. They are compressed to JPEG in the
+            Upload 1–{MAX_PHOTOS} place photos. They are compressed to JPEG in the
             browser (iPhone HEIC included on Safari).
           </p>
         </div>

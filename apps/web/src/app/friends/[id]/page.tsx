@@ -167,7 +167,7 @@ export default function FriendProfilePage() {
       )}
 
       <SectionTitle
-        title="Their places"
+        title="Places to Book & pay"
         subtitle={
           listings.length > 0
             ? `${listings.length} place${listings.length === 1 ? "" : "s"} you can Book & pay or share`

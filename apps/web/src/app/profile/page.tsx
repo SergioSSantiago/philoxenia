@@ -83,7 +83,7 @@ export default function ProfilePage() {
                 className="mt-1"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Your name"
+                placeholder="Display name"
                 maxLength={64}
                 autoComplete="nickname"
               />

@@ -16,7 +16,7 @@ Roles overview (Host · Guest · Connector): **[roles.md](./roles.md)**
 
 | You | Get |
 |-----|-----|
-| Share a friend’s place with someone you trust | A **host-set % of the booking total** when they Book & pay through your invite |
+| Share a friend’s place with someone you trust | A **host-set % of the booking total** when they Book & pay through your **place invite** |
 | Paid on settle | Funds go **straight to your Ready X wallet** (same asset the guest paid: STRK or DAI) |
 | No inventory, no hosting | You don’t list a place — you introduce guests |
 | Aligned with the protocol | Philoxenia only earns **10% of your connector reward** (not of the whole stay). Direct **Book & pay** stays **0%** protocol |
@@ -46,8 +46,8 @@ Guest Book & pay ──► escrow settles ──► you + host + (10% of your re
 
 | Surface | What you do |
 |---------|-------------|
-| **`/connector` (Earnings)** | Explains the model, lists **friends’ places** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` (**open stay**; missing title **Book & pay stay**). Totals: asset shown **per stay**. Empty places: add friends by **Ready X wallet** who host. Step 1: **Pick a friend’s place**. Step 2: **Share your place invite** (not the Ready X wallet). Empty rewards: share a friend’s **place**. Share & earn subtitle: **Share your place invite** so they **Book & pay**. Loading: **Loading places to Book & pay…**. Rewards loading: **Loading rewards from Book & pay…** |
-| **`/friends/[id]`** | Friend’s places + share; CTA **Earn as a connector** → `/connector`; **View place**. Loading: **Loading places to Book & pay…**. Not friends: **you must be friends to Book & pay their places**. Missing user: **they must Connect Ready X once**. Open from name or **Ready X wallet** on Friends / Messages. Opening your own profile errors: **Open your own places from Home or My places.** |
+| **`/connector` (Earnings)** | Explains the model, lists **friends’ places** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` (**open stay**; missing title **Book & pay stay**). Totals: asset shown **per stay**. Empty places: add friends by **Ready X wallet** who host. Step 1: **Pick a friend’s place**. Step 2: **Share your place invite** (not the Ready X wallet). Empty rewards: share a friend’s **place** — they **Book & pay through your place invite**. 0% empty: earn when they **Book & pay through your place invite**. Rewards subtitle: paid to your **Ready X wallet** when they **Book & pay through your place invite**. Share & earn subtitle: **Share your place invite** so they **Book & pay**. Loading: **Loading places to Book & pay…**. Rewards loading: **Loading rewards from Book & pay…** |
+| **`/friends/[id]`** | Friend’s places + share; heading **Places to Book & pay**; CTA **Earn as a connector** → `/connector`; **View place**. Loading: **Loading places to Book & pay…**. Not friends: **you must be friends to Book & pay their places**. Missing user: **they must Connect Ready X once**. Open from name or **Ready X wallet** on Friends / Messages. Opening your own profile errors: **Open your own places from Home or My places.** |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their places |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → **places**; preview / › → chat |
 | **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host or 0% → **Share this place**. Busy: **Creating place invite…**. Native share: **Book & pay stay at …**. Fail: **Could not share this place**. Copy status **Place invite copied** / **Place invite shared**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…**. Host nights busy: **Saving open nights…** |
@@ -56,7 +56,7 @@ Header nav width stays consistent across pages (`max-w-6xl`); only page content 
 
 ## Host tip — set a reward people will share
 
-When listing a place, pick a connector % that makes introductions worthwhile (often **3–10%**). At **0%**, friends can still share for discovery, but they earn nothing — `/connector` says you earn when they **Book & pay** through your invite once a % is set.
+When listing a place, pick a connector % that makes introductions worthwhile (often **3–10%**). At **0%**, friends can still share for discovery, but they earn nothing — `/connector` says you earn when they **Book & pay** through your **place invite** once a % is set.
 
 ## API
 

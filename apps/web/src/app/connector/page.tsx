@@ -260,7 +260,7 @@ export default function ConnectorPage() {
             })}
 
             {earnable.length === 0 && noReward.length > 0 && (
-              <EmptyState message="Your friends have places, but none offer a connector reward yet (0%). Ask them to set a % when they list — you earn when they Book & pay through your invite." />
+              <EmptyState message="Your friends have places, but none offer a connector reward yet (0%). Ask them to set a % when they list — you earn when they Book & pay through your place invite." />
             )}
 
             {noReward.length > 0 && earnable.length > 0 && (
@@ -303,7 +303,7 @@ export default function ConnectorPage() {
       <section>
         <SectionTitle
           title="Your rewards"
-          subtitle="Paid to your Ready X wallet when they Book & pay through your invite."
+          subtitle="Paid to your Ready X wallet when they Book & pay through your place invite."
         />
 
         {data && (
@@ -321,7 +321,7 @@ export default function ConnectorPage() {
         {!data ? (
           <p className="text-muted">Loading rewards from Book & pay…</p>
         ) : data.bookings.length === 0 ? (
-          <EmptyState message="No rewards yet. Share a friend’s place above — when they Book & pay through your invite, it shows up here." />
+          <EmptyState message="No rewards yet. Share a friend’s place above — when they Book & pay through your place invite, it shows up here." />
         ) : (
           <div className="space-y-4">
             {data.bookings.map((b) => (

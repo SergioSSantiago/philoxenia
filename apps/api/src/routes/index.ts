@@ -697,7 +697,9 @@ export async function registerRoutes(app: FastifyInstance) {
       try {
         return await social.getBookingById(params.id, request.user.userId);
       } catch {
-        return reply.status(404).send({ error: "Booking not found" });
+        return reply.status(404).send({
+          error: "This stay isn’t available to Book & pay.",
+        });
       }
     }
   );
@@ -724,7 +726,8 @@ export async function registerRoutes(app: FastifyInstance) {
           body
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Payment failed";
+        const message =
+          err instanceof Error ? err.message : "Could not record this Book & pay";
         return reply.status(400).send({ error: message });
       }
     }
@@ -748,7 +751,8 @@ export async function registerRoutes(app: FastifyInstance) {
           body
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Settle failed";
+        const message =
+          err instanceof Error ? err.message : "Could not settle this Book & pay stay";
         return reply.status(400).send({ error: message });
       }
     }
@@ -772,7 +776,8 @@ export async function registerRoutes(app: FastifyInstance) {
           body
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Refund failed";
+        const message =
+          err instanceof Error ? err.message : "Could not refund this Book & pay stay";
         return reply.status(400).send({ error: message });
       }
     }

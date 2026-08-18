@@ -149,7 +149,9 @@ export async function sendFriendRequest(fromUserId: string, toUserId: string) {
   });
 
   if (existing) {
-    throw new Error("Friend request already pending");
+    throw new Error(
+      "A friend request is already pending — Book & pay their places after they accept."
+    );
   }
 
   const reverse = await db.query.friendRequests.findFirst({
@@ -1149,7 +1151,9 @@ export async function confirmPaidBooking(
     where: eq(schema.users.id, guestId),
   });
   if (!guest) {
-    throw new Error("Account not found");
+    throw new Error(
+      "Your Ready X account wasn’t found. Connect Ready X again."
+    );
   }
 
   const existing = await db.query.bookings.findFirst({
@@ -1163,13 +1167,13 @@ export async function confirmPaidBooking(
     ) {
       return mapBooking(existing, undefined, input.privacyMode ?? "public");
     }
-    throw new Error("Booking already exists");
+    throw new Error("This Book & pay stay is already recorded.");
   }
 
   const inspected = await inspectEscrowSettledTx(input.fundTxHash);
   if (!sameFelt(inspected.escrowBookingId, input.escrowBookingId)) {
     throw new Error(
-      "Tx has no BookingSettled event for this booking on the Philoxenia escrow"
+      "Tx has no BookingSettled event for this Book & pay stay on the Philoxenia escrow"
     );
   }
   if (!sameFelt(guest.walletAddress, inspected.guest)) {
@@ -1375,7 +1379,9 @@ export async function inspectPaidBookingTx(
     where: eq(schema.users.id, guestId),
   });
   if (!guest) {
-    throw new Error("Account not found");
+    throw new Error(
+      "Your Ready X account wasn’t found. Connect Ready X again."
+    );
   }
 
   const inspected = await inspectEscrowSettledTx(fundTxHash);
@@ -1455,7 +1461,9 @@ export async function recoverMinePaidBookings(guestId: string) {
     where: eq(schema.users.id, guestId),
   });
   if (!guest) {
-    throw new Error("Account not found");
+    throw new Error(
+      "Your Ready X account wasn’t found. Connect Ready X again."
+    );
   }
 
   await absorbSettledPaysForListing(ORPHAN_LISTING_ID);
@@ -1660,11 +1668,11 @@ async function prepareBooking(
   } else if (input.checkIn && input.checkOut) {
     nightKeys = nightsInWindow(input.checkIn, input.checkOut);
   } else {
-    throw new Error("Select at least one night");
+    throw new Error("Select at least one night to Book & pay");
   }
 
   if (nightKeys.length < 1) {
-    throw new Error("Select at least one night");
+    throw new Error("Select at least one night to Book & pay");
   }
 
   const todayKey = new Date().toISOString().slice(0, 10);
@@ -1898,7 +1906,7 @@ export async function updateBookingPayment(
   });
 
   if (!booking || booking.guestId !== guestId) {
-    throw new Error("Booking not found");
+    throw new Error("This stay isn’t available to Book & pay.");
   }
 
   if (booking.status !== "pending") {
@@ -1971,11 +1979,11 @@ export async function settleBooking(
   });
 
   if (!booking || booking.guestId !== guestId) {
-    throw new Error("Booking not found");
+    throw new Error("This stay isn’t available to Book & pay.");
   }
 
   if (booking.status !== "funded") {
-    throw new Error("Booking cannot be settled in current state");
+    throw new Error("This stay cannot be settled in its current state");
   }
 
   if (!booking.escrowBookingId) {
@@ -2023,17 +2031,17 @@ export async function socialCancelBooking(
   });
 
   if (!booking) {
-    throw new Error("Booking not found");
+    throw new Error("This stay isn’t available to Book & pay.");
   }
 
   const isParty =
     booking.guestId === userId || booking.hostId === userId;
   if (!isParty) {
-    throw new Error("Booking not found");
+    throw new Error("This stay isn’t available to Book & pay.");
   }
 
   if (!["funded", "confirmed", "completed"].includes(booking.status)) {
-    throw new Error("Booking cannot be cancelled in current state");
+    throw new Error("These nights cannot be freed in the current stay state");
   }
 
   await db
@@ -2051,7 +2059,7 @@ export async function socialCancelBooking(
 
   const otherId =
     userId === booking.guestId ? booking.hostId : booking.guestId;
-  const title = booking.listing?.title ?? "listing";
+  const title = booking.listing?.title ?? "place";
   const body = `Booking for “${title}” marked cancelled. Nights are free again. Funds already settled on-chain — any money return is voluntary via Messages (Send STRK or DAI).`;
 
   try {
@@ -2083,7 +2091,7 @@ export async function refundBooking(
   });
 
   if (!booking || booking.hostId !== hostId) {
-    throw new Error("Booking not found");
+    throw new Error("This stay isn’t available to Book & pay.");
   }
 
   if (booking.status !== "funded") {
@@ -2135,7 +2143,7 @@ export async function getBookingById(bookingId: string, userId: string) {
   });
 
   if (!booking) {
-    throw new Error("Booking not found");
+    throw new Error("This stay isn’t available to Book & pay.");
   }
 
   const involved =
@@ -2144,7 +2152,7 @@ export async function getBookingById(bookingId: string, userId: string) {
     (booking.connectorId !== null && booking.connectorId === userId);
 
   if (!involved) {
-    throw new Error("Booking not found");
+    throw new Error("This stay isn’t available to Book & pay.");
   }
 
   const modes = await privacyModesForBookings([booking.id]);

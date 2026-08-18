@@ -68,7 +68,7 @@ Listing cards (`ListingCard`) show `{n}% connector` next to the DAI price when t
 1. Guest opens link.
 2. If already friends with host → the place opens (**Opening place to Book & pay…**). First paint while resolving the token: **Opening invite to Book & pay…**. Pending friendship: open the **place** so you can Book & pay. Invite eyebrow: **Place invite**. Invalid/expired token (API + page): **This place invite isn’t available to Book & pay.** Invite body: **Private place hosted by**. Already friends when requesting: **You’re already friends — Book & pay their places from Friends.**
 3. If not → request friendship with host; after accept, the place unlocks. Friend-request fail: **Could not send the friend request to Book & pay.** While pending, `/invite/[token]` polls every **3s** and redirects when `canViewListing` becomes true (copy: open the place so you can **Book & pay**).
-4. Display name is cosmetic; rewards always go to the connector **Ready X wallet**. Unsigned guests tap **Connect Ready X to Book & pay** on `/invite/[token]`. Connector badge: **Connector (Ready X payout)**. Invite body: friends with the host to **Book & pay (STRK or DAI)**; if they **Book & pay** through the link, the reward goes to the connector’s Ready X wallet.
+4. Display name is cosmetic; rewards always go to the connector **Ready X wallet**. Unsigned guests tap **Connect Ready X to Book & pay** on `/invite/[token]`. Connector badge: **Connector (Ready X payout)**. Invite body: friends with the host to **Book & pay (STRK or DAI)**; if they **Book & pay** through the place invite, the reward goes to the connector’s Ready X wallet.
 
 ## Related
 

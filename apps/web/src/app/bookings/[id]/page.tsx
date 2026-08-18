@@ -28,7 +28,15 @@ export default function BookingDetailPage() {
     api
       .get<Booking>(`/bookings/${params.id}`)
       .then(setBooking)
-      .catch(() => setError("This stay isn’t available to Book & pay"));
+      .catch((err) =>
+        setError(
+          err instanceof Error &&
+            err.message &&
+            err.message !== "Request failed"
+            ? err.message
+            : "This stay isn’t available to Book & pay."
+        )
+      );
   }, [token, params.id, router]);
 
   async function socialCancel() {
