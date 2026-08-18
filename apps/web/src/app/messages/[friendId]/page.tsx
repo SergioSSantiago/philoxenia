@@ -135,7 +135,7 @@ export default function ChatThreadPage() {
           err.message &&
           err.message !== API_GENERIC_ERROR
           ? err.message
-          : "This chat isn’t available."
+          : "This Messages thread isn’t available."
       )
     );
     const id = window.setInterval(() => {

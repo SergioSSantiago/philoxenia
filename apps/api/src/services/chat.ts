@@ -31,12 +31,12 @@ function mapMessage(
 
 async function requireFriendship(userId: string, friendId: string) {
   if (userId === friendId) {
-    throw new Error("You can’t message yourself.");
+    throw new Error("You can’t send a sealed note to yourself.");
   }
   const friends = await areFriends(userId, friendId);
   if (!friends) {
     throw new Error(
-      "You can only message friends — add them by Ready X wallet first."
+      "You can only send sealed notes to friends — add them by Ready X wallet first."
     );
   }
 }
@@ -97,7 +97,7 @@ export async function getConversation(userId: string, friendId: string) {
   const friend = await db.query.users.findFirst({
     where: eq(schema.users.id, friendId),
   });
-  if (!friend) throw new Error("This chat isn’t available.");
+  if (!friend) throw new Error("This Messages thread isn’t available.");
 
   const rows = await db.query.directMessages.findMany({
     where: or(

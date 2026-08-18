@@ -25,7 +25,7 @@ Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoin
 
 ## Notifications
 
-Bell empty: friend requests, sealed notes, and **Book & pay** stays. Footer links: **Friends**, **Messages**, **Bookings**, **Earnings**. Polled ~2.5s while the tab is visible. Message bell: **New sealed note** / **New note** (not “New message”); helper **open Messages to read this sealed note**. Social-cancel bell: **Nights freed** (not “Booking cancelled”); body **Stay at “…”: nights are free again**.
+Bell empty: friend requests, **sealed notes**, and **Book & pay** stays (UI: **sealed notes**, not “sealed messages”). Footer links: **Friends**, **Messages**, **Bookings**, **Earnings**. Polled ~2.5s while the tab is visible. Friend-request body: **wants to be friends so you can Book & pay** (not “wants to connect”). Message bell: **New sealed note** / **New note** (not “New message”); helper **open Messages to read this sealed note**. Social-cancel bell: **Nights freed** (not “Booking cancelled”); body **Stay at “…”: nights are free again**.
 
 | Type | Recipient |
 |------|-----------|

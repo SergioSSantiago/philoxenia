@@ -340,7 +340,7 @@ export function AvailabilityCalendar({
             Tap a day to open/close it. Tap a night in the list (or long-press /
             right-click a day) to set a custom DAI list price (guests Book & pay
             STRK or DAI).{" "}
-            <span className="text-foreground">Paid nights stay locked</span> —
+            <span className="text-foreground">Book & pay nights stay locked</span> —
             you can’t remove them or change their price.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -432,7 +432,7 @@ export function AvailabilityCalendar({
           {days.some((d) => d.booked) && (
             <div className="border-t border-border pt-3">
               <p className="mb-1 text-xs font-medium text-foreground">
-                Paid nights (locked)
+                Book & pay nights (locked)
               </p>
               <ul className="max-h-28 space-y-1 overflow-y-auto text-xs text-muted">
                 {days

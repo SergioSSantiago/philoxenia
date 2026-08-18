@@ -179,7 +179,7 @@ export async function sendFriendRequest(fromUserId: string, toUserId: string) {
     userId: toUserId,
     type: "friend_request",
     title: "New friend request",
-    body: `${fromUser?.displayName ?? "Someone"} wants to connect`,
+    body: `${fromUser?.displayName ?? "Someone"} wants to be friends so you can Book & pay`,
     href: "/friends",
   });
 

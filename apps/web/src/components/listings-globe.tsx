@@ -189,7 +189,7 @@ function focusAngles(points: GlobePoint[]): { phi: number; theta: number } {
 }
 
 function kindLabel(kind: PointKind) {
-  return kind === "mine" ? "Yours" : kind === "friend" ? "Friend" : "Invite";
+  return kind === "mine" ? "Yours" : kind === "friend" ? "Friend" : "Place invite";
 }
 
 /**
@@ -674,7 +674,7 @@ export function ListingsGlobe({
             [
               ["mine", "Yours"],
               ["friend", "Friends"],
-              ["shared", "Invite"],
+              ["shared", "Place invite"],
             ] as const
           ).map(([kind, label]) => (
             <span

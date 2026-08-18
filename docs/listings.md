@@ -20,7 +20,7 @@ Hosts create **private places** visible only to themselves and their friends. `/
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests **Book & pay STRK or DAI** |
 | `availability` | Legacy contiguous windows (still accepted) |
 
-Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; range CTA **Open nights to Book & pay** (not “Add range”); range start **Open from**; range end **Until (morning guests leave)**; price field **DAI list price / night**; **Save open nights** (busy **Saving open nights…**); success **Open nights saved — guests can Book & pay.** Empty PATCH: **Open at least one night guests can Book & pay**. Bad night price: **Enter a valid DAI list price for {day}**. Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
+Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host helper: **Book & pay nights stay locked** (not “Paid nights stay locked”); list heading **Book & pay nights (locked)**. Host heading **Open nights guests can Book & pay**; range CTA **Open nights to Book & pay** (not “Add range”); range start **Open from**; range end **Until (morning guests leave)**; price field **DAI list price / night**; **Save open nights** (busy **Saving open nights…**); success **Open nights saved — guests can Book & pay.** Empty PATCH: **Open at least one night guests can Book & pay**. Bad night price: **Enter a valid DAI list price for {day}**. Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
 
 ## Delete this place
 
@@ -46,7 +46,7 @@ Everyone else ──► 404 (place unavailable)
 
 ## Home globe
 
-`/home` plots accessible places on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **invite** (taupe). Pin/legend labels: **Yours** / **Friend** / **Invite**. Cluster counts: **N places here**. Aria: **Interactive globe of places you can Book & pay**. Cluster hover: **Tap to choose a place to Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: **places need a map pin** — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the place.
+`/home` plots accessible places on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **invite** (taupe). Pin/legend labels: **Yours** / **Friend** / **Place invite** (not “Invite”). Cluster counts: **N places here**. Aria: **Interactive globe of places you can Book & pay**. Cluster hover: **Tap to choose a place to Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: **places need a map pin** — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the place.
 
 ## API endpoints
 
