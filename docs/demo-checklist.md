@@ -25,7 +25,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 ## C. Private pay (preferred)
 
 1. [ ] Guest shields enough **STRK or DAI** on Profile (match the pay asset)
-2. [ ] Books nights → Pay **Private**
+2. [ ] Book & pay nights → **Private**
 3. [ ] Confirm succeeds only after chain settle (fake txHash must fail). If Ready X throws after the tx, Book & pay shows **Recording booking…** — do not pay twice.
 4. [ ] Booking shows `completed`, Voyager link, privacy = Private
 5. [ ] Host receives the pay asset; connector (if any) paid
@@ -38,7 +38,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 ## E. Cancel policy
 
 1. [ ] Open booking → read cancel policy box
-2. [ ] Free nights → status `cancelled`; nights bookable again
+2. [ ] Free nights → status `cancelled`; nights open for Book & pay again
 3. [ ] Money stays settled; Messages **Send STRK or DAI** for voluntary return
 
 ## F. Sealed chat

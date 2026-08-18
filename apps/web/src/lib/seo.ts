@@ -21,6 +21,7 @@ export const rootMetadata: Metadata = {
     "STRK",
     "DAI",
     "Ready X",
+    "Book & pay",
     "trust network",
     "earn as connector",
   ],

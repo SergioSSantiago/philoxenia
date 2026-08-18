@@ -4,7 +4,7 @@
 
 # Listings
 
-Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**.
+Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). Host on listing detail: **Book & pay is disabled for the host**. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**.
 
 ## Listing fields
 
@@ -26,7 +26,7 @@ Paid guest nights stay in inventory as **locked** (`booked`): host cannot remove
 
 `DELETE /my-listings/:id` (host only).
 
-Allowed when there are **no active paid bookings** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete.
+Allowed when there are **no active Book & pay stays** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete. Confirm dialog copy matches.
 
 ## Cancellation vs escrow
 
@@ -46,7 +46,7 @@ Everyone else ──► 404 (listing unavailable)
 
 ## Home globe
 
-`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Empty: listings need a map pin — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the listing.
+`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Aria: **Interactive globe of places you can Book & pay**. Empty: listings need a map pin — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the listing.
 
 ## API endpoints
 
@@ -54,7 +54,7 @@ Everyone else ──► 404 (listing unavailable)
 |--------|------|------|-------------|
 | POST | `/my-listings` | Yes | Create listing (map pin + photos required) |
 | GET | `/my-listings` | Yes | Host's own listings |
-| DELETE | `/my-listings/:id` | Yes | Host delete when no active paid bookings remain |
+| DELETE | `/my-listings/:id` | Yes | Host delete when no active Book & pay stays remain |
 | GET | `/my-network/listings` | Yes | Friends' listings |
 | GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
 | GET | `/shared-listings` | Yes | Listings shared with user via introductions |

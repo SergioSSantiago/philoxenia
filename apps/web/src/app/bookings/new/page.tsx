@@ -766,8 +766,8 @@ function NewBookingForm() {
                   ? "Recording booking…"
                   : submitting
                     ? fundMode === "private"
-                      ? "Proving & paying…"
-                      : "Paying…"
+                      ? "Private Book & pay…"
+                      : "Book & pay…"
                     : paymentAsset === "DAI"
                       ? `Book & pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
                           fundMode === "private"

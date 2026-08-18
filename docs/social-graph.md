@@ -63,7 +63,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 
 `/friends/[id]` — identity, wallet, listings from that friend, and **Share invite & earn** when the listing has a connector % (payout STRK or DAI matching the guest).
 
-Opened by tapping **name** or **wallet** on:
+Opened by tapping **name** or **Ready X wallet** on:
 
 - `/friends` (accepted friends) — empty list: add by **Ready X wallet** (0x optional)
 - `/messages` inbox

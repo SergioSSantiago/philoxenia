@@ -391,7 +391,7 @@ export default function ListingPage() {
           <ConfirmDialog
             open={deleteOpen}
             title="Delete this listing?"
-            body="This permanently removes the listing, its photos, and calendar. You can only delete if there are no active paid bookings — past stays are fine."
+            body="This permanently removes the listing, its photos, and calendar. You can only delete if there are no active Book & pay stays — past stays are fine."
             confirmLabel="Delete listing"
             cancelLabel="Keep listing"
             danger
@@ -408,7 +408,7 @@ export default function ListingPage() {
 
           {isHost && (
             <p className="mt-3 text-sm text-muted">
-              You own this listing — booking is disabled for the host.
+              You own this listing — Book & pay is disabled for the host.
             </p>
           )}
 

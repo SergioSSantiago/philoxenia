@@ -517,7 +517,7 @@ export function ListingsGlobe({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         role="application"
-        aria-label="Interactive globe of places you can access"
+        aria-label="Interactive globe of places you can Book & pay"
       >
         <canvas ref={canvasRef} className="block h-full w-full" />
 
