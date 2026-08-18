@@ -185,7 +185,7 @@ export function TokenSwapPanel() {
                 disabled={reconnecting}
                 onClick={() => void reconnectReady()}
               >
-                {reconnecting ? "Connecting…" : "Connect Ready X"}
+                {reconnecting ? "Connecting Ready X…" : "Connect Ready X"}
               </Button>
             </div>
           </div>

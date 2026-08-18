@@ -222,7 +222,7 @@ export default function CreateListingPage() {
           )}
 
           <Button type="submit" disabled={submitting} className="w-full sm:w-auto">
-            {submitting ? "Creating…" : "Create listing"}
+            {submitting ? "Listing…" : "List this place"}
           </Button>
         </form>
       </Card>

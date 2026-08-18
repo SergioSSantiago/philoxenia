@@ -217,7 +217,7 @@ export function AuthModal() {
                   </a>
                   <p className="text-xs text-muted leading-relaxed">
                     Prefer the in-app browser? Copy the link and open it inside
-                    Ready X (best for Private STRK or DAI).
+                    Ready X (best for Private Book & pay).
                   </p>
                   <button
                     type="button"
@@ -260,7 +260,7 @@ export function AuthModal() {
                 {signing || (waiting && challengeReady)
                   ? "Approve in Ready X…"
                   : !account
-                    ? "Wallet loading…"
+                    ? "Ready X loading…"
                     : !challengeReady
                       ? "Preparing signature…"
                       : "Sign in"}

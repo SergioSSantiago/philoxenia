@@ -13,7 +13,7 @@ The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.55;">
 <strong style="color:#7f1d1d;">⚠ Required: Ready X setup (read this first)</strong><br/><br/>
 <strong>Desktop:</strong> <strong>Chrome</strong> + <strong>Ready X</strong> extension, with <strong>Smart Wallet</strong> and <strong>Private</strong> turned on.<br/><br/>
-<strong>iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604">Ready X</a>. Safari can <strong>Connect</strong> via WalletConnect redirect into Ready X (StarknetKit mobile system browser mode). For <strong>Private STRK or DAI</strong>, prefer opening Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
+<strong>iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604">Ready X</a>. Safari can <strong>Connect</strong> via WalletConnect redirect into Ready X (StarknetKit mobile system browser mode). For <strong>Private Book & pay</strong>, prefer opening Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
 <strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears — <strong>no Private Book & pay</strong>.
 </p>
 
@@ -51,7 +51,7 @@ See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend
 ### What you must do (checklist)
 
 1. **Desktop:** Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** (not Firefox). Enable **Smart Wallet** and **Private**.
-2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For Private STRK or DAI, open the same URL in the **Ready X in-app browser**.
+2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For **Private Book & pay**, open the same URL in the **Ready X in-app browser**.
 3. Connect Ready X → Sign in (approve SNIP-12). On mobile Safari this is two steps: Connect, then Sign in (second open of Ready X).
 
 Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home` (`ReadyWalletNotice` compact in the modal; full notice on the landing). The StarknetKit picker labels the injected wallet **Ready X** (connector id remains `argentX`). Display name is optional; friends add you by **Ready X wallet** only.
@@ -118,7 +118,7 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 
 **Implemented (off-chain + UI):**
 
-- Wallet authentication via Ready X (SNIP-12): Chrome extension, iPhone Safari WalletConnect, or **in-app browser** (ideal for privacy pay)
+- Wallet authentication via Ready X (SNIP-12): Chrome extension, iPhone Safari WalletConnect, or **in-app browser** (ideal for Private Book & pay)
 - Friend requests and friendships (search by **Ready X wallet** address)
 - Friend profile (`/friends/[id]`): listings + share-as-connector; name/wallet links from Friends & Messages
 - **Earnings (`/connector`)**: how connectors earn, shareable friend listings, reward history

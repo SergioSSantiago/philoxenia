@@ -20,7 +20,7 @@ Hosts create **private listings** visible only to themselves and their friends. 
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests **Book & pay STRK or DAI** |
 | `availability` | Legacy contiguous windows (still accepted) |
 
-Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
+Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; **Save open nights**; success **Open nights saved — guests can Book & pay.** Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
 
 ## Delete listing
 
@@ -42,7 +42,7 @@ Friend of host ──► can view + share
 Everyone else ──► 404 (listing unavailable)
 ```
 
-`GET /my-listings` powers `/my-listings` and Home **My listings**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new` (validation: **Open at least one night guests can Book & pay**; default DAI price is used when you open those nights). Home **Places from my friends** empty state points to Friends, then Book & pay. **Shared with me** subtitle: invite links to **Book & pay**; empty: open a friend’s invite to **Book & pay**. Home **My bookings**: recent Book & pay stays.
+`GET /my-listings` powers `/my-listings` and Home **My listings**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new` (submit **List this place**; validation: **Open at least one night guests can Book & pay**; default DAI price is used when you open those nights). Home **Places from my friends** empty state points to Friends, then Book & pay. **Shared with me** subtitle: invite links to **Book & pay**; empty: open a friend’s invite to **Book & pay**. Home **My bookings**: recent Book & pay stays.
 
 ## Home globe
 

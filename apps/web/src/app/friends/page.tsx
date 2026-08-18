@@ -71,7 +71,7 @@ export default function FriendsPage() {
     const normalized = normalizeWalletQuery(query);
     if (normalized.length < 6) {
       setSearchError(
-        "Enter at least 4 hex characters of a wallet (0x is added if missing)."
+        "Enter at least 4 hex characters of a Ready X wallet (0x is added if missing)."
       );
       setResults([]);
       return;

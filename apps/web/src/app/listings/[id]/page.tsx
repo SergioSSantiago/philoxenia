@@ -127,7 +127,7 @@ export default function ListingPage() {
       );
       setListing(updated);
       setDraftDays(null);
-      setAvailMsg("Availability saved.");
+      setAvailMsg("Open nights saved — guests can Book & pay.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Update failed");
     } finally {
@@ -278,7 +278,7 @@ export default function ListingPage() {
           <div className="mt-4">
             <p className="mb-3 text-sm font-medium text-foreground">
               {isHost
-                ? "Manage availability & nightly prices"
+                ? "Open nights guests can Book & pay"
                 : "Open nights to Book & pay"}
             </p>
             {isHost ? (
@@ -298,7 +298,7 @@ export default function ListingPage() {
                     disabled={availBusy || !draftDays}
                     onClick={saveAvailability}
                   >
-                    {availBusy ? "Saving…" : "Save availability"}
+                    {availBusy ? "Saving…" : "Save open nights"}
                   </Button>
                   {draftDays && (
                     <Button

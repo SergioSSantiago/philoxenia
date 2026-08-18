@@ -2,7 +2,7 @@
 
 Use **two Ready X wallets** (Chrome + Smart Wallet + Private, or Ready X on iPhone). Prefer **three** if demoing connectors (host / connector / guest).
 
-On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private STRK/DAI in section C, open Philoxenia in the **Ready X in-app browser**.
+On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for **Private Book & pay** in section C, open Philoxenia in the **Ready X in-app browser**.
 
 ## A. Social + listing
 
