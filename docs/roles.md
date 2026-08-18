@@ -35,7 +35,7 @@ Philoxenia has **no public marketplace**. The network grows only when someone in
 3. Tap **Share invite & earn** → link is copied. Send it in chat / WhatsApp.
 4. When they **Book & pay** through your invite, track rewards on Earnings.
 
-Or open a friend from **Friends** / **Messages** (tap name or wallet) → their listings → share.
+Or open a friend from **Friends** / **Messages** (tap name or **Ready X wallet**) → their listings → share.
 
 Full guide: **[connectors.md](./connectors.md)**
 

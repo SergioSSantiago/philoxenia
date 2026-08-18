@@ -777,7 +777,7 @@ export async function getMyListings(hostId: string) {
 export { hasActivePaidNights } from "../lib/geo.js";
 
 /**
- * Host deletes their listing when no active paid bookings remain.
+ * Host deletes their listing when no active Book & pay stays remain.
  * Past paid stays are OK — only today/future paid nights block delete.
  */
 export async function deleteListing(listingId: string, hostId: string) {
@@ -793,7 +793,7 @@ export async function deleteListing(listingId: string, hostId: string) {
   for (const b of paid) {
     if (hasActivePaidNights(b.nights, b.checkOut, todayKey)) {
       throw new Error(
-        "Cannot delete listing while it has active paid bookings. Wait until those stays are past, or mark them cancelled with the guest."
+        "Cannot delete listing while it has active Book & pay stays. Wait until those stays are past, or mark them cancelled with the guest."
       );
     }
   }
@@ -1112,8 +1112,8 @@ export async function quoteBooking(
     nightBreakdown: prepared.nightBreakdown,
     note:
       paymentAsset === "DAI"
-        ? "List prices are DAI per night. Paying in DAI settles 1:1. Host + connector are paid immediately on pay."
-        : "List prices are DAI per night. STRK amount uses the live DAI/STRK market rate at quote time. Host + connector are paid immediately on pay.",
+        ? "List prices are DAI per night. Book & pay in DAI settles 1:1. Host + connector are paid immediately."
+        : "List prices are DAI per night. STRK amount uses the live DAI/STRK market rate at quote time. Host + connector are paid immediately.",
   };
 }
 

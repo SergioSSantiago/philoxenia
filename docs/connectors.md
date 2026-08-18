@@ -47,7 +47,7 @@ Guest Book & pay ──► escrow settles ──► you + host + (10% of your re
 | Surface | What you do |
 |---------|-------------|
 | **`/connector` (Earnings)** | Explains the model, lists **friends’ listings** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id`. Empty listings: add friends by **Ready X wallet** who host. Empty rewards: they **Book & pay** through your invite |
-| **`/friends/[id]`** | Friend’s listings + share; open from name or wallet on Friends / Messages |
+| **`/friends/[id]`** | Friend’s listings + share; open from name or **Ready X wallet** on Friends / Messages |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their listings |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → listings; preview / › → chat |
 | **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host → Share listing (no connector). Cards elsewhere show the % next to DAI price |

@@ -547,8 +547,8 @@ function NewBookingForm() {
       <p className="mb-8 text-sm text-muted leading-relaxed">
         Use the calendar: tap each night you want (they need not be consecutive).
         One tap selects, another deselects. Then Book & pay in STRK or DAI. If Ready X
-        already charged you, wait for Recording booking… — do not pay twice;
-        open My bookings.
+        already charged you, wait for Recording booking… — do not Book & pay
+        twice; open My bookings.
       </p>
 
       {isOwnListing ? (

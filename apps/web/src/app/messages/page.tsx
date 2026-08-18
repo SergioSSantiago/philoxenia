@@ -64,9 +64,9 @@ export default function MessagesPage() {
             const body = t.lastMessage?.body;
             let preview = "Start a sealed conversation";
             if (t.lastMessage?.kind === "transfer") {
-              preview = t.lastMessage.body || "Token transfer";
+              preview = t.lastMessage.body || "STRK or DAI sent";
             } else if (t.lastMessage?.kind === "booking") {
-              preview = t.lastMessage.body || "Booking update";
+              preview = t.lastMessage.body || "Book & pay update";
             } else if (body) {
               preview = await previewBody(user?.walletAddress, body);
             }
@@ -105,8 +105,8 @@ export default function MessagesPage() {
         <h1 className="mt-1 text-3xl text-foreground sm:text-4xl">Messages</h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
           Sealed notes decrypt only on your device. From a thread you can also
-          send STRK or DAI (Public or Private). Tap a name or wallet to see
-          their listings and share invites; open the preview or › to chat.
+          send STRK or DAI (Public or Private). Tap a name or Ready X wallet to
+          see their listings and share invites; open the preview or › to chat.
         </p>
       </header>
 
@@ -163,7 +163,7 @@ export default function MessagesPage() {
                     href={profileHref}
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent/25 to-accent/5 text-sm font-semibold text-accent transition hover:from-accent/35 hover:to-accent/10 touch-manipulation"
                     aria-label={`View ${t.friend.displayName}'s listings`}
-                    title="View listings"
+                    title="View listings to Book & pay"
                   >
                     {initials(t.friend.displayName)}
                   </Link>

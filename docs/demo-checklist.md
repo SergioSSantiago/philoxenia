@@ -11,7 +11,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 3. [ ] A adds B by Ready X wallet → B accepts
 4. [ ] A creates listing with open nights + **connector % > 0** (e.g. 5%)
 5. [ ] B sees listing on home / friends path
-6. [ ] Tap B’s **name or wallet** on Friends → `/friends/[id]` shows A’s listing
+6. [ ] Tap B’s **name or Ready X wallet** on Friends → `/friends/[id]` shows A’s listing
 
 ## B. Connector share & earn (key loop)
 
@@ -26,7 +26,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 
 1. [ ] Guest shields enough **STRK or DAI** on Profile (match the pay asset)
 2. [ ] Book & pay nights → **Private**
-3. [ ] Confirm succeeds only after chain settle (fake txHash must fail). If Ready X throws after the tx, Book & pay shows **Recording booking…** — do not pay twice.
+3. [ ] Confirm succeeds only after chain settle (fake txHash must fail). If Ready X throws after the tx, Book & pay shows **Recording booking…** — do not Book & pay twice.
 4. [ ] Booking shows `completed`, Voyager link, privacy = Private
 5. [ ] Host receives the pay asset; connector (if any) paid
 
