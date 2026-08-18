@@ -26,7 +26,7 @@ Caller must be the privacy pool (when pool is set in storage).
 |----------|-------|
 | `NEXT_PUBLIC_MESSAGE_MAILBOX_ADDRESS` | mailbox address above (also defaulted in web code) |
 
-Chat seals E2E off-chain first. Optional UI checkbox **Also anchor on-chain** posts the ciphertext hash via Ready `strk20InvokeTransaction` → pool → mailbox.
+Sealed notes are E2E off-chain first. Optional **Anchor this sealed note** posts the ciphertext hash via Ready `strk20InvokeTransaction` → pool → mailbox.
 
 ## Related
 

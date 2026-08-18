@@ -711,7 +711,7 @@ function NewBookingForm() {
 
               <p className="text-xs text-muted">
                 {paymentAsset === "DAI"
-                  ? "DAI settles at the listed price. Host and connector are paid immediately."
+                  ? "DAI settles at the DAI list price. Host and connector are paid immediately."
                   : "STRK amount refreshes from the live DAI market rate when you Book & pay."}
               </p>
             </Card>

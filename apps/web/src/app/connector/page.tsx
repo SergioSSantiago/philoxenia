@@ -137,7 +137,7 @@ export default function ConnectorPage() {
 
       <section className="mb-12">
         <SectionTitle
-          title="Share & earn"
+          title="Share place invite & earn"
           subtitle="Friends’ places. Share your place invite so they Book & pay and you earn."
         />
 

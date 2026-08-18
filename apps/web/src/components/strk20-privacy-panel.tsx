@@ -175,7 +175,7 @@ export function Strk20PrivacyPanel() {
           </p>
           <p className="mt-0.5 text-xs text-muted">
             Shielded balances for Private Book & pay (wallet-mediated).
-            Deposit/withdraw amounts are public onchain.
+            Shield and unshield amounts are public on-chain.
           </p>
         </div>
 

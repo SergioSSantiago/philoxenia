@@ -32,7 +32,7 @@ Stats fade as the brand docks into the header on scroll.
 
 Below the fold: tagline **Direct Book & pay: 0% protocol fee.** (`whitespace-nowrap` on `0% protocol fee` so the phrase does not wrap mid-line). Footer: **Direct Book & pay: 0% protocol**, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
 
-Landing CTAs: **See places to Book & pay**, **Earn as a connector**, List your place. Header **Connect Ready X**. Guest card: **Book & pay through friendship or a place invite**. **Start here** banner: share a friend’s **place** invite; when they **Book & pay**, you receive the host’s connector % on settle (STRK or DAI). CTA **Connect Ready X & open Earnings** goes to `/connector` (unsigned visitors are redirected to `/home` to connect). Host role card: **Direct Book & pay stays 0% protocol**. Unsigned `/home`: **Connect Ready X to Book & pay places from people you trust.** Invite: **Connect Ready X to Book & pay** (not a generic “Connect wallet”).
+Landing CTAs: **See places to Book & pay**, **Earn as a connector**, List your place. Header **Connect Ready X**. Guest card: **Book & pay through friendship or a place invite**. **Start here** banner: share a friend’s **place** invite; when they **Book & pay**, you receive the host’s connector % on settle (STRK or DAI). CTA **Connect Ready X & open Earnings** goes to `/connector` (unsigned visitors are redirected to `/home` to connect). Host role card: **Publish places for friends**; **Direct Book & pay stays 0% protocol**. Unsigned `/home`: **Connect Ready X to Book & pay places from people you trust.** Invite: **Connect Ready X to Book & pay** (not a generic “Connect wallet”).
 
 ## Wallet
 

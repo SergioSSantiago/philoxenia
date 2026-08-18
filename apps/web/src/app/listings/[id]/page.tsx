@@ -168,7 +168,7 @@ export default function ListingPage() {
   async function shareViaSystem() {
     if (!shareUrl) return;
     const result = await shareInviteNative({
-      title: listing?.title ?? "Philoxenia place",
+      title: listing?.title ?? "this place",
       text: `Book & pay stay at ${listing?.title ?? "this place"} via Philoxenia — open this place invite (STRK or DAI).`,
       url: shareUrl,
     });
@@ -344,7 +344,7 @@ export default function ListingPage() {
           </div>
 
           <p className="mt-4 text-sm text-muted leading-relaxed">
-            Cancellation: {listing.cancellationTerms}. After Book & pay, host
+            Cancellation terms: {listing.cancellationTerms}. After Book & pay, host
             and connector already have the funds — cancel frees nights; any
             return is Send STRK or DAI in Messages.
           </p>

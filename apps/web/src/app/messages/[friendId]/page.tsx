@@ -543,7 +543,7 @@ export default function ChatThreadPage() {
               }
             >
               <summary className="cursor-pointer select-none text-muted hover:text-foreground">
-                Advanced
+                Anchor this sealed note
               </summary>
               <label className="mt-2 flex cursor-pointer items-start gap-2 leading-snug">
                 <input

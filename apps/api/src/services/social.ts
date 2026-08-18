@@ -2043,7 +2043,7 @@ export async function socialCancelBooking(
   }
 
   if (!["funded", "confirmed", "completed"].includes(booking.status)) {
-    throw new Error("These nights cannot be freed in the current stay state");
+    throw new Error("These nights cannot be freed for this Book & pay stay");
   }
 
   await db
