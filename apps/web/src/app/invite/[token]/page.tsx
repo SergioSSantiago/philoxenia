@@ -167,7 +167,7 @@ export default function InvitePage() {
           >
             {busy
               ? "Sending friend request to Book & pay…"
-              : `Request friendship with ${invite.host.displayName}`}
+              : `Request friendship to Book & pay with ${invite.host.displayName}`}
           </Button>
         )}
       </Card>

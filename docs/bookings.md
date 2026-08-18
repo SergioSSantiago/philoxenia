@@ -43,7 +43,7 @@ Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **
 
 | Action | Effect |
 |--------|--------|
-| **Free nights** (`POST …/social-cancel`) | Confirm dialog: nights free, **no** on-chain clawback; host/connector were paid **at Book & pay**; money return via Messages. Prompt ends **Free these nights?** (not “Continue?”). Stay detail heading is **Cancellation terms** (not Cancel policy / refund). Settled CTA: **Free nights (no clawback)** (not “no on-chain refund”). Stay body: **Money return is social** then **Send STRK or DAI**. Stay detail: **Book & pay settles immediately** |
+| **Free nights** (`POST …/social-cancel`) | Confirm dialog: nights free, **no** on-chain clawback; host/connector were paid **at Book & pay**; money return via Messages. Prompt ends **Free these nights?** (not “Continue?”). Fail **Could not free these nights** (not “Could not free nights”). Stay detail heading is **Cancellation terms** (not Cancel policy / refund). Settled CTA: **Free nights (no clawback)** (not “no on-chain refund”). Stay body: **Money return is social** then **Send STRK or DAI**. Stay detail: **Book & pay settles immediately** |
 | **Money return** | Voluntary peer transfer in Messages (**Send STRK or DAI**) |
 | **On-chain `refund_booking`** | Only if booking never settled (`funded`); UI does not offer this after immediate settle |
 
@@ -54,7 +54,7 @@ Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **
 | POST | `/bookings/quote` | Quote |
 | POST | `/bookings/confirm` | Verified create → `completed`. Fallback fail **Could not record this Book & pay stay** (not “Confirm booking failed”). Direct POST `/bookings` is rejected: **Stays are recorded only after Book & pay.** |
 | POST | `/bookings/recover` | Recover a settled Book & pay. Fallback fail **Could not recover this Book & pay stay** |
-| POST | `/bookings/:id/social-cancel` | Free nights. Confirm ends **Free these nights?** |
+| POST | `/bookings/:id/social-cancel` | Free nights. Confirm ends **Free these nights?** Fail **Could not free these nights** |
 | POST | `/bookings/:id/fund` | Legacy — verified |
 | POST | `/bookings/:id/settle` | Legacy — verified |
 | POST | `/bookings/:id/refund` | Legacy funded-only — verified |

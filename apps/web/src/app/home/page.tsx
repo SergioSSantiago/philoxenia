@@ -78,7 +78,7 @@ export default function HomePage() {
               Hello, {user.displayName}
             </h1>
             <p className="mt-1 text-xs text-muted leading-relaxed">
-              Places from people you trust. Book & pay STRK or DAI.
+              Places from friends to Book & pay. STRK or DAI.
             </p>
           </div>
           <Card className="min-w-0 space-y-3 overflow-hidden p-4 sm:p-4">

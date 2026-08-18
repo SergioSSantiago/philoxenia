@@ -93,7 +93,7 @@ export function Strk20PrivacyPanel() {
 
       if (ok) {
         setNotice({
-          title: "Private balances ready",
+          title: "Shielded STRK or DAI ready for Private Book & pay",
           body: "Ready X reported a privacy-capable session. You can shield and unshield STRK or DAI now.",
           tone: "info",
           primaryLabel: "Got it",
@@ -140,7 +140,7 @@ export function Strk20PrivacyPanel() {
         const { txHash } = await provider.shield(amount);
         setMsg(`Shielded ${asset}. Tx ${txHash.slice(0, 10)}…`);
       } else {
-        setMsg(`Unshielding ${asset} to your public balance…`);
+        setMsg(`Unshielding ${asset} to public STRK or DAI…`);
         const { txHash } = await provider.unshield(amount, address);
         setMsg(`Unshielded ${asset}. Tx ${txHash.slice(0, 10)}…`);
       }
@@ -227,7 +227,7 @@ export function Strk20PrivacyPanel() {
           </div>
         ) : (
           <>
-            <div className="flex gap-2" role="group" aria-label="Token">
+            <div className="flex gap-2" role="group" aria-label="STRK or DAI">
               {(["STRK", "DAI"] as const).map((token) => (
                 <button
                   key={token}

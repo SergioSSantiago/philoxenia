@@ -241,7 +241,7 @@ export function AuthModal() {
                 </div>
               ) : null}
               <label className="block text-sm">
-                <span className="text-muted">Display name (optional)</span>
+                <span className="text-muted">Display name (friends add you by Ready X wallet)</span>
                 <TextInput
                   className="mt-1"
                   value={displayName}

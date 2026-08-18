@@ -61,7 +61,7 @@ export default function BookingDetailPage() {
         "Nights freed. Money was already settled on-chain — arrange any return in Messages."
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not free nights");
+      setError(err instanceof Error ? err.message : "Could not free these nights");
     } finally {
       setBusy(false);
     }

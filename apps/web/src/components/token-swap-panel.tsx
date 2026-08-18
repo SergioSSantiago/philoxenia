@@ -123,17 +123,17 @@ export function TokenSwapPanel() {
         });
         setQuote(live);
       }
-      setMsg("Approve in Ready X to execute the AVNU swap…");
+      setMsg("Approve in Ready X to swap STRK ↔ DAI…");
       const { transactionHash } = await executeAvnuSwap({
         account,
         quote: live,
       });
-      setMsg(`Swapped. Tx ${transactionHash.slice(0, 12)}…`);
+      setMsg(`Swapped STRK ↔ DAI. Tx ${transactionHash.slice(0, 12)}…`);
       setAmount("");
       setQuote(null);
       setNotice({
-        title: "Swap submitted",
-        body: `AVNU route executed. Tx ${transactionHash}`,
+        title: "Swap STRK ↔ DAI submitted",
+        body: `STRK ↔ DAI swapped. Tx ${transactionHash}`,
         tone: "info",
         primaryLabel: "Got it",
       });
