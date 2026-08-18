@@ -86,7 +86,7 @@ export default function InvitePage() {
   if (invite.canViewListing) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
-        <p className="text-muted">Opening listing…</p>
+        <p className="text-muted">Opening listing to Book & pay…</p>
       </div>
     );
   }

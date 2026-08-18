@@ -66,7 +66,7 @@ Listing cards (`ListingCard`) show `{n}% connector` next to the DAI price when t
 ## Invite gate
 
 1. Guest opens link.
-2. If already friends with host → listing opens.
+2. If already friends with host → listing opens (**Opening listing to Book & pay…**).
 3. If not → request friendship with host; after accept, listing unlocks. While pending, `/invite/[token]` polls every **3s** and redirects when `canViewListing` becomes true (copy: open the listing so you can **Book & pay**).
 4. Display name is cosmetic; rewards always go to the connector **Ready X wallet**. Unsigned guests tap **Connect Ready X to continue** on `/invite/[token]`. Connector badge: **Connector (Ready X payout)**. Invite body: friends with the host to **Book & pay (STRK or DAI)**; if they **Book & pay** through the link, the reward goes to the connector’s Ready X wallet.
 

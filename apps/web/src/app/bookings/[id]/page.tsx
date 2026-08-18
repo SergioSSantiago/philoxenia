@@ -27,7 +27,7 @@ export default function BookingDetailPage() {
     api
       .get<Booking>(`/bookings/${params.id}`)
       .then(setBooking)
-      .catch(() => setError("Booking not found"));
+      .catch(() => setError("Stay not found"));
   }, [token, params.id, router]);
 
   async function socialCancel() {
@@ -100,7 +100,7 @@ export default function BookingDetailPage() {
     <Shell>
       <div className="mb-8">
         <p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
-          Booking
+          Book & pay
         </p>
         <h1 className="mt-1 text-3xl text-foreground sm:text-4xl">
           <Link
@@ -112,7 +112,7 @@ export default function BookingDetailPage() {
         </h1>
         <p className="mt-2 text-sm text-muted">
           Tap the title for the listing. Open the {counterpartyRole.toLowerCase()}{" "}
-          to see their profile and places.
+          to see their profile and places you can Book & pay.
         </p>
       </div>
 
@@ -225,10 +225,10 @@ export default function BookingDetailPage() {
               </span>
             </div>
           ) : (
-            <p className="text-xs text-muted">Direct booking — no connector.</p>
+            <p className="text-xs text-muted">Direct Book & pay — no connector.</p>
           )}
           <div className="flex justify-between pt-2 text-base font-medium">
-            <span>Paid at booking</span>
+            <span>Paid at Book & pay</span>
             <span>
               {formatTokenAmount(booking.totalPrice)} {booking.paymentAsset}
             </span>

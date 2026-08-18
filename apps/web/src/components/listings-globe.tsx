@@ -630,7 +630,7 @@ export function ListingsGlobe({
             onPointerDown={(e) => e.stopPropagation()}
           >
             <p className="border-b border-border px-3 py-2 text-[10px] uppercase tracking-[0.1em] text-muted">
-              Choose listing
+              Choose a place to Book & pay
             </p>
             <ul className="max-h-44 overflow-auto py-1">
               {menu.items.map((item) => (

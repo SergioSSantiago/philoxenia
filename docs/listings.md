@@ -46,7 +46,7 @@ Everyone else ──► 404 (listing unavailable)
 
 ## Home globe
 
-`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Aria: **Interactive globe of places you can Book & pay**. Empty: listings need a map pin — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the listing.
+`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **shared via invite** (taupe). Aria: **Interactive globe of places you can Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: listings need a map pin — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the listing.
 
 ## API endpoints
 
