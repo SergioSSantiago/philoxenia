@@ -444,7 +444,7 @@ export default function ListingPage() {
                   className="w-full sm:w-auto"
                   onClick={() => void shareViaSystem()}
                 >
-                  Share via…
+                  Share place invite…
                 </Button>
               </div>
               {shareHasConnector ? (

@@ -100,7 +100,7 @@ export default function MessagesPage() {
     <Shell>
       <header className="mb-6">
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">
-          Private inbox
+          Sealed Messages
         </p>
         <h1 className="mt-1 text-3xl text-foreground sm:text-4xl">Messages</h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted sm:text-base">

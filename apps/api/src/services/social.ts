@@ -1395,7 +1395,7 @@ export async function inspectPaidBookingTx(
     BigInt(inspected.listingOnChainId)
   );
   if (!listing) {
-    throw new Error("Place for this Book & pay was not found");
+    throw new Error("This place isn’t available to Book & pay.");
   }
 
   const authorized = await canViewListing(

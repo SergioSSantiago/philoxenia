@@ -399,7 +399,7 @@ export default function ChatThreadPage() {
                       : "border border-border bg-surface text-muted hover:text-foreground"
                   }`}
                 >
-                  Private
+                  Private send
                 </button>
                 <button
                   type="button"
@@ -410,7 +410,7 @@ export default function ChatThreadPage() {
                       : "border border-border bg-surface text-muted hover:text-foreground"
                   }`}
                 >
-                  Public
+                  Public send
                 </button>
               </div>
 

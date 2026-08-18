@@ -68,7 +68,7 @@ export async function verifyEscrowPaymentTx(input: {
     receipt = await provider.getTransactionReceipt(txHash);
   } catch {
     throw new Error(
-      "Book & pay not found on Starknet yet — wait for confirmation and retry"
+      "Book & pay isn’t on Starknet yet — wait for confirmation and retry"
     );
   }
 
@@ -277,7 +277,7 @@ export async function inspectEscrowSettledTx(
     receipt = await provider.getTransactionReceipt(normalized);
   } catch {
     throw new Error(
-      "Book & pay not found on Starknet yet — wait for confirmation and retry"
+      "Book & pay isn’t on Starknet yet — wait for confirmation and retry"
     );
   }
 

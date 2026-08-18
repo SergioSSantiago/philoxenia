@@ -194,7 +194,7 @@ export default function ConnectorPage() {
                           <span className="text-muted"> / night</span>
                           <span className="mx-2 text-border">·</span>
                           <span className="font-medium text-accent">
-                            You earn {listing.connectorRewardPercent}%
+                            You earn {listing.connectorRewardPercent}% connector reward
                           </span>
                           <span className="text-muted"> if they Book & pay</span>
                         </p>
@@ -248,7 +248,7 @@ export default function ConnectorPage() {
                                 )
                               }
                             >
-                              Share via…
+                              Share place invite…
                             </Button>
                           </div>
                         </div>
@@ -266,7 +266,7 @@ export default function ConnectorPage() {
             {noReward.length > 0 && earnable.length > 0 && (
               <div className="pt-2">
                 <p className="mb-3 text-sm text-muted">
-                  Also in your network (0% connector — sharing won&apos;t earn):
+                  Also in your network (0% connector reward — a place invite won&apos;t earn):
                 </p>
                 <ul className="space-y-2 text-sm">
                   {noReward.map((l) => (

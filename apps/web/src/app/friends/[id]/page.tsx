@@ -223,7 +223,7 @@ export default function FriendProfilePage() {
                           <>
                             <span className="mx-2 text-border">·</span>
                             <span className="font-medium text-accent">
-                              You earn {listing.connectorRewardPercent}%
+                              You earn {listing.connectorRewardPercent}% connector reward
                             </span>
                             <span className="text-muted"> if they Book & pay</span>
                           </>
@@ -289,7 +289,7 @@ export default function FriendProfilePage() {
                               )
                             }
                           >
-                            Share via…
+                            Share place invite…
                           </Button>
                         </div>
                       </div>
