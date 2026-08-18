@@ -9,7 +9,7 @@ import { Shell, Button, Card } from "@/components/ui";
 import { UserBadge } from "@/components/user-badge";
 import { stayStatusLabel } from "@/components/cards";
 import { useAuth } from "@/lib/auth-context";
-import { api } from "@/lib/api";
+import { api, API_GENERIC_ERROR } from "@/lib/api";
 
 export default function BookingDetailPage() {
   const params = useParams<{ id: string }>();
@@ -32,7 +32,7 @@ export default function BookingDetailPage() {
         setError(
           err instanceof Error &&
             err.message &&
-            err.message !== "Request failed"
+            err.message !== API_GENERIC_ERROR
             ? err.message
             : "This stay isn’t available to Book & pay."
         )
@@ -203,7 +203,7 @@ export default function BookingDetailPage() {
               {booking.privacyMode === "private"
                 ? "Private (STRK20 · STRK or DAI)"
                 : booking.privacyMode === "public"
-                  ? "Public ERC-20"
+                  ? "Public Book & pay"
                   : "—"}
             </p>
           </div>

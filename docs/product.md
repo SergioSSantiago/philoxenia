@@ -122,7 +122,7 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 - Friend requests and friendships (search by **Ready X wallet** address)
 - Friend profile (`/friends/[id]`): places + share-as-connector; name/wallet links from Friends & Messages
 - **Earnings (`/connector`)**: how connectors earn, shareable friend places, reward history
-- Profile: display name, public STRK/DAI balances, shield/unshield **STRK or DAI**, **AVNU STRK ↔ DAI swap**. Subtitle: friends add you by **Ready X wallet**. Display name is not searchable.
+- Profile: display name (CTA **Save display name**), public STRK/DAI balances, shield/unshield **STRK or DAI**, **AVNU STRK ↔ DAI swap**. Subtitle: friends add you by **Ready X wallet**. Display name is not searchable.
 - Private places (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution

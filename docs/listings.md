@@ -20,7 +20,7 @@ Hosts create **private places** visible only to themselves and their friends. `/
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests **Book & pay STRK or DAI** |
 | `availability` | Legacy contiguous windows (still accepted) |
 
-Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; range CTA **Open nights to Book & pay** (not “Add range”); range end **Until (morning guests leave)**; **Save open nights** (busy **Saving open nights…**); success **Open nights saved — guests can Book & pay.** Empty PATCH: **Open at least one night guests can Book & pay**. Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
+Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; range CTA **Open nights to Book & pay** (not “Add range”); range start **Open from**; range end **Until (morning guests leave)**; **Save open nights** (busy **Saving open nights…**); success **Open nights saved — guests can Book & pay.** Empty PATCH: **Open at least one night guests can Book & pay**. Bad night price: **Enter a valid DAI list price for {day}**. Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
 
 ## Delete this place
 

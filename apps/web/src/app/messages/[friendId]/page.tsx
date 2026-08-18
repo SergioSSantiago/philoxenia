@@ -20,7 +20,7 @@ import { formatTokenAmount } from "@philoxenia/shared";
 import { Shell, Button, TextInput } from "@/components/ui";
 import { ActionNotice } from "@/components/action-notice";
 import { useAuth } from "@/lib/auth-context";
-import { api } from "@/lib/api";
+import { api, API_GENERIC_ERROR } from "@/lib/api";
 import { formatWalletError } from "@/lib/wallet-errors";
 import {
   isSealedBody,
@@ -106,7 +106,7 @@ export default function ChatThreadPage() {
         const plain = await unsealMessage(wallet, m.body);
         next.push({
           ...m,
-          displayBody: plain ?? "Unable to decrypt on this device",
+          displayBody: plain ?? "Unable to decrypt this sealed note on this device",
           sealed: true,
           decryptFailed: plain === null,
         });
@@ -133,7 +133,7 @@ export default function ChatThreadPage() {
       setError(
         err instanceof Error &&
           err.message &&
-          err.message !== "Request failed"
+          err.message !== API_GENERIC_ERROR
           ? err.message
           : "This chat isn’t available."
       )
@@ -211,7 +211,7 @@ export default function ChatThreadPage() {
         title: "Ready X connected",
         body: pendingPayRef.current
           ? "Finishing your transfer…"
-          : "Wallet is ready to sign. You can send now.",
+          : "Ready X is ready to sign. You can Send STRK or DAI now.",
         tone: "info",
         primaryLabel: "Got it",
       });
@@ -325,7 +325,7 @@ export default function ChatThreadPage() {
   if (!conversation) {
     return (
       <Shell>
-        <p className="text-muted">{error || "Opening sealed thread…"}</p>
+        <p className="text-muted">{error || "Opening sealed Messages…"}</p>
       </Shell>
     );
   }
@@ -354,7 +354,7 @@ export default function ChatThreadPage() {
             <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted">
               <span className="inline-flex items-center gap-1 text-accent">
                 <LockIcon />
-                {canSeal ? "Sealed channel" : "Waiting for friend’s key"}
+                {canSeal ? "Sealed Messages" : "Waiting for friend’s sealed key"}
               </span>
               <span className="hidden sm:inline" aria-hidden>
                 ·

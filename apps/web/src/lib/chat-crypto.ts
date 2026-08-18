@@ -162,7 +162,7 @@ export async function sealMessage(
   plaintext: string
 ): Promise<string> {
   const stored = readStored(walletAddress);
-  if (!stored) throw new Error("Generate your sealed-message keys first");
+  if (!stored) throw new Error("Generate your sealed Messages keys first");
   if (plaintext.length > SEALED_PLAINTEXT_MAX) {
     throw new Error(`Message must be at most ${SEALED_PLAINTEXT_MAX} characters`);
   }

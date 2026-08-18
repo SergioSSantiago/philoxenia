@@ -141,7 +141,9 @@ export async function registerRoutes(app: FastifyInstance) {
           return reply.send(user);
         }
         if (!body.displayName) {
-          return reply.status(400).send({ error: "Nothing to update" });
+          return reply.status(400).send({
+            error: "Enter a display name or sealed Messages keys",
+          });
         }
         const user = await social.updateUserDisplayName(
           request.user.userId,
@@ -150,7 +152,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return reply.send(user);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Failed to update profile";
+          err instanceof Error ? err.message : "Could not save your display name";
         return reply.status(400).send({ error: message });
       }
     }

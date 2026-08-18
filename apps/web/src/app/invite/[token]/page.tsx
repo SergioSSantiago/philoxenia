@@ -6,7 +6,7 @@ import type { InviteResolution } from "@philoxenia/shared";
 import { Button, Card } from "@/components/ui";
 import { UserBadge } from "@/components/user-badge";
 import { useAuth } from "@/lib/auth-context";
-import { api } from "@/lib/api";
+import { api, API_GENERIC_ERROR } from "@/lib/api";
 
 export default function InvitePage() {
   const params = useParams<{ token: string }>();
@@ -30,7 +30,7 @@ export default function InvitePage() {
         setError(
           err instanceof Error &&
             err.message &&
-            err.message !== "Request failed"
+            err.message !== API_GENERIC_ERROR
             ? err.message
             : "This place invite isn’t available to Book & pay."
         )

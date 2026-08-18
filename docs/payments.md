@@ -13,6 +13,8 @@ List prices are always **DAI**. At pay time the guest chooses:
 | **DAI** | `totalPriceDai` (1:1) | `NEXT_PUBLIC_DAI_BOOKING_ESCROW_ADDRESS` |
 | **STRK** | `totalPriceDai × live strkPerDai` (CoinGecko) | `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS` |
 
+Bad DAI input when converting to STRK: **Enter a valid DAI amount to Book & pay**.
+
 Each escrow is the same Cairo class with a different constructor token.
 
 ## Principles
@@ -35,7 +37,7 @@ Private fund (default when Ready X wallet API ≥ 0.10):
 
 1. **Anonymizer (live)** — `withdraw` to helper + `privacy_invoke` (no silent public fallback). If the wallet lacks STRK20, Book & pay errors: **Private Book & pay needs Ready X** (wallet API ≥ 0.10) — then shield on Profile, or choose Public. User-abort and failure copy is **Private Book & pay cancelled/failed** (no public fallback).
 2. Shadow-account backup only if `NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1` (Ready X lacks it by default)
-3. Public ERC-20 only when the guest explicitly chooses Public
+3. **Public Book & pay** only when the guest explicitly chooses Public (UI label, not “Public ERC-20”)
 
 Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow.md](./deploy-escrow.md).
 

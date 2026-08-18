@@ -36,7 +36,7 @@ Philoxenia minimizes **public discovery** of hospitality offers and offers an op
 
 | Path | On-chain visibility |
 |------|---------------------|
-| Public ERC-20 | Full — guest → escrow → host/connector |
+| Public Book & pay (ERC-20) | Full — guest → escrow → host/connector |
 | Private (anonymizer) | Pool withdraws to Philoxenia anonymizer; helper create/fund/settle; host paid. Guest is not the public ERC-20 payer into escrow. Escrow **storage** still holds guest/host/amounts. Settlement transfers to host (and connector) are public. |
 | Shield / unshield | Public ERC-20 legs into/out of the privacy pool |
 
@@ -70,7 +70,7 @@ Starknet Privacy includes auditor selective disclosure by design. Philoxenia inh
 ## User-facing guidance (honest)
 
 - Prefer **Private Book & pay** when Ready X supports wallet API ≥ 0.10 (Chrome + Ready X, or Ready X in-app browser on iPhone). Profile’s shield checklist and `ReadyWalletNotice` say so when the session is not privacy-capable.
-- On Firefox / desktop legacy Ready, use Public ERC-20 — **Private Book & pay** will not activate
+- On Firefox / desktop legacy Ready, use **Public Book & pay** — **Private Book & pay** will not activate
 - Expect guest/host/amounts to remain readable on the escrow contract  
 - Treat shield/unshield amounts as public  
 - Keep some **public** STRK for gas when paying Public after shielding most of your balance

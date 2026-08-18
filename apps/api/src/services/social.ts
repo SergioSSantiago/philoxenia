@@ -81,7 +81,7 @@ export async function updateUserDisplayName(userId: string, displayName: string)
     .returning();
 
   if (!updated) {
-    throw new Error("Could not save your name — Connect Ready X again");
+    throw new Error("Could not save your display name — Connect Ready X again");
   }
 
   return toUserResponse(updated);
@@ -93,7 +93,7 @@ export async function updateUserMessagePublicKey(
 ) {
   const key = messagePublicKey.trim();
   if (!key || key.length < 16 || key.length > 512) {
-    throw new Error("Invalid message public key");
+    throw new Error("Could not save sealed Messages keys");
   }
 
   const [updated] = await db
@@ -103,7 +103,7 @@ export async function updateUserMessagePublicKey(
     .returning();
 
   if (!updated) {
-    throw new Error("Could not save sealed keys — Connect Ready X again");
+    throw new Error("Could not save sealed Messages keys — Connect Ready X again");
   }
 
   return toUserResponse(updated);
@@ -438,7 +438,7 @@ export async function createListing(
       seen.add(day);
       const price = row.pricePerNight.trim();
       if (!price || Number(price) <= 0) {
-        throw new Error(`Invalid price for ${day}`);
+        throw new Error(`Enter a valid DAI list price for ${day}`);
       }
       dayRows.push({ day, pricePerNight: price });
     }
@@ -683,7 +683,7 @@ export async function setListingAvailableDays(
     seen.add(day);
     const price = row.pricePerNight.trim();
     if (!price || Number(price) <= 0) {
-      throw new Error(`Invalid price for ${day}`);
+      throw new Error(`Enter a valid DAI list price for ${day}`);
     }
     normalized.push({ day, pricePerNight: price });
   }

@@ -29,7 +29,7 @@ export function WalletAddress({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      setShareError("Could not copy. Select the address manually.");
+      setShareError("Could not copy this Ready X wallet. Select the address manually.");
     }
   }, [address]);
 

@@ -11,7 +11,7 @@ import { GuestNightCalendar } from "@/components/guest-night-calendar";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { CopyInviteButton } from "@/components/copy-invite-button";
 import { useAuth } from "@/lib/auth-context";
-import { api } from "@/lib/api";
+import { api, API_GENERIC_ERROR } from "@/lib/api";
 import {
   copyText,
   inviteReadyStatus,
@@ -52,7 +52,7 @@ export default function ListingPage() {
         setError(
           err instanceof Error &&
             err.message &&
-            err.message !== "Request failed"
+            err.message !== API_GENERIC_ERROR
             ? err.message
             : "This place isn’t available to Book & pay."
         )

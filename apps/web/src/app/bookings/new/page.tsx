@@ -692,7 +692,7 @@ function NewBookingForm() {
                       }`}
                       onClick={() => setFundMode("public")}
                     >
-                      Public ERC-20
+                      Public Book & pay
                     </button>
                   </div>
                   {!privacyCapable && fundMode === "private" && (
@@ -704,7 +704,7 @@ function NewBookingForm() {
                   <p className="text-xs text-muted leading-relaxed">
                     {fundMode === "private"
                       ? "Book & pay from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield the Book & pay asset on Profile first — proofs can take a while."
-                      : "Standard on-chain approve + fund. Visible on explorers."}
+                      : "Public Book & pay: approve in Ready X, then fund. Visible on explorers."}
                   </p>
                 </div>
               )}

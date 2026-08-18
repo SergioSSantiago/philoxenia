@@ -345,7 +345,7 @@ export function AvailabilityCalendar({
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block text-xs">
-              Add from
+              Open from
               <input
                 type="date"
                 className="mt-1 w-full rounded-xl border border-border bg-surface px-3 py-2"

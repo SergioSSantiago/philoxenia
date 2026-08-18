@@ -90,7 +90,7 @@ export async function getStrkPerDai(opts?: {
 /** Convert a DAI decimal string to STRK at the given rate. */
 export function daiToStrk(daiAmount: string, strkPerDai: number): string {
   const dai = Number(daiAmount);
-  if (!Number.isFinite(dai) || dai < 0) throw new Error("Invalid DAI amount");
+  if (!Number.isFinite(dai) || dai < 0) throw new Error("Enter a valid DAI amount to Book & pay");
   const strk = dai * strkPerDai;
   // Keep enough precision for escrow u256 while staying human-readable
   return strk.toFixed(8).replace(/\.?0+$/, "") || "0";
