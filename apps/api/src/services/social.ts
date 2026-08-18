@@ -793,7 +793,7 @@ export async function deleteListing(listingId: string, hostId: string) {
   for (const b of paid) {
     if (hasActivePaidNights(b.nights, b.checkOut, todayKey)) {
       throw new Error(
-        "Cannot delete listing while it has active Book & pay stays. Wait until those stays are past, or mark them cancelled with the guest."
+        "Cannot delete this place while it has active Book & pay stays. Wait until those stays are past, or mark them cancelled with the guest."
       );
     }
   }
@@ -925,7 +925,7 @@ export async function createListingShare(
   );
 
   if (!canShare) {
-    throw new Error("Not authorized to share this listing");
+    throw new Error("Not authorized to share this place");
   }
 
   // Host may share for discovery, but is never a connector (0% connector path).
@@ -1649,7 +1649,7 @@ async function prepareBooking(
   }
 
   if (listing.hostId === guestId) {
-    throw new Error("You cannot book your own listing");
+    throw new Error("You cannot Book & pay your own place");
   }
 
   let nightKeys: string[];

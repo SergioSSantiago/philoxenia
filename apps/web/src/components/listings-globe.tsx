@@ -477,7 +477,7 @@ export function ListingsGlobe({
     if (tipTitleRef.current) {
       tipTitleRef.current.textContent =
         cluster.items.length > 1
-          ? `${cluster.items.length} listings here`
+          ? `${cluster.items.length} places here`
           : first.title;
     }
     if (tipMetaRef.current) {
@@ -563,7 +563,7 @@ export function ListingsGlobe({
                 }}
                 aria-label={
                   multi
-                    ? `${cluster.items.length} listings`
+                    ? `${cluster.items.length} places`
                     : `Open ${lead.title}`
                 }
                 className="group pointer-events-auto absolute z-10 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
@@ -666,7 +666,7 @@ export function ListingsGlobe({
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 px-3 py-2">
         <p className="min-w-0 text-[11px] leading-snug text-muted">
           {points.length === 0
-            ? "No mapped places yet — listings need a map pin. Add friends by Ready X wallet or list a place to Book & pay."
+            ? "No mapped places yet — places need a map pin. Add friends by Ready X wallet or list a place to Book & pay."
             : `${points.length} place${points.length === 1 ? "" : "s"} · drag to spin · +/− to zoom · tap a pin`}
         </p>
         <div className="flex shrink-0 items-center gap-3">

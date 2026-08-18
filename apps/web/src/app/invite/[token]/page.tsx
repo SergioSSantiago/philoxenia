@@ -86,7 +86,7 @@ export default function InvitePage() {
   if (invite.canViewListing) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
-        <p className="text-muted">Opening listing to Book & pay…</p>
+        <p className="text-muted">Opening place to Book & pay…</p>
       </div>
     );
   }
@@ -103,7 +103,7 @@ export default function InvitePage() {
             : `${invite.host.displayName} shared a place with you`}
         </h1>
         <p className="mt-4 text-sm text-muted leading-relaxed sm:text-base">
-          Private listing hosted by{" "}
+          Private place hosted by{" "}
           <span className="font-medium text-foreground">
             {invite.host.displayName}
           </span>
@@ -148,7 +148,7 @@ export default function InvitePage() {
             <span className="font-medium text-foreground">
               {invite.host.displayName}
             </span>
-            . When they accept, this page will open the listing so you can Book
+            . When they accept, this page will open the place so you can Book
             & pay.
           </p>
         ) : (

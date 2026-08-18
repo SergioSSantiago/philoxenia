@@ -107,11 +107,11 @@ export default function BookingDetailPage() {
             href={`/listings/${booking.listingId}`}
             className="underline-offset-2 hover:underline"
           >
-            {booking.listing?.title ?? "Private listing"}
+            {booking.listing?.title ?? "Private place"}
           </Link>
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Tap the title for the listing. Open the {counterpartyRole.toLowerCase()}{" "}
+          Tap the title for the place. Open the {counterpartyRole.toLowerCase()}{" "}
           to see their profile and places you can Book & pay.
         </p>
       </div>

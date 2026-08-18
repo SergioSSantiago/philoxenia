@@ -112,7 +112,7 @@ export default function ConnectorPage() {
         <p className="text-sm font-medium text-accent">How you make money</p>
         <ol className="space-y-3 text-sm leading-relaxed text-foreground">
           <li>
-            <span className="font-medium">1. Pick a friend&apos;s listing</span>
+            <span className="font-medium">1. Pick a friend&apos;s place</span>
             {" — "}
             only places from people you already trust appear here.
           </li>
@@ -260,7 +260,7 @@ export default function ConnectorPage() {
             })}
 
             {earnable.length === 0 && noReward.length > 0 && (
-              <EmptyState message="Your friends have listings, but none offer a connector reward yet (0%). Ask them to set a % when they list — you earn when they Book & pay through your invite." />
+              <EmptyState message="Your friends have places, but none offer a connector reward yet (0%). Ask them to set a % when they list — you earn when they Book & pay through your invite." />
             )}
 
             {noReward.length > 0 && earnable.length > 0 && (
@@ -321,7 +321,7 @@ export default function ConnectorPage() {
         {!data ? (
           <p className="text-muted">Loading rewards…</p>
         ) : data.bookings.length === 0 ? (
-          <EmptyState message="No rewards yet. Share a friend listing above — when they Book & pay through your invite, it shows up here." />
+          <EmptyState message="No rewards yet. Share a friend’s place above — when they Book & pay through your invite, it shows up here." />
         ) : (
           <div className="space-y-4">
             {data.bookings.map((b) => (

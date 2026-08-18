@@ -22,11 +22,11 @@ Hosts create **private listings** visible only to themselves and their friends. 
 
 Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; **Save open nights**; success **Open nights saved — guests can Book & pay.** Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
 
-## Delete listing
+## Delete this place
 
 `DELETE /my-listings/:id` (host only).
 
-Allowed when there are **no active Book & pay stays** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete. Confirm dialog copy matches.
+Allowed when there are **no active Book & pay stays** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete. Confirm: **Delete this place?** API error if still active: **Cannot delete this place while it has active Book & pay stays.**
 
 ## Cancellation vs escrow
 
@@ -46,7 +46,7 @@ Everyone else ──► 404 (listing unavailable)
 
 ## Home globe
 
-`/home` plots accessible listings on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **invite** (taupe). Pin/legend labels: **Yours** / **Friend** / **Invite**. Aria: **Interactive globe of places you can Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: listings need a map pin — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the listing.
+`/home` plots accessible places on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **invite** (taupe). Pin/legend labels: **Yours** / **Friend** / **Invite**. Cluster counts: **N places here**. Aria: **Interactive globe of places you can Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: **places need a map pin** — add friends by **Ready X wallet** or list a place to **Book & pay**. Tap a pin to open the place.
 
 ## API endpoints
 
@@ -58,7 +58,7 @@ Everyone else ──► 404 (listing unavailable)
 | GET | `/my-network/listings` | Yes | Friends' listings |
 | GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
 | GET | `/shared-listings` | Yes | Listings shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This listing isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place** |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This place isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Host badge **Your place**. Delete: **Delete this place** |
 | POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 

@@ -132,7 +132,7 @@ export function BookingCard({
             href={listingHref}
             className="block text-lg text-foreground underline-offset-2 hover:underline touch-manipulation"
           >
-            {booking.listing?.title ?? "Private listing"}
+            {booking.listing?.title ?? "Private place"}
           </Link>
           {other ? (
             <p className="text-sm text-muted">

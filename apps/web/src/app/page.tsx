@@ -68,7 +68,7 @@ export default function LandingPage() {
             Be a connector — grow the network and earn
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Share a friend&apos;s listing invite. When they Book &amp; pay, you
+            Share a friend&apos;s place invite. When they Book &amp; pay, you
             receive the host&apos;s connector % on settle — paid in STRK or DAI
             (same asset the guest used). No inventory required. Hosts win filled
             nights; guests arrive with a vouch; you get paid for the

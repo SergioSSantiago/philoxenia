@@ -39,7 +39,7 @@ export function landingJsonLd() {
         },
         featureList: [
           "Private friend-based hospitality",
-          "Host listings for trusted network",
+          "Host places for trusted network",
           "Guest Book & pay with Starknet escrow",
           "Connector introductions that earn on settle",
           "STRK20 Private Book & pay with Ready X",

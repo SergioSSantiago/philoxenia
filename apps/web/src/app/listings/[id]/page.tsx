@@ -48,7 +48,7 @@ export default function ListingPage() {
     api
       .get<Listing>(`/listings/${params.id}`)
       .then(setListing)
-      .catch(() => setError("This listing isn’t available to Book & pay."));
+      .catch(() => setError("This place isn’t available to Book & pay."));
   }, [token, params.id, router]);
 
   const hostCalendarDays: ListingAvailableDay[] = useMemo(() => {
@@ -160,7 +160,7 @@ export default function ListingPage() {
   async function shareViaSystem() {
     if (!shareUrl) return;
     const result = await shareInviteNative({
-      title: listing?.title ?? "Philoxenia listing",
+      title: listing?.title ?? "Philoxenia place",
       text: "Open this Philoxenia invite to Book & pay (STRK or DAI).",
       url: shareUrl,
     });
@@ -238,7 +238,7 @@ export default function ListingPage() {
           {listing.host && (
             <UserBadge
               user={listing.host}
-              role={isHost ? "Your listing" : "Host"}
+              role={isHost ? "Your place" : "Host"}
               showWallet={!isHost}
             />
           )}
@@ -383,17 +383,17 @@ export default function ListingPage() {
                   setDeleteOpen(true);
                 }}
               >
-                Delete listing
+                Delete this place
               </Button>
             )}
           </div>
 
           <ConfirmDialog
             open={deleteOpen}
-            title="Delete this listing?"
-            body="This permanently removes the listing, its photos, and calendar. You can only delete if there are no active Book & pay stays — past stays are fine."
-            confirmLabel="Delete listing"
-            cancelLabel="Keep listing"
+            title="Delete this place?"
+            body="This permanently removes the place, its photos, and calendar. You can only delete if there are no active Book & pay stays — past stays are fine."
+            confirmLabel="Delete this place"
+            cancelLabel="Keep this place"
             danger
             busy={deleteBusy}
             error={deleteError}
@@ -408,7 +408,7 @@ export default function ListingPage() {
 
           {isHost && (
             <p className="mt-3 text-sm text-muted">
-              You own this listing — Book & pay is disabled for the host.
+              You own this place — Book & pay is disabled for the host.
             </p>
           )}
 
@@ -454,7 +454,7 @@ export default function ListingPage() {
                     no connector
                   </span>
                   . Guests who Book & pay through it do not create a connector reward.
-                  Friends who share your listing become connectors on their own
+                  Friends who share your place become connectors on their own
                   links.
                 </p>
               )}

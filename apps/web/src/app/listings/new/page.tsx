@@ -86,7 +86,7 @@ export default function CreateListingPage() {
       });
       router.push(`/listings/${listing.id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create listing");
+      setError(err instanceof Error ? err.message : "Failed to list this place");
     } finally {
       setSubmitting(false);
     }
@@ -96,7 +96,7 @@ export default function CreateListingPage() {
     <Shell>
       <h1 className="mb-2 text-3xl sm:text-4xl">List your place</h1>
       <p className="mb-8 text-sm text-muted sm:text-base">
-        Only friends can see this listing. Price is in DAI; guests Book & pay
+        Only friends can see this place. Price is in DAI; guests Book & pay
         STRK or DAI. Set a connector % so friends can share an invite and earn.
       </p>
 
@@ -155,7 +155,7 @@ export default function CreateListingPage() {
                 }
               />
               <span className="mt-1 block text-xs text-muted">
-                A friend who shares your listing earns this % of the stay (3–10%
+                A friend who shares your place earns this % of the stay (3–10%
                 is typical) when they Book & pay in STRK or DAI. Philoxenia
                 takes 10% of that connector reward only. Direct Book & pay stays
                 0% protocol.
@@ -174,7 +174,7 @@ export default function CreateListingPage() {
           <section className="space-y-4">
             <h2 className="text-lg text-foreground">Availability</h2>
             <p className="text-xs text-muted leading-relaxed">
-              Same calendar as when you edit a listing: tap nights one by one,
+              Same calendar as when you edit a place: tap nights one by one,
               or add a range, and set per-night DAI list prices. Guests Book &amp;
               pay those nights in STRK or DAI.
             </p>

@@ -215,7 +215,7 @@ function NewBookingForm() {
       return;
     }
     if (!listingId) {
-      setLoadError("Missing listing.");
+      setLoadError("Missing place.");
       return;
     }
     let cancelled = false;
@@ -236,7 +236,7 @@ function NewBookingForm() {
         }
       })
       .catch(() => {
-        if (!cancelled) setLoadError("This listing isn’t available to Book & pay.");
+        if (!cancelled) setLoadError("This place isn’t available to Book & pay.");
       });
     return () => {
       cancelled = true;
@@ -554,14 +554,14 @@ function NewBookingForm() {
       {isOwnListing ? (
         <Card className="space-y-4">
           <p className="text-sm text-muted">
-            You cannot Book & pay your own listing.
+            You cannot Book & pay your own place.
           </p>
           <Button
             type="button"
             variant="secondary"
             onClick={() => router.push(`/listings/${listing.id}`)}
           >
-            Back to listing
+            Back to place
           </Button>
         </Card>
       ) : openNights.length === 0 ? (

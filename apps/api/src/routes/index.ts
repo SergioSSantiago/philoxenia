@@ -398,7 +398,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return await social.deleteListing(params.id, request.user.userId);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Delete listing failed";
+          err instanceof Error ? err.message : "Delete this place failed";
         const status = message.includes("unavailable") ? 404 : 400;
         return reply.status(status).send({ error: message });
       }
