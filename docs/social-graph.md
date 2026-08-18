@@ -25,7 +25,7 @@ Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoin
 
 ## Notifications
 
-Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer links: **Friends**, **Messages**, **Bookings**, **Earnings**. Polled ~2.5s while the tab is visible.
+Bell empty: friend requests, sealed notes, and **Book & pay** stays. Footer links: **Friends**, **Messages**, **Bookings**, **Earnings**. Polled ~2.5s while the tab is visible. Message bell: **New sealed note** / **New note** (not “New message”); helper **open Messages to read this sealed note**. Social-cancel bell: **Nights freed** (not “Booking cancelled”); body **Stay at “…”: nights are free again**.
 
 | Type | Recipient |
 |------|-----------|
@@ -61,7 +61,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 
 ## Friend profile (web)
 
-`/friends/[id]` — identity, **Ready X wallet**, heading **Places to Book & pay**. Intro: open one to **Book & pay**, or **share a place invite** to earn (same asset they Book & pay). Profile CTA **Messages** (not Message). **Share place invite & earn** when the place has a connector %.
+`/friends/[id]` — identity, **Ready X wallet**, heading **Places to Book & pay**. Intro: open one to **Book & pay**, or **share a place invite** to earn (same asset they Book & pay). Profile CTA **Messages** (not Message). Empty places: **You can still open Messages**; Book & pay when they list a place. **Share place invite & earn** when the place has a connector %.
 
 Opened by tapping **name** or **Ready X wallet** on:
 

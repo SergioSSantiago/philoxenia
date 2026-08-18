@@ -156,8 +156,8 @@ export async function sendTextMessage(
   await createNotification({
     userId: recipientId,
     type: "message",
-    title: sealed ? "New sealed message" : "New message",
-    body: sealed ? "Encrypted on your device — open chat to read" : trimmed.slice(0, 120),
+    title: sealed ? "New sealed note" : "New note",
+    body: sealed ? "Encrypted on your device — open Messages to read this sealed note" : trimmed.slice(0, 120),
     href: `/messages/${senderId}`,
   });
 

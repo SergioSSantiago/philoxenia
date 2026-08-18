@@ -560,7 +560,7 @@ export default function ChatThreadPage() {
             </details>
           )}
           <div className="mt-1.5 flex justify-between gap-2 text-[10px] text-muted">
-            <span>Enter to send · Shift+Enter for newline</span>
+            <span>Enter to send this sealed note · Shift+Enter for newline</span>
             <span>
               {text.length}/{SEALED_PLAINTEXT_MAX}
             </span>

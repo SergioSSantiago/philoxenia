@@ -109,7 +109,7 @@ export default function ConnectorPage() {
       </div>
 
       <Card className="mb-10 space-y-4 border-accent/20 bg-accent-soft/30">
-        <p className="text-sm font-medium text-accent">How you make money</p>
+        <p className="text-sm font-medium text-accent">How you earn when they Book & pay</p>
         <ol className="space-y-3 text-sm leading-relaxed text-foreground">
           <li>
             <span className="font-medium">1. Pick a friend&apos;s place</span>
@@ -184,7 +184,7 @@ export default function ConnectorPage() {
                         <p className="mt-0.5 text-sm text-muted">
                           {listing.location}
                           {listing.host
-                            ? ` · Hosted by ${listing.host.displayName}`
+                            ? ` · Host ${listing.host.displayName}`
                             : ""}
                         </p>
                         <p className="mt-2 text-sm">

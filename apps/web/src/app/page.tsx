@@ -94,7 +94,7 @@ export default function LandingPage() {
           },
           {
             title: "Guest",
-            body: "Book & pay through friendship or an invite. STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
+            body: "Book & pay through friendship or a place invite. STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
           },
         ].map((item) => (
           <div key={item.title}>

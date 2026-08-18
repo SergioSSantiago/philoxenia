@@ -73,7 +73,7 @@ Signed-in home uses `GET /home` (JWT): friends, network places, shared places, o
 
 | Route | Purpose |
 |-------|---------|
-| `/` | Landing. Brand-first hero + live network stats; header brand links here |
+| `/` | Landing. Brand-first hero + live network stats; header brand links here. Guest card: **Book & pay through friendship or a place invite** (not “an invite”) |
 | `/home` | Unsigned heading **Book & pay with people you trust**; **Connect Ready X to Book & pay places from people you trust.** Signed-in: **Places from people you trust. Book & pay STRK or DAI.** Compact **Ready X wallet** + STRK/DAI + **Shield & swap** to Profile, globe of accessible places, friends’ places, **Shared with me** (**Place invites to Book & pay — last place invite wins connector attribution**; empty **No place invites yet**), own places (**share a place invite and earn**), **My stays** (recent Book & pay stays), friends count |
 | `/auth` | Legacy redirect to `/home` |
 | `/profile` | Display name, public STRK/DAI, shield/unshield **STRK or DAI**, AVNU STRK ↔ DAI swap. Name field placeholder **Display name**; CTA **Save display name**. Empty PATCH: **Enter a display name or sealed Messages keys**. Loader **Loading Ready X profile…**. Swap fail **Could not swap STRK or DAI**. Copy fail **Could not copy this Ready X wallet** |

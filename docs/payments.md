@@ -43,7 +43,7 @@ Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow
 
 ## Swap STRK ↔ DAI (Profile)
 
-Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (Home shortcut is **Shield & swap**). Labels: **You sell** / **You receive** (not “You pay” — that is **Book & pay**). Ready X must be connected to sign (**Connect Ready X** / **Connecting Ready X…** — Chrome or iPhone). Notices say Ready X, not a generic Ready extension. Swap fail: **Could not swap STRK or DAI**. Same-token: **Choose different tokens to swap STRK ↔ DAI**. No quote: **No AVNU route to swap STRK ↔ DAI right now**. Amount: **Enter a STRK or DAI amount**. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
+Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (heading **Swap STRK ↔ DAI**, not “Swap”; Home shortcut is **Shield & swap**). Labels: **You sell** / **You receive** (not “You pay” — that is **Book & pay**). Ready X must be connected to sign (**Connect Ready X** / **Connecting Ready X…** — Chrome or iPhone). Notices say Ready X, not a generic Ready extension. Swap fail: **Could not swap STRK or DAI**. Same-token: **Choose different tokens to swap STRK ↔ DAI**. No quote: **No AVNU route to swap STRK ↔ DAI right now**. Amount: **Enter a STRK or DAI amount**. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
 
 ## Balances (Home vs Profile)
 
