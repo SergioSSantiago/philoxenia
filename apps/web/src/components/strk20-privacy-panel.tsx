@@ -100,12 +100,12 @@ export function Strk20PrivacyPanel() {
         });
       } else {
         setNotice({
-          title: "Still not privacy-capable",
+          title: "Ready X is not Private-capable yet",
           body:
             lastReason ??
             "Ready X connected, but Private needs Smart Wallet + Private (API ≥ 0.10).",
           tone: "warn",
-          primaryLabel: "Try again",
+          primaryLabel: "Try Ready X again",
           secondaryLabel: "Refresh Philoxenia",
           reloadOnSecondary: true,
         });
@@ -115,7 +115,7 @@ export function Strk20PrivacyPanel() {
         title: "Could not reconnect Ready X",
         body: formatWalletError(err),
         tone: "error",
-        primaryLabel: "Try again",
+        primaryLabel: "Try Ready X again",
           secondaryLabel: "Refresh Philoxenia",
         reloadOnSecondary: true,
       });
@@ -300,7 +300,7 @@ export function Strk20PrivacyPanel() {
             label === "Connect Ready X" ||
             label === "Reconnect Ready" ||
             label === "Reconnect Ready X" ||
-            label === "Try again"
+            label === "Try Ready X again"
           ) {
             void reconnectReady();
             return;

@@ -78,7 +78,7 @@ export function WalletAddress({
           onClick={copy}
           className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border bg-surface px-4 text-sm font-medium text-foreground transition hover:bg-accent-soft/50 active:scale-[0.98]"
         >
-          {copied ? "Copied!" : "Copy"}
+          {copied ? "Copied Ready X wallet" : "Copy Ready X wallet"}
         </button>
         <button
           type="button"

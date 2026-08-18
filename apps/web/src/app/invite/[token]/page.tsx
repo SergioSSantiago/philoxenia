@@ -166,7 +166,7 @@ export default function InvitePage() {
             onClick={requestFriendship}
           >
             {busy
-              ? "Sending…"
+              ? "Sending friend request to Book & pay…"
               : `Request friendship with ${invite.host.displayName}`}
           </Button>
         )}

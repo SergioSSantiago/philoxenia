@@ -14,7 +14,7 @@ export function formatWalletError(err: unknown): string {
   const lower = msg.toLowerCase();
 
   if (isWalletCancelled(err)) {
-    return "Request cancelled in Ready X. Try again when ready to approve.";
+    return "Request cancelled in Ready X. Approve in Ready X when ready.";
   }
 
   if (msg.includes("Cannot sign the message from a different chainId")) {

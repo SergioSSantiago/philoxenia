@@ -207,7 +207,7 @@ export function LocationMapPicker({
               void runSearch();
             }
           }}
-          placeholder="Search city, street, or place…"
+          placeholder="Search this place on the map…"
           className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm"
         />
         <button
@@ -216,7 +216,7 @@ export function LocationMapPicker({
           disabled={searching}
           className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-full border border-border bg-surface px-5 text-sm font-medium disabled:opacity-50"
         >
-          {searching ? "Searching…" : "Search"}
+          {searching ? "Searching this place…" : "Search this place"}
         </button>
       </div>
 

@@ -112,7 +112,7 @@ export function AuthModal() {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      setError("Could not copy. Paste this URL in Ready X: " + openUrl);
+      setError("Could not copy Philoxenia link for Ready X. Paste this URL in Ready X: " + openUrl);
     }
   }
 
@@ -286,7 +286,7 @@ export function AuthModal() {
               ) : null}
               <p className="pt-1 text-center text-xs text-muted">
                 {mobileOutsideWallet
-                  ? "Ready X must open a second time to show the sign request."
+                  ? "Ready X must open a second time to Approve in Ready X."
                   : "Ready X will ask you to Approve in Ready X."}{" "}
                 Philoxenia never custodies your funds or keys.
               </p>

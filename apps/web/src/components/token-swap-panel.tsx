@@ -91,7 +91,7 @@ export function TokenSwapPanel() {
         title: "Could not connect Ready X",
         body: formatWalletError(err),
         tone: "error",
-        primaryLabel: "Try again",
+        primaryLabel: "Try Ready X again",
       });
     } finally {
       setReconnecting(false);
@@ -212,7 +212,7 @@ export function TokenSwapPanel() {
             type="button"
             onClick={flipDirection}
             className="mb-1 flex h-11 w-11 items-center justify-center self-end rounded-full border border-border bg-surface text-lg text-foreground transition hover:bg-accent-soft/50"
-            aria-label="Flip swap direction"
+            aria-label="Flip STRK ↔ DAI"
           >
             ⇄
           </button>
@@ -251,7 +251,7 @@ export function TokenSwapPanel() {
           {!walletReady
             ? "Connect Ready X to swap STRK ↔ DAI"
             : busy
-              ? "Swapping…"
+              ? "Swapping STRK ↔ DAI…"
               : `Swap ${sellAsset} → ${buyAsset}`}
         </Button>
 
@@ -271,7 +271,7 @@ export function TokenSwapPanel() {
           if (
             notice?.primaryLabel === "Connect Ready" ||
             notice?.primaryLabel === "Connect Ready X" ||
-            notice?.primaryLabel === "Try again"
+            notice?.primaryLabel === "Try Ready X again"
           ) {
             void reconnectReady();
             return;

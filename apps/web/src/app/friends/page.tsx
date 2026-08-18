@@ -216,7 +216,7 @@ export default function FriendsPage() {
                       disabled={busyId === found.id}
                       onClick={() => sendRequest(found.id)}
                     >
-                      {busyId === found.id ? "Sending…" : "Add by Ready X wallet"}
+                      {busyId === found.id ? "Sending friend request…" : "Add by Ready X wallet"}
                     </Button>
                   }
                 />
@@ -267,7 +267,7 @@ export default function FriendsPage() {
                           )
                         }
                       >
-                        {busyId === r.id ? "Accepting…" : "Accept"}
+                        {busyId === r.id ? "Accepting…" : "Accept to Book & pay"}
                       </Button>
                       <Button
                         variant="ghost"
@@ -281,7 +281,7 @@ export default function FriendsPage() {
                           )
                         }
                       >
-                        Reject
+                        Reject to Book & pay
                       </Button>
                     </div>
                   }
@@ -295,7 +295,7 @@ export default function FriendsPage() {
       <section className="mb-8">
         <SectionTitle
           title="Sent requests to Book & pay"
-          subtitle="Cancel a request before the other person responds"
+          subtitle="Cancel before they can Book & pay"
         />
         {data.pendingOutgoing.length === 0 ? (
           <EmptyState message="No sent requests to Book & pay yet. Cancel appears here after you send one." />
@@ -321,7 +321,7 @@ export default function FriendsPage() {
                         )
                       }
                     >
-                      {busyId === r.id ? "Cancelling…" : "Cancel request"}
+                      {busyId === r.id ? "Cancelling…" : "Cancel friend request to Book & pay"}
                     </Button>
                   }
                 />

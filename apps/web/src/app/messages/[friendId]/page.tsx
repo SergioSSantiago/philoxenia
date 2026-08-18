@@ -221,7 +221,7 @@ export default function ChatThreadPage() {
         title: "Could not connect Ready X",
         body: formatWalletError(err),
         tone: "error",
-        primaryLabel: "Try again",
+        primaryLabel: "Try Ready X again",
       });
     } finally {
       setReconnecting(false);
@@ -583,7 +583,7 @@ export default function ChatThreadPage() {
         busy={reconnecting || busy}
         primaryLabel={notice?.primaryLabel}
         onPrimary={() => {
-          if (notice?.primaryLabel === "Connect Ready" || notice?.primaryLabel === "Connect Ready X" || notice?.primaryLabel === "Try again") {
+          if (notice?.primaryLabel === "Connect Ready" || notice?.primaryLabel === "Connect Ready X" || notice?.primaryLabel === "Try Ready X again") {
             void reconnectReady();
             return;
           }

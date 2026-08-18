@@ -40,7 +40,7 @@ export default function Error({
         ) : null}
         <div className="mt-6 flex flex-col gap-3">
           <Button className="w-full" onClick={() => reset()}>
-            Try again
+            Try Philoxenia again
           </Button>
           <Button variant="secondary" className="w-full" onClick={clearSession}>
             Disconnect Ready X & go Home
