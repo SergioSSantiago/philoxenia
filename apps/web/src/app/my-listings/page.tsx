@@ -34,7 +34,7 @@ export default function MyListingsPage() {
         </Link>
       </div>
       {listings.length === 0 ? (
-        <EmptyState message="You haven't listed a place yet. Friends only see what you publish — add nights and a connector % so they can introduce guests who Book & pay." />
+        <EmptyState message="You haven’t published a place yet. Friends only see what you publish — add nights and a connector % so they can introduce guests who Book & pay." />
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {listings.map((l) => (

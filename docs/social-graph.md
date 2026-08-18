@@ -61,7 +61,7 @@ Bell empty: friend requests, **sealed notes**, and **Book & pay** stays (UI: **s
 
 ## Friend profile (web)
 
-`/friends/[id]` — identity, **Ready X wallet**, heading **Places to Book & pay**. Intro: open one to **Book & pay**, or **share a place invite** to earn (same asset they Book & pay). Profile CTA **Messages** (not Message). Empty places: **You can still open Messages**; Book & pay when they list a place. **Share place invite & earn** when the place has a connector %.
+`/friends/[id]` — identity, **Ready X wallet**, heading **Places to Book & pay**. Intro: open one to **Book & pay**, or **share a place invite** to earn (same asset they Book & pay). Profile CTA **Messages** (not Message). Empty places: **You can still open Messages**; Book & pay when they list a place; empty heading **hasn’t published a place yet**. **Share place invite & earn** when the place has a connector %.
 
 Opened by tapping **name** or **Ready X wallet** on:
 

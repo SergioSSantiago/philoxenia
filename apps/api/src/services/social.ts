@@ -931,7 +931,7 @@ export async function createListingShare(
   );
 
   if (!canShare) {
-    throw new Error("Not authorized to share this place");
+    throw new Error("You can’t share this place");
   }
 
   // Host may share for discovery, but is never a connector (0% connector path).
@@ -1704,7 +1704,7 @@ async function prepareBooking(
   for (const day of nightKeys) {
     const price = dayMap.get(day) ?? (opts?.settledRecovery ? listing.pricePerNight : undefined);
     if (!price) {
-      throw new Error(`Night ${day} is not available`);
+      throw new Error(`Night ${day} isn’t open to Book & pay`);
     }
     nightBreakdown.push({ day, pricePerNight: price });
     totalDaiNum += Number(price);
@@ -1912,7 +1912,7 @@ export async function updateBookingPayment(
   }
 
   if (booking.status !== "pending") {
-    throw new Error("This stay cannot be funded in its current state");
+    throw new Error("This stay cannot be recorded as Book & pay in its current state");
   }
 
   const escrowBookingId = data.escrowBookingId ?? booking.escrowBookingId;
@@ -1985,7 +1985,7 @@ export async function settleBooking(
   }
 
   if (booking.status !== "funded") {
-    throw new Error("This stay cannot be settled in its current state");
+    throw new Error("This stay cannot be recorded as Book & pay in its current state");
   }
 
   if (!booking.escrowBookingId) {

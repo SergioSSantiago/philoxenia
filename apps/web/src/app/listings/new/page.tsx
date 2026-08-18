@@ -126,7 +126,7 @@ export default function CreateListingPage() {
               />
             </label>
             <label className="block text-sm">
-              Default price per night (DAI)
+              DAI list price / night
               <TextInput
                 className="mt-1"
                 type="number"

@@ -62,9 +62,9 @@ export default function MessagesPage() {
         const withPreview = await Promise.all(
           raw.map(async (t) => {
             const body = t.lastMessage?.body;
-            let preview = "Start a sealed conversation to Book & pay";
+            let preview = "Start a sealed note to Book & pay";
             if (t.lastMessage?.kind === "transfer") {
-              preview = t.lastMessage.body || "STRK or DAI sent";
+              preview = t.lastMessage.body || "Send STRK or DAI";
             } else if (t.lastMessage?.kind === "booking") {
               preview = t.lastMessage.body || "Book & pay update";
             } else if (body) {
@@ -149,7 +149,7 @@ export default function MessagesPage() {
           ))}
         </div>
       ) : threads.length === 0 ? (
-        <EmptyState message="No friends yet. Add someone by Ready X wallet on Friends — each friend gets a sealed thread here. Send STRK or DAI in chat, and Book & pay updates show up on the thread." />
+        <EmptyState message="No friends yet. Add someone by Ready X wallet on Friends — each friend gets a sealed thread here. Send STRK or DAI in Messages, and Book & pay updates show up on the thread." />
       ) : (
         <ul className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm divide-y divide-border">
           {threads.map((t) => {

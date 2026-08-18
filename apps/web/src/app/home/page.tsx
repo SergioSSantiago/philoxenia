@@ -148,7 +148,7 @@ export default function HomePage() {
             subtitle="Priced in DAI. Guests Book & pay STRK or DAI. Set a connector % so friends can share a place invite and earn."
           />
           {data.myListings.length === 0 ? (
-            <EmptyState message="You haven't listed a place yet. Use List your place in the nav — friends only see what you publish, then they Book & pay STRK or DAI." />
+            <EmptyState message="You haven’t published a place yet. Use List your place in the nav — friends only see what you publish, then they Book & pay STRK or DAI." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.myListings.map((l) => (

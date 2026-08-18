@@ -187,8 +187,8 @@ export async function recordTransferMessage(
   const mode = input.privacyMode === "private" ? "private" : "public";
   const body =
     mode === "private"
-      ? `Sent ${amount} ${input.asset} (private)`
-      : `Sent ${amount} ${input.asset}`;
+      ? `Sent ${amount} ${input.asset} · Private`
+      : `Sent ${amount} ${input.asset} · Public`;
 
   const [row] = await db
     .insert(schema.directMessages)
@@ -209,8 +209,8 @@ export async function recordTransferMessage(
     title: `Received ${amount} ${input.asset}`,
     body:
       mode === "private"
-        ? "A friend sent you a private STRK20 transfer."
-        : "A friend sent you tokens in chat.",
+        ? "A friend used Send STRK or DAI · Private."
+        : "A friend used Send STRK or DAI in Messages.",
     href: `/messages/${senderId}`,
   });
 

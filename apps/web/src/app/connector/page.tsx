@@ -260,7 +260,7 @@ export default function ConnectorPage() {
             })}
 
             {earnable.length === 0 && noReward.length > 0 && (
-              <EmptyState message="Your friends have places, but none offer a connector reward yet (0%). Ask them to set a % when they list — you earn when they Book & pay through your place invite." />
+              <EmptyState message="Your friends have places, but none offer a connector reward yet (0%). Ask them to set a % when they list a place — you earn when they Book & pay through your place invite." />
             )}
 
             {noReward.length > 0 && earnable.length > 0 && (
