@@ -93,7 +93,7 @@ export default function ProfilePage() {
               disabled={saving || !displayName.trim()}
               className="w-full sm:w-auto"
             >
-              {saving ? "Saving…" : saved ? "Saved!" : "Save display name"}
+              {saving ? "Saving display name…" : saved ? "Display name saved" : "Save display name"}
             </Button>
           </form>
           {error && <p className="mt-3 text-sm text-red-700">{error}</p>}

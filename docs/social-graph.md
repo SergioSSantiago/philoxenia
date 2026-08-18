@@ -25,7 +25,7 @@ Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoin
 
 ## Notifications
 
-Bell heading **Friends, notes & stays** (not “Notifications”). Empty: **No friends, notes or Book & pay yet.** Friend requests, **sealed notes**, and **Book & pay** stays (UI: **sealed notes**, not “sealed messages”). Footer links: **Friends**, **Messages**, **Bookings**, **Earnings**. Polled ~2.5s while the tab is visible. Friend-request body: **wants to be friends so you can Book & pay** (not “wants to connect”). Message bell: **New sealed note** / **New note** (not “New message”); helper **open Messages to read this sealed note**. Social-cancel bell: **Nights freed** (not “Booking cancelled”); body **Stay at “…”: nights are free again**.
+Bell heading **Friends, notes & stays** (not “Notifications”). **Mark friends, notes & stays read** (not “Mark all read”). Empty: **No friends, notes or Book & pay yet.** Friend requests, **sealed notes**, and **Book & pay** stays (UI: **sealed notes**, not “sealed messages”). Footer links: **Friends**, **Messages**, **Bookings**, **Earnings**. Polled ~2.5s while the tab is visible. Friend-request body: **wants to be friends so you can Book & pay** (not “wants to connect”). Message bell: **New sealed note** / **New note** (not “New message”); helper **open Messages to read this sealed note**. Social-cancel bell: **Nights freed** (not “Booking cancelled”); body **Stay at “…”: nights are free again**.
 
 | Type | Recipient |
 |------|-----------|
@@ -42,7 +42,7 @@ Bell heading **Friends, notes & stays** (not “Notifications”). Empty: **No f
 |--------|------|-------------|
 | GET | `/notifications` | List + unread count |
 | POST | `/notifications/:id/read` | Mark one read. Missing: **That notification isn’t available.** |
-| POST | `/notifications/read-all` | Mark all read |
+| POST | `/notifications/read-all` | Mark all read. UI: **Mark friends, notes & stays read** |
 
 ## API endpoints
 

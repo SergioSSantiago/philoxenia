@@ -213,7 +213,7 @@ export function Strk20PrivacyPanel() {
                 disabled={reconnecting}
                 onClick={() => void reconnectReady()}
               >
-                {reconnecting ? "Reconnecting…" : "Reconnect Ready X"}
+                {reconnecting ? "Reconnecting Ready X…" : "Reconnect Ready X"}
               </Button>
               <Button
                 type="button"

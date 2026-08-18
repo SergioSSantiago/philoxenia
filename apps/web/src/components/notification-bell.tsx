@@ -66,7 +66,7 @@ export function NotificationBell() {
                 className="text-xs text-muted underline-offset-2 hover:text-foreground hover:underline"
                 onClick={() => void markAllRead()}
               >
-                Mark all read
+                Mark friends, notes & stays read
               </button>
             )}
           </div>

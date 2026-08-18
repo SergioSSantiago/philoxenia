@@ -46,7 +46,7 @@ Everyone else ──► 404 (place unavailable)
 
 ## Home globe
 
-`/home` plots accessible places on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **invite** (taupe). Pin/legend labels: **Yours** / **Friend** / **Place invite** (not “Invite”). Cluster counts: **N places here**. Aria: **Interactive globe of places you can Book & pay**. Cluster hover: **Tap to choose a place to Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: **places need a map pin** — add friends by **Ready X wallet** or **publish a place** to **Book & pay**. Tap a pin to open the place.
+`/home` plots accessible places on a cobe globe (`listings-globe.tsx`). Pins need `locationLat` / `locationLng`. Colors: **yours** (orange), **friends** (dark), **invite** (taupe). Pin/legend labels: **Yours** / **Friend** / **Place invite** (not “Invite”). Cluster counts: **N places here**. Pin aria: **View place: {title}** (not “Open {title}”); cluster aria: **N places to Book & pay**. Aria: **Interactive globe of places you can Book & pay**. Cluster hover: **Tap to choose a place to Book & pay**. Cluster menu: **Choose a place to Book & pay**. Empty: **places need a map pin** — add friends by **Ready X wallet** or **publish a place** to **Book & pay**. Tap a pin to **View place**.
 
 ## API endpoints
 

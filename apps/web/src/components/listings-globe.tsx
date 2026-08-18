@@ -563,8 +563,8 @@ export function ListingsGlobe({
                 }}
                 aria-label={
                   multi
-                    ? `${cluster.items.length} places`
-                    : `Open ${lead.title}`
+                    ? `${cluster.items.length} places to Book & pay`
+                    : `View place: ${lead.title}`
                 }
                 className="group pointer-events-auto absolute z-10 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 style={{ visibility: "hidden" }}
