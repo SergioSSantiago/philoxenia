@@ -195,11 +195,11 @@ export async function acceptFriendRequest(
   });
 
   if (!request || request.toUserId !== currentUserId) {
-    throw new Error("That friend request isn’t available.");
+    throw new Error("That friend request to Book & pay isn’t available.");
   }
 
   if (request.status !== "pending") {
-    throw new Error("That friend request is no longer pending.");
+    throw new Error("That friend request to Book & pay is no longer pending.");
   }
 
   const [userAId, userBId] = orderedPair(request.fromUserId, request.toUserId);
@@ -237,11 +237,11 @@ export async function rejectFriendRequest(
   });
 
   if (!request || request.toUserId !== currentUserId) {
-    throw new Error("That friend request isn’t available.");
+    throw new Error("That friend request to Book & pay isn’t available.");
   }
 
   if (request.status !== "pending") {
-    throw new Error("That friend request is no longer pending.");
+    throw new Error("That friend request to Book & pay is no longer pending.");
   }
 
   await db
@@ -271,11 +271,11 @@ export async function cancelFriendRequest(
   });
 
   if (!request || request.fromUserId !== currentUserId) {
-    throw new Error("That friend request isn’t available.");
+    throw new Error("That friend request to Book & pay isn’t available.");
   }
 
   if (request.status !== "pending") {
-    throw new Error("That friend request is no longer pending.");
+    throw new Error("That friend request to Book & pay is no longer pending.");
   }
 
   await db
@@ -312,7 +312,7 @@ export async function removeFriend(currentUserId: string, friendId: string) {
     .returning();
 
   if (deleted.length === 0) {
-    throw new Error("That friendship isn’t available.");
+    throw new Error("That friendship to Book & pay isn’t available.");
   }
 
   const remover = await getUserById(currentUserId);

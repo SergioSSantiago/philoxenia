@@ -260,7 +260,7 @@ export function AuthModal() {
                 {signing || (waiting && challengeReady)
                   ? "Approve in Ready X…"
                   : !account
-                    ? "Ready X loading…"
+                    ? "Connecting Ready X…"
                     : !challengeReady
                       ? "Preparing Ready X signature…"
                       : "Approve in Ready X"}

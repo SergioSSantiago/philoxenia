@@ -249,7 +249,7 @@ export function TokenSwapPanel() {
           onClick={() => void onSwap()}
         >
           {!walletReady
-            ? "Connect Ready X to swap"
+            ? "Connect Ready X to swap STRK ↔ DAI"
             : busy
               ? "Swapping…"
               : `Swap ${sellAsset} → ${buyAsset}`}

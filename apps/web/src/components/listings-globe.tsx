@@ -527,9 +527,9 @@ export function ListingsGlobe({
         >
           {(
             [
-              ["+", () => bumpScale(1.14), "Zoom in"],
-              ["−", () => bumpScale(0.88), "Zoom out"],
-              ["⊙", resetView, "Reset view"],
+              ["+", () => bumpScale(1.14), "Zoom places in"],
+              ["−", () => bumpScale(0.88), "Zoom places out"],
+              ["⊙", resetView, "Reset globe of places"],
             ] as const
           ).map(([label, action, aria]) => (
             <button
@@ -673,7 +673,7 @@ export function ListingsGlobe({
           {(
             [
               ["mine", "Yours"],
-              ["friend", "Friends"],
+              ["friend", "Friend places"],
               ["shared", "Place invite"],
             ] as const
           ).map(([kind, label]) => (

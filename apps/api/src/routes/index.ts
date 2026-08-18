@@ -223,7 +223,7 @@ export async function registerRoutes(app: FastifyInstance) {
         );
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not update this friend request";
+          err instanceof Error ? err.message : "Could not update this friend request to Book & pay";
         return reply.status(400).send({ error: message });
       }
     }
@@ -244,7 +244,7 @@ export async function registerRoutes(app: FastifyInstance) {
         );
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not update this friend request";
+          err instanceof Error ? err.message : "Could not update this friend request to Book & pay";
         return reply.status(400).send({ error: message });
       }
     }
@@ -265,7 +265,7 @@ export async function registerRoutes(app: FastifyInstance) {
         );
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not update this friend request";
+          err instanceof Error ? err.message : "Could not update this friend request to Book & pay";
         return reply.status(400).send({ error: message });
       }
     }
@@ -283,7 +283,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return await social.removeFriend(request.user.userId, params.id);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not remove this friend";
+          err instanceof Error ? err.message : "Could not end this friendship to Book & pay";
         return reply.status(400).send({ error: message });
       }
     }
@@ -368,7 +368,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return await social.removeFriend(request.user.userId, params.id);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not remove this friend";
+          err instanceof Error ? err.message : "Could not end this friendship to Book & pay";
         return reply.status(400).send({ error: message });
       }
     }

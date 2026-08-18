@@ -125,7 +125,7 @@ export default function FriendsPage() {
       await load();
       setActionOk(okMessage);
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Could not update this friend request");
+      setActionError(err instanceof Error ? err.message : "Could not update Friends to Book & pay");
     } finally {
       setBusyId(null);
     }
@@ -240,7 +240,7 @@ export default function FriendsPage() {
       <section className="mb-8">
         <SectionTitle
           title="Friend requests to Book & pay"
-          subtitle="Accept or reject requests sent to you"
+          subtitle="Accept so you can Book & pay"
         />
         {data.pendingIncoming.length === 0 ? (
           <EmptyState message="No friend requests to Book & pay yet. They appear when someone adds your Ready X wallet." />
@@ -263,7 +263,7 @@ export default function FriendsPage() {
                           runAction(
                             r.id,
                             () => api.post(`/friends/accept/${r.id}`),
-                            "Friend request accepted."
+                            "Friend request accepted — Book & pay their places."
                           )
                         }
                       >
@@ -277,7 +277,7 @@ export default function FriendsPage() {
                           runAction(
                             r.id,
                             () => api.post(`/friends/reject/${r.id}`),
-                            "Friend request rejected."
+                            "Friend request rejected — they cannot Book & pay your places."
                           )
                         }
                       >
@@ -317,7 +317,7 @@ export default function FriendsPage() {
                         runAction(
                           r.id,
                           () => api.post(`/friends/cancel/${r.id}`),
-                          "Friend request cancelled."
+                          "Friend request cancelled — they cannot Book & pay yet."
                         )
                       }
                     >
@@ -351,7 +351,7 @@ export default function FriendsPage() {
                       className="w-full sm:w-auto"
                       onClick={() => router.push(`/messages/${friend.id}`)}
                     >
-                      Message
+                      Messages
                     </Button>
                     <Button
                       variant="secondary"
@@ -361,11 +361,11 @@ export default function FriendsPage() {
                         runAction(
                           friend.id,
                           () => api.post(`/friends/remove/${friend.id}`),
-                          "Friend removed."
+                          "Friend removed — you can no longer Book & pay their places."
                         )
                       }
                     >
-                      {busyId === friend.id ? "Removing…" : "Remove friend"}
+                      {busyId === friend.id ? "Ending friendship…" : "End friendship"}
                     </Button>
                   </div>
                 }

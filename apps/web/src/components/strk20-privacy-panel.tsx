@@ -106,7 +106,7 @@ export function Strk20PrivacyPanel() {
             "Ready X connected, but Private needs Smart Wallet + Private (API ≥ 0.10).",
           tone: "warn",
           primaryLabel: "Try again",
-          secondaryLabel: "Refresh page",
+          secondaryLabel: "Refresh Philoxenia",
           reloadOnSecondary: true,
         });
       }
@@ -116,7 +116,7 @@ export function Strk20PrivacyPanel() {
         body: formatWalletError(err),
         tone: "error",
         primaryLabel: "Try again",
-        secondaryLabel: "Refresh page",
+          secondaryLabel: "Refresh Philoxenia",
         reloadOnSecondary: true,
       });
     } finally {
@@ -156,7 +156,7 @@ export function Strk20PrivacyPanel() {
         body,
         tone: "error",
         primaryLabel: needsReconnect ? "Reconnect Ready X" : "Got it",
-        secondaryLabel: needsReconnect ? "Refresh page" : "Got it",
+        secondaryLabel: needsReconnect ? "Refresh Philoxenia" : "Got it",
         reloadOnSecondary: needsReconnect,
       });
     } finally {
@@ -221,7 +221,7 @@ export function Strk20PrivacyPanel() {
                 disabled={reconnecting}
                 onClick={() => window.location.reload()}
               >
-                Refresh page
+                Refresh Philoxenia
               </Button>
             </div>
           </div>
