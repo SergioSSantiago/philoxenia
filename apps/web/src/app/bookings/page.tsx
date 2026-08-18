@@ -31,9 +31,9 @@ export default function BookingsPage() {
         subtitle="Cards show You host or You stay. Book & pay is STRK or DAI; cancel only frees nights."
       />
       {bookings == null ? (
-        <p className="text-sm text-muted">Loading bookings…</p>
+        <p className="text-sm text-muted">Loading stays…</p>
       ) : bookings.length === 0 ? (
-        <EmptyState message="No bookings yet. Book & pay a friend’s place, or wait for a guest after a connector invite." />
+        <EmptyState message="No Book & pay stays yet. Book & pay a friend’s place, or wait for a guest after a connector invite." />
       ) : (
         <div className="space-y-4">
           {bookings.map((b) => (

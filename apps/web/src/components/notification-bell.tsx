@@ -123,6 +123,13 @@ export function NotificationBell() {
             >
               Bookings
             </Link>
+            <Link
+              href="/connector"
+              className="text-xs text-muted hover:text-foreground"
+              onClick={() => setOpen(false)}
+            >
+              Earnings
+            </Link>
           </div>
         </div>
       )}

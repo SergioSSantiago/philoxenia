@@ -22,7 +22,7 @@ npm run typecheck -w @philoxenia/web
 
 Sign-in is a modal on `/home`. Signed-out Shell header is **Connect Ready X**. **Desktop:** Chrome + Ready X (Smart Wallet + Private). **iPhone:** Safari can Connect via WalletConnect (`ready://`); Private STRK or DAI needs the Ready X in-app browser. `/auth` redirects to `/home`.
 
-Firefox: no Ready X → no private pay.
+Firefox: no Ready X → no Private Book & pay.
 
 ## Layout
 

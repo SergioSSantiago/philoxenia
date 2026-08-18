@@ -154,5 +154,5 @@ export async function confirmPaidBookingWithRetry(
       await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
     }
   }
-  throw lastErr instanceof Error ? lastErr : new Error("Confirm booking failed");
+  throw lastErr instanceof Error ? lastErr : new Error("Could not record Book & pay stay");
 }

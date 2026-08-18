@@ -154,7 +154,7 @@ export default function FriendProfilePage() {
           </Link>
           <Link href="/connector">
             <Button variant="secondary" className="w-full sm:w-auto">
-              Connector earnings
+              Earn as a connector
             </Button>
           </Link>
         </div>

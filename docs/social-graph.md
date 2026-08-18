@@ -25,7 +25,7 @@ Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoin
 
 ## Notifications
 
-Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer links: **Friends**, **Messages**, **Bookings**. Polled ~2.5s while the tab is visible.
+Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer links: **Friends**, **Messages**, **Bookings**, **Earnings**. Polled ~2.5s while the tab is visible.
 
 | Type | Recipient |
 |------|-----------|
