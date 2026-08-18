@@ -85,7 +85,7 @@ export default function LandingPage() {
       <section className="mx-auto grid max-w-5xl gap-12 px-6 py-16 md:grid-cols-3 md:gap-16">
         {[
           {
-            title: "Host",
+            title: "Publish places",
             body: "Publish places for friends. Set a connector % so your network wants to bring guests. Direct Book & pay stays 0% protocol.",
           },
           {
@@ -93,7 +93,7 @@ export default function LandingPage() {
             body: "Introduce someone you trust to a friend’s place. Earn a host-set % in STRK or DAI when they Book & pay — Philoxenia takes 10% of that reward only.",
           },
           {
-            title: "Guest",
+            title: "Book & pay",
             body: "Book & pay through friendship or a place invite. STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
           },
         ].map((item) => (

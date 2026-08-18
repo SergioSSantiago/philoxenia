@@ -176,10 +176,10 @@ export default function HomePage() {
 
         <section>
           <SectionTitle
-            title="My friends"
+            title="Friends to Book & pay"
             subtitle={
               data.pendingFriendRequests > 0
-                ? `${data.pendingFriendRequests} pending request(s)`
+                ? `${data.pendingFriendRequests} friend request(s) to Book & pay`
                 : undefined
             }
           />

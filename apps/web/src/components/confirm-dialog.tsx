@@ -12,6 +12,7 @@ export function ConfirmDialog({
   body,
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
+  busyLabel = "Working…",
   danger = false,
   busy = false,
   error,
@@ -23,6 +24,7 @@ export function ConfirmDialog({
   body: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  busyLabel?: string;
   danger?: boolean;
   busy?: boolean;
   error?: string;
@@ -85,7 +87,7 @@ export function ConfirmDialog({
               danger ? "bg-red-700 text-white hover:bg-red-800" : ""
             }`}
           >
-            {busy ? "Working…" : confirmLabel}
+            {busy ? busyLabel : confirmLabel}
           </Button>
         </div>
       </div>

@@ -645,7 +645,7 @@ function MessageBubble({
               </p>
             )}
             <p className="font-medium">
-              {mine ? "You sent" : "Received"}{" "}
+              {mine ? "Sent STRK or DAI" : "Received STRK or DAI"}{" "}
               {message.amount && message.asset
                 ? formatTokenAmount(message.amount) + ` ${message.asset}`
                 : message.displayBody}
@@ -659,7 +659,7 @@ function MessageBubble({
                   mine ? "text-white/80" : "text-muted"
                 }`}
               >
-                View transaction
+                View on Voyager
               </a>
             )}
           </>
