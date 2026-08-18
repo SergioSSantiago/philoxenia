@@ -76,7 +76,7 @@ export default function InvitePage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
-        <p className="text-muted">Opening invite to Book & pay…</p>
+        <p className="text-muted">Opening place invite to Book & pay…</p>
       </div>
     );
   }
@@ -118,8 +118,8 @@ export default function InvitePage() {
           . You must be friends with the host to view and Book & pay (STRK or
           DAI).
           {invite.hasConnector && invite.connector
-            ? " If you Book & pay through this link, the connector reward goes to their Ready X wallet."
-            : " This host link has no connector reward."}
+            ? " If you Book & pay through this place invite, the connector reward goes to their Ready X wallet."
+            : " This host place invite has no connector reward."}
         </p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -130,7 +130,7 @@ export default function InvitePage() {
               <p className="text-xs font-medium uppercase tracking-wide text-muted">
                 Connector
               </p>
-              <p className="mt-1 text-sm text-muted">None — host shared link</p>
+              <p className="mt-1 text-sm text-muted">None — host place invite</p>
             </div>
           )}
           <UserBadge user={invite.host} role="Host" />

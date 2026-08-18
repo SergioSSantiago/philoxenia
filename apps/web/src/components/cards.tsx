@@ -33,7 +33,7 @@ function bookingStayRangeLabel(booking: Booking): string {
     if (nights.length <= 5) {
       return nights.map(formatStayDay).join(" · ");
     }
-    return `${formatStayDay(nights[0])} – ${formatStayDay(nights[nights.length - 1])} · not consecutive`;
+    return `${formatStayDay(nights[0])} – ${formatStayDay(nights[nights.length - 1])} · nights not consecutive`;
   }
   return `${new Date(booking.checkIn).toLocaleDateString()} – ${new Date(booking.checkOut).toLocaleDateString()}`;
 }
@@ -51,7 +51,7 @@ export function stayStatusLabel(status: BookingStatus): string {
     case "confirmed":
       return "Book & pay confirmed";
     case "refunded":
-      return "Refunded";
+      return "Book & pay refunded";
     default:
       return status;
   }
@@ -183,7 +183,7 @@ export function BookingCard({
               {formatTokenAmount(booking.totalPrice)} {booking.paymentAsset} ·{" "}
               {booking.nights} nights
               {stayNightsHaveGaps(selectedStayNights(booking))
-                ? " · not consecutive"
+                ? " · nights not consecutive"
                 : ""}
               {booking.privacyMode === "private"
                 ? " · Private"

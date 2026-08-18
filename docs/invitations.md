@@ -29,7 +29,7 @@ Host or friend of host
 - Many active shares can exist for one listing (one per share action).
 - When a logged-in guest opens a place invite, `share_introductions` for `(guest, listing)` is **upserted** to that share’s connector (last-touch).
 - At booking, `resolveConnectorForBooking` reads that introduction:
-  - `connectorId` null (host link) → direct booking, 0% connector
+  - `connectorId` null (host place invite) → direct booking, 0% connector
   - connector still friends with host → that connector earns the reward on settle
   - connector no longer friends with host → treated as no connector
 
@@ -65,8 +65,8 @@ Listing cards (`ListingCard`) show `{n}% connector reward` next to the DAI price
 
 ## Invite gate
 
-1. Guest opens link.
-2. If already friends with host → the place opens (**Opening place to Book & pay…**). First paint while resolving the token: **Opening invite to Book & pay…**. Pending friendship: open the **place** so you can Book & pay. Invite eyebrow: **Place invite**. Invalid/expired token (API + page): **This place invite isn’t available to Book & pay.** Invite body: **Private place hosted by**. Already friends when requesting: **You’re already friends — Book & pay their places from Friends.**
+1. Guest opens the **place invite**.
+2. If already friends with host → the place opens (**Opening place to Book & pay…**). First paint while resolving the token: **Opening place invite to Book & pay…**. Pending friendship: open the **place** so you can Book & pay. Invite eyebrow: **Place invite**. Invalid/expired token (API + page): **This place invite isn’t available to Book & pay.** Invite body: **Private place hosted by**. Already friends when requesting: **You’re already friends — Book & pay their places from Friends.** Connector empty: **None — host place invite**. Host share: **This host place invite has no connector reward.** Connector share: **If you Book & pay through this place invite**, the reward goes to their Ready X wallet.
 3. If not → request friendship with host; after accept, the place unlocks. Friend-request fail: **Could not send the friend request to Book & pay.** While pending, `/invite/[token]` polls every **3s** and redirects when `canViewListing` becomes true (copy: open the place so you can **Book & pay**).
 4. Display name is cosmetic; rewards always go to the connector **Ready X wallet**. Unsigned guests tap **Connect Ready X to Book & pay** on `/invite/[token]`. Connector badge: **Connector (Ready X payout)**. Invite body: friends with the host to **Book & pay (STRK or DAI)**; if they **Book & pay** through the place invite, the reward goes to the connector’s Ready X wallet.
 

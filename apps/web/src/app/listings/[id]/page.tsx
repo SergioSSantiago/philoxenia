@@ -457,13 +457,13 @@ export default function ListingPage() {
                 </p>
               ) : (
                 <p className="text-muted leading-relaxed">
-                  You shared as the host — this link has{" "}
+                  You shared as the host — this place invite has{" "}
                   <span className="font-medium text-foreground">
                     no connector
                   </span>
                   . Guests who Book & pay through it do not create a connector reward.
                   Friends who share your place become connectors on their own
-                  links.
+                  place invites.
                 </p>
               )}
             </Card>

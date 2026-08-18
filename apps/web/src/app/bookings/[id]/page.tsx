@@ -163,11 +163,11 @@ export default function BookingDetailPage() {
       <Card className="space-y-4">
         <div className="grid gap-4 text-sm sm:grid-cols-2">
           <div>
-            <p className="text-muted">Check-in</p>
+            <p className="text-muted">First night</p>
             <p>{new Date(booking.checkIn).toLocaleDateString()}</p>
           </div>
           <div>
-            <p className="text-muted">Check-out</p>
+            <p className="text-muted">Morning you leave</p>
             <p>{new Date(booking.checkOut).toLocaleDateString()}</p>
           </div>
           <div>
@@ -188,7 +188,7 @@ export default function BookingDetailPage() {
                   )
                   .join(" · ")}
                 {nightsHaveGaps
-                  ? " — not consecutive (check-in/out is the bounding window)."
+                  ? " — nights not consecutive (first night / morning you leave is the bounding window)."
                   : ""}
               </p>
             )}
