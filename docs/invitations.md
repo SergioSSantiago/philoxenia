@@ -4,7 +4,7 @@
 
 # Invitations
 
-Connectors introduce guests to host places via **opaque share links**. Several people can share the same place; each link carries its own connector.
+Connectors introduce guests to host places via **opaque place invites**. Several people can share the same place; each invite carries its own connector.
 
 Introductions are the growth engine of Philoxenia — see **[connectors.md](./connectors.md)** for why earning as a connector matters and where to share in the UI.
 
@@ -27,7 +27,7 @@ Host or friend of host
 ## Multi-connector attribution
 
 - Many active shares can exist for one listing (one per share action).
-- When a logged-in guest opens a link, `share_introductions` for `(guest, listing)` is **upserted** to that share’s connector (last-touch).
+- When a logged-in guest opens a place invite, `share_introductions` for `(guest, listing)` is **upserted** to that share’s connector (last-touch).
 - At booking, `resolveConnectorForBooking` reads that introduction:
   - `connectorId` null (host link) → direct booking, 0% connector
   - connector still friends with host → that connector earns the reward on settle
@@ -59,14 +59,14 @@ Listing cards (`ListingCard`) show `{n}% connector` next to the DAI price when t
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | POST | `/listings/:id/share` | Yes | Create share; returns `hasConnector` |
-| GET | `/invite/:token` | Optional | Resolve invite; records introduction if logged in |
+| GET | `/invite/:token` | Optional | Resolve place invite; records introduction if logged in. Missing/expired: **This place invite isn’t available to Book & pay.** (not “Invitation unavailable.”). The invite page surfaces that API error (not a silent generic catch). |
 | GET | `/connector/earnings` | Yes | Connector reward history |
 | GET | `/friends/:id` | Yes | Friend + their places (share from profile) |
 
 ## Invite gate
 
 1. Guest opens link.
-2. If already friends with host → the place opens (**Opening place to Book & pay…**). First paint while resolving the token: **Opening invite to Book & pay…**. Pending friendship: open the **place** so you can Book & pay. Invite eyebrow: **Place invite**. Invalid token: **This place invite isn’t available to Book & pay.** Invite body: **Private place hosted by**.
+2. If already friends with host → the place opens (**Opening place to Book & pay…**). First paint while resolving the token: **Opening invite to Book & pay…**. Pending friendship: open the **place** so you can Book & pay. Invite eyebrow: **Place invite**. Invalid/expired token (API + page): **This place invite isn’t available to Book & pay.** Invite body: **Private place hosted by**. Already friends when requesting: **You’re already friends — Book & pay their places from Friends.**
 3. If not → request friendship with host; after accept, the place unlocks. Friend-request fail: **Could not send the friend request to Book & pay.** While pending, `/invite/[token]` polls every **3s** and redirects when `canViewListing` becomes true (copy: open the place so you can **Book & pay**).
 4. Display name is cosmetic; rewards always go to the connector **Ready X wallet**. Unsigned guests tap **Connect Ready X to Book & pay** on `/invite/[token]`. Connector badge: **Connector (Ready X payout)**. Invite body: friends with the host to **Book & pay (STRK or DAI)**; if they **Book & pay** through the link, the reward goes to the connector’s Ready X wallet.
 

@@ -64,7 +64,7 @@ export async function verifyAuthSignature(
   }
 
   if (!signature[0] || !signature[1]) {
-    throw new Error("Invalid signature");
+    throw new Error("Invalid Ready X signature. Connect Ready X again.");
   }
 
   const chainId = resolveSnip12ChainId(process.env.STARKNET_CHAIN);
@@ -85,12 +85,12 @@ export async function verifyAuthSignature(
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err);
     throw new Error(
-      `Could not verify signature on Starknet (${detail}). Confirm Ready is on mainnet and try again.`
+      `Could not verify signature on Starknet (${detail}). Confirm Ready X is on mainnet and try again.`
     );
   }
 
   if (!isValid) {
-    throw new Error("Invalid signature");
+    throw new Error("Invalid Ready X signature. Connect Ready X again.");
   }
 
   await db

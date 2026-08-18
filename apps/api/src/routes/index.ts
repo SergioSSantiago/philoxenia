@@ -508,7 +508,8 @@ export async function registerRoutes(app: FastifyInstance) {
           request.user.userId
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Share failed";
+        const message =
+          err instanceof Error ? err.message : "Could not share this place";
         const status = message.includes("unavailable") ? 404 : 403;
         return reply.status(status).send({ error: message });
       }
@@ -525,7 +526,9 @@ export async function registerRoutes(app: FastifyInstance) {
     try {
       return await social.resolveInvite(params.token, guestId ?? undefined);
     } catch {
-      return reply.status(404).send({ error: "Invitation unavailable." });
+      return reply.status(404).send({
+        error: "This place invite isn’t available to Book & pay.",
+      });
     }
   });
 

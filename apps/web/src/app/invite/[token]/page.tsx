@@ -26,7 +26,15 @@ export default function InvitePage() {
   useEffect(() => {
     setLoading(true);
     loadInvite()
-      .catch(() => setError("This place invite isn’t available to Book & pay."))
+      .catch((err) =>
+        setError(
+          err instanceof Error &&
+            err.message &&
+            err.message !== "Request failed"
+            ? err.message
+            : "This place invite isn’t available to Book & pay."
+        )
+      )
       .finally(() => setLoading(false));
     // Re-resolve when the guest signs in so introduction + friendship state update
     // eslint-disable-next-line react-hooks/exhaustive-deps

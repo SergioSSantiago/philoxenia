@@ -130,12 +130,14 @@ export async function searchUsers(query: string, currentUserId: string) {
 
 export async function sendFriendRequest(fromUserId: string, toUserId: string) {
   if (fromUserId === toUserId) {
-    throw new Error("Cannot send friend request to yourself");
+    throw new Error("You can’t send a friend request to yourself");
   }
 
   const alreadyFriends = await areFriends(fromUserId, toUserId);
   if (alreadyFriends) {
-    throw new Error("Already friends");
+    throw new Error(
+      "You’re already friends — Book & pay their places from Friends."
+    );
   }
 
   const existing = await db.query.friendRequests.findFirst({
@@ -189,11 +191,11 @@ export async function acceptFriendRequest(
   });
 
   if (!request || request.toUserId !== currentUserId) {
-    throw new Error("Friend request not found");
+    throw new Error("That friend request isn’t available.");
   }
 
   if (request.status !== "pending") {
-    throw new Error("Friend request is not pending");
+    throw new Error("That friend request is no longer pending.");
   }
 
   const [userAId, userBId] = orderedPair(request.fromUserId, request.toUserId);
@@ -231,11 +233,11 @@ export async function rejectFriendRequest(
   });
 
   if (!request || request.toUserId !== currentUserId) {
-    throw new Error("Friend request not found");
+    throw new Error("That friend request isn’t available.");
   }
 
   if (request.status !== "pending") {
-    throw new Error("Friend request is not pending");
+    throw new Error("That friend request is no longer pending.");
   }
 
   await db
@@ -265,11 +267,11 @@ export async function cancelFriendRequest(
   });
 
   if (!request || request.fromUserId !== currentUserId) {
-    throw new Error("Friend request not found");
+    throw new Error("That friend request isn’t available.");
   }
 
   if (request.status !== "pending") {
-    throw new Error("Friend request is not pending");
+    throw new Error("That friend request is no longer pending.");
   }
 
   await db
@@ -290,7 +292,7 @@ export async function cancelFriendRequest(
 
 export async function removeFriend(currentUserId: string, friendId: string) {
   if (currentUserId === friendId) {
-    throw new Error("Cannot remove yourself");
+    throw new Error("You can’t remove yourself.");
   }
 
   const [userAId, userBId] = orderedPair(currentUserId, friendId);
@@ -306,7 +308,7 @@ export async function removeFriend(currentUserId: string, friendId: string) {
     .returning();
 
   if (deleted.length === 0) {
-    throw new Error("Friendship not found");
+    throw new Error("That friendship isn’t available.");
   }
 
   const remover = await getUserById(currentUserId);
@@ -963,7 +965,7 @@ export async function resolveInvite(token: string, guestId?: string) {
   });
 
   if (!share || share.status !== "active") {
-    throw new Error("Invitation unavailable.");
+    throw new Error("This place invite isn’t available to Book & pay.");
   }
 
   if (share.expiresAt && share.expiresAt < new Date()) {
@@ -971,7 +973,7 @@ export async function resolveInvite(token: string, guestId?: string) {
       .update(schema.listingShares)
       .set({ status: "expired" })
       .where(eq(schema.listingShares.id, share.id));
-    throw new Error("Invitation unavailable.");
+    throw new Error("This place invite isn’t available to Book & pay.");
   }
 
   let canViewListing = false;

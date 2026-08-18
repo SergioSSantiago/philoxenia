@@ -62,7 +62,7 @@ export default function MessagesPage() {
         const withPreview = await Promise.all(
           raw.map(async (t) => {
             const body = t.lastMessage?.body;
-            let preview = "Start a sealed conversation";
+            let preview = "Start a sealed conversation to Book & pay";
             if (t.lastMessage?.kind === "transfer") {
               preview = t.lastMessage.body || "STRK or DAI sent";
             } else if (t.lastMessage?.kind === "booking") {
@@ -106,7 +106,7 @@ export default function MessagesPage() {
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
           Sealed notes decrypt only on your device. From a thread you can also
           send STRK or DAI (Public or Private). Tap a name or Ready X wallet to
-          see their places and share invites; open the preview or › to chat.
+          see their places and share a place invite; open the preview or › to chat.
         </p>
       </header>
 
