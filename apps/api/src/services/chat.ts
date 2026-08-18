@@ -138,7 +138,7 @@ export async function sendTextMessage(
   if (!trimmed || trimmed.length > maxLen) {
     throw new Error(
       sealed
-        ? "Sealed message payload too large"
+        ? "This sealed note is too large"
         : "Message must be 1–2000 characters"
     );
   }

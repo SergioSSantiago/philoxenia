@@ -48,7 +48,7 @@ Host or friend of host
 |-------|--------|
 | `/connector` | Share any friend place with earn % highlighted |
 | `/friends/[id]` | Share that friend’s places |
-| `/listings/[id]` | Friend + % > 0 → **Share invite & earn**; host share has no connector reward |
+| `/listings/[id]` | Friend + % > 0 → **Share place invite & earn**; host share has no connector reward |
 
 Listing cards (`ListingCard`) show `{n}% connector` next to the DAI price when the host set a reward.
 

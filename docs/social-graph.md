@@ -61,7 +61,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 
 ## Friend profile (web)
 
-`/friends/[id]` — identity, **Ready X wallet**, heading **Places to Book & pay**. Intro: open one to **Book & pay**, or share an invite to earn (same asset they Book & pay). **Share invite & earn** when the place has a connector %.
+`/friends/[id]` — identity, **Ready X wallet**, heading **Places to Book & pay**. Intro: open one to **Book & pay**, or share a place invite to earn (same asset they Book & pay). **Share place invite & earn** when the place has a connector %.
 
 Opened by tapping **name** or **Ready X wallet** on:
 

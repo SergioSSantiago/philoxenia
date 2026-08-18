@@ -207,7 +207,7 @@ export default function ConnectorPage() {
                         >
                           {sharingId === listing.id
                             ? "Creating place invite…"
-                            : "Share invite & earn"}
+                            : "Share place invite & earn"}
                         </Button>
                         <Link href={`/listings/${listing.id}`}>
                           <Button

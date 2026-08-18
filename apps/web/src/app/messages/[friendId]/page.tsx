@@ -97,7 +97,7 @@ export default function ChatThreadPage() {
         if (!wallet) {
           next.push({
             ...m,
-            displayBody: "Sealed message",
+            displayBody: "Sealed note",
             sealed: true,
             decryptFailed: true,
           });
@@ -289,8 +289,8 @@ export default function ChatThreadPage() {
     if (!pending || !account || !conversation) return;
     pendingPayRef.current = null;
     setNotice({
-      title: "Sending…",
-      body: "Ready X is connected — completing your transfer. Approve in the wallet if prompted.",
+      title: "Sending STRK or DAI…",
+      body: "Ready X is connected — finishing Send STRK or DAI. Approve in Ready X if prompted.",
       tone: "info",
     });
     void executeTransfer(account, pending.amount, pending.asset, pending.mode);
@@ -340,7 +340,7 @@ export default function ChatThreadPage() {
           <Link
             href="/messages"
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition hover:bg-accent-soft/60 hover:text-foreground touch-manipulation"
-            aria-label="Back to messages"
+            aria-label="Back to Messages"
           >
             ←
           </Link>
@@ -470,7 +470,7 @@ export default function ChatThreadPage() {
               ) : (
                 <Button type="submit" disabled={busy || !amount.trim()}>
                   {busy
-                    ? "Sending…"
+                    ? "Sending STRK or DAI…"
                     : payMode === "private"
                       ? `Send ${asset} privately`
                       : `Send ${asset} publicly`}

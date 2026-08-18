@@ -377,7 +377,7 @@ export default function ListingPage() {
                 : isHost
                   ? "Share this place"
                   : listing.connectorRewardPercent > 0
-                    ? "Share invite & earn"
+                    ? "Share place invite & earn"
                     : "Share this place"}
             </Button>
             {isHost && (

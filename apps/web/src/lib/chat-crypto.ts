@@ -226,7 +226,7 @@ export async function previewBody(
 ): Promise<string> {
   if (!body) return "";
   if (!isSealedBody(body)) return body;
-  if (!walletAddress) return "Sealed message";
+  if (!walletAddress) return "Sealed note";
   const plain = await unsealMessage(walletAddress, body);
-  return plain ?? "Sealed message";
+  return plain ?? "Sealed note";
 }

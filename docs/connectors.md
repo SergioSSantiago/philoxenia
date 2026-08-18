@@ -29,7 +29,7 @@ Hosts who set a healthy connector % make their friends want to share. Connectors
 
 1. **Be friends** with a host who listed a place (and set `connectorRewardPercent` > 0).
 2. Open **Earnings** (`/connector`), that friend’s profile (`/friends/[id]`), or the place itself.
-3. Tap **Share invite & earn** — creates an opaque `/invite/{token}` link with **you** as connector. The button shows **Copied!** when the clipboard succeeds (**Copy place invite**).
+3. Tap **Share place invite & earn** — creates an opaque `/invite/{token}` link with **you** as connector. The button shows **Copied!** when the clipboard succeeds (**Copy place invite**).
 4. Send the link (WhatsApp, Messages, etc.). Do **not** send your wallet as the invite.
 5. Guest opens the link → attribution is saved (last link wins). They become friends with the host if needed, then **Book & pay**. Earnings (`/connector`) step 3 is **They Book & pay**.
 6. On settle, your reward hits your Ready X wallet **in the same asset the guest paid** (STRK or DAI). Track totals on `/connector`.
@@ -47,10 +47,10 @@ Guest Book & pay ──► escrow settles ──► you + host + (10% of your re
 | Surface | What you do |
 |---------|-------------|
 | **`/connector` (Earnings)** | Explains the model, lists **friends’ places** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` (**open stay**; missing title **Book & pay stay**). Totals: asset shown **per stay**. Empty places: add friends by **Ready X wallet** who host. Step 1: **Pick a friend’s place**. Step 2: **Share your place invite** (not the Ready X wallet). Empty rewards: share a friend’s **place** — they **Book & pay through your place invite**. 0% empty: earn when they **Book & pay through your place invite**. Rewards subtitle: paid to your **Ready X wallet** when they **Book & pay through your place invite**. Share & earn subtitle: **Share your place invite** so they **Book & pay**. Loading: **Loading places to Book & pay…**. Rewards loading: **Loading rewards from Book & pay…** |
-| **`/friends/[id]`** | Friend’s places + share; heading **Places to Book & pay**; CTA **Earn as a connector** → `/connector`; **View place**. Loading: **Loading places to Book & pay…**. Not friends: **you must be friends to Book & pay their places**. Missing user: **they must Connect Ready X once**. Open from name or **Ready X wallet** on Friends / Messages. Opening your own profile errors: **Open your own places from Home or My places.** |
+| **`/friends/[id]`** | Friend’s places + share; heading **Places to Book & pay**; **Share place invite & earn** (else **Share this place**); CTA **Earn as a connector** → `/connector`; **View place**. Loading: **Loading places to Book & pay…**. Not friends: **you must be friends to Book & pay their places**. Missing user: **they must Connect Ready X once**. Open from name or **Ready X wallet** on Friends / Messages. Opening your own profile errors: **Open your own places from Home or My places.** |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their places |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → **places**; preview / › → chat |
-| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host or 0% → **Share this place**. Busy: **Creating place invite…**. Native share: **Book & pay stay at …**. Fail: **Could not share this place**. Copy status **Place invite copied** / **Place invite shared**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…**. Host nights busy: **Saving open nights…** |
+| **`/listings/[id]`** | Friend + % > 0 → **Share place invite & earn**; host or 0% → **Share this place**. Busy: **Creating place invite…**. Native share: **Book & pay stay at …**. Fail: **Could not share this place**. Copy status **Place invite copied** / **Place invite shared**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…**. Host nights busy: **Saving open nights…** |
 
 Header nav width stays consistent across pages (`max-w-6xl`); only page content uses the narrow/wide shell.
 

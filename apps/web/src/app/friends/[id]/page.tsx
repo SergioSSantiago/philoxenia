@@ -254,8 +254,8 @@ export default function FriendProfilePage() {
                         {sharingId === listing.id
                             ? "Creating place invite…"
                           : canEarn
-                            ? "Share invite & earn"
-                            : "Share invite"}
+                            ? "Share place invite & earn"
+                            : "Share this place"}
                       </Button>
                     </div>
                     {share && (

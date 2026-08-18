@@ -86,7 +86,7 @@ One person can be host on their places, guest on friends’ places, and connecto
 ## Core flow (acceptance scenario)
 
 1. Bob lists an apartment in Florence (**DAI**/night, **5% connector reward**) and opens nights on the calendar.
-2. Alice (Bob's friend) opens **Earnings** or Bob’s friend profile, taps **Share invite & earn**, and sends the link to Carlos.
+2. Alice (Bob's friend) opens **Earnings** or Bob’s friend profile, taps **Share place invite & earn**, and sends the place invite to Carlos.
 3. Carlos creates an account, requests friendship with Bob, Bob accepts.
 4. Carlos selects nights (need not be consecutive) and **Book & pay** in **STRK** (live FX) or **DAI** (1:1).
 5. **Book & pay** is fund + settle in one tx → host (+ connector) receive immediately; booking is `completed`. Alice sees the reward under `/connector`.
