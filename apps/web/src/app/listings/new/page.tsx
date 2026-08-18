@@ -54,8 +54,8 @@ export default function CreateListingPage() {
     setError("");
 
     try {
-      if (!title.trim()) throw new Error("Title is required");
-      if (!description.trim()) throw new Error("Description is required");
+      if (!title.trim()) throw new Error("Title for this place is required");
+      if (!description.trim()) throw new Error("Description for this place is required");
       if (!pricePerNight || Number(pricePerNight) <= 0) {
         throw new Error("Enter a valid default price per night (DAI)");
       }
@@ -63,7 +63,7 @@ export default function CreateListingPage() {
         throw new Error("Pin the exact location on the map");
       }
       if (photos.length === 0) {
-        throw new Error("Add at least one photo");
+        throw new Error("Add at least one place photo");
       }
       if (availableDays.length < 1) {
         throw new Error("Open at least one night guests can Book & pay");

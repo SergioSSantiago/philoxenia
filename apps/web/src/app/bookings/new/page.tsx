@@ -215,7 +215,7 @@ function NewBookingForm() {
       return;
     }
     if (!listingId) {
-      setLoadError("Missing place.");
+      setLoadError("Missing place to Book & pay.");
       return;
     }
     let cancelled = false;

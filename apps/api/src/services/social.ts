@@ -59,7 +59,7 @@ function mapListing(
   };
 }
 
-const LISTING_UNAVAILABLE = "Listing unavailable.";
+const LISTING_UNAVAILABLE = "This place isn’t available to Book & pay.";
 
 export async function getUserById(userId: string) {
   const user = await db.query.users.findFirst({
@@ -390,10 +390,10 @@ export async function createListing(
   }
 ) {
   if (!input.photos.length) {
-    throw new Error("Add at least one photo");
+    throw new Error("Add at least one place photo");
   }
   if (input.photos.length > 8) {
-    throw new Error("Maximum 8 photos");
+    throw new Error("Maximum 8 place photos");
   }
   for (const photo of input.photos) {
     if (
@@ -401,10 +401,10 @@ export async function createListing(
       !photo.startsWith("https://") &&
       !photo.startsWith("http://")
     ) {
-      throw new Error("Photos must be uploaded images or https URLs");
+      throw new Error("Place photos must be uploaded images or https URLs");
     }
     if (photo.startsWith("data:image/") && photo.length > 900_000) {
-      throw new Error("A photo is too large — compress and try again");
+      throw new Error("A place photo is too large — compress and try again");
     }
   }
 
@@ -450,7 +450,7 @@ export async function createListing(
       }
     }
   } else {
-    throw new Error("Select at least one available night on the calendar");
+    throw new Error("Open at least one night guests can Book & pay");
   }
 
   dayRows.sort((a, b) => a.day.localeCompare(b.day));
@@ -673,7 +673,7 @@ export async function setListingAvailableDays(
     if (seen.has(day)) continue;
     if (paidNights.has(day)) {
       throw new Error(
-        `Night ${day} is already booked — leave it locked`
+        `Night ${day} is already a Book & pay stay — leave it locked`
       );
     }
     seen.add(day);
@@ -1703,7 +1703,7 @@ async function prepareBooking(
   if (!opts?.settledRecovery) {
     for (const day of nightKeys) {
       if (taken.has(day)) {
-        throw new Error(`Night ${day} is already booked`);
+        throw new Error(`Night ${day} is already a Book & pay stay`);
       }
     }
   }

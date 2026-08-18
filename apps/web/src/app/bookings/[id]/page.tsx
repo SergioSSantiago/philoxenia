@@ -206,7 +206,7 @@ export default function BookingDetailPage() {
         <div className="space-y-2 text-sm">
           {booking.totalPriceDai && (
             <div className="flex justify-between">
-              <span className="text-muted">List total (DAI)</span>
+              <span className="text-muted">Place list total (DAI)</span>
               <span>{formatTokenAmount(booking.totalPriceDai)} DAI</span>
             </div>
           )}
@@ -239,7 +239,7 @@ export default function BookingDetailPage() {
 
         {booking.fundTxHash && (
           <p className="break-all font-mono text-xs text-muted">
-            Verified tx:{" "}
+            Verified Book & pay tx:{" "}
             <a
               href={`https://voyager.online/tx/${booking.fundTxHash}`}
               target="_blank"

@@ -489,7 +489,7 @@ export async function registerRoutes(app: FastifyInstance) {
           request.user.userId
         );
       } catch {
-        return reply.status(404).send({ error: "Listing unavailable." });
+        return reply.status(404).send({ error: "This place isn’t available to Book & pay." });
       }
     }
   );

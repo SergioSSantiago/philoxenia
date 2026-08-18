@@ -6,7 +6,7 @@ import { copyText } from "@/lib/share-invite";
 
 export function CopyInviteButton({
   url,
-  label = "Copy link",
+  label = "Copy place invite",
   className = "w-full sm:w-auto",
   onCopied,
 }: {

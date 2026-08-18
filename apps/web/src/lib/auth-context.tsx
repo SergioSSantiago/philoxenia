@@ -187,7 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = useCallback(
     async (displayName?: string) => {
       if (!address || !account) {
-        throw new Error("Wallet not connected");
+        throw new Error("Ready X is not connected. Tap Connect Ready X.");
       }
 
       const cached = challengeRef.current;

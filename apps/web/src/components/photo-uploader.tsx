@@ -59,7 +59,7 @@ export function PhotoUploader({
       try {
         const remaining = MAX_PHOTOS - photos.length;
         if (remaining <= 0) {
-          throw new Error(`Maximum ${MAX_PHOTOS} photos`);
+          throw new Error(`Maximum ${MAX_PHOTOS} place photos`);
         }
         const selected = Array.from(files).slice(0, remaining);
         const next: string[] = [];

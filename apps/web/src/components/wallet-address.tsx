@@ -40,7 +40,7 @@ export function WalletAddress({
     if (typeof navigator.share === "function") {
       try {
         await navigator.share({
-          title: "Philoxenia wallet",
+          title: "My Philoxenia Ready X wallet",
           text: shareText,
         });
         return;

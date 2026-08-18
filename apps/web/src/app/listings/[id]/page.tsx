@@ -418,14 +418,14 @@ export default function ListingPage() {
 
           {shareUrl && (
             <Card className="mt-4 space-y-3 text-sm">
-              <p className="font-medium text-foreground">Invite link</p>
+              <p className="font-medium text-foreground">Place invite</p>
               <p className="break-all font-mono text-xs text-foreground select-all">
                 {shareUrl}
               </p>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <CopyInviteButton
                   url={shareUrl}
-                  label="Copy invite link"
+                  label="Copy place invite"
                   onCopied={(ok) =>
                     setShareStatus(inviteReadyStatus(ok, shareHasConnector))
                   }
