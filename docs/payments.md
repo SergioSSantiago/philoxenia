@@ -49,15 +49,15 @@ Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeS
 
 | Surface | Mode | Notes |
 |---------|------|--------|
-| `/home` | `compact` | Public STRK **and DAI** hints “shield on Profile”; STRK20 line covers both assets |
+| `/home` | `compact` | Public STRK **and DAI** hints “shield for Private Book & pay” |
 | `/profile` | full | Same public rows + `Strk20PrivacyPanel` (shield / unshield **STRK or DAI**) + AVNU swap |
 
-If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, private pay, settle, swap). `/bookings/new` says the same when Pay is blocked.
+If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, private Book & pay, settle, swap). `/bookings/new` says the same when Book & pay is blocked.
 
 Factory: `createPaymentProvider()` in `strk20-payment-provider.ts`.  
 Token / escrow helpers: `tokenAddressForAsset`, `escrowAddressForAsset` in `lib/tokens.ts`.
 
-**Bookable nights:** API and guest calendar reject nights before UTC today.
+**Bookable nights:** API and guest calendar reject nights before UTC today (copy: cannot be added to **Book & pay**).
 
 ## Public path (ERC20)
 

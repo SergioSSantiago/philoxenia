@@ -634,7 +634,7 @@ function NewBookingForm() {
               </div>
 
               <label className="block pt-1">
-                <span className="text-muted">Pay with</span>
+                <span className="text-muted">Book & pay with</span>
                 <select
                   className="mt-1 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-foreground"
                   value={paymentAsset}
@@ -659,7 +659,7 @@ function NewBookingForm() {
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-muted">You pay now</span>
+                <span className="text-muted">Book & pay now</span>
                 <span className="font-medium">
                   {paymentAsset === "DAI"
                     ? formatDaiPrice(quote.totalPriceDai)

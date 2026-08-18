@@ -205,8 +205,8 @@ export function GuestNightCalendar({
 
       <p className="text-xs text-muted leading-relaxed">
         Tap nights one by one — they do not need to be consecutive. Past nights
-        cannot be booked. Price under each day is DAI (list). Book & pay in STRK
-        or DAI.
+        cannot be added to Book & pay. Price under each day is DAI (list). Book
+        & pay in STRK or DAI.
         {firstOpen ? ` Open nights start ${firstOpen}.` : ""}
       </p>
     </div>

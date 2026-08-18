@@ -100,8 +100,8 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         hint={
           STRK20_PRIVACY_ENABLED
             ? compact
-              ? "Public · shield on Profile"
-              : "Public balance · shield STRK or DAI on Profile"
+              ? "Public · shield for Private Book & pay"
+              : "Public balance · shield STRK or DAI on Profile for Private Book & pay"
             : undefined
         }
       />
@@ -113,8 +113,8 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         hint={
           STRK20_PRIVACY_ENABLED
             ? compact
-              ? "Public · shield on Profile"
-              : "Public balance · shield on Profile for private DAI"
+              ? "Public · shield for Private Book & pay"
+              : "Public balance · shield on Profile for Private Book & pay"
             : undefined
         }
       />

@@ -22,9 +22,9 @@ type NoticeState = {
 };
 
 /**
- * Shield / unshield STRK or DAI via Ready WalletAccountV6.
+ * Shield / unshield STRK or DAI via Ready X WalletAccountV6.
  * Deposit amounts are public ERC-20 legs — labeled honestly.
- * Requires a live Ready signing session (JWT alone is not enough).
+ * Requires a live Ready X signing session (JWT alone is not enough).
  */
 export function Strk20PrivacyPanel() {
   const { account, address } = useAccount();
