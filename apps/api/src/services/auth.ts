@@ -60,7 +60,7 @@ export async function verifyAuthSignature(
   try {
     validateAndParseAddress(normalized);
   } catch {
-    throw new Error("Invalid wallet address");
+    throw new Error("Invalid Ready X wallet address");
   }
 
   if (!signature[0] || !signature[1]) {

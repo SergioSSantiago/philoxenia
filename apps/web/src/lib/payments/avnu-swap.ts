@@ -13,14 +13,14 @@ const SCALE = 10n ** DECIMALS;
 
 export function parseSwapAmount(amount: string): bigint {
   const trimmed = amount.trim();
-  if (!trimmed) throw new Error("Enter an amount");
+  if (!trimmed) throw new Error("Enter a STRK or DAI amount");
   const [whole, frac = ""] = trimmed.split(".");
   if (!/^\d+$/.test(whole) || (frac && !/^\d+$/.test(frac))) {
-    throw new Error("Invalid amount");
+    throw new Error("Enter a valid STRK or DAI amount");
   }
   const padded = frac.padEnd(18, "0").slice(0, 18);
   const value = BigInt(whole + padded);
-  if (value <= 0n) throw new Error("Amount must be greater than zero");
+  if (value <= 0n) throw new Error("Amount of STRK or DAI must be greater than zero");
   return value;
 }
 

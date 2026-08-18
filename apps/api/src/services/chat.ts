@@ -95,7 +95,7 @@ export async function getConversation(userId: string, friendId: string) {
   const friend = await db.query.users.findFirst({
     where: eq(schema.users.id, friendId),
   });
-  if (!friend) throw new Error("User not found");
+  if (!friend) throw new Error("This chat isn’t available.");
 
   const rows = await db.query.directMessages.findMany({
     where: or(
@@ -176,7 +176,7 @@ export async function recordTransferMessage(
 
   const amount = input.amount.trim();
   if (!/^\d+(\.\d+)?$/.test(amount) || Number(amount) <= 0) {
-    throw new Error("Invalid amount");
+    throw new Error("Enter a valid STRK or DAI amount");
   }
   if (!input.txHash || input.txHash.length < 10) {
     throw new Error("Transaction hash required");

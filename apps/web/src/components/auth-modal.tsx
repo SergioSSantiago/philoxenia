@@ -224,7 +224,7 @@ export function AuthModal() {
                     onClick={() => void copyOpenUrl()}
                     className="text-xs text-accent underline-offset-2 hover:underline"
                   >
-                    {copied ? "Copied!" : "Copy Philoxenia link"}
+                    {copied ? "Copied!" : "Copy Philoxenia link for Ready X"}
                   </button>
                 </div>
               ) : null}

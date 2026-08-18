@@ -286,7 +286,7 @@ export default function BookingDetailPage() {
             variant="ghost"
             onClick={() => router.push(`/messages/${otherId}`)}
           >
-            Open Messages
+            Open Messages to Send STRK or DAI
           </Button>
         </div>
 

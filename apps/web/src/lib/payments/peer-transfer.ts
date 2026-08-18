@@ -8,7 +8,7 @@ import { toWalletFelt } from "@/lib/payments/private-escrow-fund";
 function parseAmount(amount: string): bigint {
   const [whole, frac = ""] = amount.trim().split(".");
   if (!/^\d+$/.test(whole) || (frac && !/^\d+$/.test(frac))) {
-    throw new Error("Invalid amount");
+    throw new Error("Enter a valid STRK or DAI amount");
   }
   const padded = frac.padEnd(18, "0").slice(0, 18);
   return BigInt(whole + padded);
@@ -22,7 +22,7 @@ export async function transferToFriend(
   asset: PaymentAsset
 ): Promise<string> {
   const value = parseAmount(amount);
-  if (value <= 0n) throw new Error("Amount must be greater than zero");
+  if (value <= 0n) throw new Error("Amount of STRK or DAI must be greater than zero");
 
   const u = uint256.bnToUint256(value);
   const call: Call = {
@@ -47,7 +47,7 @@ export async function transferToFriendPrivate(
   asset: PaymentAsset
 ): Promise<string> {
   const value = parseAmount(amount);
-  if (value <= 0n) throw new Error("Amount must be greater than zero");
+  if (value <= 0n) throw new Error("Amount of STRK or DAI must be greater than zero");
 
   const session = await resolvePrivacyWallet(account.address);
   if (!session?.privacyCapable) {

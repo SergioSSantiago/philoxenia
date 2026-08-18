@@ -42,7 +42,7 @@ export function formatWalletError(err: unknown): string {
     return "Starknet could not read this account (RPC). Check mainnet in Ready X and try Sign in again.";
   }
 
-  return msg || "Could not complete the wallet request.";
+  return msg || "Could not complete the Ready X request.";
 }
 
 /** Normalize Ready / starknet.js signMessage results into felt strings for the API. */
@@ -57,7 +57,7 @@ export function normalizeWalletSignature(signature: unknown): string[] {
 
   if (Array.isArray(signature)) {
     if (signature.length < 2) {
-      throw new Error("Wallet returned an incomplete signature");
+      throw new Error("Ready X returned an incomplete signature");
     }
     return signature.map(toFelt);
   }

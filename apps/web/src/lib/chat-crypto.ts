@@ -128,7 +128,7 @@ export async function ensureMessageKeyPair(
   walletAddress: string
 ): Promise<string> {
   if (typeof window === "undefined" || !walletAddress) {
-    throw new Error("Wallet required for sealed messaging");
+    throw new Error("Ready X is required for sealed messaging");
   }
   const existing = readStored(walletAddress);
   if (existing?.publicSpki && existing?.privateJwk) {

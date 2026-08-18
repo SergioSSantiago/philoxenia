@@ -108,7 +108,7 @@ export async function registerRoutes(app: FastifyInstance) {
     async (request, reply) => {
       const userId = request.user.userId;
       const user = await social.getUserById(userId);
-      if (!user) return reply.status(404).send({ error: "User not found" });
+      if (!user) return reply.status(404).send({ error: "Saved Ready X session is invalid. Connect Ready X again." });
       return reply.send(user);
     }
   );

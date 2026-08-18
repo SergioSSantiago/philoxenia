@@ -40,7 +40,7 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 
 ## Why connectors matter
 
-Philoxenia has no public directory of places. **Growth is introductions.** A connector is a friend of the host who shares an invite link with someone they trust. When they Book & pay through the link, the connector is paid on settle.
+Philoxenia has no public directory of places. **Growth is introductions.** A connector is a friend of the host who shares a place invite with someone they trust. When they Book & pay through the invite, the connector is paid on settle.
 
 That loop is the product: hosts fill nights, connectors earn for good intros, guests arrive with a social vouch — and Philoxenia only takes a cut of the connector reward (never of direct host↔guest stays).
 
@@ -54,7 +54,7 @@ See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend
 2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For **Private Book & pay**, open the same URL in the **Ready X in-app browser**.
 3. Connect Ready X → Sign in (approve SNIP-12). On mobile Safari this is two steps: Connect, then Sign in (second open of Ready X).
 
-Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home` (`ReadyWalletNotice` compact in the modal; full notice on the landing — **Private Book & pay** in the Ready X in-app browser). The StarknetKit picker labels the injected wallet **Ready X** (connector id remains `argentX`). Display name is optional; friends add you by **Ready X wallet** only. Connect busy state is **Connecting Ready X…**.
+Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home` (`ReadyWalletNotice` compact in the modal; full notice on the landing — **Private Book & pay** in the Ready X in-app browser). The StarknetKit picker labels the injected wallet **Ready X** (connector id remains `argentX`). Display name is optional; friends add you by **Ready X wallet** only. Connect busy state is **Connecting Ready X…**. iPhone modal: **Copy Philoxenia link for Ready X**. Invalid address: **Invalid Ready X wallet address**.
 
 Wallet wiring follows [StarknetKit Ready connector](https://www.starknetkit.com/docs/latest/connectors/ready) modes (desktop QR / mobile redirect / in-app). npm `starknetkit@3.4.3` still exports `ArgentMobileConnector` (docs rename: `ReadyConnector`); Philoxenia patches mainnet deep links to `ready://` because stock maps `SN_MAIN` → `argent://` (legacy).
 

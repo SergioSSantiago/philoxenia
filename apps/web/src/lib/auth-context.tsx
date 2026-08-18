@@ -82,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           !parsed?.walletAddress ||
           typeof parsed.displayName !== "string"
         ) {
-          throw new Error("Invalid stored user");
+          throw new Error("Saved Ready X session is invalid. Connect Ready X again.");
         }
         setToken(storedToken);
         setUser(parsed);

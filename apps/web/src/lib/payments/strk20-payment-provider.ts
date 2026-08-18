@@ -23,7 +23,7 @@ import { formatWalletError as formatUserFacingWalletError } from "@/lib/wallet-e
 function parseAmount(amount: string): bigint {
   const [whole, frac = ""] = amount.trim().split(".");
   if (!/^\d+$/.test(whole) || (frac && !/^\d+$/.test(frac))) {
-    throw new Error("Invalid amount");
+    throw new Error("Enter a valid STRK or DAI amount");
   }
   const padded = frac.padEnd(18, "0").slice(0, 18);
   return BigInt(whole + padded);
@@ -31,7 +31,7 @@ function parseAmount(amount: string): bigint {
 
 function toHexAmount(amount: string): string {
   const value = parseAmount(amount);
-  if (value <= 0n) throw new Error("Amount must be greater than zero");
+  if (value <= 0n) throw new Error("Amount of STRK or DAI must be greater than zero");
   return `0x${value.toString(16)}`;
 }
 

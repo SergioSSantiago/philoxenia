@@ -81,7 +81,7 @@ export async function updateUserDisplayName(userId: string, displayName: string)
     .returning();
 
   if (!updated) {
-    throw new Error("User not found");
+    throw new Error("Could not save your name — Connect Ready X again");
   }
 
   return toUserResponse(updated);
@@ -103,7 +103,7 @@ export async function updateUserMessagePublicKey(
     .returning();
 
   if (!updated) {
-    throw new Error("User not found");
+    throw new Error("Could not save sealed keys — Connect Ready X again");
   }
 
   return toUserResponse(updated);
@@ -864,12 +864,12 @@ export async function getFriendProfile(viewerId: string, friendId: string) {
 
   const friends = await areFriends(viewerId, friendId);
   if (!friends) {
-    throw new Error("Not friends with this user");
+    throw new Error("Not friends with this user — you must be friends to Book & pay their places");
   }
 
   const friend = await getUserById(friendId);
   if (!friend) {
-    throw new Error("User not found");
+    throw new Error("This person isn’t on Philoxenia — they must Connect Ready X once");
   }
 
   const rows = await db.query.listings.findMany({

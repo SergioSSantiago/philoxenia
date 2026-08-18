@@ -50,7 +50,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 |--------|------|-------------|
 | GET | `/friends` | Friends + pending incoming/outgoing |
 | GET | `/friends/search?q=` | Search by **Ready X wallet** only. Client prepends `0x` if missing and requires ≥4 hex chars of a **Ready X wallet** (normalized length ≥ 6). API minimum is 2 chars. |
-| GET | `/friends/:id` | Friend profile + their places (must be friends) |
+| GET | `/friends/:id` | Friend profile + their places (must be friends). Not friends: **you must be friends to Book & pay their places**. Missing user: **they must Connect Ready X once** |
 | PATCH | `/users/me` | Update display name (1–64 chars) |
 | POST | `/friends/request` | Send request `{ toUserId }` |
 | POST | `/friends/accept/:id` | Accept incoming request |

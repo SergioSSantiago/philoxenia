@@ -42,7 +42,7 @@ Friend of host ──► can view + share
 Everyone else ──► 404 (place unavailable)
 ```
 
-`GET /my-listings` powers `/my-listings` and Home **My places**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new` (submit **List this place**; validation: **Open at least one night guests can Book & pay**; default DAI price is used when you open those nights). Home **Places from my friends** empty: no places from friends yet. **Shared with me** empty: **No invite places yet**. Home **My stays**: recent Book & pay stays. Home loaders: **Loading places to Book & pay…**.
+`GET /my-listings` powers `/my-listings` and Home **My places**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new` (submit **List this place**; validation: **Open at least one night guests can Book & pay**; default DAI price is used when you open those nights). Home **Places from my friends** empty: no places from friends yet. **Shared with me** subtitle: **Place invites to Book & pay**; empty: **No invite places yet** — open a friend’s **place invite**. Home **My stays**: recent Book & pay stays. Home loaders: **Loading places to Book & pay…**.
 
 ## Home globe
 
@@ -59,7 +59,7 @@ Everyone else ──► 404 (place unavailable)
 | GET | `/friends/:id` | Yes | One friend’s places (must be friends) |
 | GET | `/shared-listings` | Yes | Places shared with user via introductions |
 | GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized / API 404: **This place isn’t available to Book & pay.** (not “Listing unavailable.”). Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place**. Delete: **Delete this place** (fail **Could not delete this place**). Host nights busy **Saving open nights…** (fail **Could not save open nights**). Copy: **Copy place invite**; status **Place invite copied** / **Place invite shared** |
-| POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
+| POST | `/listings/:id/share` | Yes | Generate place invite (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 
 ## Related

@@ -14,7 +14,7 @@ const BOOKING_REFUNDED = num.toHex(hash.getSelectorFromName("BookingRefunded"));
 function normalizeTxHash(txHash: string): string {
   const h = txHash.trim().toLowerCase();
   if (!/^0x[0-9a-f]{1,64}$/.test(h)) {
-    throw new Error("Invalid transaction hash");
+    throw new Error("Invalid Book & pay transaction hash");
   }
   return `0x${h.slice(2).padStart(64, "0")}`;
 }

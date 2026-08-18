@@ -103,7 +103,7 @@ export default function ConnectorPage() {
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           Friends list places privately. When you introduce a guest with your
-          invite link and they Book & pay, you get a cut of the stay — paid in
+          place invite and they Book & pay, you get a cut of the stay — paid in
           the same asset they used (STRK or DAI) to your Ready X wallet.
         </p>
       </div>
@@ -117,9 +117,9 @@ export default function ConnectorPage() {
             only places from people you already trust appear here.
           </li>
           <li>
-            <span className="font-medium">2. Share your invite link</span>
+            <span className="font-medium">2. Share your place invite</span>
             {" — "}
-            not the wallet address. Opening the link attributes you as
+            not the Ready X wallet. Opening the invite attributes you as
             connector.
           </li>
           <li>
