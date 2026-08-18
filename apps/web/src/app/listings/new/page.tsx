@@ -121,7 +121,7 @@ export default function CreateListingPage() {
                 className="mt-1 min-h-28 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="What makes this place special for a trusted guest?"
+                placeholder="What makes this place special for a friend who Book & pay?"
                 required
               />
             </label>

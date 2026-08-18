@@ -99,7 +99,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
         {listing.host && (
           <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">
             <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent">
-              Host
+              Publishes this place
             </span>
             <span className="text-sm font-medium text-foreground">
               {listing.host.displayName}

@@ -50,7 +50,7 @@ Host or friend of host
 | `/friends/[id]` | Share that friend’s places |
 | `/listings/[id]` | Friend + % > 0 → **Share place invite & earn**; host share has no connector reward |
 
-Listing cards (`ListingCard`) show `{n}% connector reward` next to the DAI price when the host set a reward. Helper **Book & pay: STRK or DAI** (not “Guest Book & pay”). Empty photo: **No place photo**.
+Listing cards (`ListingCard`) show `{n}% connector reward` next to the DAI price when the host set a reward. Helper **Book & pay: STRK or DAI** (not “Guest Book & pay”). Badge **Publishes this place** (not “Host”). Empty photo: **No place photo**.
 
 **Copy UX:** `CopyInviteButton` (`apps/web/src/components/copy-invite-button.tsx`) writes the `/invite/{token}` URL via `copyText` in `lib/share-invite.ts` (Clipboard API, then `execCommand` fallback). Default label **Copy place invite**. On success the button reads **Place invite copied** for 2s (not “Copied!”) and the status line is **Place invite copied** (connector: you earn if they **Book & pay**) or **Place invite ready** if copy failed. Native share success: **Place invite shared**. If both copy paths fail, the URL stays visible so the user can select it.
 

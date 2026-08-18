@@ -184,7 +184,7 @@ export default function ConnectorPage() {
                         <p className="mt-0.5 text-sm text-muted">
                           {listing.location}
                           {listing.host
-                            ? ` · Host ${listing.host.displayName}`
+                            ? ` · Publishes this place: ${listing.host.displayName}`
                             : ""}
                         </p>
                         <p className="mt-2 text-sm">
@@ -260,13 +260,13 @@ export default function ConnectorPage() {
             })}
 
             {earnable.length === 0 && noReward.length > 0 && (
-              <EmptyState message="Your friends have places, but none offer a connector reward yet (0%). Ask them to set a % when they publish a place — you earn when they Book & pay through your place invite." />
+              <EmptyState message="Friends to Book & pay have places, but none offer a connector reward yet (0%). Ask them to set a % when they publish a place — you earn when they Book & pay through your place invite." />
             )}
 
             {noReward.length > 0 && earnable.length > 0 && (
               <div className="pt-2">
                 <p className="mb-3 text-sm text-muted">
-                  Also in your network (0% connector reward — a place invite won&apos;t earn):
+                  Also among friends to Book & pay (0% connector reward — a place invite won&apos;t earn):
                 </p>
                 <ul className="space-y-2 text-sm">
                   {noReward.map((l) => (

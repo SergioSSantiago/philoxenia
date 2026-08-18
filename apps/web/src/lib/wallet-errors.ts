@@ -39,7 +39,7 @@ export function formatWalletError(err: unknown): string {
   }
 
   if (/contract.?not.?found|account.?not.?found/i.test(msg)) {
-    return "Starknet could not read this account (RPC). Check mainnet in Ready X and try Approve in Ready X again.";
+    return "Starknet could not read this account (RPC). Check mainnet in Ready X, then Approve in Ready X again.";
   }
 
   return msg || "Could not complete the Ready X request.";
