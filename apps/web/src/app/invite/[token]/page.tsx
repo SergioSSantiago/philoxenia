@@ -133,7 +133,7 @@ export default function InvitePage() {
               <p className="mt-1 text-sm text-muted">None — host place invite</p>
             </div>
           )}
-          <UserBadge user={invite.host} role="Host" />
+          <UserBadge user={invite.host} role="Publishes this place" />
         </div>
 
         {error && <p className="mt-4 text-sm text-red-700">{error}</p>}

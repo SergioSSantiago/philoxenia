@@ -246,7 +246,7 @@ export default function ListingPage() {
           {listing.host && (
             <UserBadge
               user={listing.host}
-              role={isHost ? "Your place" : "Host"}
+              role={isHost ? "Your place" : "Publishes this place"}
               showWallet={!isHost}
             />
           )}

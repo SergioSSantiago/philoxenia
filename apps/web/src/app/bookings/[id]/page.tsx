@@ -120,8 +120,8 @@ export default function BookingDetailPage() {
           </Link>
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Tap the title for the place. Open the {counterpartyRole.toLowerCase()}{" "}
-          to see their profile and places you can Book & pay.
+          Tap the title for the place. Open their profile to see places you can
+          Book & pay.
         </p>
       </div>
 
@@ -134,13 +134,12 @@ export default function BookingDetailPage() {
             </Link>
             <Link href={`/friends/${counterparty.id}`} className="block">
               <Button variant="secondary" className="w-full sm:w-auto">
-                View {counterpartyRole.toLowerCase()} &amp; places to Book &amp;
-                pay
+                Places to Book & pay
               </Button>
             </Link>
             <Link href={`/messages/${counterparty.id}`} className="block">
               <Button variant="ghost" className="w-full sm:w-auto">
-                Message {counterpartyRole.toLowerCase()}
+                Messages
               </Button>
             </Link>
           </div>
@@ -154,7 +153,7 @@ export default function BookingDetailPage() {
           </Link>
           <Link href={`/friends/${otherId}`}>
             <Button variant="secondary">
-              View {counterpartyRole.toLowerCase()}
+              Places to Book & pay
             </Button>
           </Link>
         </div>

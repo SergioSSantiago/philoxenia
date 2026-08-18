@@ -26,7 +26,7 @@ Paid guest nights stay in inventory as **locked** (`booked`). Guest and host cal
 
 `DELETE /my-listings/:id` (host only).
 
-Allowed when there are **no active Book & pay stays** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete. Confirm: **Delete this place?** Busy: **Deleting this place…** (not “Working…”). Keep: **Keep this place**. API error if still active: **Cannot delete this place while it has active Book & pay stays.**
+Allowed when there are **no active Book & pay stays** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete. Confirm: **Delete this place?** Busy: **Deleting this place…** (not “Working…”). Defaults if a dialog omits labels: **Confirm this place** / **Working on this place…** (not “Confirm” / “Working…”). Keep: **Keep this place**. API error if still active: **Cannot delete this place while it has active Book & pay stays.**
 
 ## Cancellation vs escrow
 
@@ -58,7 +58,7 @@ Everyone else ──► 404 (place unavailable)
 | GET | `/my-network/listings` | Yes | Friends' places |
 | GET | `/friends/:id` | Yes | One friend’s places (must be friends) |
 | GET | `/shared-listings` | Yes | Places shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized / API 404: **This place isn’t available to Book & pay.** (not “Listing unavailable.”). The page surfaces that API error. Loading: **Loading place to Book & pay…**. Detail **DAI list price** (not “Default list price”). Friend + % > 0: **Share place invite & earn**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place**. Delete: **Delete this place** (busy **Deleting this place…**; fail **Could not delete this place**). Host nights busy **Saving open nights…** (fail **Could not save open nights**). Copy: **Copy place invite** (busy success **Place invite copied**, not “Copied!”); status **Place invite copied** / **Place invite shared**. Host share helper: **this place invite has no connector** (not “this link”); friends become connectors on their own **place invites** |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized / API 404: **This place isn’t available to Book & pay.** (not “Listing unavailable.”). The page surfaces that API error. Loading: **Loading place to Book & pay…**. Detail **DAI list price** (not “Default list price”). Friend + % > 0: **Share place invite & earn**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place** / **Publishes this place** (not “Host”). Delete: **Delete this place** (busy **Deleting this place…**; fail **Could not delete this place**). Host nights busy **Saving open nights…** (fail **Could not save open nights**). Copy: **Copy place invite** (busy success **Place invite copied**, not “Copied!”); status **Place invite copied** / **Place invite shared**. Host share helper: **this place invite has no connector** (not “this link”); friends become connectors on their own **place invites** |
 | POST | `/listings/:id/share` | Yes | Generate place invite (friend → connector). Unauthorized: **You can’t share this place** |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 

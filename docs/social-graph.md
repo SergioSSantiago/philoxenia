@@ -69,7 +69,7 @@ Opened by tapping **name** or **Ready X wallet** on:
 - `/messages` inbox
 - `/messages/[friendId]` chat header
 
-Chat remains available via Message buttons / preview / ›.
+Chat remains available via **Messages** buttons / preview / ›.
 
 ## Authorization rules
 
