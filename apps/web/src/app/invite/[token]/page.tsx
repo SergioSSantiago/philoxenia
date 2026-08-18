@@ -68,7 +68,7 @@ export default function InvitePage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
-        <p className="text-muted">Loading invitation…</p>
+        <p className="text-muted">Opening invite to Book & pay…</p>
       </div>
     );
   }

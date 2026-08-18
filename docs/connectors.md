@@ -46,11 +46,11 @@ Guest Book & pay ──► escrow settles ──► you + host + (10% of your re
 
 | Surface | What you do |
 |---------|-------------|
-| **`/connector` (Earnings)** | Explains the model, lists **friends’ listings** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` (**open stay**; missing title **Book & pay stay**). Totals: asset shown **per stay**. Empty listings: add friends by **Ready X wallet** who host. Empty rewards: they **Book & pay** through your invite |
+| **`/connector` (Earnings)** | Explains the model, lists **friends’ places** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` (**open stay**; missing title **Book & pay stay**). Totals: asset shown **per stay**. Empty listings: add friends by **Ready X wallet** who host. Empty rewards: they **Book & pay** through your invite. Share & earn subtitle: share your invite so they **Book & pay**. Loading: **Loading places to Book & pay…** |
 | **`/friends/[id]`** | Friend’s listings + share; CTA **Earn as a connector** → `/connector`. Open from name or **Ready X wallet** on Friends / Messages |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their listings |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → listings; preview / › → chat |
-| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host → Share listing (no connector). Cards elsewhere show the % next to DAI price |
+| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host or 0% → **Share this place**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…** |
 
 Header nav width stays consistent across pages (`max-w-6xl`); only page content uses the narrow/wide shell.
 

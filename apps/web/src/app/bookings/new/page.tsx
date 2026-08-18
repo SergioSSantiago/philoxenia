@@ -532,7 +532,7 @@ function NewBookingForm() {
   if (!listing) {
     return (
       <Shell>
-        <p className="text-muted">Loading listing…</p>
+        <p className="text-muted">Loading place to Book & pay…</p>
         {error && <p className="mt-3 text-sm text-red-700">{error}</p>}
       </Shell>
     );

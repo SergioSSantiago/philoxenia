@@ -21,7 +21,7 @@ Friendships are **entirely off-chain**. They gate listing visibility and sharing
 | `accepted` | Becomes a friendship |
 | `rejected` | Closed; sender may request again later |
 
-Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoing empty explains Cancel. Friends empty: add by **Ready X wallet** address (0x optional).
+Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoing empty explains Cancel. Friends empty: add by **Ready X wallet** address (0x optional) — they must **Connect Ready X** once, then you can **Book & pay** their places. List subtitle: tap name or Ready X wallet to see places you can **Book & pay**.
 
 ## Notifications
 

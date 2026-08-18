@@ -58,7 +58,7 @@ Everyone else ──► 404 (listing unavailable)
 | GET | `/my-network/listings` | Yes | Friends' listings |
 | GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
 | GET | `/shared-listings` | Yes | Listings shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This listing isn’t available to Book & pay.** |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This listing isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place** |
 | POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 

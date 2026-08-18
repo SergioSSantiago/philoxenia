@@ -184,7 +184,7 @@ export default function ListingPage() {
   if (!listing) {
     return (
       <Shell>
-        <p className="text-muted">Loading listing…</p>
+        <p className="text-muted">Loading place to Book & pay…</p>
       </Shell>
     );
   }
@@ -367,10 +367,10 @@ export default function ListingPage() {
               {shareBusy
                 ? "Creating link…"
                 : isHost
-                  ? "Share listing"
+                  ? "Share this place"
                   : listing.connectorRewardPercent > 0
                     ? "Share invite & earn"
-                    : "Share listing"}
+                    : "Share this place"}
             </Button>
             {isHost && (
               <Button

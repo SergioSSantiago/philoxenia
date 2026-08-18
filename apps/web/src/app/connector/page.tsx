@@ -138,13 +138,13 @@ export default function ConnectorPage() {
       <section className="mb-12">
         <SectionTitle
           title="Share & earn"
-          subtitle="Listings from your friends. Share your link to earn the connector reward."
+          subtitle="Friends’ places. Share your invite so they Book & pay and you earn."
         />
 
         {networkListings === null ? (
-          <p className="text-muted">Loading listings…</p>
+          <p className="text-muted">Loading places to Book & pay…</p>
         ) : networkListings.length === 0 ? (
-          <EmptyState message="No friend listings yet. Add friends by Ready X wallet who host — their places will show up here so you can share and earn." />
+          <EmptyState message="No friend places yet. Add friends by Ready X wallet who host — their places show up here so you can share and earn when they Book & pay." />
         ) : (
           <div className="space-y-4">
             {shareError && (

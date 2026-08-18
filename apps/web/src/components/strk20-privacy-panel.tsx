@@ -171,7 +171,7 @@ export function Strk20PrivacyPanel() {
       <div className="space-y-3 rounded-xl border border-border bg-background p-4">
         <div>
           <p className="text-sm font-medium text-foreground">
-            Private STRK / DAI
+            Shield for Private Book & pay
           </p>
           <p className="mt-0.5 text-xs text-muted">
             Shielded balances for Private Book & pay (wallet-mediated).
@@ -182,8 +182,8 @@ export function Strk20PrivacyPanel() {
         {!walletReady ? (
           <div className="space-y-3">
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
-              Ready X is not connected for signing. Connect to view and manage
-              shielded STRK or DAI.
+              Ready X is not connected for signing. Connect to view shielded
+              STRK or DAI for Private Book & pay.
             </div>
             <Button
               type="button"
