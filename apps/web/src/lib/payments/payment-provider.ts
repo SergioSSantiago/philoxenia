@@ -43,5 +43,5 @@ export function hasCapability(
 }
 
 export function privacyLabel(mode: "private" | "public"): string {
-  return mode === "private" ? "Private payment" : "Standard payment";
+  return mode === "private" ? "Private" : "Public";
 }

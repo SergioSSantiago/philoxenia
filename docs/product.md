@@ -60,7 +60,7 @@ Wallet wiring follows [StarknetKit Ready connector](https://www.starknetkit.com/
 
 ### Firefox — no Ready X
 
-Firefox does **not** list the Ready X extension. Users only see the **legacy Ready Wallet** (formerly Argent). That build typically **cannot** expose wallet API ≥ 0.10 or run Private pay / shield / unshield. Use **Chrome + Ready X** (desktop) or the Ready X app browser (iPhone).
+Firefox does **not** list the Ready X extension. Users only see the **legacy Ready Wallet** (formerly Argent). That build typically **cannot** expose wallet API ≥ 0.10 or run **Private Book & pay** / shield / unshield. Use **Chrome + Ready X** (desktop) or the Ready X app browser (iPhone).
 
 ### iPhone — Safari vs in-app
 

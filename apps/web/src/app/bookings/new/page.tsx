@@ -170,8 +170,8 @@ function NewBookingForm() {
         if (!cancelled && (pending?.fundTxHash || inflight)) {
           setError(
             err instanceof Error
-              ? `${err.message} Do not pay again — open My bookings.`
-              : "Do not pay again — open My bookings."
+              ? `${err.message} Do not Book & pay again — open My bookings.`
+              : "Do not Book & pay again — open My bookings."
           );
         }
       } finally {
@@ -349,7 +349,7 @@ function NewBookingForm() {
     ) {
       setRecording(true);
       setError(
-        "A payment for these nights is already in progress. Do not pay again."
+        "A Book & pay for these nights is already in progress. Do not Book & pay again."
       );
       void api.get<Booking[]>("/bookings").then((rows) => {
         const hit = rows.find(
@@ -500,7 +500,7 @@ function NewBookingForm() {
       }
       setRecording(true);
       setError(
-        "If Ready charged you, the stay is being recorded. Do not pay again — open My bookings."
+        "If Ready X charged you, the stay is being recorded. Do not Book & pay again — open My bookings."
       );
       void api.get<Booking[]>("/bookings").then((rows) => {
         const hit = rows.find(
@@ -547,7 +547,7 @@ function NewBookingForm() {
       <p className="mb-8 text-sm text-muted leading-relaxed">
         Use the calendar: tap each night you want (they need not be consecutive).
         One tap selects, another deselects. Then Book & pay in STRK or DAI. If Ready X
-        already charged you, wait for Recording booking… — do not Book & pay
+        already charged you, wait for Recording stay… — do not Book & pay
         twice; open My bookings.
       </p>
 
@@ -698,7 +698,7 @@ function NewBookingForm() {
                   {!privacyCapable && fundMode === "private" && (
                     <p className="text-xs text-amber-800 leading-relaxed">
                       {privacyHint ||
-                        "Ready X wallet API ≥ 0.10 is required for Private. Update or tap Connect Ready X — we will not fall back to a public pay silently."}
+                        "Ready X wallet API ≥ 0.10 is required for Private. Update or tap Connect Ready X — we will not fall back to Public Book & pay silently."}
                     </p>
                   )}
                   <p className="text-xs text-muted leading-relaxed">
@@ -719,7 +719,7 @@ function NewBookingForm() {
 
           {recording && (
             <p className="text-sm text-amber-800 leading-relaxed">
-              Payment landed on-chain. Recording the booking in Philoxenia —
+              Payment landed on-chain. Recording the stay in Philoxenia —
               do not tap Book & pay again.
             </p>
           )}
@@ -746,7 +746,7 @@ function NewBookingForm() {
             )}
             {payLocked ? (
               <Button type="button" disabled>
-                Recording booking…
+                Recording stay…
               </Button>
             ) : !walletReady ? (
               <Button
@@ -763,7 +763,7 @@ function NewBookingForm() {
                 onClick={payAndBook}
               >
                 {recording
-                  ? "Recording booking…"
+                  ? "Recording stay…"
                   : submitting
                     ? fundMode === "private"
                       ? "Private Book & pay…"

@@ -378,7 +378,7 @@ export default function ChatThreadPage() {
                 <span className="font-medium text-foreground">
                   {conversation.friend.displayName}
                 </span>{" "}
-                STRK or DAI from chat — same friend wallet as booking pay.
+                STRK or DAI from chat — same friend wallet as Book & pay.
               </p>
 
               <div className="flex flex-wrap gap-2">
@@ -606,7 +606,7 @@ function MessageBubble({
             href={`/bookings/${message.bookingId}`}
             className="mt-1 inline-block text-accent underline-offset-2 hover:underline"
           >
-            View booking
+            View stay
           </Link>
         )}
       </div>
