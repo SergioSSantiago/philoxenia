@@ -157,7 +157,7 @@ export function AuthModal() {
     <div className="fixed inset-0 z-[80] flex items-end justify-center sm:items-center sm:p-6">
       <button
         type="button"
-        aria-label="Close sign in"
+        aria-label="Close Connect Ready X"
         className="absolute inset-0 bg-foreground/40 backdrop-blur-[2px]"
         onClick={closeSignIn}
       />
@@ -185,7 +185,7 @@ export function AuthModal() {
           </div>
           <button
             type="button"
-            aria-label="Close"
+            aria-label="Close Connect Ready X"
             onClick={closeSignIn}
             className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-xl text-muted hover:text-foreground"
           >

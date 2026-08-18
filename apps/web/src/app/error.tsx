@@ -43,7 +43,7 @@ export default function Error({
             Try again
           </Button>
           <Button variant="secondary" className="w-full" onClick={clearSession}>
-            Clear session & Connect Ready X
+            Disconnect Ready X & go Home
           </Button>
           <Link href="/home" className="text-sm text-muted hover:text-foreground">
             Back to Home

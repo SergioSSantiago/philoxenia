@@ -121,7 +121,7 @@ export default function ProfilePage() {
         </Card>
 
         <Card>
-          <h3 className="text-lg text-foreground">Session</h3>
+          <h3 className="text-lg text-foreground">Ready X in this browser</h3>
           <p className="mt-2 text-sm text-muted">
             Disconnect Ready X from this browser.
           </p>

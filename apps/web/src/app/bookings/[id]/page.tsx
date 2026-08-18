@@ -45,7 +45,7 @@ export default function BookingDetailPage() {
       "This only frees the nights in Philoxenia.\n\n" +
         "Host/connector were already paid on-chain at Book & pay. " +
         "Any money return must be agreed in Messages and sent with Send STRK or DAI.\n\n" +
-        "Continue?"
+        "Free these nights?"
     );
     if (!agreed) return;
 

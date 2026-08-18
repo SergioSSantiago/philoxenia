@@ -374,7 +374,7 @@ export default function ChatThreadPage() {
             className="shrink-0 !px-3 !py-2 text-xs sm:text-sm"
             onClick={() => setShowPay((v) => !v)}
           >
-            {showPay ? "Close" : "Send STRK or DAI"}
+            {showPay ? "Close Send STRK or DAI" : "Send STRK or DAI"}
           </Button>
         </header>
 
