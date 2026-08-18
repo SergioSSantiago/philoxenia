@@ -122,7 +122,7 @@ export function BookingCard({
   const asGuest = Boolean(viewerId && viewerId === booking.guestId);
   const roleLabel = asHost ? "You host" : asGuest ? "You stay" : null;
   const other = asHost ? booking.guest : booking.host;
-  const otherRole = asHost ? "Guest" : "Host";
+  const otherRole = asHost ? "Book & pay" : "Publishes this place";
   const otherHref = other
     ? `/friends/${other.id}`
     : asHost
@@ -170,7 +170,7 @@ export function BookingCard({
                 href={otherHref}
                 className="font-medium text-foreground underline-offset-2 hover:underline touch-manipulation"
               >
-                View profile
+                Places to Book & pay
               </Link>
             </p>
           )}

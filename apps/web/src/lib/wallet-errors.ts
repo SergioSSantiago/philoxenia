@@ -18,7 +18,7 @@ export function formatWalletError(err: unknown): string {
   }
 
   if (msg.includes("Cannot sign the message from a different chainId")) {
-    return "Wrong network in Ready X. Switch to Starknet mainnet and try again.";
+    return "Wrong network in Ready X. Switch to Starknet mainnet. Try Ready X again.";
   }
 
   // Only connector discovery failures — NOT every RPC "… not found".

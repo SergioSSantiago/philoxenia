@@ -87,7 +87,7 @@ export default function BookingDetailPage() {
   const isHost = user?.id === booking.hostId;
   const otherId = isGuest ? booking.hostId : booking.guestId;
   const counterparty = isGuest ? booking.host : booking.guest;
-  const counterpartyRole = isGuest ? "Host" : "Guest";
+  const counterpartyRole = isGuest ? "Publishes this place" : "Book & pay";
   const canCancel = ["funded", "confirmed", "completed"].includes(
     booking.status
   );

@@ -80,7 +80,7 @@ export default function MessagesPage() {
         }
       } catch {
         if (!cancelled) {
-          setError("Could not load Messages.");
+          setError("Could not load sealed Messages.");
           setLoading(false);
         }
       }

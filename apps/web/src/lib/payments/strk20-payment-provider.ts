@@ -218,7 +218,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
     const session = await resolvePrivacyWallet(this.account.address);
     if (!session?.privacyCapable) {
       throw new Error(
-        "Could not open a STRK20 wallet session. Reconnect Ready X and try again."
+        "Could not open a STRK20 wallet session. Reconnect Ready X. Try Ready X again."
       );
     }
 

@@ -301,7 +301,7 @@ function NewBookingForm() {
       setError(
         err instanceof Error
           ? err.message
-          : "Could not reconnect Ready X. Open Ready X (Chrome or iPhone) and try again."
+          : "Could not reconnect Ready X. Open Ready X (Chrome or iPhone). Try Ready X again."
       );
     } finally {
       setReconnecting(false);
