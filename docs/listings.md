@@ -11,16 +11,16 @@ Hosts create **private places** visible only to themselves and their friends. `/
 | Field | Description |
 |-------|-------------|
 | `title`, `description` | About this place |
-| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home to **Book & pay** — not a public directory. Map search fail: **Could not find that place**. Listing detail **Open on OpenStreetMap** is an external OSM tab |
+| `location`, `locationLat`, `locationLng` | Human-readable place + required map pin (WGS84). Create-listing copy: friends see the pin on Home to **Book & pay** — not a public directory. Map search fail: **Could not find that place**. Out-of-range pin: **Pin a valid place on the map**. Listing detail **Open on OpenStreetMap** is an external OSM tab |
 | `pricePerNight` | Default DAI price; nights can override per day on the calendar. Guests choose **STRK** (live FX) or **DAI** (1:1) at pay time — listing detail copy says both |
-| `minStay`, `maxStay` | Derived from open nights (not host-entered) |
+| `minStay`, `maxStay` | Derived from open nights (not host-entered). Invalid: **Stay limits must allow at least one night to Book & pay**. Range windows: **Open nights must end after they start** |
 | `cancellationTerms` | Off-chain policy text (not enforced by escrow). Create-listing default: cancel frees nights; **Book & pay** already paid host/connector; money return is **Send STRK or DAI** in Messages. Listing detail matches |
 | `connectorRewardPercent` | 0–100; **connector’s share** when a friend introduces a guest. Create-listing UI default is **5%** and explains 3–10% typical when they **Book & pay**; Philoxenia takes 10% of that reward only; **Direct Book & pay** stays 0% protocol ([connectors.md](./connectors.md)) |
 | `photos` | 1–8 images (JPEG/PNG/WebP/HEIC); browser compresses to JPEG data URLs (~1600px). Uploader copy lists iPhone HEIC |
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests **Book & pay STRK or DAI** |
 | `availability` | Legacy contiguous windows (still accepted) |
 
-Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; **Save open nights** (busy **Saving open nights…**); success **Open nights saved — guests can Book & pay.** Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
+Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; range CTA **Open nights to Book & pay** (not “Add range”); range end **Until (morning guests leave)**; **Save open nights** (busy **Saving open nights…**); success **Open nights saved — guests can Book & pay.** Empty PATCH: **Open at least one night guests can Book & pay**. Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
 
 ## Delete this place
 
@@ -58,7 +58,7 @@ Everyone else ──► 404 (place unavailable)
 | GET | `/my-network/listings` | Yes | Friends' places |
 | GET | `/friends/:id` | Yes | One friend’s places (must be friends) |
 | GET | `/shared-listings` | Yes | Places shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized / API 404: **This place isn’t available to Book & pay.** (not “Listing unavailable.”). Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place**. Delete: **Delete this place** (fail **Could not delete this place**). Host nights busy **Saving open nights…** (fail **Could not save open nights**). Copy: **Copy place invite**; status **Place invite copied** / **Place invite shared** |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized / API 404: **This place isn’t available to Book & pay.** (not “Listing unavailable.”). The page surfaces that API error. Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place**. Delete: **Delete this place** (fail **Could not delete this place**). Host nights busy **Saving open nights…** (fail **Could not save open nights**). Copy: **Copy place invite**; status **Place invite copied** / **Place invite shared** |
 | POST | `/listings/:id/share` | Yes | Generate place invite (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 

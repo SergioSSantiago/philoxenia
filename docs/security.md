@@ -22,7 +22,7 @@ Expanded security notes for API, contracts, and deployment.
 
 1. `POST /auth/challenge` — server generates nonce, stores with expiry
 2. Client signs SNIP-12 typed data (`Authentication { nonce }`) in Ready X
-3. `POST /auth/verify` — server verifies via RPC `verifyMessageInStarknet`, issues JWT. Fail: **Invalid Ready X signature. Connect Ready X again.** (not “Invalid signature”). RPC errors ask to confirm **Ready X** is on mainnet.
+3. `POST /auth/verify` — server verifies via RPC `verifyMessageInStarknet`, issues JWT. Fail: **Invalid Ready X signature. Connect Ready X again.** (not “Invalid signature”). Expired nonce: **Sign-in expired. Connect Ready X again.** (not “Invalid or expired authentication challenge”). Missing JWT: **Connect Ready X to continue.** (not “Unauthorized”). RPC errors ask to confirm **Ready X** is on mainnet. Fallback: **Could not sign in with Ready X.**
 
 Nonces are single-use and expire in 5 minutes.
 

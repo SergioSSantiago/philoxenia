@@ -123,8 +123,8 @@ export default function MessagesPage() {
         <div className="min-w-0 text-sm leading-relaxed">
           <p className="font-medium text-foreground">
             {sealedReady
-              ? "Sealed messaging is on"
-              : "Preparing sealed keys…"}
+              ? "Sealed Messages is on"
+              : "Preparing sealed Messages keys…"}
           </p>
           <p className="mt-0.5 text-muted">
             Messages are sealed on your device. Who you chat with still comes

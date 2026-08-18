@@ -28,7 +28,7 @@ export async function buildApp() {
 
   app.setErrorHandler((error: Error & { validation?: unknown }, _request, reply) => {
     if (error.message === "Unauthorized") {
-      return reply.status(401).send({ error: "Unauthorized" });
+      return reply.status(401).send({ error: "Connect Ready X to continue." });
     }
     // Zod / Fastify validation — surface a clear message instead of a blank 500
     if (

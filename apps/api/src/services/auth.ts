@@ -54,7 +54,7 @@ export async function verifyAuthSignature(
   const nonceRecord = nonceRecords[0];
 
   if (!nonceRecord) {
-    throw new Error("Invalid or expired authentication challenge");
+    throw new Error("Sign-in expired. Connect Ready X again.");
   }
 
   try {

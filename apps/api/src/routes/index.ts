@@ -97,7 +97,7 @@ export async function registerRoutes(app: FastifyInstance) {
       });
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Authentication failed";
+        err instanceof Error ? err.message : "Could not sign in with Ready X.";
       return reply.status(401).send({ error: message });
     }
   });
@@ -199,7 +199,8 @@ export async function registerRoutes(app: FastifyInstance) {
         );
         return reply.send(result);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Request failed";
+        const message =
+          err instanceof Error ? err.message : "Could not send friend request";
         return reply.status(400).send({ error: message });
       }
     }
@@ -219,7 +220,8 @@ export async function registerRoutes(app: FastifyInstance) {
           request.user.userId
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Request failed";
+        const message =
+          err instanceof Error ? err.message : "Could not update this friend request";
         return reply.status(400).send({ error: message });
       }
     }
@@ -239,7 +241,8 @@ export async function registerRoutes(app: FastifyInstance) {
           request.user.userId
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Request failed";
+        const message =
+          err instanceof Error ? err.message : "Could not update this friend request";
         return reply.status(400).send({ error: message });
       }
     }
@@ -259,7 +262,8 @@ export async function registerRoutes(app: FastifyInstance) {
           request.user.userId
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Request failed";
+        const message =
+          err instanceof Error ? err.message : "Could not update this friend request";
         return reply.status(400).send({ error: message });
       }
     }
@@ -276,7 +280,8 @@ export async function registerRoutes(app: FastifyInstance) {
       try {
         return await social.removeFriend(request.user.userId, params.id);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Request failed";
+        const message =
+          err instanceof Error ? err.message : "Could not remove this friend";
         return reply.status(400).send({ error: message });
       }
     }
@@ -296,8 +301,11 @@ export async function registerRoutes(app: FastifyInstance) {
           params.id
         );
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Request failed";
-        const status = message.includes("not found")
+        const message =
+          err instanceof Error
+            ? err.message
+            : "Could not load this friend’s places to Book & pay";
+        const status = message.includes("Connect Ready X once")
           ? 404
           : message.includes("Not friends")
             ? 403
@@ -338,7 +346,10 @@ export async function registerRoutes(app: FastifyInstance) {
         params.id,
         request.user.userId
       );
-      if (!row) return reply.status(404).send({ error: "Not found" });
+      if (!row)
+        return reply
+          .status(404)
+          .send({ error: "That notification isn’t available." });
       return row;
     }
   );
@@ -354,7 +365,8 @@ export async function registerRoutes(app: FastifyInstance) {
       try {
         return await social.removeFriend(request.user.userId, params.id);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Request failed";
+        const message =
+          err instanceof Error ? err.message : "Could not remove this friend";
         return reply.status(400).send({ error: message });
       }
     }
@@ -373,7 +385,8 @@ export async function registerRoutes(app: FastifyInstance) {
         );
         return reply.status(201).send(listing);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Create failed";
+        const message =
+          err instanceof Error ? err.message : "Could not list this place";
         return reply.status(400).send({ error: message });
       }
     }
@@ -450,10 +463,10 @@ export async function registerRoutes(app: FastifyInstance) {
         }
         return reply
           .status(400)
-          .send({ error: "Provide days or availability" });
+          .send({ error: "Open at least one night guests can Book & pay" });
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Update availability failed";
+          err instanceof Error ? err.message : "Could not save open nights";
         return reply.status(400).send({ error: message });
       }
     }
@@ -947,7 +960,7 @@ const createListingSchema = z
         if (!(end > start)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Availability end must be after start",
+            message: "Open nights must end after they start",
             path: ["availability", i, "endDate"],
           });
         }

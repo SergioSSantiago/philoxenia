@@ -31,11 +31,13 @@ function mapMessage(
 
 async function requireFriendship(userId: string, friendId: string) {
   if (userId === friendId) {
-    throw new Error("Cannot message yourself");
+    throw new Error("You can’t message yourself.");
   }
   const friends = await areFriends(userId, friendId);
   if (!friends) {
-    throw new Error("You can only message friends");
+    throw new Error(
+      "You can only message friends — add them by Ready X wallet first."
+    );
   }
 }
 
@@ -179,7 +181,7 @@ export async function recordTransferMessage(
     throw new Error("Enter a valid STRK or DAI amount");
   }
   if (!input.txHash || input.txHash.length < 10) {
-    throw new Error("Transaction hash required");
+    throw new Error("Send STRK or DAI needs a transaction hash.");
   }
 
   const mode = input.privacyMode === "private" ? "private" : "public";

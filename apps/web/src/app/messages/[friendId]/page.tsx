@@ -129,7 +129,15 @@ export default function ChatThreadPage() {
       router.replace("/home");
       return;
     }
-    load().catch(() => setError("This chat isn’t available."));
+    load().catch((err) =>
+      setError(
+        err instanceof Error &&
+          err.message &&
+          err.message !== "Request failed"
+          ? err.message
+          : "This chat isn’t available."
+      )
+    );
     const id = window.setInterval(() => {
       if (document.visibilityState === "visible") {
         load().catch(() => undefined);

@@ -354,7 +354,7 @@ export function AvailabilityCalendar({
               />
             </label>
             <label className="block text-xs">
-              Until (check-out)
+              Until (morning guests leave)
               <input
                 type="date"
                 className="mt-1 w-full rounded-xl border border-border bg-surface px-3 py-2"
@@ -376,7 +376,7 @@ export function AvailabilityCalendar({
             className="min-h-[44px] rounded-full border border-border px-4 text-sm"
             onClick={addHostRange}
           >
-            Add range
+            Open nights to Book & pay
           </button>
 
           {editDay && (

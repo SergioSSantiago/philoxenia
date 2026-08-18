@@ -426,7 +426,7 @@ export async function createListing(
     input.locationLng < -180 ||
     input.locationLng > 180
   ) {
-    throw new Error("Invalid map coordinates");
+    throw new Error("Pin a valid place on the map");
   }
 
   let dayRows: { day: string; pricePerNight: string }[] = [];
@@ -447,7 +447,7 @@ export async function createListing(
       const start = new Date(window.startDate);
       const end = new Date(window.endDate);
       if (daysBetween(start, end) < 1) {
-        throw new Error("Availability end must be after start");
+        throw new Error("Open nights must end after they start");
       }
       for (const day of nightsInWindow(window.startDate, window.endDate)) {
         dayRows.push({ day, pricePerNight: input.pricePerNight });
@@ -462,7 +462,7 @@ export async function createListing(
   const minStay = input.minStay ?? 1;
   const maxStay = input.maxStay ?? derivedMax;
   if (minStay < 1 || maxStay < minStay) {
-    throw new Error("Invalid stay limits");
+    throw new Error("Stay limits must allow at least one night to Book & pay");
   }
 
   const [listing] = await db
