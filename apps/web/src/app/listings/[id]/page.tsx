@@ -279,7 +279,7 @@ export default function ListingPage() {
             <p className="mb-3 text-sm font-medium text-foreground">
               {isHost
                 ? "Manage availability & nightly prices"
-                : "Open nights & prices"}
+                : "Open nights to Book & pay"}
             </p>
             {isHost ? (
               <>

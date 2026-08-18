@@ -22,7 +22,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 5. [ ] On settle: A (host) + B (connector) paid; B sees reward under `/connector`
 6. [ ] From Messages, tap name/wallet → same friend listings path
 
-## C. Private pay (preferred)
+## C. Private Book & pay (preferred)
 
 1. [ ] Guest shields enough **STRK or DAI** on Profile (match the pay asset)
 2. [ ] Book & pay nights → **Private**
@@ -37,7 +37,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for Private ST
 
 ## E. Cancel policy
 
-1. [ ] Open booking → read cancel policy box
+1. [ ] Open stay → read **Cancel policy** box
 2. [ ] Free nights → status `cancelled`; nights open for Book & pay again
 3. [ ] Money stays settled; Messages **Send STRK or DAI** for voluntary return
 

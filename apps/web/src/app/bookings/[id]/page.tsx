@@ -34,7 +34,7 @@ export default function BookingDetailPage() {
     if (!booking) return;
     const agreed = window.confirm(
       "This only frees the nights in Philoxenia.\n\n" +
-        "Host/connector were already paid on-chain at booking time. " +
+        "Host/connector were already paid on-chain at Book & pay. " +
         "Any money return must be agreed in Messages and sent with Send STRK or DAI.\n\n" +
         "Continue?"
     );
@@ -69,7 +69,7 @@ export default function BookingDetailPage() {
   if (!booking) {
     return (
       <Shell>
-        <p className="text-muted">Loading booking…</p>
+        <p className="text-muted">Loading stay…</p>
       </Shell>
     );
   }
@@ -258,7 +258,7 @@ export default function BookingDetailPage() {
         )}
 
         <div className="rounded-xl border border-border bg-background/80 px-4 py-3 text-xs leading-relaxed text-muted">
-          <p className="font-medium text-foreground">Cancel &amp; refund policy</p>
+          <p className="font-medium text-foreground">Cancel policy</p>
           <p className="mt-1">
             Book & pay settles immediately (host + connector paid in the same tx). There
             is <span className="text-foreground">no escrow clawback</span> after

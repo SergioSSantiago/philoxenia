@@ -33,8 +33,8 @@ Located in `apps/web/src/lib/payments/`:
 
 Private fund (default when Ready X wallet API ≥ 0.10):
 
-1. **Anonymizer (live)** — `withdraw` to helper + `privacy_invoke` (no silent public fallback)
-2. Shadow-account backup only if `NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1` (Ready lacks it by default)
+1. **Anonymizer (live)** — `withdraw` to helper + `privacy_invoke` (no silent public fallback). If the wallet lacks STRK20, Book & pay errors: **Private Book & pay needs Ready X** (wallet API ≥ 0.10) — then shield on Profile, or choose Public.
+2. Shadow-account backup only if `NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1` (Ready X lacks it by default)
 3. Public ERC-20 only when the guest explicitly chooses Public
 
 Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow.md](./deploy-escrow.md).

@@ -211,7 +211,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
     const capable = await this.detectPrivacySupport();
     if (!capable) {
       throw new Error(
-        "Private pay needs Ready X with STRK20 (wallet API ≥ 0.10). Update Ready X, shield on Profile, then retry — or choose Public."
+        "Private Book & pay needs Ready X with STRK20 (wallet API ≥ 0.10). Update Ready X, shield on Profile, then retry — or choose Public."
       );
     }
 
@@ -262,7 +262,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
           /wallet_strk20ShadowAccountCommitment|Unknown request type/i.test(msg)
         ) {
           privateErrors.push(
-            "shadow: Ready does not support shadow accounts yet"
+            "shadow: Ready X does not support shadow accounts yet"
           );
         } else {
           privateErrors.push(`shadow: ${msg}`);

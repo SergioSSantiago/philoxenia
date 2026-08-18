@@ -75,7 +75,7 @@ export default function LandingPage() {
             introduction.
           </p>
           <div className="mt-6">
-            <Link href="/home">
+            <Link href="/connector">
               <Button>Connect Ready X &amp; open Earnings</Button>
             </Link>
           </div>
