@@ -54,7 +54,7 @@ Optional checkbox in the thread UI anchors a ciphertext hash via Ready → priva
 ## Related
 
 - [social-graph.md](./social-graph.md)
-- [connectors.md](./connectors.md) — share that friend’s listings and earn
+- [connectors.md](./connectors.md) — share that friend’s places and earn
 - [bookings.md](./bookings.md)
 - [payments.md](./payments.md)
 - [message-mailbox.md](./message-mailbox.md)

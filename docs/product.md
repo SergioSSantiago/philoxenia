@@ -24,8 +24,8 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 ## What Philoxenia is
 
 - A **social trust network** for private stays
-- **Friend-based discovery** — see listings from friends, not strangers
-- **Connectors (key growth loop)** — friends introduce guests to host listings and **earn a % when the stay settles**; this is how the private network expands without a public marketplace
+- **Friend-based discovery** — see places from friends, not strangers
+- **Connectors (key growth loop)** — friends introduce guests to host places and **earn a % when the stay settles**; this is how the private network expands without a public marketplace
 - **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct **Book & pay**)
 - **Payment privacy** — STRK20 for STRK and DAI when Ready X has Smart Wallet + Private enabled (**Private Book & pay**)
 - **Sealed chat + peer pay** — E2E messages between friends; public or private peer transfers

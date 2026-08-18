@@ -65,7 +65,7 @@ export default function ConnectorPage() {
         },
       }));
     } catch (err) {
-      setShareError(err instanceof Error ? err.message : "Share failed");
+      setShareError(err instanceof Error ? err.message : "Could not share this place");
     } finally {
       setSharingId(null);
     }
@@ -206,7 +206,7 @@ export default function ConnectorPage() {
                           onClick={() => void shareAsConnector(listing)}
                         >
                           {sharingId === listing.id
-                            ? "Creating invite…"
+                            ? "Creating place invite…"
                             : "Share invite & earn"}
                         </Button>
                         <Link href={`/listings/${listing.id}`}>

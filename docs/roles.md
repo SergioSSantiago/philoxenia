@@ -63,7 +63,7 @@ Hosts: set a connector % people will actually share. At **0%**, friends can stil
 |-----------|--------|
 | You list a flat | Host |
 | You stay at a friend’s place | Guest |
-| You send a friend’s listing to a colleague | **Connector** |
+| You send a friend’s place to a colleague | **Connector** |
 | Your friend books your place with no invite from a third party | Host + Guest only (0% protocol) |
 
 ---

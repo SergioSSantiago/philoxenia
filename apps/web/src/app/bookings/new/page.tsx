@@ -442,7 +442,7 @@ function NewBookingForm() {
       })();
 
       if (!result.txHash) {
-        throw new Error("Payment did not return a transaction hash");
+        throw new Error("Book & pay did not return a transaction hash");
       }
 
       const pending = {
@@ -494,7 +494,7 @@ function NewBookingForm() {
       if (isWalletCancelled(err)) {
         clearPayInflight();
         setError(
-          err instanceof Error ? err.message : "Payment cancelled in Ready X."
+          err instanceof Error ? err.message : "Book & pay cancelled in Ready X."
         );
         return;
       }

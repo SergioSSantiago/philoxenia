@@ -81,8 +81,8 @@ Signed-in home uses `GET /home` (JWT): friends, network places, shared places, o
 | `/friends/[id]` | Friend profile: their places + share-as-connector |
 | `/messages`, `/messages/[friendId]` | Sealed chat + peer pay; name/wallet → friend places |
 | `/my-listings`, `/listings/new` | Host place CRUD + map + availability calendar; submit busy **Publishing this place…** |
-| `/listings/[id]` | Place detail (authorized viewers) + share; guest CTA **Book & pay** |
-| `/invite/[token]` | Invitation landing |
+| `/listings/[id]` | Place detail (authorized viewers) + share; guest CTA **Book & pay**. Share busy **Creating place invite…**; fail **Could not share this place**. Host nights busy **Saving open nights…** |
+| `/invite/[token]` | Place invite landing; missing token **This place invite isn’t available to Book & pay.** |
 | `/bookings`, `/bookings/new`, `/bookings/[id]` | Book & pay nights (non-contiguous OK); STRK or DAI. Stay detail **Loading stay…**. If Ready X already charged you, do not Book & pay twice |
 | `/connector` | **Earn as connector** — explain model, share friend places, reward history |
 

@@ -26,7 +26,7 @@ export default function InvitePage() {
   useEffect(() => {
     setLoading(true);
     loadInvite()
-      .catch(() => setError("Invitation unavailable."))
+      .catch(() => setError("This place invite isn’t available to Book & pay."))
       .finally(() => setLoading(false));
     // Re-resolve when the guest signs in so introduction + friendship state update
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,7 +59,7 @@ export default function InvitePage() {
       await api.post("/friends/request", { toUserId: invite!.hostId });
       await loadInvite();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Request failed");
+      setError(err instanceof Error ? err.message : "Could not send the friend request to Book & pay.");
     } finally {
       setBusy(false);
     }
@@ -77,7 +77,7 @@ export default function InvitePage() {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <Card className="max-w-md text-center">
-          <p className="text-muted">{error || "Invitation unavailable."}</p>
+          <p className="text-muted">{error || "This place invite isn’t available to Book & pay."}</p>
         </Card>
       </div>
     );
@@ -95,7 +95,7 @@ export default function InvitePage() {
     <div className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
       <Card className="w-full max-w-lg">
         <p className="text-sm uppercase tracking-widest text-muted">
-          Invitation
+          Place invite
         </p>
         <h1 className="mt-4 text-2xl sm:text-3xl">
           {invite.hasConnector && invite.connector

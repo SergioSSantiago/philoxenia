@@ -4,14 +4,14 @@ Use **two Ready X wallets** (Chrome + Smart Wallet + Private, or Ready X on iPho
 
 On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for **Private Book & pay** in section C, open Philoxenia in the **Ready X in-app browser**.
 
-## A. Social + listing
+## A. Social + place
 
 1. [ ] Wallet A signs in; set display name
 2. [ ] Wallet B signs in
 3. [ ] A adds B by Ready X wallet → B accepts
-4. [ ] A creates listing with open nights + **connector % > 0** (e.g. 5%)
-5. [ ] B sees listing on home / friends path
-6. [ ] Tap B’s **name or Ready X wallet** on Friends → `/friends/[id]` shows A’s listing
+4. [ ] A lists a place with open nights + **connector % > 0** (e.g. 5%)
+5. [ ] B sees the place on home / friends path
+6. [ ] Tap B’s **name or Ready X wallet** on Friends → `/friends/[id]` shows A’s place
 
 ## B. Connector share & earn (key loop)
 

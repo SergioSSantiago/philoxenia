@@ -151,7 +151,7 @@ export default function ListingPage() {
       const copied = await copyText(url);
       setShareStatus(inviteReadyStatus(copied, result.hasConnector));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Share failed");
+      setError(err instanceof Error ? err.message : "Could not share this place");
     } finally {
       setShareBusy(false);
     }
@@ -161,7 +161,7 @@ export default function ListingPage() {
     if (!shareUrl) return;
     const result = await shareInviteNative({
       title: listing?.title ?? "Philoxenia place",
-      text: "Open this Philoxenia invite to Book & pay (STRK or DAI).",
+      text: `Book & pay stay at ${listing?.title ?? "this place"} via Philoxenia — open this invite (STRK or DAI).`,
       url: shareUrl,
     });
     if (result === "shared") {
@@ -298,7 +298,7 @@ export default function ListingPage() {
                     disabled={availBusy || !draftDays}
                     onClick={saveAvailability}
                   >
-                    {availBusy ? "Saving…" : "Save open nights"}
+                    {availBusy ? "Saving open nights…" : "Save open nights"}
                   </Button>
                   {draftDays && (
                     <Button
@@ -365,7 +365,7 @@ export default function ListingPage() {
               onClick={shareListing}
             >
               {shareBusy
-                ? "Creating invite…"
+                ? "Creating place invite…"
                 : isHost
                   ? "Share this place"
                   : listing.connectorRewardPercent > 0

@@ -71,7 +71,7 @@ export default function FriendProfilePage() {
         },
       }));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Share failed");
+      setError(err instanceof Error ? err.message : "Could not share this place");
     } finally {
       setSharingId(null);
     }
@@ -252,7 +252,7 @@ export default function FriendProfilePage() {
                         onClick={() => void shareAsConnector(listing)}
                       >
                         {sharingId === listing.id
-                          ? "Creating invite…"
+                            ? "Creating place invite…"
                           : canEarn
                             ? "Share invite & earn"
                             : "Share invite"}

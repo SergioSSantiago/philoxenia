@@ -6,7 +6,7 @@
 
 **Connectors are how Philoxenia grows — and the best way to start using the app.** Hosts list privately; guests book privately; connectors bridge the gap — introducing trusted people to trusted places and **earning when a stay settles**.
 
-You do not need to host a place to participate. Open **Earnings**, share a friend’s listing, get paid on settle.
+You do not need to host a place to participate. Open **Earnings**, share a friend’s place, get paid on settle.
 
 Without connectors, the network stays closed among existing friends. With connectors, hospitality spreads one introduction at a time, and the introducer is paid on-chain.
 
@@ -16,7 +16,7 @@ Roles overview (Host · Guest · Connector): **[roles.md](./roles.md)**
 
 | You | Get |
 |-----|-----|
-| Share a friend’s listing with someone you trust | A **host-set % of the booking total** when they Book & pay through your invite |
+| Share a friend’s place with someone you trust | A **host-set % of the booking total** when they Book & pay through your invite |
 | Paid on settle | Funds go **straight to your Ready X wallet** (same asset the guest paid: STRK or DAI) |
 | No inventory, no hosting | You don’t list a place — you introduce guests |
 | Aligned with the protocol | Philoxenia only earns **10% of your connector reward** (not of the whole stay). Direct **Book & pay** stays **0%** protocol |
@@ -28,7 +28,7 @@ Hosts who set a healthy connector % make their friends want to share. Connectors
 ## How it works (user path)
 
 1. **Be friends** with a host who listed a place (and set `connectorRewardPercent` > 0).
-2. Open **Earnings** (`/connector`), that friend’s profile (`/friends/[id]`), or the listing itself.
+2. Open **Earnings** (`/connector`), that friend’s profile (`/friends/[id]`), or the place itself.
 3. Tap **Share invite & earn** — creates an opaque `/invite/{token}` link with **you** as connector. The button shows **Copied!** when the clipboard succeeds.
 4. Send the link (WhatsApp, Messages, etc.). Do **not** send your wallet as the invite.
 5. Guest opens the link → attribution is saved (last link wins). They become friends with the host if needed, then **Book & pay**. Earnings (`/connector`) step 3 is **They Book & pay**.
@@ -50,21 +50,21 @@ Guest Book & pay ──► escrow settles ──► you + host + (10% of your re
 | **`/friends/[id]`** | Friend’s places + share; CTA **Earn as a connector** → `/connector`; **View place**. Loading: **Loading places to Book & pay…**. Open from name or **Ready X wallet** on Friends / Messages. Opening your own profile errors: **Open your own places from Home or My places.** |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their places |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → **places**; preview / › → chat |
-| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host or 0% → **Share this place**. Busy: **Creating invite…**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…** |
+| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host or 0% → **Share this place**. Busy: **Creating place invite…**. Native share: **Book & pay stay at …**. Fail: **Could not share this place**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…**. Host nights busy: **Saving open nights…** |
 
 Header nav width stays consistent across pages (`max-w-6xl`); only page content uses the narrow/wide shell.
 
 ## Host tip — set a reward people will share
 
-When creating a listing, pick a connector % that makes introductions worthwhile (often **3–10%**). At **0%**, friends can still share for discovery, but they earn nothing — `/connector` says you earn when they **Book & pay** through your invite once a % is set.
+When listing a place, pick a connector % that makes introductions worthwhile (often **3–10%**). At **0%**, friends can still share for discovery, but they earn nothing — `/connector` says you earn when they **Book & pay** through your invite once a % is set.
 
 ## API
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | GET | `/connector/earnings` | Yes | Total earned + bookings where you were connector |
-| GET | `/my-network/listings` | Yes | All friends’ listings (share candidates) |
-| GET | `/friends/:id` | Yes | Friend profile + that friend’s listings (must be friends) |
+| GET | `/my-network/listings` | Yes | All friends’ places (share candidates) |
+| GET | `/friends/:id` | Yes | Friend profile + that friend’s places (must be friends) |
 | POST | `/listings/:id/share` | Yes | Create invite; `hasConnector: true` when sharer ≠ host |
 
 ## Rules (unchanged)

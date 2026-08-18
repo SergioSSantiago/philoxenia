@@ -20,7 +20,7 @@ Hosts create **private places** visible only to themselves and their friends. `/
 | `availableDays` | Preferred on create: `{ day, pricePerNight }[]` via host calendar. Host UI: DAI list prices; guests **Book & pay STRK or DAI** |
 | `availability` | Legacy contiguous windows (still accepted) |
 
-Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; **Save open nights**; success **Open nights saved — guests can Book & pay.** Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
+Paid guest nights stay in inventory as **locked** (`booked`). Guest and host calendars label those days **paid**. Host heading **Open nights guests can Book & pay**; **Save open nights** (busy **Saving open nights…**); success **Open nights saved — guests can Book & pay.** Guest calendar footer: tap nights one by one; past nights cannot be added to **Book & pay**; **Book & pay** in STRK or DAI. Host cannot remove locked nights or change their price; social cancel frees them again.
 
 ## Delete this place
 
@@ -58,7 +58,7 @@ Everyone else ──► 404 (place unavailable)
 | GET | `/my-network/listings` | Yes | Friends' places |
 | GET | `/friends/:id` | Yes | One friend’s places (must be friends) |
 | GET | `/shared-listings` | Yes | Places shared with user via introductions |
-| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This place isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Host badge **Your place**. Delete: **Delete this place** |
+| GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This place isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Busy **Creating place invite…**; fail **Could not share this place**. Host badge **Your place**. Delete: **Delete this place**. Host nights busy **Saving open nights…** |
 | POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |
 
