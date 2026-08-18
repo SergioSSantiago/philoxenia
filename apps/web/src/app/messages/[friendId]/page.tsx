@@ -641,7 +641,7 @@ function MessageBubble({
                 }`}
               >
                 <LockIcon />
-                Private transfer
+                Private Send STRK or DAI
               </p>
             )}
             <p className="font-medium">

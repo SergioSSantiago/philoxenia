@@ -224,7 +224,7 @@ export function AuthModal() {
                     onClick={() => void copyOpenUrl()}
                     className="text-xs text-accent underline-offset-2 hover:underline"
                   >
-                    {copied ? "Copied!" : "Copy Philoxenia link for Ready X"}
+                    {copied ? "Copied Philoxenia link for Ready X" : "Copy Philoxenia link for Ready X"}
                   </button>
                 </div>
               ) : null}
@@ -262,7 +262,7 @@ export function AuthModal() {
                   : !account
                     ? "Ready X loading…"
                     : !challengeReady
-                      ? "Preparing signature…"
+                      ? "Preparing Ready X signature…"
                       : "Approve in Ready X"}
               </Button>
               {mobileOutsideWallet && (signing || waiting) ? (

@@ -89,7 +89,7 @@ export default function LandingPage() {
             body: "Publish places for friends. Set a connector % so your network wants to bring guests. Direct Book & pay stays 0% protocol.",
           },
           {
-            title: "Connector",
+            title: "Earn as a connector",
             body: "Introduce someone you trust to a friend’s place. Earn a host-set % in STRK or DAI when they Book & pay — Philoxenia takes 10% of that reward only.",
           },
           {

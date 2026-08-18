@@ -239,11 +239,11 @@ export default function FriendsPage() {
 
       <section className="mb-8">
         <SectionTitle
-          title="Incoming requests"
+          title="Friend requests to Book & pay"
           subtitle="Accept or reject requests sent to you"
         />
         {data.pendingIncoming.length === 0 ? (
-          <EmptyState message="No incoming requests. They appear when someone adds your Ready X wallet." />
+          <EmptyState message="No friend requests to Book & pay yet. They appear when someone adds your Ready X wallet." />
         ) : (
           <div className="space-y-2">
             {data.pendingIncoming.map((r) => {
@@ -294,11 +294,11 @@ export default function FriendsPage() {
 
       <section className="mb-8">
         <SectionTitle
-          title="Sent requests"
+          title="Sent requests to Book & pay"
           subtitle="Cancel a request before the other person responds"
         />
         {data.pendingOutgoing.length === 0 ? (
-          <EmptyState message="No pending sent requests. Cancel appears here after you send one." />
+          <EmptyState message="No sent requests to Book & pay yet. Cancel appears here after you send one." />
         ) : (
           <div className="space-y-2">
             {data.pendingOutgoing.map((r) => {
@@ -333,7 +333,7 @@ export default function FriendsPage() {
 
       <section>
         <SectionTitle
-          title="Your friends"
+          title="Friends to Book & pay"
           subtitle="Tap a name or Ready X wallet to see places you can Book & pay. Remove ends the friendship for both of you."
         />
         {data.friends.length === 0 ? (

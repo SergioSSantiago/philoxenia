@@ -22,7 +22,7 @@ See [PRIVATE_MESSAGING_PLAN.md](../PRIVATE_MESSAGING_PLAN.md) and the Cairo `Mes
 | Kind | Description |
 |------|-------------|
 | `text` | Sealed body (`phx1.…`). Plaintext never stored. Limit ~900 chars plaintext. |
-| `transfer` | Public **or** private **Send STRK or DAI** to the friend’s Ready X wallet, then recorded in Messages. Public copy: both Ready X wallets visible on-chain. Thread body **Sent STRK · Private** / **Sent STRK · Public**. Bell: **A friend used Send STRK or DAI in Messages** (not “tokens in chat”) |
+| `transfer` | Public **or** private **Send STRK or DAI** to the friend’s Ready X wallet, then recorded in Messages. Public copy: both Ready X wallets visible on-chain. Thread body **Sent STRK · Private** / **Sent STRK · Public**. Private eyebrow **Private Send STRK or DAI** (not “Private transfer”). Bell: **A friend used Send STRK or DAI in Messages** (not “tokens in chat”) |
 | `booking` | System notice after a guest **Book & pay** on the host’s place (`Book & pay for “…”`). Bell titles: **New Book & pay** (host), **Book & pay complete** (guest). Social cancel: **Nights freed** (not “Booking cancelled”) |
 
 Only friends can message each other. Each user publishes `messagePublicKey` (device ECDH P-256) via `PATCH /users/me` when they open Messages.

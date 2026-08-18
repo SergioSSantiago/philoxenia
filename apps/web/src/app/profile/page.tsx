@@ -65,7 +65,7 @@ export default function ProfilePage() {
   return (
     <Shell>
       <SectionTitle
-        title="Profile"
+        title="Ready X"
         subtitle="Friends add you by Ready X wallet. Shield STRK or DAI here for Private Book & pay; swap is public AVNU."
       />
 
