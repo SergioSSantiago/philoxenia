@@ -86,7 +86,7 @@ export default function FriendProfilePage() {
     if (!share) return;
     const result = await shareInviteNative({
       title,
-      text: `Book & pay stay at ${title} via Philoxenia — open this invite (STRK or DAI).`,
+      text: `Book & pay stay at ${title} via Philoxenia — open this place invite (STRK or DAI).`,
       url: share.url,
     });
     if (result === "shared") {
@@ -143,14 +143,14 @@ export default function FriendProfilePage() {
           </h1>
           <p className="mt-1 text-sm text-muted">
             Places they host in your trust network — open one to Book &amp; pay,
-            or share an invite to earn as connector (STRK or DAI, same asset
+            or share a place invite to earn as connector (STRK or DAI, same asset
             they Book &amp; pay).
           </p>
         </div>
         <WalletAddress address={friend.walletAddress} compact />
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link href={`/messages/${friend.id}`}>
-            <Button className="w-full sm:w-auto">Message</Button>
+            <Button className="w-full sm:w-auto">Messages</Button>
           </Link>
           <Link href="/connector">
             <Button variant="secondary" className="w-full sm:w-auto">

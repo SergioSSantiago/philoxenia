@@ -57,10 +57,10 @@ export default function CreateListingPage() {
       if (!title.trim()) throw new Error("Title for this place is required");
       if (!description.trim()) throw new Error("Description for this place is required");
       if (!pricePerNight || Number(pricePerNight) <= 0) {
-        throw new Error("Enter a valid default price per night (DAI)");
+        throw new Error("Enter a valid DAI list price / night");
       }
       if (!mapLocation) {
-        throw new Error("Pin the exact location on the map");
+        throw new Error("Pin this place on the map");
       }
       if (photos.length === 0) {
         throw new Error("Add at least one place photo");
@@ -97,7 +97,7 @@ export default function CreateListingPage() {
       <h1 className="mb-2 text-3xl sm:text-4xl">List your place</h1>
       <p className="mb-8 text-sm text-muted sm:text-base">
         Only friends can see this place. Price is in DAI; guests Book & pay
-        STRK or DAI. Set a connector % so friends can share an invite and earn.
+        STRK or DAI. Set a connector % so friends can share a place invite and earn.
       </p>
 
       <Card>

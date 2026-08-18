@@ -189,7 +189,7 @@ export function LocationMapPicker({
   return (
     <div className="space-y-3">
       <div>
-        <p className="text-sm font-medium text-foreground">Location on map</p>
+        <p className="text-sm font-medium text-foreground">Place on the map</p>
         <p className="mt-0.5 text-xs text-muted">
           Search an address, then click the map or drag the pin. Friends see
           this pin on Home to Book & pay — it is not a public directory.

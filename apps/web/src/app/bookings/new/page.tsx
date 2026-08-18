@@ -613,7 +613,7 @@ function NewBookingForm() {
 
           {quote && range.ok && (
             <Card className="space-y-3 text-sm">
-              <p className="font-medium text-foreground">Price breakdown</p>
+              <p className="font-medium text-foreground">Book & pay breakdown</p>
               <ul className="space-y-1">
                 {quote.nightBreakdown.map((n) => (
                   <li

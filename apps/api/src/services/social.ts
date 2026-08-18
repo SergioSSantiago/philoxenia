@@ -420,7 +420,7 @@ export async function createListing(
     Number.isNaN(input.locationLat) ||
     Number.isNaN(input.locationLng)
   ) {
-    throw new Error("Pin the exact location on the map");
+    throw new Error("Pin this place on the map");
   }
   if (
     input.locationLat < -90 ||

@@ -483,7 +483,7 @@ export function ListingsGlobe({
     if (tipMetaRef.current) {
       tipMetaRef.current.textContent =
         cluster.items.length > 1
-          ? "Tap to choose · zoom in to split"
+          ? "Tap to choose a place to Book & pay"
           : `${kindLabel(first.kind)} · ${first.location}`;
     }
   }

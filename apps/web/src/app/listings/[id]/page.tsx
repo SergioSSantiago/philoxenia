@@ -169,7 +169,7 @@ export default function ListingPage() {
     if (!shareUrl) return;
     const result = await shareInviteNative({
       title: listing?.title ?? "Philoxenia place",
-      text: `Book & pay stay at ${listing?.title ?? "this place"} via Philoxenia — open this invite (STRK or DAI).`,
+      text: `Book & pay stay at ${listing?.title ?? "this place"} via Philoxenia — open this place invite (STRK or DAI).`,
       url: shareUrl,
     });
     if (result === "shared") {
