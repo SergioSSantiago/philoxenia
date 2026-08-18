@@ -210,7 +210,7 @@ export default function ChatThreadPage() {
       setNotice({
         title: "Ready X connected",
         body: pendingPayRef.current
-          ? "Finishing your transfer…"
+          ? "Finishing Send STRK or DAI…"
           : "Ready X is ready to sign. You can Send STRK or DAI now.",
         tone: "info",
         primaryLabel: "Got it",
@@ -417,7 +417,7 @@ export default function ChatThreadPage() {
               <p className="text-xs leading-relaxed text-muted">
                 {payMode === "private"
                   ? "From your shielded STRK or DAI via STRK20 (Ready X · Smart Wallet + Private). Amount stays private; shield that asset on Profile first."
-                  : "Normal ERC-20 transfer. Amount and both Ready X wallets are visible on-chain."}
+                  : "Send STRK or DAI on-chain via Ready X. Amount and both wallets are visible on explorers."}
               </p>
 
               {!walletReady && (
@@ -510,8 +510,8 @@ export default function ChatThreadPage() {
           {!canSeal && (
             <p className="mb-2 text-xs text-amber-800">
               {conversation.friend.messagePublicKey
-                ? "Finishing your sealed keys…"
-                : "Ask your friend to open Messages once so their sealed key is published."}
+                ? "Preparing sealed Messages keys…"
+            : "Ask your friend to open Messages once so their sealed Messages key is published."}
             </p>
           )}
           <div className="flex items-end gap-2">

@@ -198,8 +198,8 @@ export default function MessagesPage() {
                       {sealed && (
                         <span
                           className="inline-flex shrink-0 text-accent"
-                          title="Sealed"
-                          aria-label="Sealed"
+                          title="Sealed note"
+                          aria-label="Sealed note"
                         >
                           <LockIcon small />
                         </span>

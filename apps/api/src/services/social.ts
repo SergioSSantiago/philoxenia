@@ -71,7 +71,9 @@ export async function getUserById(userId: string) {
 export async function updateUserDisplayName(userId: string, displayName: string) {
   const name = displayName.trim();
   if (name.length < 1 || name.length > 64) {
-    throw new Error("Display name must be 1–64 characters");
+    throw new Error(
+      "Enter a display name (1–64 characters). Friends add you by Ready X wallet."
+    );
   }
 
   const [updated] = await db
@@ -1766,7 +1768,7 @@ export async function createBooking(
   }
 ) {
   throw new Error(
-    "Bookings are created only after payment. Use POST /bookings/quote then pay and POST /bookings/confirm."
+    "Stays are recorded only after Book & pay. Quote, pay on-chain, then confirm."
   );
 }
 

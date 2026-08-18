@@ -322,8 +322,8 @@ export function AvailabilityCalendar({
       {mode === "guest" && onSelectRange && (
         <p className="text-xs text-muted leading-relaxed">
           {pickingCheckout
-            ? "Now tap check-out (morning you leave). Dashed days are valid check-outs — they don’t need a nightly price."
-            : "Numbers under each day are the DAI price for that night. Tap check-in, then check-out."}
+            ? "Now tap the morning you leave. Dashed days are valid — they don’t need a nightly DAI price."
+            : "Numbers under each day are the DAI list price. Tap nights to Book & pay."}
         </p>
       )}
 
@@ -363,7 +363,7 @@ export function AvailabilityCalendar({
               />
             </label>
             <label className="block text-xs">
-              Price / night (DAI)
+              DAI list price / night
               <input
                 className="mt-1 w-full rounded-xl border border-border bg-surface px-3 py-2"
                 value={rangePrice}

@@ -54,7 +54,7 @@ See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend
 2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For **Private Book & pay**, open the same URL in the **Ready X in-app browser**.
 3. Connect Ready X → Sign in (approve SNIP-12). On mobile Safari this is two steps: Connect, then Sign in (second open of Ready X).
 
-Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home` (`ReadyWalletNotice` compact in the modal; full notice on the landing — **Private Book & pay** in the Ready X in-app browser). The StarknetKit picker labels the injected wallet **Ready X** (connector id remains `argentX`). Display name is optional; friends add you by **Ready X wallet** only. Name field placeholder **Display name**. Connect busy state is **Connecting Ready X…**. iPhone modal: **Copy Philoxenia link for Ready X**. Invalid address: **Invalid Ready X wallet address**. Sign-in fail: **Invalid Ready X signature. Connect Ready X again.** Expired challenge: **Sign-in expired. Connect Ready X again.** Missing JWT: **Connect Ready X to continue.** Missing/expired `/invite/:token`: **This place invite isn’t available to Book & pay.** Missing stay: **This stay isn’t available to Book & pay.**
+Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home` (`ReadyWalletNotice` compact in the modal; full notice on the landing — **Private Book & pay** in the Ready X in-app browser). Unsigned `/home` heading: **Book & pay with people you trust**. The StarknetKit picker labels the injected wallet **Ready X** (connector id remains `argentX`). Display name is optional; friends add you by **Ready X wallet** only. Name field placeholder **Display name**. Connect busy state is **Connecting Ready X…**. iPhone modal: **Copy Philoxenia link for Ready X**. Invalid address: **Invalid Ready X wallet address**. Sign-in fail: **Invalid Ready X signature. Connect Ready X again.** Expired challenge: **Sign-in expired. Connect Ready X again.** Missing JWT: **Connect Ready X to continue.** Missing/expired `/invite/:token`: **This place invite isn’t available to Book & pay.** Missing stay: **This stay isn’t available to Book & pay.**
 
 Wallet wiring follows [StarknetKit Ready connector](https://www.starknetkit.com/docs/latest/connectors/ready) modes (desktop QR / mobile redirect / in-app). npm `starknetkit@3.4.3` still exports `ArgentMobileConnector` (docs rename: `ReadyConnector`); Philoxenia patches mainnet deep links to `ready://` because stock maps `SN_MAIN` → `argent://` (legacy).
 
@@ -125,8 +125,8 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 - Profile: display name (CTA **Save display name**), public STRK/DAI balances, shield/unshield **STRK or DAI**, **AVNU STRK ↔ DAI swap**. Subtitle: friends add you by **Ready X wallet**. Display name is not searchable.
 - Private places (host + friends visibility)
 - Share links and invite resolution
-- Booking creation with date validation and connector attribution
-- Payment initiation: **Private** (STRK20 anonymizer, default when wallet API ≥ 0.10) or **Public** ERC-20
+- Booking creation with date validation and connector attribution → **Book & pay** stays
+- Payment initiation: **Private** (STRK20 anonymizer, default when wallet API ≥ 0.10) or **Public Book & pay**
 - Settle is atomic with pay (host + connector paid immediately)
 - Sealed E2E chat + peer transfers (public or private STRK)
 - On-chain verify before booking confirm; rate limits + audit logs

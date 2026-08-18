@@ -50,7 +50,7 @@ export default function HomePage() {
     return (
       <Shell wide>
         <div className="mb-8 sm:mb-10">
-          <h1 className="text-3xl sm:text-4xl">Your private network</h1>
+          <h1 className="text-3xl sm:text-4xl">Book & pay with people you trust</h1>
           <p className="mt-2 text-sm text-muted sm:text-base">
             Connect Ready X to Book & pay places from people you trust.
           </p>
@@ -78,7 +78,7 @@ export default function HomePage() {
               Hello, {user.displayName}
             </h1>
             <p className="mt-1 text-xs text-muted leading-relaxed">
-              Your network of trusted places. Book & pay STRK or DAI.
+              Places from people you trust. Book & pay STRK or DAI.
             </p>
           </div>
           <Card className="min-w-0 space-y-3 overflow-hidden p-4 sm:p-4">

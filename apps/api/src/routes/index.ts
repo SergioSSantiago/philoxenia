@@ -600,7 +600,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return reply.status(201).send(booking);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Confirm booking failed";
+          err instanceof Error ? err.message : "Could not record this Book & pay stay";
         const status =
           /unavailable/i.test(message)
             ? 404
@@ -659,7 +659,7 @@ export async function registerRoutes(app: FastifyInstance) {
         return reply.status(201).send(booking);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Recover booking failed";
+          err instanceof Error ? err.message : "Could not recover this Book & pay stay";
         const status = /unavailable/i.test(message) ? 404 : 400;
         return reply.status(status).send({ error: message });
       }
@@ -672,7 +672,7 @@ export async function registerRoutes(app: FastifyInstance) {
     async (_request, reply) => {
       return reply.status(400).send({
         error:
-          "Bookings are created only after payment. Use POST /bookings/quote, pay on-chain, then POST /bookings/confirm.",
+          "Stays are recorded only after Book & pay. Quote, pay on-chain, then confirm.",
       });
     }
   );

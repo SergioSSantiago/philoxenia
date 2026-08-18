@@ -38,7 +38,7 @@ export async function quoteAvnuSwap(input: {
   takerAddress: string;
 }): Promise<Quote> {
   if (input.sellAsset === input.buyAsset) {
-    throw new Error("Choose different tokens to swap");
+    throw new Error("Choose different tokens to swap STRK ↔ DAI");
   }
   const sellAmount = parseSwapAmount(input.sellAmount);
   const quotes = await getQuotes({
@@ -50,7 +50,7 @@ export async function quoteAvnuSwap(input: {
     integratorName: "Philoxenia",
   });
   const quote = quotes[0];
-  if (!quote) throw new Error("No AVNU route for this swap right now");
+  if (!quote) throw new Error("No AVNU route to swap STRK ↔ DAI right now");
   return quote;
 }
 

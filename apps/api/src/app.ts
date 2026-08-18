@@ -36,13 +36,13 @@ export async function buildApp() {
       Array.isArray(error.validation) ||
       error.message?.includes("Invalid")
     ) {
-      return reply.status(400).send({ error: error.message || "Invalid request" });
+      return reply.status(400).send({ error: error.message || "Could not understand that request." });
     }
     app.log.error(error);
     const detail =
       process.env.NODE_ENV === "production"
-        ? "Internal server error"
-        : error.message || "Internal server error";
+        ? "Philoxenia could not complete that. Try again."
+        : error.message || "Philoxenia could not complete that. Try again.";
     return reply.status(500).send({ error: detail });
   });
 

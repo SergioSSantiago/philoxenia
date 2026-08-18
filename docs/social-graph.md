@@ -51,7 +51,7 @@ Bell empty: friend requests, sealed messages, and **Book & pay** stays. Footer l
 | GET | `/friends` | Friends + pending incoming/outgoing |
 | GET | `/friends/search?q=` | Search by **Ready X wallet** only. Client prepends `0x` if missing and requires ≥4 hex chars of a **Ready X wallet** (normalized length ≥ 6). API minimum is 2 chars. |
 | GET | `/friends/:id` | Friend profile + their places (must be friends). Not friends: **you must be friends to Book & pay their places**. Missing user: **they must Connect Ready X once** |
-| PATCH | `/users/me` | Update display name (1–64 chars) and/or sealed Messages keys. Empty body: **Enter a display name or sealed Messages keys**. Save fail: **Could not save your display name**. Bad key: **Could not save sealed Messages keys** |
+| PATCH | `/users/me` | Update display name (1–64 chars) and/or sealed Messages keys. Empty body: **Enter a display name or sealed Messages keys**. Too short/long: **Enter a display name (1–64 characters). Friends add you by Ready X wallet.** Save fail: **Could not save your display name**. Bad key: **Could not save sealed Messages keys** |
 | POST | `/friends/request` | Send request `{ toUserId }` |
 | POST | `/friends/accept/:id` | Accept incoming request |
 | POST | `/friends/reject/:id` | Reject incoming request |
