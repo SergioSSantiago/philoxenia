@@ -128,7 +128,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
           >
             Connect Ready X
           </button>{" "}
-          only when you need to sign (shield, private pay, settle).
+          only when you need to sign (shield, Private Book & pay, settle).
         </p>
       )}
       {compact && STRK20_PRIVACY_ENABLED && (

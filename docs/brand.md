@@ -32,7 +32,7 @@ Stats fade as the brand docks into the header on scroll.
 
 Below the fold: tagline **Direct Book & pay: 0% protocol fee.** (`whitespace-nowrap` on `0% protocol fee` so the phrase does not wrap mid-line). Footer: **Direct Book & pay: 0% protocol**, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
 
-Landing CTAs: **Connect Ready X & open Earnings**, Explore, List your place. **Start here** banner: share a friend’s invite; when they **Book & pay**, you receive the host’s connector % on settle (STRK or DAI). Host role card: **Direct Book & pay stays 0% protocol**. Unsigned `/home` and invite pages use **Connect Ready X** (not a generic “Connect wallet”).
+Landing CTAs: **See places to Book & pay**, **Earn as a connector**, List your place. Header **Connect Ready X**. **Start here** banner: share a friend’s invite; when they **Book & pay**, you receive the host’s connector % on settle (STRK or DAI). Host role card: **Direct Book & pay stays 0% protocol**. Unsigned `/home` and invite pages use **Connect Ready X** (not a generic “Connect wallet”).
 
 ## Wallet
 
@@ -41,5 +41,5 @@ Philoxenia connects **Ready X** only. Braavos is not supported.
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
 <strong>Desktop:</strong> Chrome + Ready X with <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/>
 <strong>iPhone:</strong> Ready X — Safari Connect (WC) or <strong>app browser</strong> for Private.<br/>
-<strong>Firefox:</strong> no Ready X → no privacy.
+<strong>Firefox:</strong> no Ready X → no Private Book & pay.
 </p>

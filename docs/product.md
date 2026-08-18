@@ -14,7 +14,7 @@ The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](
 <strong style="color:#7f1d1d;">⚠ Required: Ready X setup (read this first)</strong><br/><br/>
 <strong>Desktop:</strong> <strong>Chrome</strong> + <strong>Ready X</strong> extension, with <strong>Smart Wallet</strong> and <strong>Private</strong> turned on.<br/><br/>
 <strong>iPhone:</strong> install <a href="https://apps.apple.com/us/app/ready-x/id6744935604">Ready X</a>. Safari can <strong>Connect</strong> via WalletConnect redirect into Ready X (StarknetKit mobile system browser mode). For <strong>Private STRK or DAI</strong>, prefer opening Philoxenia in the <strong>Ready X in-app browser</strong>.<br/><br/>
-<strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears — <strong>no private payments</strong>.
+<strong>Firefox:</strong> Ready X is <strong>not available</strong>. Only the old Ready Wallet appears — <strong>no Private Book & pay</strong>.
 </p>
 
 ## Problem
@@ -26,8 +26,8 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - A **social trust network** for private stays
 - **Friend-based discovery** — see listings from friends, not strangers
 - **Connectors (key growth loop)** — friends introduce guests to host listings and **earn a % when the stay settles**; this is how the private network expands without a public marketplace
-- **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct bookings)
-- **Payment privacy** — STRK20 for STRK and DAI when Ready X has Smart Wallet + Private enabled
+- **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct **Book & pay**)
+- **Payment privacy** — STRK20 for STRK and DAI when Ready X has Smart Wallet + Private enabled (**Private Book & pay**)
 - **Sealed chat + peer pay** — E2E messages between friends; public or private peer transfers
 - **STRK ↔ DAI swap** — public AVNU swap on Profile (and from Home)
 
@@ -96,7 +96,7 @@ One person can be host on their places, guest on friends’ places, and connecto
 
 | Party | Fee |
 |-------|------|
-| Direct host↔guest (no connector) | **0%** protocol |
+| Direct **Book & pay** (no connector) | **0%** protocol |
 | Connector | Host-configured **% of booking total** (0–100%) |
 | Philoxenia | **10% of the connector reward** (not of the booking total) |
 | Host | Remainder after connector reward |

@@ -180,7 +180,8 @@ export default function CreateListingPage() {
             </p>
             {!pricePerNight || Number(pricePerNight) <= 0 ? (
               <p className="text-sm text-muted">
-                Enter a default DAI price above to open nights on the calendar.
+                Enter a default DAI price above to open nights guests can Book
+                &amp; pay.
               </p>
             ) : (
               <AvailabilityCalendar

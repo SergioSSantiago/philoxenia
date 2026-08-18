@@ -9,7 +9,7 @@ Landing role cards (`/`): Host (connector % + 0% direct), Connector (STRK/DAI wh
 | Role | What you do | How you get paid |
 |------|-------------|------------------|
 | **Host** | List a private place, open nights, set a connector % | Stay payment on settle (minus connector share) |
-| **Guest** | Book & pay through friendship or an invite (STRK or DAI) | You pay for the stay; private pay when Ready X supports it |
+| **Guest** | Book & pay through friendship or an invite (STRK or DAI) | You pay for the stay; **Private Book & pay** when Ready X supports it |
 | **Connector** | Share a friend’s listing invite with someone you trust | **Host-set % of the booking** → your Ready X wallet on settle |
 
 ---

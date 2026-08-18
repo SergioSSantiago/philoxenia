@@ -123,7 +123,7 @@ export default function ConnectorPage() {
             connector.
           </li>
           <li>
-            <span className="font-medium">3. They book &amp; pay</span>
+            <span className="font-medium">3. They Book &amp; pay</span>
             {" — "}
             you receive the host&apos;s connector % on settle in STRK or DAI
             (Philoxenia takes 10% of that reward only).

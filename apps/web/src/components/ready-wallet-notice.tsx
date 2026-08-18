@@ -1,4 +1,4 @@
-/** Shared copy: Ready X setup for Philoxenia (login + private pay). */
+/** Shared copy: Ready X setup for Philoxenia (login + Private Book & pay). */
 
 export const READY_WALLET_SETUP_TITLE = "Required: Ready X setup";
 
@@ -25,7 +25,7 @@ export function ReadyWalletNotice({
           <strong>Ready X</strong>. Safari can <strong>Connect</strong>{" "}
           (WalletConnect). For Private STRK or DAI, open Philoxenia in the Ready X
           in-app browser.{" "}
-          <strong>Firefox:</strong> no Ready X — no private pay.
+          <strong>Firefox:</strong> no Ready X — no Private Book &amp; pay.
         </p>
       ) : (
         <ul className="mt-2 list-disc space-y-1.5 pl-4 text-xs leading-relaxed text-red-800/95 sm:text-sm">
@@ -50,7 +50,7 @@ export function ReadyWalletNotice({
           </li>
           <li>
             <strong>Firefox:</strong> Ready X extension is unavailable — no
-            private payments. Use Chrome + Ready X or the Ready X app browser.
+            Private Book &amp; pay. Use Chrome + Ready X or the Ready X app browser.
           </li>
         </ul>
       )}

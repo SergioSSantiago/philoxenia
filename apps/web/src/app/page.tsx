@@ -48,7 +48,7 @@ export default function LandingPage() {
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link href="/home">
-            <Button>Explore</Button>
+            <Button>See places to Book &amp; pay</Button>
           </Link>
           <Link href="/connector">
             <Button variant="secondary">Earn as a connector</Button>

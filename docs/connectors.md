@@ -31,7 +31,7 @@ Hosts who set a healthy connector % make their friends want to share. Connectors
 2. Open **Earnings** (`/connector`), that friend’s profile (`/friends/[id]`), or the listing itself.
 3. Tap **Share invite & earn** — creates an opaque `/invite/{token}` link with **you** as connector. The button shows **Copied!** when the clipboard succeeds.
 4. Send the link (WhatsApp, Messages, etc.). Do **not** send your wallet as the invite.
-5. Guest opens the link → attribution is saved (last link wins). They become friends with the host if needed, then Book & pay.
+5. Guest opens the link → attribution is saved (last link wins). They become friends with the host if needed, then **Book & pay**. Earnings (`/connector`) step 3 is **They Book & pay**.
 6. On settle, your reward hits your Ready X wallet **in the same asset the guest paid** (STRK or DAI). Track totals on `/connector`.
 
 ```

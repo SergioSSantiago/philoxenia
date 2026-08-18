@@ -164,7 +164,7 @@ export function GuestNightCalendar({
               >
                 <span>{dayNum}</span>
                 {booked && (
-                  <span className="mt-0.5 text-[9px]">booked</span>
+                  <span className="mt-0.5 text-[9px]">paid</span>
                 )}
                 {isPast && !booked && (
                   <span className="mt-0.5 text-[9px]">past</span>

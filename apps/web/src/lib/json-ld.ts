@@ -42,7 +42,7 @@ export function landingJsonLd() {
           "Host listings for trusted network",
           "Guest Book & pay with Starknet escrow",
           "Connector introductions that earn on settle",
-          "STRK20 private payments with Ready X",
+          "STRK20 Private Book & pay with Ready X",
           "Guests Book & pay STRK or DAI",
         ],
       },

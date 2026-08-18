@@ -151,7 +151,7 @@ Connect with [Ready X](https://www.ready.co/) — **Chrome** + Smart Wallet + Pr
 | Payment fails | Set `NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS`; ensure on-chain booking exists |
 | Wallet auth fails (Ready X) | Mainnet; Smart Wallet + Private; `ALCHEMY_API_KEY` |
 | Wallet auth fails on iPhone Safari | Install Ready X; allow app open on Connect; use in-app browser if WC fails |
-| Private pay blocked on Firefox | Expected — use Chrome + Ready X or Ready X app browser |
+| Private Book & pay blocked on Firefox | Expected — use Chrome + Ready X or Ready X app browser |
 
 ## Related
 
