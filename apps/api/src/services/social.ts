@@ -1197,7 +1197,7 @@ export async function confirmPaidBooking(
   );
 
   if (uuidToOnChainId(prepared.listing.id) !== BigInt(inspected.listingOnChainId)) {
-    throw new Error("This payment is for a different place");
+    throw new Error("This Book & pay is for a different place");
   }
 
   const paymentAsset = inspected.paymentAsset;
@@ -1429,7 +1429,7 @@ export async function recoverPaidBooking(
     return getBookingById(inspected.existingBookingId, guestId);
   }
   if (input.listingId && input.listingId !== inspected.listingId) {
-    throw new Error("This payment is for a different place");
+    throw new Error("This Book & pay is for a different place");
   }
 
   return confirmPaidBooking(guestId, {
@@ -1900,12 +1900,12 @@ export async function updateBookingPayment(
   }
 
   if (booking.status !== "pending") {
-    throw new Error("Booking cannot be funded in current state");
+    throw new Error("This stay cannot be funded in its current state");
   }
 
   const escrowBookingId = data.escrowBookingId ?? booking.escrowBookingId;
   if (!escrowBookingId) {
-    throw new Error("escrowBookingId required to verify payment on-chain");
+    throw new Error("Book & pay stay id is required to verify on-chain");
   }
 
   const verified = await verifyEscrowPaymentTx({
@@ -1977,7 +1977,7 @@ export async function settleBooking(
   }
 
   if (!booking.escrowBookingId) {
-    throw new Error("Missing escrow booking id");
+    throw new Error("Missing Book & pay stay id");
   }
 
   const verified = await verifyEscrowPaymentTx({
@@ -2091,7 +2091,7 @@ export async function refundBooking(
   }
 
   if (!booking.escrowBookingId) {
-    throw new Error("Missing escrow booking id");
+    throw new Error("Missing Book & pay stay id");
   }
 
   const verified = await verifyEscrowRefundTx({

@@ -167,8 +167,8 @@ export default function ListingPage() {
     if (result === "shared") {
       setShareStatus(
         shareHasConnector
-          ? "Invite shared — you are the connector"
-          : "Invite link shared"
+          ? "Place invite shared — you are the connector"
+          : "Place invite shared"
       );
     }
   }

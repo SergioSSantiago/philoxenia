@@ -28,7 +28,7 @@ export default function BookingDetailPage() {
     api
       .get<Booking>(`/bookings/${params.id}`)
       .then(setBooking)
-      .catch(() => setError("This stay isn’t available"));
+      .catch(() => setError("This stay isn’t available to Book & pay"));
   }, [token, params.id, router]);
 
   async function socialCancel() {
@@ -279,7 +279,7 @@ export default function BookingDetailPage() {
                 ? "Freeing nights…"
                 : alreadySettled
                   ? "Free nights (no on-chain refund)"
-                  : "Mark cancelled (free nights)"}
+                  : "Free nights (stay not settled yet)"}
             </Button>
           )}
           <Button

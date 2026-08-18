@@ -95,8 +95,8 @@ export default function FriendProfilePage() {
         [listingId]: {
           ...share,
           status: asConnector
-            ? "Invite shared — you are the connector"
-            : "Invite shared",
+            ? "Place invite shared — you are the connector"
+            : "Place invite shared",
         },
       }));
     }

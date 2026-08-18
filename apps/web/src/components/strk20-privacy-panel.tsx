@@ -197,7 +197,7 @@ export function Strk20PrivacyPanel() {
           <div className="space-y-3">
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
               {hint ||
-                "This wallet does not expose STRK20 yet (needs wallet API ≥ 0.10)."}
+                "This Ready X wallet does not expose STRK20 yet (needs wallet API ≥ 0.10)."}
             </div>
             <ol className="list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted">
               <li>

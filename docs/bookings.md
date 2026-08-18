@@ -36,7 +36,7 @@ After a successful on-chain pay, the client stores a pending row in `localStorag
 - Escrow emitted `BookingSettled` for `escrowBookingId`
 - `fundTxHash` not already used on another payment
 
-Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **Book & pay for “…”** (host: **New Book & pay**, guest: **Book & pay complete**). Social cancel tells the other party to **Send STRK or DAI** in Messages (not “Send DAI/STRK”). Confirm wallet mismatch: **This Book & pay was not made from your Ready X wallet.** Reused hash: **This Book & pay was already used for another stay.** Missing place: **Place for this Book & pay was not found.** Unsettled: **This Book & pay stay is not settled on-chain.**
+Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **Book & pay for “…”** (host: **New Book & pay**, guest: **Book & pay complete**). Social cancel tells the other party to **Send STRK or DAI** in Messages (not “Send DAI/STRK”). Confirm wallet mismatch: **This Book & pay was not made from your Ready X wallet.** Wrong place: **This Book & pay is for a different place.** Reused hash: **This Book & pay was already used for another stay.** Missing place: **Place for this Book & pay was not found.** Unsettled: **This Book & pay stay is not settled on-chain.** Missing stay id: **Missing Book & pay stay id.** Not on chain yet: **Book & pay not found on Starknet yet**.
 
 ## Cancel policy (honest)
 
@@ -57,7 +57,7 @@ Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **
 | POST | `/bookings/:id/settle` | Legacy — verified |
 | POST | `/bookings/:id/refund` | Legacy funded-only — verified |
 | GET | `/bookings` | List title **My stays** — empty **No Book & pay stays yet**; Home empty matches. Cards show **You host** / **You stay** and stay status **Book & pay complete** / **Nights freed** (not raw `completed` / `cancelled`). Home **My stays** subtitle: recent Book & pay stays. If nights are gapped, the card lists those dates (or “not consecutive”) instead of a contiguous check-in–out range |
-| GET | `/bookings/:id` | Detail eyebrow **Book & pay**. **Loading stay…**. Missing stay: **This stay isn’t available**. Stay field **Book & pay complete** / **Nights freed**. **Direct Book & pay — no connector.** **Place list total (DAI)**. **Paid at Book & pay**. **Verified Book & pay tx**. Title fallback **Private place** + **View place**; host/guest profile (**places to Book & pay**). Gapped `selectedNights` note that check-in/out is only the bounding window. Quote fail: **Could not quote Book & pay**. Escrow missing: **Book & pay escrow is not configured** |
+| GET | `/bookings/:id` | Detail eyebrow **Book & pay**. **Loading stay…**. Missing stay: **This stay isn’t available to Book & pay**. Stay field **Book & pay complete** / **Nights freed**. Cancel idle (legacy): **Free nights (stay not settled yet)**. **Direct Book & pay — no connector.** **Place list total (DAI)**. **Paid at Book & pay**. **Verified Book & pay tx**. Title fallback **Private place** + **View place**; host/guest profile (**places to Book & pay**). Gapped `selectedNights` note that check-in/out is only the bounding window. Quote fail: **Could not quote Book & pay**. Escrow missing: **Book & pay escrow is not configured** |
 
 ## Related
 

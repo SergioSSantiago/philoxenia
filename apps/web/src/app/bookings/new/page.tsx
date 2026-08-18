@@ -312,7 +312,7 @@ function NewBookingForm() {
     if (!listing || !range.ok || range.nights.length === 0) return;
     if (!account || !address) {
       setError(
-        "Ready X is not connected for signing. Tap Connect Ready X, then Book & pay again — Public and Private both need a live wallet session."
+        "Ready X is not connected for signing. Tap Connect Ready X, then Book & pay again — Public and Private both need a live Ready X session."
       );
       return;
     }

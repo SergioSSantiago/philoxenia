@@ -50,7 +50,7 @@ Guest Book & pay ──► escrow settles ──► you + host + (10% of your re
 | **`/friends/[id]`** | Friend’s places + share; CTA **Earn as a connector** → `/connector`; **View place**. Loading: **Loading places to Book & pay…**. Open from name or **Ready X wallet** on Friends / Messages. Opening your own profile errors: **Open your own places from Home or My places.** |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their places |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → **places**; preview / › → chat |
-| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host or 0% → **Share this place**. Busy: **Creating place invite…**. Native share: **Book & pay stay at …**. Fail: **Could not share this place**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…**. Host nights busy: **Saving open nights…** |
+| **`/listings/[id]`** | Friend + % > 0 → **Share invite & earn**; host or 0% → **Share this place**. Busy: **Creating place invite…**. Native share: **Book & pay stay at …**. Fail: **Could not share this place**. Copy status **Place invite copied** / **Place invite shared**. Cards elsewhere show the % next to DAI price. Loading: **Loading place to Book & pay…**. Host nights busy: **Saving open nights…** |
 
 Header nav width stays consistent across pages (`max-w-6xl`); only page content uses the narrow/wide shell.
 

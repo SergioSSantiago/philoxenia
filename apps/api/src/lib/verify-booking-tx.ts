@@ -56,10 +56,10 @@ export async function verifyEscrowPaymentTx(input: {
   try {
     bookingId = BigInt(input.escrowBookingId);
   } catch {
-    throw new Error("Invalid escrow booking id");
+    throw new Error("Invalid Book & pay stay id");
   }
   if (bookingId <= 0n) {
-    throw new Error("Invalid escrow booking id");
+    throw new Error("Invalid Book & pay stay id");
   }
 
   const provider = getRpcProvider();
@@ -68,7 +68,7 @@ export async function verifyEscrowPaymentTx(input: {
     receipt = await provider.getTransactionReceipt(txHash);
   } catch {
     throw new Error(
-      "Transaction not found on Starknet yet — wait for confirmation and retry"
+      "Book & pay not found on Starknet yet — wait for confirmation and retry"
     );
   }
 
@@ -83,7 +83,7 @@ export async function verifyEscrowPaymentTx(input: {
     (receipt as { isSuccess?: () => boolean }).isSuccess?.() === true;
 
   if (!ok && exec && exec !== "SUCCEEDED") {
-    throw new Error(`Transaction did not succeed (status: ${exec})`);
+    throw new Error(`Book & pay did not succeed (status: ${exec})`);
   }
 
   const events =
@@ -149,11 +149,11 @@ export async function verifyEscrowPaymentTx(input: {
   if (input.requireSettled !== false) {
     if (fundedMatch) {
       throw new Error(
-        "Tx funded escrow but did not settle — Philoxenia requires fund+settle in one payment"
+        "Book & pay funded escrow but did not settle — Philoxenia requires fund+settle in one Book & pay"
       );
     }
     throw new Error(
-      "Tx has no BookingSettled event for this booking on the Philoxenia escrow"
+      "Book & pay has no BookingSettled event for this stay on the Philoxenia escrow"
     );
   }
 
@@ -167,7 +167,7 @@ export async function verifyEscrowPaymentTx(input: {
   }
 
   throw new Error(
-    "Tx has no matching BookingFunded/BookingSettled event on Philoxenia escrow"
+    "Book & pay has no matching BookingFunded/BookingSettled event on Philoxenia escrow"
   );
 }
 
@@ -181,7 +181,7 @@ export async function verifyEscrowRefundTx(input: {
   try {
     bookingId = BigInt(input.escrowBookingId);
   } catch {
-    throw new Error("Invalid escrow booking id");
+    throw new Error("Invalid Book & pay stay id");
   }
 
   const provider = getRpcProvider();
@@ -212,7 +212,7 @@ export async function verifyEscrowRefundTx(input: {
   }
 
   throw new Error(
-    "Tx has no BookingRefunded event for this booking on Philoxenia escrow"
+    "Book & pay has no BookingRefunded event for this stay on Philoxenia escrow"
   );
 }
 
@@ -277,7 +277,7 @@ export async function inspectEscrowSettledTx(
     receipt = await provider.getTransactionReceipt(normalized);
   } catch {
     throw new Error(
-      "Transaction not found on Starknet yet — wait for confirmation and retry"
+      "Book & pay not found on Starknet yet — wait for confirmation and retry"
     );
   }
 
@@ -286,7 +286,7 @@ export async function inspectEscrowSettledTx(
     (receipt as { status?: string }).status ??
     "";
   if (!receiptSucceeded(receipt as { execution_status?: string }) && exec) {
-    throw new Error(`Transaction did not succeed (status: ${exec})`);
+    throw new Error(`Book & pay did not succeed (status: ${exec})`);
   }
 
   const events =

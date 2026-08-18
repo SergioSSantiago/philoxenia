@@ -84,7 +84,7 @@ export default function ConnectorPage() {
         ...prev,
         [listingId]: {
           ...share,
-          status: "Invite shared — you are the connector",
+          status: "Place invite shared — you are the connector",
         },
       }));
     }

@@ -54,7 +54,7 @@ export default function FriendsPage() {
       router.replace("/home");
       return;
     }
-    load().catch(() => setActionError("Could not load friends."));
+    load().catch(() => setActionError("Could not load friends to Book & pay."));
     const id = window.setInterval(() => {
       if (document.visibilityState === "visible") {
         load().catch(() => undefined);
