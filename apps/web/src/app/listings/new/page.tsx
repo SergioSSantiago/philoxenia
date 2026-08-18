@@ -105,7 +105,7 @@ export default function CreateListingPage() {
           <section className="space-y-4">
             <h2 className="text-lg text-foreground">About this place</h2>
             <label className="block text-sm">
-              Title
+              Title for this place
               <TextInput
                 className="mt-1"
                 value={title}
@@ -116,7 +116,7 @@ export default function CreateListingPage() {
               />
             </label>
             <label className="block text-sm">
-              Description
+              Description for this place
               <textarea
                 className="mt-1 min-h-28 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm"
                 value={description}

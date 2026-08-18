@@ -106,7 +106,7 @@ export default function MessagesPage() {
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
           Sealed notes decrypt only on your device. From a thread you can also
           send STRK or DAI (Public or Private). Tap a name or Ready X wallet to
-          see their places and share a place invite; open the preview or › to chat.
+          see their places and share a place invite; open the preview or › for Messages.
         </p>
       </header>
 
@@ -127,7 +127,7 @@ export default function MessagesPage() {
               : "Preparing sealed Messages keys…"}
           </p>
           <p className="mt-0.5 text-muted">
-            Messages are sealed on your device. Who you chat with still comes
+            Messages are sealed on your device. Who you send sealed notes to still comes
             from your Philoxenia friends list. Book & pay updates and Send STRK
             or DAI live on the same thread.
           </p>
@@ -211,7 +211,7 @@ export default function MessagesPage() {
                 <Link
                   href={`/messages/${t.friend.id}`}
                   className="flex shrink-0 items-center px-3 text-muted transition hover:bg-accent-soft/35 hover:text-foreground touch-manipulation"
-                  aria-label={`Open chat with ${t.friend.displayName}`}
+                  aria-label={`Open Messages with ${t.friend.displayName}`}
                 >
                   ›
                 </Link>

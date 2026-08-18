@@ -592,7 +592,7 @@ function NewBookingForm() {
                     {range.gap && (
                       <span className="text-muted">
                         {" "}
-                        · non-consecutive OK
+                        · nights not consecutive
                       </span>
                     )}
                   </p>

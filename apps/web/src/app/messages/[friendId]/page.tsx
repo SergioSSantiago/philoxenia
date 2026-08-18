@@ -386,7 +386,7 @@ export default function ChatThreadPage() {
                 <span className="font-medium text-foreground">
                   {conversation.friend.displayName}
                 </span>{" "}
-                STRK or DAI from chat — same friend wallet as Book & pay.
+                STRK or DAI from Messages — same friend wallet as Book & pay.
               </p>
 
               <div className="flex flex-wrap gap-2">
@@ -554,7 +554,7 @@ export default function ChatThreadPage() {
                 />
                 <span>
                   Anchor ciphertext hash on-chain (MessageMailbox). Optional
-                  proof-of-existence — not needed for normal chat.
+                  proof-of-existence — not needed for a sealed note.
                 </span>
               </label>
             </details>

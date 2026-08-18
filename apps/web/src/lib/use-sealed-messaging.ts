@@ -34,7 +34,7 @@ export function useSealedMessaging() {
     } catch (err) {
       setReady(false);
       setError(
-        err instanceof Error ? err.message : "Could not enable sealed chat"
+        err instanceof Error ? err.message : "Could not enable sealed Messages"
       );
       return null;
     }

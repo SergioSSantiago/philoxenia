@@ -77,7 +77,7 @@ See [strk20.md](./strk20.md). Private selection does **not** fall back to public
 
 ## Peer transfers (Messages)
 
-Friends can send DAI or STRK directly from chat (`peer-transfer.ts`) — used for voluntary returns after social cancel. Not escrow. Chat and booking pay both say **Connect Ready X** when the JWT is live but the wallet is not.
+Friends can **Send STRK or DAI** from Messages (`peer-transfer.ts`) — used for voluntary returns after social cancel. Not escrow. Messages and Book & pay both say **Connect Ready X** when the JWT is live but the wallet is not.
 
 ## Live FX
 
