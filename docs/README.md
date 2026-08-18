@@ -14,7 +14,7 @@ Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustle
 | [connectors.md](./connectors.md) | **Earn as a connector** — key growth loop, Earnings UI, share surfaces |
 | [architecture.md](./architecture.md) | Monorepo, pages, data flow |
 | [social-graph.md](./social-graph.md) | Friends; friend profile; search by Ready X wallet only |
-| [listings.md](./listings.md) | Private listings |
+| [listings.md](./listings.md) | Private places |
 | [invitations.md](./invitations.md) | Share links |
 | [bookings.md](./bookings.md) | Verified pay; social cancel (no clawback) |
 | [demo-checklist.md](./demo-checklist.md) | Prod happy-path checklist |

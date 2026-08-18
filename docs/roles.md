@@ -10,7 +10,7 @@ Landing role cards (`/`): Host (connector % + 0% direct), Connector (STRK/DAI wh
 |------|-------------|------------------|
 | **Host** | List a private place, open nights, set a connector % | Stay payment on settle (minus connector share) |
 | **Guest** | Book & pay through friendship or an invite (STRK or DAI) | You pay for the stay; **Private Book & pay** when Ready X supports it |
-| **Connector** | Share a friend’s listing invite with someone you trust | **Host-set % of the booking** → your Ready X wallet on settle |
+| **Connector** | Share a friend’s place invite with someone you trust | **Host-set % of the booking** → your Ready X wallet on settle |
 
 ---
 
@@ -23,7 +23,7 @@ Philoxenia has **no public marketplace**. The network grows only when someone in
 - **Earn without hosting** — no photos, no calendar, no guests in your home
 - **Paid on-chain** — when the guest settles, your cut hits your Ready X wallet (STRK or DAI)
 - **Aligned incentives** — hosts who set 3–10% give friends a reason to share; you fill their nights
-- **Trust-native** — you only introduce people you actually know; guests arrive with a vouch, not a cold listing
+- **Trust-native** — you only introduce people you actually know; guests arrive with a vouch, not a cold public listing
 - **Protocol takes a thin cut of *your* reward only** — 10% of the connector share (never of direct host↔guest stays)
 
 **Example:** guest pays **1,000 DAI**, host set **5%** connector → **you 45 DAI**, protocol 5 DAI, host 950 DAI.

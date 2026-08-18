@@ -837,7 +837,7 @@ export async function deleteListing(listingId: string, hostId: string) {
     });
   } catch (err) {
     const detail = err instanceof Error ? err.message : "database error";
-    throw new Error(`Could not delete listing (${detail})`);
+    throw new Error(`Could not delete this place (${detail})`);
   }
 
   return { ok: true as const, id: listingId };
@@ -1197,7 +1197,7 @@ export async function confirmPaidBooking(
   );
 
   if (uuidToOnChainId(prepared.listing.id) !== BigInt(inspected.listingOnChainId)) {
-    throw new Error("This payment is for a different listing");
+    throw new Error("This payment is for a different place");
   }
 
   const paymentAsset = inspected.paymentAsset;
@@ -1429,7 +1429,7 @@ export async function recoverPaidBooking(
     return getBookingById(inspected.existingBookingId, guestId);
   }
   if (input.listingId && input.listingId !== inspected.listingId) {
-    throw new Error("This payment is for a different listing");
+    throw new Error("This payment is for a different place");
   }
 
   return confirmPaidBooking(guestId, {

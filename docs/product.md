@@ -75,11 +75,11 @@ Philoxenia has three roles — **Host**, **Guest**, and **Connector**. One walle
 
 | Role | Description |
 |------|-------------|
-| **Host** | Creates listings; sets connector %; receives accommodation payment on settlement |
+| **Host** | Creates places; sets connector %; receives accommodation payment on settlement |
 | **Guest** | Books and funds stays; must be friends with the host (or become friends after an invite) |
-| **Connector** | **Start here to grow the network** — a friend who shares a listing invite; earns the host’s configured % of the booking total, paid to their Ready X wallet on settle |
+| **Connector** | **Start here to grow the network** — a friend who shares a place invite; earns the host’s configured % of the booking total, paid to their Ready X wallet on settle |
 
-**Be a connector:** open **Earnings** (`/connector`), share a friend’s listing, earn when they Book & pay. No need to host. Details: **[roles.md](./roles.md)** · **[connectors.md](./connectors.md)**
+**Be a connector:** open **Earnings** (`/connector`), share a friend’s place, earn when they Book & pay. No need to host. Details: **[roles.md](./roles.md)** · **[connectors.md](./connectors.md)**
 
 One person can be host on their places, guest on friends’ places, and connector when they introduce others.
 
@@ -120,10 +120,10 @@ UI always shows **percentages**. On-chain storage uses basis points internally (
 
 - Wallet authentication via Ready X (SNIP-12): Chrome extension, iPhone Safari WalletConnect, or **in-app browser** (ideal for Private Book & pay)
 - Friend requests and friendships (search by **Ready X wallet** address)
-- Friend profile (`/friends/[id]`): listings + share-as-connector; name/wallet links from Friends & Messages
-- **Earnings (`/connector`)**: how connectors earn, shareable friend listings, reward history
+- Friend profile (`/friends/[id]`): places + share-as-connector; name/wallet links from Friends & Messages
+- **Earnings (`/connector`)**: how connectors earn, shareable friend places, reward history
 - Profile: display name, public STRK/DAI balances, shield/unshield **STRK or DAI**, **AVNU STRK ↔ DAI swap**. Subtitle: friends add you by **Ready X wallet**. Display name is not searchable.
-- Private listings (host + friends visibility)
+- Private places (host + friends visibility)
 - Share links and invite resolution
 - Booking creation with date validation and connector attribution
 - Payment initiation: **Private** (STRK20 anonymizer, default when wallet API ≥ 0.10) or **Public** ERC-20

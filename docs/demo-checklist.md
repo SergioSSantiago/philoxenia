@@ -15,12 +15,12 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for **Private 
 
 ## B. Connector share & earn (key loop)
 
-1. [ ] B opens **Earnings** (`/connector`) — sees how connectors earn + A’s listing with earn %
+1. [ ] B opens **Earnings** (`/connector`) — sees how connectors earn + A’s place with earn %
 2. [ ] B taps **Share invite & earn** → copies/sends invite link
 3. [ ] Guest C opens invite → requests friendship with A → A accepts
 4. [ ] C Book & pay through that attribution
 5. [ ] On settle: A (host) + B (connector) paid; B sees reward under `/connector`
-6. [ ] From Messages, tap name/wallet → same friend listings path
+6. [ ] From Messages, tap name/wallet → same friend places path
 
 ## C. Private Book & pay (preferred)
 

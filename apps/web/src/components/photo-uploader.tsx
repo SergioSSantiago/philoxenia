@@ -124,7 +124,7 @@ export function PhotoUploader({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
-                alt={`Listing photo ${index + 1}`}
+                alt={`Place photo ${index + 1}`}
                 className="h-full w-full object-cover"
               />
               {index === 0 && (

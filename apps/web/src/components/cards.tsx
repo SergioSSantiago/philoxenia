@@ -186,7 +186,7 @@ export function UserRow({
 }: {
   user: User;
   action?: React.ReactNode;
-  /** When set, name + wallet open this friend’s listings. */
+  /** When set, name + wallet open this friend’s places. */
   profileHref?: string;
 }) {
   const name = profileHref ? (

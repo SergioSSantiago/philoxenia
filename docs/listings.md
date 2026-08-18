@@ -4,7 +4,7 @@
 
 # Listings
 
-Hosts create **private listings** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). Host on listing detail: **Book & pay is disabled for the host**. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**.
+Hosts create **private places** visible only to themselves and their friends. `/listings/new` states guests **Book & pay STRK or DAI** and that friends can share and earn if a connector % is set. Submit busy: **Publishing this place…** (not a marketplace “Listing…”). Create calendar: DAI list prices, guests **Book & pay** STRK or DAI. Default cancel terms are honest (nights free; no clawback; **Send STRK or DAI** in Messages). Host on place detail: **Book & pay is disabled for the host**. `ListingCard` shows that % next to the DAI nightly price and **Guest Book & pay: STRK or DAI**. Photo uploader alt: **Place photo**. Native share sheet: **Book & pay stay at …**.
 
 ## Listing fields
 
@@ -37,9 +37,9 @@ Legacy on-chain `refund_booking` only applies if a booking never settled (`funde
 ## Visibility
 
 ```
-Host ──always──► own listings
+Host ──always──► own places
 Friend of host ──► can view + share
-Everyone else ──► 404 (listing unavailable)
+Everyone else ──► 404 (place unavailable)
 ```
 
 `GET /my-listings` powers `/my-listings` and Home **My places**: both subtitles remind hosts of DAI list prices, guests **Book & pay STRK or DAI**, and connector %. Empty states tell hosts to list so guests **Book & pay**. **List your place** goes to `/listings/new` (submit **List this place**; validation: **Open at least one night guests can Book & pay**; default DAI price is used when you open those nights). Home **Places from my friends** empty: no places from friends yet. **Shared with me** empty: **No invite places yet**. Home **My bookings**: recent Book & pay stays. Home loaders: **Loading places to Book & pay…**.
@@ -52,12 +52,12 @@ Everyone else ──► 404 (listing unavailable)
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| POST | `/my-listings` | Yes | Create listing (map pin + photos required) |
-| GET | `/my-listings` | Yes | Host's own listings |
+| POST | `/my-listings` | Yes | Create place (map pin + photos required) |
+| GET | `/my-listings` | Yes | Host's own places |
 | DELETE | `/my-listings/:id` | Yes | Host delete when no active Book & pay stays remain |
-| GET | `/my-network/listings` | Yes | Friends' listings |
-| GET | `/friends/:id` | Yes | One friend’s listings (must be friends) |
-| GET | `/shared-listings` | Yes | Listings shared with user via introductions |
+| GET | `/my-network/listings` | Yes | Friends' places |
+| GET | `/friends/:id` | Yes | One friend’s places (must be friends) |
+| GET | `/shared-listings` | Yes | Places shared with user via introductions |
 | GET | `/listings/:id` | Yes | Detail (if authorized). Guest heading **Open nights to Book & pay**. Guest CTA is **Book & pay**. Unauthorized: **This place isn’t available to Book & pay.** Loading: **Loading place to Book & pay…**. Host/0% share: **Share this place**. Host badge **Your place**. Delete: **Delete this place** |
 | POST | `/listings/:id/share` | Yes | Generate invite link (friend → connector) |
 | GET | `/connector/earnings` | Yes | Your connector reward history |

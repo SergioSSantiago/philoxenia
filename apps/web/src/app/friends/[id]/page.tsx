@@ -86,7 +86,7 @@ export default function FriendProfilePage() {
     if (!share) return;
     const result = await shareInviteNative({
       title,
-      text: `Stay at ${title} via Philoxenia — open this invite to Book & pay (STRK or DAI).`,
+      text: `Book & pay stay at ${title} via Philoxenia — open this invite (STRK or DAI).`,
       url: share.url,
     });
     if (result === "shared") {
