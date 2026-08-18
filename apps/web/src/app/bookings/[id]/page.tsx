@@ -121,11 +121,12 @@ export default function BookingDetailPage() {
           <UserBadge user={counterparty} role={counterpartyRole} />
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
             <Link href={`/listings/${booking.listingId}`} className="block">
-              <Button className="w-full sm:w-auto">Open listing</Button>
+              <Button className="w-full sm:w-auto">View listing</Button>
             </Link>
             <Link href={`/friends/${counterparty.id}`} className="block">
               <Button variant="secondary" className="w-full sm:w-auto">
-                View {counterpartyRole.toLowerCase()} &amp; listings
+                View {counterpartyRole.toLowerCase()} &amp; places to Book &amp;
+                pay
               </Button>
             </Link>
             <Link href={`/messages/${counterparty.id}`} className="block">
@@ -140,7 +141,7 @@ export default function BookingDetailPage() {
       {!counterparty && (
         <div className="mb-6 flex flex-col gap-2 sm:flex-row">
           <Link href={`/listings/${booking.listingId}`}>
-            <Button>Open listing</Button>
+            <Button>View listing</Button>
           </Link>
           <Link href={`/friends/${otherId}`}>
             <Button variant="secondary">

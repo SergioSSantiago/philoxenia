@@ -30,7 +30,7 @@ Before scroll, the landing shows only:
 
 Stats fade as the brand docks into the header on scroll.
 
-Below the fold: tagline **Direct stays: 0% protocol fee.** (`whitespace-nowrap` on `0% protocol fee` so the phrase does not wrap mid-line). Footer: fee recap, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
+Below the fold: tagline **Direct Book & pay: 0% protocol fee.** (`whitespace-nowrap` on `0% protocol fee` so the phrase does not wrap mid-line). Footer: **Direct Book & pay: 0% protocol**, then **Made in Lausanne, Switzerland 🇨🇭** by [Sergio SSantiago](https://github.com/SergioSSantiago).
 
 Landing CTAs: **Connect Ready X & open Earnings**, Explore, List your place. **Start here** banner: share a friend’s invite; when they **Book & pay**, you receive the host’s connector % on settle (STRK or DAI). Host role card: **Direct Book & pay stays 0% protocol**. Unsigned `/home` and invite pages use **Connect Ready X** (not a generic “Connect wallet”).
 

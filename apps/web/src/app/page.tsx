@@ -35,7 +35,7 @@ export default function LandingPage() {
           marketplace.
         </p>
         <p className="mx-auto mt-3 max-w-2xl text-base text-muted sm:text-lg">
-          Direct stays:{" "}
+          Direct Book &amp; pay:{" "}
           <span className="whitespace-nowrap">
             <strong className="font-medium text-foreground">0%</strong> protocol
             fee.
@@ -106,7 +106,7 @@ export default function LandingPage() {
 
       <footer className="border-t border-border py-10 text-center text-sm text-muted">
         <p>
-          Direct host↔guest: 0% protocol. Connectors earn; Philoxenia takes 10% of
+          Direct Book &amp; pay: 0% protocol. Connectors earn; Philoxenia takes 10% of
           the connector reward only.
         </p>
         <p className="mt-3">

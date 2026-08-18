@@ -183,8 +183,8 @@ Key variables:
 Bob lists an apartment in Florence (DAI/night, **5% connector reward**).
 Alice (Bob's friend) opens **Earnings** or Bob’s friend profile and shares an invite with Carlos.
 Carlos creates an account, requests friendship with Bob, Bob accepts.
-Carlos books and pays (STRK or DAI).
-Settlement example at 750 total: Host **712.5**, Connector **33.75**, Philoxenia **3.75** (10% of connector reward). Direct bookings (no connector): host 100%, protocol **0%**.
+Carlos **Book & pay** (STRK or DAI).
+Settlement example at 750 total: Host **712.5**, Connector **33.75**, Philoxenia **3.75** (10% of connector reward). Direct **Book & pay** (no connector): host 100%, protocol **0%**.
 
 See [docs/connectors.md](./docs/connectors.md).
 
