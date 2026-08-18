@@ -229,6 +229,7 @@ export function AvailabilityCalendar({
           type="button"
           className="min-h-[44px] rounded-full border border-border px-4 text-sm"
           onClick={() => navigate(-1)}
+          aria-label="Previous month of nights"
         >
           ←
         </button>
@@ -237,6 +238,7 @@ export function AvailabilityCalendar({
           type="button"
           className="min-h-[44px] rounded-full border border-border px-4 text-sm"
           onClick={() => navigate(1)}
+          aria-label="Next month of nights"
         >
           →
         </button>

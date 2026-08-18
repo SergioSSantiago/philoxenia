@@ -27,7 +27,7 @@ export default function MyListingsPage() {
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <SectionTitle
           title="My places"
-          subtitle="Private places priced in DAI. Guests Book & pay STRK or DAI. Set a connector % so friends can share a place invite and earn."
+          subtitle="Private places priced in DAI. Book & pay STRK or DAI. Set a connector % so friends can share a place invite and earn."
         />
         <Link href="/listings/new">
           <Button className="w-full sm:w-auto">List your place</Button>

@@ -111,7 +111,7 @@ export function GuestNightCalendar({
           type="button"
           className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border text-sm"
           onClick={() => navigate(-1)}
-          aria-label="Previous month"
+          aria-label="Previous month of nights"
         >
           ←
         </button>
@@ -120,7 +120,7 @@ export function GuestNightCalendar({
           type="button"
           className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border text-sm"
           onClick={() => navigate(1)}
-          aria-label="Next month"
+          aria-label="Next month of nights"
         >
           →
         </button>

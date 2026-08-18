@@ -111,7 +111,7 @@ export default function InvitePage() {
             : `${invite.host.displayName} shared a place with you`}
         </h1>
         <p className="mt-4 text-sm text-muted leading-relaxed sm:text-base">
-          Private place hosted by{" "}
+          Place hosted by{" "}
           <span className="font-medium text-foreground">
             {invite.host.displayName}
           </span>
