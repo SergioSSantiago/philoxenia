@@ -259,7 +259,7 @@ export default function BookingDetailPage() {
         <div className="rounded-xl border border-border bg-background/80 px-4 py-3 text-xs leading-relaxed text-muted">
           <p className="font-medium text-foreground">Cancel &amp; refund policy</p>
           <p className="mt-1">
-            Pay settles immediately (host + connector paid in the same tx). There
+            Book & pay settles immediately (host + connector paid in the same tx). There
             is <span className="text-foreground">no escrow clawback</span> after
             settlement. Cancelling only frees nights. Refunds are social: agree
             in Messages, then Send STRK or DAI.

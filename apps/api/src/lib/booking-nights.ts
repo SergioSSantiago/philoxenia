@@ -15,7 +15,7 @@ export function assertNoPastNights(
 ): void {
   for (const day of nightKeys) {
     if (day < todayKey) {
-      throw new Error(`Night ${day} is in the past and cannot be booked`);
+      throw new Error(`Night ${day} is in the past and cannot be added to Book & pay`);
     }
   }
 }

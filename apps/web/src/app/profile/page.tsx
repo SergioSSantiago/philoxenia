@@ -73,8 +73,8 @@ export default function ProfilePage() {
         <Card>
           <h3 className="text-lg text-foreground">Display name</h3>
           <p className="mt-2 text-sm text-muted leading-relaxed">
-            Change it anytime. It is not used for search — only your wallet
-            address can be used to find you.
+            Change it anytime. It is not used for search — only your Ready X
+            wallet can be used to find you.
           </p>
           <form onSubmit={handleSaveName} className="mt-4 space-y-3">
             <label className="block text-sm">

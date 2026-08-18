@@ -312,7 +312,7 @@ function NewBookingForm() {
     if (!listing || !range.ok || range.nights.length === 0) return;
     if (!account || !address) {
       setError(
-        "Ready X is not connected for signing. Tap Connect Ready X, then Pay again — Public and Private both need a live wallet session."
+        "Ready X is not connected for signing. Tap Connect Ready X, then Book & pay again — Public and Private both need a live wallet session."
       );
       return;
     }
@@ -703,7 +703,7 @@ function NewBookingForm() {
                   )}
                   <p className="text-xs text-muted leading-relaxed">
                     {fundMode === "private"
-                      ? "Pays from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield the pay asset on Profile first — proofs can take a while."
+                      ? "Pays from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records guest/host/amounts. Shield the Book & pay asset on Profile first — proofs can take a while."
                       : "Standard on-chain approve + fund. Visible on explorers."}
                   </p>
                 </div>
@@ -712,7 +712,7 @@ function NewBookingForm() {
               <p className="text-xs text-muted">
                 {paymentAsset === "DAI"
                   ? "DAI settles at the listed price. Host and connector are paid immediately."
-                  : "STRK amount refreshes from the live DAI market rate when you pay."}
+                  : "STRK amount refreshes from the live DAI market rate when you Book & pay."}
               </p>
             </Card>
           )}
@@ -720,7 +720,7 @@ function NewBookingForm() {
           {recording && (
             <p className="text-sm text-amber-800 leading-relaxed">
               Payment landed on-chain. Recording the booking in Philoxenia —
-              do not tap Pay again.
+              do not tap Book & pay again.
             </p>
           )}
 
@@ -729,8 +729,8 @@ function NewBookingForm() {
           {!walletReady && quote && range.ok && !payLocked && (
             <p className="text-sm text-amber-800 leading-relaxed">
               Ready X is signed in for Philoxenia but not connected for
-              transactions. Tap Connect Ready X (Chrome or iPhone) to pay
-              Public or Private.
+              transactions. Tap Connect Ready X (Chrome or iPhone) to Book &
+              pay Public or Private.
             </p>
           )}
 
@@ -754,7 +754,7 @@ function NewBookingForm() {
                 disabled={reconnecting || !quote || !range.ok}
                 onClick={() => void reconnectForPay()}
               >
-                {reconnecting ? "Connecting Ready X…" : "Connect Ready X to pay"}
+                {reconnecting ? "Connecting Ready X…" : "Connect Ready X to Book & pay"}
               </Button>
             ) : (
               <Button
@@ -769,12 +769,12 @@ function NewBookingForm() {
                       ? "Proving & paying…"
                       : "Paying…"
                     : paymentAsset === "DAI"
-                      ? `Pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
+                      ? `Book & pay ${quote ? formatTokenAmount(quote.totalPriceDai) : "…"} DAI${
                           fundMode === "private"
                             ? ` · ${privacyLabel("private")}`
                             : ""
                         }`
-                      : `Pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
+                      : `Book & pay ${quote ? formatTokenAmount(quote.totalPriceStrk) : "…"} STRK${
                           fundMode === "private"
                             ? ` · ${privacyLabel("private")}`
                             : ""
