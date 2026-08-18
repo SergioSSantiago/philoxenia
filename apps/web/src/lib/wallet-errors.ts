@@ -31,15 +31,15 @@ export function formatWalletError(err: unknown): string {
   }
 
   if (/invalid signature|signature verification/i.test(msg)) {
-    return "Signature could not be verified. Confirm Ready X is on Starknet mainnet, then Sign in again.";
+    return "Signature could not be verified. Confirm Ready X is on Starknet mainnet, then Approve in Ready X again.";
   }
 
   if (/invalid or expired authentication challenge/i.test(msg)) {
-    return "Login challenge expired. Tap Sign in again.";
+    return "Login challenge expired. Tap Approve in Ready X again.";
   }
 
   if (/contract.?not.?found|account.?not.?found/i.test(msg)) {
-    return "Starknet could not read this account (RPC). Check mainnet in Ready X and try Sign in again.";
+    return "Starknet could not read this account (RPC). Check mainnet in Ready X and try Approve in Ready X again.";
   }
 
   return msg || "Could not complete the Ready X request.";

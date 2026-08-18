@@ -106,7 +106,7 @@ export default function ChatThreadPage() {
         const plain = await unsealMessage(wallet, m.body);
         next.push({
           ...m,
-          displayBody: plain ?? "Unable to decrypt this sealed note on this device",
+          displayBody: plain ?? "Could not open this sealed note on this device",
           sealed: true,
           decryptFailed: plain === null,
         });

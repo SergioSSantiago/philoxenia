@@ -116,7 +116,7 @@ export default function BookingDetailPage() {
             href={`/listings/${booking.listingId}`}
             className="underline-offset-2 hover:underline"
           >
-            {booking.listing?.title ?? "Private place"}
+            {booking.listing?.title ?? "this place"}
           </Link>
         </h1>
         <p className="mt-2 text-sm text-muted">

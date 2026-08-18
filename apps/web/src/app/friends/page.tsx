@@ -102,7 +102,7 @@ export default function FriendsPage() {
       setResults([]);
       setQuery("");
       setShowAdd(false);
-      setActionOk("Friend request sent.");
+      setActionOk("Friend request sent — Book & pay after they accept.");
     } catch (err) {
       setActionError(
         err instanceof Error ? err.message : "Could not send friend request"
@@ -166,7 +166,7 @@ export default function FriendsPage() {
           </Button>
         ) : (
           <div>
-            <h3 className="text-lg">Add someone you trust</h3>
+            <h3 className="text-lg">Add by Ready X wallet</h3>
             <p className="mt-2 text-sm text-muted leading-relaxed">
               Paste a Ready X wallet address (0x optional). They must already have
               connected Ready X once. Only add people you genuinely know. Search needs
@@ -198,7 +198,7 @@ export default function FriendsPage() {
                     setSearchError("");
                   }}
                 >
-                  Close
+                  Close add by Ready X wallet
                 </Button>
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function FriendsPage() {
                       disabled={busyId === found.id}
                       onClick={() => sendRequest(found.id)}
                     >
-                      {busyId === found.id ? "Sending…" : "Add friend"}
+                      {busyId === found.id ? "Sending…" : "Add by Ready X wallet"}
                     </Button>
                   }
                 />
@@ -267,7 +267,7 @@ export default function FriendsPage() {
                           )
                         }
                       >
-                        {busyId === r.id ? "Working…" : "Accept"}
+                        {busyId === r.id ? "Accepting…" : "Accept"}
                       </Button>
                       <Button
                         variant="ghost"

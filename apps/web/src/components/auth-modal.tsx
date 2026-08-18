@@ -176,7 +176,7 @@ export function AuthModal() {
             <p className="mt-2 text-sm text-muted leading-relaxed">
               {isConnected
                 ? mobileOutsideWallet
-                  ? "Step 2 of 2: Sign in opens Ready X again to approve the login signature."
+                  ? "Step 2 of 2: Approve in Ready X to sign the login."
                   : "Approve the login signature in Ready X."
                 : mobileOutsideWallet
                   ? "Step 1 of 2: Connect opens Ready X. Signing comes next."
@@ -263,7 +263,7 @@ export function AuthModal() {
                     ? "Ready X loading…"
                     : !challengeReady
                       ? "Preparing signature…"
-                      : "Sign in"}
+                      : "Approve in Ready X"}
               </Button>
               {mobileOutsideWallet && (signing || waiting) ? (
                 <div className="space-y-2 text-center text-sm">
