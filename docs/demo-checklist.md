@@ -32,12 +32,12 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for **Private 
 
 ## D. Public pay fallback
 
-1. [ ] Alternate booking with **Public** ERC-20
+1. [ ] Alternate stay with **Public Book & pay**
 2. [ ] Confirm verifies `BookingSettled` on-chain
 
-## E. Cancel policy
+## E. Cancellation terms
 
-1. [ ] Open stay → read **Cancel policy** box
+1. [ ] Open stay → read **Cancellation terms** box
 2. [ ] Free nights → status `cancelled`; nights open for Book & pay again
 3. [ ] Money stays settled; Messages **Send STRK or DAI** for voluntary return
 

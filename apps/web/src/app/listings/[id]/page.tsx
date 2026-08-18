@@ -279,7 +279,7 @@ export default function ListingPage() {
           <p className="mt-8 text-muted leading-relaxed">{listing.description}</p>
 
           <p className="mt-6 text-sm text-muted leading-relaxed">
-            Default list price: {formatDaiPrice(listing.pricePerNight)} / night
+            DAI list price: {formatDaiPrice(listing.pricePerNight)} / night
             (nights can differ)
           </p>
 

@@ -227,7 +227,7 @@ export default function BookingDetailPage() {
           {booking.connectorId ? (
             <div className="flex justify-between">
               <span className="text-muted">
-                Connector received ({booking.connectorRewardPercent}%)
+                Connector reward ({booking.connectorRewardPercent}%)
               </span>
               <span>
                 {formatTokenAmount(booking.connectorRewardAmount)}{" "}
@@ -267,11 +267,11 @@ export default function BookingDetailPage() {
         )}
 
         <div className="rounded-xl border border-border bg-background/80 px-4 py-3 text-xs leading-relaxed text-muted">
-          <p className="font-medium text-foreground">Cancel policy</p>
+          <p className="font-medium text-foreground">Cancellation terms</p>
           <p className="mt-1">
             Book & pay settles immediately (host + connector paid in the same tx). There
             is <span className="text-foreground">no escrow clawback</span> after
-            settlement. Cancelling only frees nights. Refunds are social: agree
+            settlement. Cancelling only frees nights. Money return is social: agree
             in Messages, then Send STRK or DAI.
           </p>
         </div>
@@ -286,7 +286,7 @@ export default function BookingDetailPage() {
               {busy
                 ? "Freeing nights…"
                 : alreadySettled
-                  ? "Free nights (no on-chain refund)"
+                  ? "Free nights (no clawback)"
                   : "Free nights (stay not settled yet)"}
             </Button>
           )}

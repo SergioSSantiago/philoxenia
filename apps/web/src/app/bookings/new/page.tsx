@@ -627,7 +627,7 @@ function NewBookingForm() {
               </ul>
               <hr className="border-border" />
               <div className="flex justify-between">
-                <span className="text-muted">Total (DAI)</span>
+                <span className="text-muted">Place list total (DAI)</span>
                 <span className="font-medium">
                   {formatDaiPrice(quote.totalPriceDai)}
                 </span>

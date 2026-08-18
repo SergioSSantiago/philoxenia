@@ -129,10 +129,10 @@ export default function HomePage() {
         <section>
           <SectionTitle
             title="Shared with me"
-            subtitle="Place invites to Book & pay — last invite wins connector attribution"
+            subtitle="Place invites to Book & pay — last place invite wins connector attribution"
           />
           {data.sharedListings.length === 0 ? (
-            <EmptyState message="No invite places yet. Open a friend’s place invite to Book & pay — last invite wins connector attribution." />
+            <EmptyState message="No place invites yet. Open a friend’s place invite to Book & pay — last place invite wins connector attribution." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.sharedListings.map((l) => (
@@ -145,7 +145,7 @@ export default function HomePage() {
         <section>
           <SectionTitle
             title="My places"
-            subtitle="Priced in DAI. Guests Book & pay STRK or DAI. Set a connector % so friends can share and earn."
+            subtitle="Priced in DAI. Guests Book & pay STRK or DAI. Set a connector % so friends can share a place invite and earn."
           />
           {data.myListings.length === 0 ? (
             <EmptyState message="You haven't listed a place yet. Use List your place in the nav — friends only see what you publish, then they Book & pay STRK or DAI." />

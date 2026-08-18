@@ -119,7 +119,7 @@ export default function ConnectorPage() {
           <li>
             <span className="font-medium">2. Share your place invite</span>
             {" — "}
-            not the Ready X wallet. Opening the invite attributes you as
+            not the Ready X wallet. Opening the place invite attributes you as
             connector.
           </li>
           <li>
@@ -144,7 +144,7 @@ export default function ConnectorPage() {
         {networkListings === null ? (
           <p className="text-muted">Loading places to Book & pay…</p>
         ) : networkListings.length === 0 ? (
-          <EmptyState message="No friend places yet. Add friends by Ready X wallet who host — their places show up here so you can share and earn when they Book & pay." />
+          <EmptyState message="No friend places yet. Add friends by Ready X wallet who host — their places show up here so you can share a place invite and earn when they Book & pay." />
         ) : (
           <div className="space-y-4">
             {shareError && (
