@@ -57,7 +57,7 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <Shell>
-        <p className="text-muted">Loading profile…</p>
+        <p className="text-muted">Loading Ready X profile…</p>
       </Shell>
     );
   }

@@ -46,7 +46,7 @@ Guest Book & pay ──► escrow settles ──► you + host + (10% of your re
 
 | Surface | What you do |
 |---------|-------------|
-| **`/connector` (Earnings)** | Explains the model, lists **friends’ places** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` (**open stay**; missing title **Book & pay stay**). Totals: asset shown **per stay**. Empty places: add friends by **Ready X wallet** who host. Step 1: **Pick a friend’s place**. Empty rewards: share a friend’s **place**. Share & earn subtitle: share your invite so they **Book & pay**. Loading: **Loading places to Book & pay…** |
+| **`/connector` (Earnings)** | Explains the model, lists **friends’ places** with your earn %, one-tap share, reward history. Native share text: Book & pay STRK or DAI. Reward rows open `/bookings/:id` (**open stay**; missing title **Book & pay stay**). Totals: asset shown **per stay**. Empty places: add friends by **Ready X wallet** who host. Step 1: **Pick a friend’s place**. Empty rewards: share a friend’s **place**. Share & earn subtitle: share your invite so they **Book & pay**. Loading: **Loading places to Book & pay…**. Rewards loading: **Loading rewards from Book & pay…** |
 | **`/friends/[id]`** | Friend’s places + share; CTA **Earn as a connector** → `/connector`; **View place**. Loading: **Loading places to Book & pay…**. Open from name or **Ready X wallet** on Friends / Messages. Opening your own profile errors: **Open your own places from Home or My places.** |
 | **`/friends`** | Tap friend’s **name** or **wallet** → their places |
 | **`/messages`**, **`/messages/[friendId]`** | Same: name / wallet → **places**; preview / › → chat |

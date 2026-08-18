@@ -76,17 +76,17 @@ Signed-in home uses `GET /home` (JWT): friends, network places, shared places, o
 | `/` | Landing. Brand-first hero + live network stats; header brand links here |
 | `/home` | Unsigned: **Connect Ready X to Book & pay places from people you trust.** Signed-in snapshot: compact **Ready X wallet** + STRK/DAI + **Shield & swap** to Profile, globe of accessible places, friends’ places, **Shared with me** (invite Book & pay), own places, **My stays** (recent Book & pay stays), friends count |
 | `/auth` | Legacy redirect to `/home` |
-| `/profile` | Display name, public STRK/DAI, shield/unshield **STRK or DAI**, AVNU STRK ↔ DAI swap |
-| `/friends` | Friends; search by **Ready X wallet**; tap name/wallet → friend places |
+| `/profile` | Display name, public STRK/DAI, shield/unshield **STRK or DAI**, AVNU STRK ↔ DAI swap. Loader **Loading Ready X profile…**. Swap fail **Could not swap STRK or DAI** |
+| `/friends` | Friends; search by **Ready X wallet**; tap name/wallet → friend places. Loader **Loading friends to Book & pay…** |
 | `/friends/[id]` | Friend profile: their places + share-as-connector |
 | `/messages`, `/messages/[friendId]` | Sealed chat + peer pay; name/wallet → friend places. Load fail **This chat isn’t available.** Note fail **Could not send this sealed note**. Pay fail **Could not send STRK or DAI** |
 | `/my-listings`, `/listings/new` | Host place CRUD + map + availability calendar; headings **About this place** / **Open nights guests can Book & pay**; submit busy **Publishing this place…**; fail **Could not list this place** |
-| `/listings/[id]` | Place detail (authorized viewers) + share; guest CTA **Book & pay**. Share busy **Creating place invite…**; fail **Could not share this place**. Host nights busy **Saving open nights…** (fail **Could not save open nights**). Delete fail **Could not delete this place** |
+| `/listings/[id]` | Place detail (authorized viewers) + share; guest CTA **Book & pay**. Share busy **Creating place invite…**; fail **Could not share this place**. Host nights busy **Saving open nights…** (fail **Could not save open nights**; discard **Discard open nights**). Delete fail **Could not delete this place** |
 | `/invite/[token]` | Place invite landing; missing token **This place invite isn’t available to Book & pay.** |
 | `/bookings`, `/bookings/new`, `/bookings/[id]` | Book & pay nights (non-contiguous OK); STRK or DAI. List title **My stays**. Stay status **Book & pay complete** / **Nights freed** (not raw `completed`). Stay detail **Loading stay…**. Cancel busy **Freeing nights…**. If Ready X already charged you, do not Book & pay twice — open **My stays**. Quote fail **Could not quote Book & pay**. Recording: **Book & pay landed on-chain** (not “Payment landed”) |
-| `/connector` | **Earn as connector** — explain model, share friend places, reward history |
+| `/connector` | **Earn as connector** — explain model, share friend places, reward history. Rewards loader **Loading rewards from Book & pay…** |
 
-Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Notification bell footer: Friends, Messages, Bookings, **Earnings**. Signed-out header CTA is **Connect Ready X** (same as landing). Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`). Client error boundary (`error.tsx`): **Clear session & Connect Ready X**; **Connect Ready X to Book & pay** if the session is stuck; **Back to Home** is `/home` (not the landing). Home loaders: **Loading places to Book & pay…**. Host section title **My places**. Stay list title **My stays** (nav stays **Bookings**).
+Shell nav: Home, Friends, Messages, List your place, Bookings, Earnings (`/connector`). Notification bell footer: Friends, Messages, Bookings, **Earnings**. Signed-out header CTA is **Connect Ready X** (same as landing). Missing mobile connector: **Ready X is not available. Use Chrome or the Ready X app.** Header/nav always `max-w-6xl`; page content may be `max-w-4xl` or `max-w-6xl` (`wide`). Client error boundary (`error.tsx`): **Clear session & Connect Ready X**; **Connect Ready X to Book & pay** if the session is stuck; **Back to Home** is `/home` (not the landing). Home loaders: **Loading places to Book & pay…**. Host section title **My places**. Stay list title **My stays** (nav stays **Bookings**).
 
 ## Shared types (`packages/shared`)
 

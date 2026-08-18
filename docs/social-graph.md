@@ -21,7 +21,7 @@ Friendships are **entirely off-chain**. They gate place visibility and sharing p
 | `accepted` | Becomes a friendship |
 | `rejected` | Closed; sender may request again later |
 
-Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoing empty explains Cancel. Friends empty: add by **Ready X wallet** address (0x optional) — they must **Connect Ready X** once, then you can **Book & pay** their places. List subtitle: tap name or Ready X wallet to see places you can **Book & pay**. Search miss fallback: **Could not find that Ready X wallet**. Accept/reject fail: **Could not update this friend request**. Friend profile load fail: **Could not load this friend’s places to Book & pay**.
+Incoming empty: “They appear when someone adds your Ready X wallet.” Outgoing empty explains Cancel. Friends empty: add by **Ready X wallet** address (0x optional) — they must **Connect Ready X** once, then you can **Book & pay** their places. List subtitle: tap name or Ready X wallet to see places you can **Book & pay**. Search miss fallback: **Could not find that Ready X wallet**. Accept/reject fail: **Could not update this friend request**. Friend profile load fail: **Could not load this friend’s places to Book & pay**. Friends page loader: **Loading friends to Book & pay…**.
 
 ## Notifications
 

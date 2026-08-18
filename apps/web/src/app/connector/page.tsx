@@ -319,7 +319,7 @@ export default function ConnectorPage() {
         )}
 
         {!data ? (
-          <p className="text-muted">Loading rewards…</p>
+          <p className="text-muted">Loading rewards from Book & pay…</p>
         ) : data.bookings.length === 0 ? (
           <EmptyState message="No rewards yet. Share a friend’s place above — when they Book & pay through your invite, it shows up here." />
         ) : (

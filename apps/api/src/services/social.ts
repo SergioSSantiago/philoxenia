@@ -1171,7 +1171,7 @@ export async function confirmPaidBooking(
     );
   }
   if (!sameFelt(guest.walletAddress, inspected.guest)) {
-    throw new Error("This payment was not made from your wallet");
+    throw new Error("This Book & pay was not made from your Ready X wallet");
   }
 
   const already = await findBookingForPayment(
@@ -1182,7 +1182,7 @@ export async function confirmPaidBooking(
     if (already.guestId === guestId) {
       return mapBooking(already, undefined, input.privacyMode ?? "private");
     }
-    throw new Error("This transaction was already used for another booking");
+    throw new Error("This Book & pay was already used for another stay");
   }
 
   const prepared = await prepareBooking(
@@ -1378,14 +1378,14 @@ export async function inspectPaidBookingTx(
 
   const inspected = await inspectEscrowSettledTx(fundTxHash);
   if (!sameFelt(guest.walletAddress, inspected.guest)) {
-    throw new Error("This payment was not made from your wallet");
+    throw new Error("This Book & pay was not made from your Ready X wallet");
   }
 
   const listing = await findListingByOnChainId(
     BigInt(inspected.listingOnChainId)
   );
   if (!listing) {
-    throw new Error("Listing for this payment was not found");
+    throw new Error("Place for this Book & pay was not found");
   }
 
   const authorized = await canViewListing(
@@ -1919,7 +1919,7 @@ export async function updateBookingPayment(
     where: eq(schema.payments.txHash, verified.txHash),
   });
   if (reused) {
-    throw new Error("This transaction was already used for another booking");
+    throw new Error("This Book & pay was already used for another stay");
   }
 
   const nextStatus =

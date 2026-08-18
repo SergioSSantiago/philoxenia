@@ -77,7 +77,7 @@ export function AuthModal() {
       // In-app or mobile Safari/Chrome: Ready mobile connector (redirect / inject).
       if (isInArgentMobileAppBrowser() || isMobileBrowser()) {
         const connector = pickReadyConnector(connectors);
-        if (!connector) throw new Error("Ready connector not available");
+        if (!connector) throw new Error("Ready X is not available. Use Chrome or the Ready X app.");
         await connectAsync({ connector });
         return;
       }

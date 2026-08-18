@@ -9,7 +9,7 @@ const MAX_DATA_URL_CHARS = 850_000;
 
 async function fileToCompressedDataUrl(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) {
-    throw new Error("Only image files are allowed");
+    throw new Error("Only place photos (JPEG, PNG, WebP, or iPhone HEIC) are allowed");
   }
 
   const bitmap = await createImageBitmap(file);
@@ -24,7 +24,7 @@ async function fileToCompressedDataUrl(file: File): Promise<string> {
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Could not process image");
+  if (!ctx) throw new Error("Could not process this place photo");
   ctx.drawImage(bitmap, 0, 0, width, height);
   bitmap.close();
 
@@ -35,7 +35,7 @@ async function fileToCompressedDataUrl(file: File): Promise<string> {
     dataUrl = canvas.toDataURL("image/jpeg", quality);
   }
   if (dataUrl.length > MAX_DATA_URL_CHARS) {
-    throw new Error("Photo is still too large after compression");
+    throw new Error("This place photo is still too large after compression");
   }
   return dataUrl;
 }
@@ -81,7 +81,7 @@ export function PhotoUploader({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="text-sm font-medium text-foreground">Photos</p>
+          <p className="text-sm font-medium text-foreground">Place photos</p>
           <p className="mt-0.5 text-xs text-muted">
             Upload 1–{MAX_PHOTOS} photos. They are compressed to JPEG in the
             browser (iPhone HEIC included on Safari).
@@ -134,7 +134,7 @@ export function PhotoUploader({
               )}
               <button
                 type="button"
-                aria-label={`Remove photo ${index + 1}`}
+                aria-label={`Remove place photo ${index + 1}`}
                 className="absolute right-2 top-2 rounded-full bg-foreground/80 px-2 py-1 text-xs text-white"
                 onClick={() =>
                   onChange(photos.filter((_, i) => i !== index))

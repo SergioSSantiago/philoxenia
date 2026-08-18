@@ -134,7 +134,7 @@ export default function FriendsPage() {
   if (!data) {
     return (
       <Shell>
-        <p className="text-muted">Loading friends…</p>
+        <p className="text-muted">Loading friends to Book & pay…</p>
       </Shell>
     );
   }

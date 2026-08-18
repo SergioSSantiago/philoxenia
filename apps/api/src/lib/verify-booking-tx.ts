@@ -338,7 +338,7 @@ export async function inspectEscrowSettledTx(
   });
   const r = Array.isArray(raw) ? raw : (raw as { result?: string[] }).result;
   if (!r || r.length < 19) {
-    throw new Error("Could not read on-chain booking from escrow");
+    throw new Error("Could not read this Book & pay stay from escrow");
   }
 
   const listingOnChainId = BigInt(r[2]) + (BigInt(r[3]) << 128n);
@@ -348,7 +348,7 @@ export async function inspectEscrowSettledTx(
   const protocolAmt = BigInt(r[13]) + (BigInt(r[14]) << 128n);
   const settledFlag = r[17] === "0x1" || r[17] === "1";
   if (!settledFlag) {
-    throw new Error("On-chain booking is not settled");
+    throw new Error("This Book & pay stay is not settled on-chain");
   }
 
   return {

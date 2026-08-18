@@ -306,7 +306,7 @@ export default function ListingPage() {
                       variant="ghost"
                       onClick={() => setDraftDays(null)}
                     >
-                      Discard
+                      Discard open nights
                     </Button>
                   )}
                 </div>

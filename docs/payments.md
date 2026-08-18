@@ -41,7 +41,7 @@ Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow
 
 ## Swap STRK ↔ DAI (Profile)
 
-Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (Home shortcut is **Shield & swap**). Labels: **You sell** / **You receive** (not “You pay” — that is **Book & pay**). Ready X must be connected to sign (**Connect Ready X** / **Connecting Ready X…** — Chrome or iPhone). Notices say Ready X, not a generic Ready extension. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
+Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (Home shortcut is **Shield & swap**). Labels: **You sell** / **You receive** (not “You pay” — that is **Book & pay**). Ready X must be connected to sign (**Connect Ready X** / **Connecting Ready X…** — Chrome or iPhone). Notices say Ready X, not a generic Ready extension. Swap fail: **Could not swap STRK or DAI**. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
 
 ## Balances (Home vs Profile)
 
@@ -49,7 +49,7 @@ Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeS
 
 | Surface | Mode | Notes |
 |---------|------|--------|
-| `/home` | `compact` | Public STRK **and DAI** hints “shield for Private Book & pay” |
+| `/home` | `compact` | Public STRK **and DAI** hints “shield for Private Book & pay”. Crash fallback: **Balances unavailable right now. Ready X is still connected — try Shield & swap on Profile.** |
 | `/profile` | full | Same public rows + `Strk20PrivacyPanel` heading **Shield for Private Book & pay** (shield / unshield **STRK or DAI**). Notices: **Ready X session needed** (not a generic Ready session); shield/unshield fail **Could not shield or unshield STRK or DAI** |
 
 If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, **Private Book & pay**, settle, swap). `/bookings/new` says the same when Book & pay is blocked.
