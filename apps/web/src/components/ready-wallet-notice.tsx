@@ -23,7 +23,7 @@ export function ReadyWalletNotice({
           <strong>Smart Wallet</strong> + <strong>Private</strong>.{" "}
           <strong>iPhone:</strong> install{" "}
           <strong>Ready X</strong>. Safari can <strong>Connect</strong>{" "}
-          (WalletConnect). For Private STRK or DAI, open Philoxenia in the Ready X
+          (WalletConnect). For Private Book &amp; pay, open Philoxenia in the Ready X
           in-app browser.{" "}
           <strong>Firefox:</strong> no Ready X — no Private Book &amp; pay.
         </p>
@@ -45,7 +45,7 @@ export function ReadyWalletNotice({
               Ready X
             </a>
             . From Safari you can <strong>Connect</strong> (WalletConnect
-            redirect into Ready X). For Private STRK or DAI, prefer Philoxenia
+            redirect into Ready X). For Private Book &amp; pay, prefer Philoxenia
             inside the <strong>Ready X in-app browser</strong>.
           </li>
           <li>

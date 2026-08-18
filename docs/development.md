@@ -131,11 +131,11 @@ npm run db:generate -w @philoxenia/api   # if script exists
 - Sign-in UI: `apps/web/src/components/auth-modal.tsx` on `/home`
 - Brand lockup: `apps/web/src/components/brand-lockup.tsx` → `/`
 
-Connect with [Ready X](https://www.ready.co/) — **Chrome** + Smart Wallet + Private on desktop; on **iPhone** Connect from Safari (opens Ready X) or use the **Ready X wallet browser** for Private. Firefox has no Ready X.
+Connect with [Ready X](https://www.ready.co/) — **Chrome** + Smart Wallet + Private on desktop; on **iPhone** Connect from Safari (opens Ready X) or use the **Ready X wallet browser** for **Private Book & pay**. Firefox has no Ready X.
 
 ### Wallet clients
 
-| Client | Auth | Private STRK20 |
+| Client | Auth | Private Book & pay |
 |--------|------|----------------|
 | Chrome + Ready X (Smart Wallet + Private) | Supported | Yes |
 | Ready X **app browser** (iPhone) | Supported | Yes |

@@ -69,7 +69,7 @@ Starknet Privacy includes auditor selective disclosure by design. Philoxenia inh
 
 ## User-facing guidance (honest)
 
-- Prefer Private when Ready X supports wallet API ≥ 0.10 (Chrome + Ready X, or Ready X in-app browser on iPhone). Profile’s shield checklist says so when the session is not privacy-capable.
+- Prefer **Private Book & pay** when Ready X supports wallet API ≥ 0.10 (Chrome + Ready X, or Ready X in-app browser on iPhone). Profile’s shield checklist and `ReadyWalletNotice` say so when the session is not privacy-capable.
 - On Firefox / desktop legacy Ready, use Public ERC-20 — **Private Book & pay** will not activate
 - Expect guest/host/amounts to remain readable on the escrow contract  
 - Treat shield/unshield amounts as public  

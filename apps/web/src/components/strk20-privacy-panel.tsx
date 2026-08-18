@@ -71,7 +71,7 @@ export function Strk20PrivacyPanel() {
     setMsg("");
     setNotice({
       title: "Reconnecting Ready X",
-      body: "Approve in Ready X (unlock if asked). We disconnect first so Private STRK/DAI can rediscover wallet API ≥ 0.10 — a silent reconnect does nothing when Ready X is already linked.",
+      body: "Approve in Ready X (unlock if asked). We disconnect first so Private Book & pay can rediscover wallet API ≥ 0.10 — a silent reconnect does nothing when Ready X is already linked.",
       tone: "info",
     });
     try {

@@ -203,7 +203,7 @@ export function AuthModal() {
                 disabled={waiting}
                 onClick={() => void connectWallet()}
               >
-                {waiting ? "Connecting…" : "Connect Ready X"}
+                {waiting ? "Connecting Ready X…" : "Connect Ready X"}
               </Button>
               {mobileOutsideWallet ? (
                 <div className="space-y-2 text-center text-sm">
