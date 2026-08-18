@@ -49,7 +49,7 @@ export function stayStatusLabel(status: BookingStatus): string {
     case "funded":
       return "Paid — recording stay";
     case "confirmed":
-      return "Confirmed";
+      return "Book & pay confirmed";
     case "refunded":
       return "Refunded";
     default:
@@ -75,7 +75,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
           />
         ) : (
           <div className="flex h-full items-center justify-center text-muted">
-            No photo
+            No place photo
           </div>
         )}
       </div>
@@ -89,7 +89,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
           <span className="text-muted"> / night</span>
           {listing.connectorRewardPercent > 0 ? (
             <span className="ml-2 text-xs text-accent">
-              {listing.connectorRewardPercent}% connector
+              {listing.connectorRewardPercent}% connector reward
             </span>
           ) : null}
           <span className="mt-1 block text-xs text-muted">

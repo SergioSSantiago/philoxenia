@@ -19,6 +19,7 @@ quote → on-chain create/fund/settle → POST /bookings/confirm (verified) → 
 | `funded` | Legacy intermediate (pre-settle path only). UI: **Paid — recording stay** |
 | `refunded` | Legacy on-chain refund — only if still `funded`. UI: **Refunded** |
 | `pending` | Unused by current web pay path. UI: **Recording stay…** |
+| `confirmed` | Legacy intermediate. UI: **Book & pay confirmed** |
 
 ## Creating a booking
 
@@ -57,7 +58,7 @@ Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **
 | POST | `/bookings/:id/fund` | Legacy — verified |
 | POST | `/bookings/:id/settle` | Legacy — verified |
 | POST | `/bookings/:id/refund` | Legacy funded-only — verified |
-| GET | `/bookings` | List title **My stays** — empty **No Book & pay stays yet** (wait after a **place invite**); Home empty matches. Cards show **You host** / **You stay** and stay status **Book & pay complete** / **Nights freed** (not raw `completed` / `cancelled`). Home **My stays** subtitle: recent Book & pay stays. If nights are gapped, the card lists those dates (or “not consecutive”) instead of a contiguous check-in–out range |
+| GET | `/bookings` | List title **My stays** — empty **No Book & pay stays yet** (wait after a **place invite**); Home empty matches. Cards show **You host** / **You stay** and stay status **Book & pay complete** / **Nights freed** / **Book & pay confirmed** (not raw `completed` / `cancelled` / `confirmed`). Home **My stays** subtitle: recent Book & pay stays. If nights are gapped, the card lists those dates (or “not consecutive”) instead of a contiguous check-in–out range |
 | GET | `/bookings/:id` | Detail eyebrow **Book & pay**. **Loading stay…**. Missing stay (API + page, not “Booking not found”): **This stay isn’t available to Book & pay.** Duplicate confirm: **This Book & pay stay is already recorded.** Quote with no nights: **Select at least one night to Book & pay**. Stay field **Book & pay complete** / **Nights freed**. **Book & pay privacy**: **Private (STRK20 · STRK or DAI)** / **Public Book & pay**. Cancel idle (legacy): **Free nights (stay not settled yet)**. Stay CTA **Open Messages to Send STRK or DAI**. **Direct Book & pay — no connector.** **Place list total (DAI)**. **Paid at Book & pay**. **Verified Book & pay tx**. Title fallback **Private place** + **View place**; host/guest profile (**places to Book & pay**). Gapped `selectedNights` note that check-in/out is only the bounding window. Quote fail: **Could not quote Book & pay**. Escrow missing: **Book & pay escrow is not configured**. Social-cancel wrong state: **These nights cannot be freed in the current stay state**. Missing Ready X user: **Your Ready X account wasn’t found. Connect Ready X again.** |
 
 ## Related

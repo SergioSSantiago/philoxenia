@@ -139,7 +139,7 @@ export async function sendTextMessage(
     throw new Error(
       sealed
         ? "This sealed note is too large"
-        : "Message must be 1–2000 characters"
+        : "This note must be 1–2000 characters"
     );
   }
 

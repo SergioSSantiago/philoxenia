@@ -169,7 +169,7 @@ export default function ConnectorPage() {
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center text-xs text-muted">
-                          No photo
+                          No place photo
                         </div>
                       )}
                     </Link>

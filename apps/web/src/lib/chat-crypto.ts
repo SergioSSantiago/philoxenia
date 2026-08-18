@@ -164,7 +164,7 @@ export async function sealMessage(
   const stored = readStored(walletAddress);
   if (!stored) throw new Error("Generate your sealed Messages keys first");
   if (plaintext.length > SEALED_PLAINTEXT_MAX) {
-    throw new Error(`Message must be at most ${SEALED_PLAINTEXT_MAX} characters`);
+    throw new Error(`This sealed note must be at most ${SEALED_PLAINTEXT_MAX} characters`);
   }
 
   const theirPub = await importPublicSpki(recipientPublicSpki);

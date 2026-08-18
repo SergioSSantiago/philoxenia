@@ -250,7 +250,7 @@ export function LocationMapPicker({
           </span>
         </p>
       ) : (
-        <p className="text-xs text-muted">No pin yet — click the map.</p>
+        <p className="text-xs text-muted">Pin this place on the map for guests to Book & pay.</p>
       )}
       {error && <p className="text-sm text-red-700">{error}</p>}
     </div>

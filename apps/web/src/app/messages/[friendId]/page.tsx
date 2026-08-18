@@ -465,15 +465,15 @@ export default function ChatThreadPage() {
                     void reconnectReady();
                   }}
                 >
-                  {reconnecting ? "Connecting Ready X…" : "Connect Ready X to send"}
+                  {reconnecting ? "Connecting Ready X…" : "Connect Ready X to Send STRK or DAI"}
                 </Button>
               ) : (
                 <Button type="submit" disabled={busy || !amount.trim()}>
                   {busy
                     ? "Sending STRK or DAI…"
                     : payMode === "private"
-                      ? `Send ${asset} privately`
-                      : `Send ${asset} publicly`}
+                      ? `Send ${asset} · Private`
+                      : `Send ${asset} · Public`}
                 </Button>
               )}
             </form>
@@ -484,7 +484,7 @@ export default function ChatThreadPage() {
         <div className="relative flex-1 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--accent-soft)_0%,_transparent_55%)] px-3 py-4 sm:px-5">
           {messages.length === 0 && (
             <div className="mx-auto mt-8 max-w-sm text-center">
-              <p className="text-lg text-foreground">Say hello — sealed</p>
+              <p className="text-lg text-foreground">Say hello — sealed note</p>
               <p className="mt-2 text-sm text-muted">
                 Your first note is encrypted before it leaves this browser.
               </p>
