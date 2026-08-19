@@ -143,7 +143,7 @@ export default function CreateListingPage() {
               </span>
             </label>
             <label className="block text-sm">
-              Connector reward (%)
+              Connector % of stay
               <TextInput
                 className="mt-1"
                 type="number"
@@ -155,10 +155,10 @@ export default function CreateListingPage() {
                 }
               />
               <span className="mt-1 block text-xs text-muted">
-                A friend who shares your place earns this % of the stay (3–10%
-                is typical) when they Book & pay in STRK or DAI. Philoxenia
-                takes 10% of that connector reward only. Direct Book & pay stays
-                0% protocol.
+                A friend who shares a place invite earns this % of the stay
+                (3–10% is typical) when someone Book & pay through that place
+                invite. Philoxenia takes 10% of that connector reward only.
+                Direct Book & pay stays 0% protocol.
               </span>
             </label>
           </section>

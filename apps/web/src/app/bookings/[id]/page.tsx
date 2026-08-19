@@ -225,7 +225,7 @@ export default function BookingDetailPage() {
           {booking.connectorId ? (
             <div className="flex justify-between">
               <span className="text-muted">
-                Connector reward ({booking.connectorRewardPercent}%)
+                Connector % of stay ({booking.connectorRewardPercent}%)
               </span>
               <span>
                 {formatTokenAmount(booking.connectorRewardAmount)}{" "}

@@ -124,11 +124,11 @@ export default function InvitePage() {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {invite.hasConnector && invite.connector ? (
-            <UserBadge user={invite.connector} role="Connector (Ready X payout)" />
+            <UserBadge user={invite.connector} role="Earns as connector" />
           ) : (
             <div className="rounded-xl border border-border bg-background p-4">
               <p className="text-xs font-medium uppercase tracking-wide text-muted">
-                Connector
+                Earns as connector
               </p>
               <p className="mt-1 text-sm text-muted">None — they published this place invite</p>
             </div>
@@ -152,7 +152,7 @@ export default function InvitePage() {
           </div>
         ) : invite.friendshipPending ? (
           <p className="mt-8 text-sm text-muted leading-relaxed">
-            Friendship request sent to{" "}
+            Friend request sent to{" "}
             <span className="font-medium text-foreground">
               {invite.host.displayName}
             </span>
