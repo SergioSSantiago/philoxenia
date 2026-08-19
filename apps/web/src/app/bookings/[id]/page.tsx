@@ -186,7 +186,7 @@ export default function BookingDetailPage() {
                   )
                   .join(" · ")}
                 {nightsHaveGaps
-                  ? " — nights not consecutive (first night / morning you leave is the bounding window)."
+                  ? " — nights not consecutive (First night / Morning you leave is the bounding window)."
                   : ""}
               </p>
             )}

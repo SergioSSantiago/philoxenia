@@ -102,7 +102,7 @@ export default function ConnectorPage() {
           Earn as a connector
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-          Friends list places privately. When you share a place invite and they
+          Friends publish places privately. When you share a place invite and they
           Book & pay, you get a cut of the stay — paid in
           the same asset they used (STRK or DAI) to your Ready X wallet.
         </p>

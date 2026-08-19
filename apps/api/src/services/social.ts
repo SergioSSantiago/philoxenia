@@ -1661,7 +1661,7 @@ async function prepareBooking(
   }
 
   if (listing.hostId === guestId) {
-    throw new Error("You cannot Book & pay your own place");
+    throw new Error("You published this place — Book & pay is disabled here");
   }
 
   let nightKeys: string[];
@@ -2098,7 +2098,7 @@ export async function refundBooking(
 
   if (booking.status !== "funded") {
     throw new Error(
-      "On-chain refund only applies if settlement did not complete. Prefer social cancel + Messages."
+      "On-chain refund only applies if settlement did not complete. Prefer Free nights + Send STRK or DAI in Messages."
     );
   }
 

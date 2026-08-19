@@ -554,7 +554,7 @@ function NewBookingForm() {
       {isOwnListing ? (
         <Card className="space-y-4">
           <p className="text-sm text-muted">
-            You cannot Book & pay your own place.
+            You published this place — Book & pay is disabled here.
           </p>
           <Button
             type="button"
