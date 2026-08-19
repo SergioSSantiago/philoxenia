@@ -103,7 +103,7 @@ export function Strk20PrivacyPanel() {
           title: "Ready X is not Private-capable yet",
           body:
             lastReason ??
-            "Ready X connected, but Private needs Smart Wallet + Private (API ≥ 0.10).",
+            "Ready X connected, but Private needs Chrome with the Ready X wallet extension, or Philoxenia in the Ready X browser (API ≥ 0.10).",
           tone: "warn",
           primaryLabel: "Try Ready X again",
           secondaryLabel: "Refresh Philoxenia",
@@ -202,9 +202,9 @@ export function Strk20PrivacyPanel() {
             <ol className="list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted">
               <li>
                 Desktop: Chrome with the Ready X wallet extension is recommended.
-                Phone: open Philoxenia in the Ready X browser.
+                Phone: Download the Ready X wallet app and open Philoxenia in the Ready X browser.
               </li>
-              <li>Enable Smart Wallet and Private.</li>
+              <li>Then enable Private in Ready X.</li>
               <li>Tap Reconnect Ready X and approve again.</li>
             </ol>
             <div className="flex flex-col gap-2 sm:flex-row">
