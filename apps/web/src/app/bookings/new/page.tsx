@@ -741,7 +741,7 @@ function NewBookingForm() {
                 variant="secondary"
                 onClick={() => setSelected([])}
               >
-                Clear
+                Clear nights
               </Button>
             )}
             {payLocked ? (

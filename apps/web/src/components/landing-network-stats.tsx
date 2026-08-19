@@ -55,7 +55,7 @@ export function LandingNetworkStats({
 
   const items = [
     {
-      label: "users",
+      label: "Ready X wallets",
       value: stats ? formatCount(stats.users) : "—",
     },
     {
@@ -67,7 +67,7 @@ export function LandingNetworkStats({
       value: stats ? formatCount(stats.listingsOpen) : "—",
     },
     {
-      label: "paid nights",
+      label: "Book & pay nights",
       value: stats ? formatCount(stats.nightsBooked) : "—",
     },
     {
