@@ -11,4 +11,4 @@ export const SITE_NAME = "Philoxenia";
 export const SITE_TAGLINE = "Trust who you trust. Pay trustless.";
 
 export const SITE_DESCRIPTION =
-  "Private peer-to-peer hospitality on Starknet. Friends publish places, Book & pay STRK or DAI, and connectors earn by sharing a place invite — no public marketplace.";
+  "Book & pay with people you trust on Starknet. Friends publish places, Book & pay STRK or DAI, and connectors earn by sharing a place invite — no public marketplace.";

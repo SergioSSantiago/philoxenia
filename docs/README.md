@@ -4,7 +4,7 @@
 
 # Philoxenia docs
 
-Private peer-to-peer hospitality on Starknet. **Trust who you trust. Pay trustless.**
+Book & pay with people you trust on Starknet. **Trust who you trust. Pay trustless.**
 
 | Doc | Topic |
 |-----|--------|

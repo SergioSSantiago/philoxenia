@@ -30,7 +30,7 @@ export default function LandingPage() {
           Pay trustless.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted">
-          Philoxenia is private hospitality on Starknet — publish places, Book
+          Book &amp; pay with people you trust on Starknet — publish places, Book
           &amp; pay, and{" "}
           <strong className="font-medium text-foreground">connectors</strong>{" "}
           who earn by sharing a place invite. No public
