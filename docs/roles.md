@@ -4,7 +4,7 @@
 
 # Roles
 
-Landing role cards (`/`): **Publish places** (not “Host”; connector % + 0% direct), **Earn as a connector** (not “Connector”; STRK/DAI when they Book & pay, 10% of that reward), **Book & pay** (not “Guest”; STRK or DAI, Public or Private). **Start here** connector banner: when they **Book & pay**, you receive the host’s %.
+Landing role cards (`/`): **Publish places** (not “Host”; connector % + 0% direct), **Earn as a connector** (not “Connector”; STRK/DAI when they Book & pay, 10% of that reward), **Book & pay** (not “Guest”; STRK or DAI, Public or Private). **Start here** connector banner heading **Earn as a connector** (not “grow the network”); when they **Book & pay**, you receive the connector %.
 
 | Role | What you do | How you get paid |
 |------|-------------|------------------|

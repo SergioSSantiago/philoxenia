@@ -29,7 +29,8 @@ export default function LandingPage() {
           Pay trustless.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted">
-          Philoxenia is private hospitality on Starknet — hosts, guests, and{" "}
+          Philoxenia is private hospitality on Starknet — publish places, Book
+          &amp; pay, and{" "}
           <strong className="font-medium text-foreground">connectors</strong>{" "}
           who earn by introducing trusted people to trusted places. No public
           marketplace.
@@ -65,14 +66,14 @@ export default function LandingPage() {
             Start here
           </p>
           <h2 className="mt-2 text-2xl text-foreground sm:text-3xl">
-            Be a connector — grow the network and earn
+            Earn as a connector
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
             Share a friend&apos;s place invite. When they Book &amp; pay, you
-            receive the host&apos;s connector % on settle — paid in STRK or DAI
-            (same asset the guest used). No inventory required. Hosts win filled
-            nights; guests arrive with a vouch; you get paid for the
-            introduction.
+            receive the connector % on settle — paid in STRK or DAI
+            (same asset they Book &amp; pay). No inventory required. Friends who
+            publish fill nights; people Book &amp; pay with a vouch; you get paid
+            for the introduction.
           </p>
           <div className="mt-6">
             <Link href="/connector">

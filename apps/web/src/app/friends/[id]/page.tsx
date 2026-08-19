@@ -108,7 +108,7 @@ export default function FriendProfilePage() {
         <p className="text-muted">{error}</p>
         <div className="mt-4">
           <Link href="/friends">
-            <Button variant="secondary">Back to friends</Button>
+            <Button variant="secondary">Back to Friends to Book & pay</Button>
           </Link>
         </div>
       </Shell>
@@ -132,7 +132,7 @@ export default function FriendProfilePage() {
           href="/friends"
           className="text-sm text-muted transition hover:text-foreground"
         >
-          ← Friends
+          ← Friends to Book & pay
         </Link>
       </div>
 

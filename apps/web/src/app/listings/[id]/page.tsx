@@ -332,8 +332,7 @@ export default function ListingPage() {
                 {guestSelected.length > 0 && (
                   <p className="text-sm text-muted">
                     {guestSelected.length} night
-                    {guestSelected.length === 1 ? "" : "s"} selected — continue
-                    to Book & pay.
+                    {guestSelected.length === 1 ? "" : "s"} selected — Book & pay.
                   </p>
                 )}
               </div>
@@ -458,7 +457,7 @@ export default function ListingPage() {
                 </p>
               ) : (
                 <p className="text-muted leading-relaxed">
-                  You shared as the host — this place invite has{" "}
+                  You published this place — this place invite has{" "}
                   <span className="font-medium text-foreground">
                     no connector
                   </span>
