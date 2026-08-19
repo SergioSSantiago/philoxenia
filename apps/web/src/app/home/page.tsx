@@ -184,7 +184,7 @@ export default function HomePage() {
             }
           />
           {data.friends.length === 0 ? (
-            <EmptyState message="Add people you trust by Ready X wallet — they must Connect Ready X once." />
+            <EmptyState message="Add by Ready X wallet — they must Connect Ready X once." />
           ) : (
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-muted">{data.friends.length} friends to Book & pay</p>

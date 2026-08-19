@@ -362,7 +362,7 @@ export default function ChatThreadPage() {
               <Link
                 href={`/friends/${conversation.friend.id}`}
                 className="truncate font-mono text-[10px] opacity-80 underline-offset-2 hover:underline touch-manipulation sm:text-xs"
-                title={`${conversation.friend.displayName}'s places`}
+                title={`Places to Book & pay for ${conversation.friend.displayName}`}
               >
                 {conversation.friend.walletAddress.slice(0, 6)}…
                 {conversation.friend.walletAddress.slice(-4)}
