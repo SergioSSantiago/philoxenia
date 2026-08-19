@@ -317,7 +317,7 @@ function NewBookingForm() {
       return;
     }
     if (!listing.host?.walletAddress) {
-      setError("Could not Book & pay — this host has no Ready X wallet.");
+      setError("Could not Book & pay — this place has no Ready X wallet.");
       return;
     }
     const hostWallet = listing.host.walletAddress;
@@ -711,7 +711,7 @@ function NewBookingForm() {
 
               <p className="text-xs text-muted">
                 {paymentAsset === "DAI"
-                  ? "DAI settles at the DAI list price. Host and connector are paid immediately."
+                  ? "DAI settles at the DAI list price. Who publishes this place and the connector are paid immediately."
                   : "STRK amount refreshes from the live DAI market rate when you Book & pay."}
               </p>
             </Card>

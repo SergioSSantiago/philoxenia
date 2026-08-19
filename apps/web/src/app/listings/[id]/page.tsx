@@ -272,7 +272,7 @@ export default function ListingPage() {
 
           <p className="mt-4 rounded-xl bg-accent-soft/60 px-4 py-3 text-sm">
             DAI list price (can vary by night) · Book & pay STRK or DAI
-            to host & connector · cancel frees nights (no clawback) — money
+            to who publishes this place & connector · cancel frees nights (no clawback) — money
             return is Send STRK or DAI in Messages
           </p>
 

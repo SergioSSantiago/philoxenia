@@ -43,7 +43,7 @@ export default function BookingDetailPage() {
     if (!booking) return;
     const agreed = window.confirm(
       "This only frees the nights in Philoxenia.\n\n" +
-        "Host/connector were already paid on-chain at Book & pay. " +
+        "Who publishes this place and the connector were already paid on-chain at Book & pay. " +
         "Any money return must be agreed in Messages and sent with Send STRK or DAI.\n\n" +
         "Free these nights?"
     );
@@ -120,8 +120,7 @@ export default function BookingDetailPage() {
           </Link>
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Tap the title for the place. Open their profile to see places you can
-          Book & pay.
+          Tap the title for the place. Open Places to Book & pay to see more.
         </p>
       </div>
 
