@@ -309,7 +309,7 @@ export function AvailabilityCalendar({
                 </span>
               )}
               {validCheckout && !availableNight && (
-                <span className="mt-0.5 text-[9px] text-accent">out</span>
+                <span className="mt-0.5 text-[9px] text-accent">leave</span>
               )}
               {booked && (
                 <span className="mt-0.5 text-[9px] font-medium text-muted">
@@ -324,7 +324,7 @@ export function AvailabilityCalendar({
       {mode === "guest" && onSelectRange && (
         <p className="text-xs text-muted leading-relaxed">
           {pickingCheckout
-            ? "Now tap the morning you leave. Dashed days are valid — they don’t need a nightly DAI price."
+            ? "Now tap Morning you leave. Dashed days are valid — they don’t need a nightly DAI price."
             : "Numbers under each day are the DAI list price. Tap nights to Book & pay."}
         </p>
       )}
@@ -343,7 +343,7 @@ export function AvailabilityCalendar({
             right-click a day) to set a custom DAI list price (Book & pay
             STRK or DAI).{" "}
             <span className="text-foreground">Book & pay nights stay locked</span> —
-            you can’t remove them or change their price.
+            you can’t free them here or change their price.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block text-xs">

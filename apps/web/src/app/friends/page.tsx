@@ -150,7 +150,7 @@ export default function FriendsPage() {
         <Card className="mb-6">
           <p className="text-sm font-medium text-foreground">Your Ready X wallet</p>
           <p className="mt-1 text-sm text-muted">
-            Share this so friends can add you. They Book & pay in STRK or DAI.
+            Friends add you by Ready X wallet. They Book & pay in STRK or DAI.
           </p>
           <div className="mt-3 space-y-4">
             <WalletAddress address={user.walletAddress} />
