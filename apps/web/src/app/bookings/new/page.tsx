@@ -113,6 +113,7 @@ function NewBookingForm() {
   const [fundMode, setFundMode] = useState<"private" | "public">("private");
   const [privacyCapable, setPrivacyCapable] = useState(false);
   const [privacyHint, setPrivacyHint] = useState("");
+  const [showAdvancedPay, setShowAdvancedPay] = useState(false);
   const [quote, setQuote] = useState<BookingQuote | null>(null);
   const [error, setError] = useState("");
   const [loadError, setLoadError] = useState("");
@@ -683,18 +684,29 @@ function NewBookingForm() {
                     >
                       Private (default)
                     </button>
+                    {(!privacyCapable || showAdvancedPay) && (
+                      <button
+                        type="button"
+                        className={`rounded-full border px-4 py-2 text-xs ${
+                          fundMode === "public"
+                            ? "border-accent bg-accent-soft text-accent"
+                            : "border-border text-muted"
+                        }`}
+                        onClick={() => setFundMode("public")}
+                      >
+                        Public Book & pay
+                      </button>
+                    )}
+                  </div>
+                  {privacyCapable && !showAdvancedPay && fundMode === "private" && (
                     <button
                       type="button"
-                      className={`rounded-full border px-4 py-2 text-xs ${
-                        fundMode === "public"
-                          ? "border-accent bg-accent-soft text-accent"
-                          : "border-border text-muted"
-                      }`}
-                      onClick={() => setFundMode("public")}
+                      className="text-xs text-muted underline-offset-2 hover:text-foreground hover:underline"
+                      onClick={() => setShowAdvancedPay(true)}
                     >
-                      Public Book & pay
+                      Advanced: public Book & pay (visible on Voyager)
                     </button>
-                  </div>
+                  )}
                   {!privacyCapable && fundMode === "private" && (
                     <p className="text-xs text-amber-800 leading-relaxed">
                       {privacyHint ||

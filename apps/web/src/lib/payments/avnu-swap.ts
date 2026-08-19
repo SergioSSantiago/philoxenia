@@ -1,11 +1,15 @@
 import {
+  createStrk20WalletProver,
+  executePrivateSwap,
   executeSwap,
   getQuotes,
+  PRIVACY_POOL_ADDRESS,
   type Quote,
 } from "@avnu/avnu-sdk";
 import type { AccountInterface } from "starknet";
 import type { PaymentAsset } from "@philoxenia/shared";
 import { tokenAddressForAsset } from "@/lib/tokens";
+import { resolvePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 
 const SLIPPAGE = 0.01; // 1%
 const DECIMALS = 18n;
@@ -63,6 +67,35 @@ export async function executeAvnuSwap(input: {
     quote: input.quote,
     slippage: SLIPPAGE,
     executeApprove: true,
+  });
+  return { transactionHash: result.transactionHash };
+}
+
+/**
+ * Private STRK ↔ DAI swap inside the STRK20 pool via AVNU (no app anonymizer).
+ * Sell token must already be shielded on Ready X.
+ *
+ * @see https://strk20-by-example.org/starknet-wallet-api/avnu-private-swaps
+ */
+export async function executeAvnuPrivateSwap(input: {
+  walletAddress: string;
+  quote: Quote;
+}): Promise<{ transactionHash: string }> {
+  const session = await resolvePrivacyWallet(input.walletAddress);
+  if (!session?.privacyCapable) {
+    throw new Error(
+      "Private swap needs Ready X with STRK20 (wallet API ≥ 0.10). Shield the sell token on Ready X first."
+    );
+  }
+
+  const prover = createStrk20WalletProver(session.account);
+  const result = await executePrivateSwap({
+    quote: input.quote,
+    slippage: SLIPPAGE,
+    takerAddress: input.walletAddress,
+    poolAddress: PRIVACY_POOL_ADDRESS,
+    feeMode: { poolFeeToken: input.quote.sellTokenAddress },
+    prover,
   });
   return { transactionHash: result.transactionHash };
 }

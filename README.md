@@ -10,6 +10,38 @@
 
 Built with [Cursor](https://cursor.com) AI-assisted development (disclosed, not hidden).
 
+## For everyone — what Philoxenia is
+
+Philoxenia is a way to **stay at a friend’s place** (or a friend-of-a-friend’s) and **pay safely**, without posting your home on a giant public website. You already know who you trust — Philoxenia lets you **Book & pay** those people in **STRK or DAI**, with optional **private payments** so strangers on the blockchain cannot see how much you paid. No hotel chain, no random guests, no platform taking a cut on every night you host directly.
+
+Think of it as **Airbnb between friends**: listings stay inside your trust circle, chat is sealed, and money is held in a **smart contract** until the stay is settled — not in Philoxenia’s bank account.
+
+## Privacy & payments stack (what we use)
+
+| Piece | Role |
+|-------|------|
+| **[STRK20](https://docs.starknet.io/build/starknet-privacy)** + **[Ready X](https://www.ready.co/)** | Shield STRK/DAI, private Book & pay, private chat sends, on-chain message anchors |
+| **[AVNU](https://docs.avnu.fi/docs/privacy)** | Private STRK ↔ DAI swap inside the privacy pool (public swap still available) |
+| **Philoxenia anonymizer** (Cairo) | Private booking fund via `privacy_invoke` → escrow |
+| **BookingEscrow** (Cairo) | Trustless hold & settle — host, guest, connector paid on-chain |
+| **MessageMailbox** (Cairo) | Optional hash anchor for sealed chat notes |
+
+Mainnet privacy pool: [`0x040337b1…812a`](https://voyager.online/contract/0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a). Details: [docs/strk20.md](./docs/strk20.md) · [docs/payments.md](./docs/payments.md)
+
+## Why Philoxenia instead of Airbnb
+
+| | **Philoxenia** | **Airbnb** |
+|--|----------------|------------|
+| **Who sees listings** | Host, friends, guests with an invite link | Everyone on the internet |
+| **Who can book** | People in your trust network | Anyone who passes KYC |
+| **Fees on direct stays** | **0%** protocol fee (host keeps 100%) | ~15–20% guest + host fees typical |
+| **Payment custody** | On-chain escrow — Philoxenia never holds your money | Platform processes card payouts |
+| **Payment privacy** | Optional **private STRK/DAI** (STRK20) | Card/bank trail always visible to platform |
+| **Social layer** | Friends, connectors who earn by vouching | Reviews from strangers |
+| **Best for** | “I trust Marco — I’ll stay at his flat in Florence” | “I need any place in Florence this weekend” |
+
+Philoxenia is **not** trying to replace hotels or mass tourism. It is for **private hospitality among people who already trust each other**, with modern crypto rails when you want them.
+
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.5;">
 <strong style="color:#7f1d1d;">⚠ Required before you start — Ready X setup</strong><br/><br/>
 <strong>1. Desktop:</strong> use <strong>Chrome</strong> with the <strong>Ready X</strong> extension
@@ -31,7 +63,7 @@ The brand mark is a cameo of a sleeping head on joined hands — rest, trust, ho
 - **Three roles — Host, Guest, Connector** ([docs/roles.md](./docs/roles.md)). **Connector** grows the app: introduce guests to friends’ places and **earn a % on settle** ([docs/connectors.md](./docs/connectors.md))
 - Trustless settlement via Cairo escrow (Philoxenia takes **10% of the connector reward**, **0%** on direct bookings)
 - STRK20 private payments with **Ready X** (Smart Wallet + Private enabled)
-- Sealed chat, peer transfers, AVNU STRK ↔ DAI swap
+- Sealed chat, private peer transfers, **AVNU private** STRK ↔ DAI swap (public swap optional)
 - Wallet paths: **Chrome + Ready X** (desktop); **iPhone Safari** for login (WalletConnect); **Ready X in-app browser** for Private STRK or DAI
 
 ## What it is not
@@ -63,7 +95,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 | Backend | Fastify, Drizzle ORM, PostgreSQL |
 | Contracts | Cairo 2.12, Scarb, Starknet Foundry |
 | Wallet | Ready X (in-app browser ideal) via `@starknet-react/core`, `starknetkit`, starknet.js **10.7** |
-| Privacy | STRK20 Wallet API + BookingEscrow anonymizer (mainnet) |
+| Privacy | STRK20 Wallet API + anonymizer + AVNU private swaps + MessageMailbox (mainnet) |
 
 ## Quick start
 

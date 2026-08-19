@@ -66,12 +66,12 @@ export default function ProfilePage() {
     <Shell>
       <SectionTitle
         title="Ready X"
-        subtitle="Friends add you by Ready X wallet. Shield STRK or DAI here for Private Book & pay; swap STRK ↔ DAI is public."
+        subtitle="Shield STRK or DAI first, then private Book & pay, swap, and chat sends. Private is the default when Ready X supports it."
       />
 
       <div className="space-y-6">
         <Card>
-          <h3 className="text-lg text-foreground">Display name</h3>
+          <h3 className="mb-1 text-lg text-foreground">Display name</h3>
           <p className="mt-2 text-sm text-muted leading-relaxed">
             Friends add you by Ready X wallet — display names are not searchable.
           </p>
@@ -103,12 +103,12 @@ export default function ProfilePage() {
         </Card>
 
         <Card>
-          <h3 className="mb-1 text-lg text-foreground">Swap STRK ↔ DAI</h3>
-          <TokenSwapPanel />
+          <Strk20PrivacyPanel />
         </Card>
 
         <Card>
-          <Strk20PrivacyPanel />
+          <h3 className="mb-1 text-lg text-foreground">Swap STRK ↔ DAI</h3>
+          <TokenSwapPanel />
         </Card>
 
         <Card>

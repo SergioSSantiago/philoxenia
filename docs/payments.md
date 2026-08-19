@@ -43,7 +43,11 @@ Mainnet smoke tests (public, anonymizer helper, connector split): [deploy-escrow
 
 ## Swap STRK ↔ DAI (Profile)
 
-Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeSwap`) from **Profile** (heading **Swap STRK ↔ DAI**, not “Swap”; Home shortcut is **Shield & swap**). Labels: **You sell** / **You receive** (not “You pay” — that is **Book & pay**). Ready X must be connected to sign (**Connect Ready X** / **Connecting Ready X…** — Chrome extension or Ready X browser, not “Chrome or iPhone”). Disconnected CTA **Connect Ready X to swap STRK ↔ DAI** (not “Connect Ready X to swap”). Connected notice **You can swap STRK ↔ DAI now** (not “quote and swap”). Busy **Swapping STRK ↔ DAI…** (not “Swapping…”). Success **Swap STRK ↔ DAI submitted** (not “Swap submitted”); body **STRK ↔ DAI swapped** (not “AVNU route executed”); status **Swapped STRK ↔ DAI. Tx** (not “Swapped. Tx”). Approve **Approve in Ready X to swap STRK ↔ DAI**. Flip **Flip STRK ↔ DAI**. Notices: reconnect fail **Try Ready X again** (not “Try again”). Wrong network **Switch to Starknet mainnet. Try Ready X again.** RPC miss **Check mainnet in Ready X, then Approve in Ready X again.** (not “try Approve”). STRK20 session miss **Reconnect Ready X. Try Ready X again.** Notices say Ready X, not a generic Ready extension. Swap fail: **Could not swap STRK or DAI**. Same-token: **Choose different tokens to swap STRK ↔ DAI**. No quote: **No AVNU route to swap STRK ↔ DAI right now**. Amount: **Enter a STRK or DAI amount**. Slippage default **1%**. Private AVNU swaps need a paymaster/server path and are not wired in the browser yet.
+**Private swap (default when Ready X supports STRK20):** [@avnu/avnu-sdk](https://docs.avnu.fi/docs/privacy) `executePrivateSwap` + `createStrk20WalletProver` — sell token must already be shielded; buy token lands shielded in the pool. No app anonymizer required.
+
+**Public swap (Advanced):** `getQuotes` + `executeSwap` — visible on Voyager.
+
+Implementation: `apps/web/src/lib/payments/avnu-swap.ts`, UI: `TokenSwapPanel`. Shield STRK/DAI on Profile **before** a private swap. Slippage default **1%**.
 
 ## Balances (Home vs Profile)
 

@@ -33,6 +33,7 @@ import {
   messageMailboxAddress,
   tryPostSealedOnChain,
 } from "@/lib/payments/message-mailbox";
+import { diagnosePrivacyWallet, resolvePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 import {
   transferToFriend,
   transferToFriendPrivate,
@@ -62,8 +63,10 @@ export default function ChatThreadPage() {
   const [reconnecting, setReconnecting] = useState(false);
   const [showPay, setShowPay] = useState(false);
   const [payMode, setPayMode] = useState<"private" | "public">("private");
-  const [anchorOnChain, setAnchorOnChain] = useState(false);
+  const [privacyCapable, setPrivacyCapable] = useState(false);
+  const [anchorOnChain, setAnchorOnChain] = useState(true);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showPayAdvanced, setShowPayAdvanced] = useState(false);
   const [onChainNote, setOnChainNote] = useState("");
   const [notice, setNotice] = useState<{
     title: string;
@@ -80,6 +83,22 @@ export default function ChatThreadPage() {
   const composerRef = useRef<HTMLTextAreaElement>(null);
   const mailboxReady = Boolean(messageMailboxAddress());
   const walletReady = Boolean(account && address);
+
+  useEffect(() => {
+    if (!address) {
+      setPrivacyCapable(false);
+      return;
+    }
+    let cancelled = false;
+    void diagnosePrivacyWallet(address).then((result) => {
+      if (cancelled) return;
+      setPrivacyCapable(result.capable);
+      if (result.capable) setPayMode("private");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [address]);
 
   const decryptConversation = useCallback(
     async (data: ChatConversation) => {
@@ -175,17 +194,24 @@ export default function ChatThreadPage() {
       setOnChainNote("");
       composerRef.current?.focus();
 
-      if (anchorOnChain && account && conversation.friend.walletAddress) {
-        const posted = await tryPostSealedOnChain({
-          account: account as never,
-          myWallet: user.walletAddress,
-          friendWallet: conversation.friend.walletAddress,
-          sealedBody: sealed,
-        });
-        if (posted.txHash) {
-          setOnChainNote(`Anchored on-chain · ${posted.txHash.slice(0, 10)}…`);
-        } else if (posted.reason && posted.reason !== "mailbox not configured") {
-          setOnChainNote(`Sealed delivered; on-chain skip: ${posted.reason}`);
+      if (anchorOnChain && user.walletAddress && conversation.friend.walletAddress) {
+        const session = await resolvePrivacyWallet(user.walletAddress);
+        if (session?.privacyCapable) {
+          const posted = await tryPostSealedOnChain({
+            account: session.account,
+            myWallet: user.walletAddress,
+            friendWallet: conversation.friend.walletAddress,
+            sealedBody: sealed,
+          });
+          if (posted.txHash) {
+            setOnChainNote(`Anchored on-chain · ${posted.txHash.slice(0, 10)}…`);
+          } else if (posted.reason && posted.reason !== "mailbox not configured") {
+            setOnChainNote(`Sealed delivered; on-chain skip: ${posted.reason}`);
+          }
+        } else {
+          setOnChainNote(
+            "Sealed delivered; on-chain anchor skipped (Ready X Private needed)."
+          );
         }
       }
 
@@ -399,20 +425,32 @@ export default function ChatThreadPage() {
                       : "border border-border bg-surface text-muted hover:text-foreground"
                   }`}
                 >
-                  Private send
+                  Private send (default)
                 </button>
+                {(!privacyCapable || showPayAdvanced) && (
+                  <button
+                    type="button"
+                    onClick={() => setPayMode("public")}
+                    className={`rounded-full px-4 py-2 text-sm transition ${
+                      payMode === "public"
+                        ? "bg-accent text-white"
+                        : "border border-border bg-surface text-muted hover:text-foreground"
+                    }`}
+                  >
+                    Public send
+                  </button>
+                )}
+              </div>
+
+              {privacyCapable && !showPayAdvanced && payMode === "private" && (
                 <button
                   type="button"
-                  onClick={() => setPayMode("public")}
-                  className={`rounded-full px-4 py-2 text-sm transition ${
-                    payMode === "public"
-                      ? "bg-accent text-white"
-                      : "border border-border bg-surface text-muted hover:text-foreground"
-                  }`}
+                  className="text-xs text-muted underline-offset-2 hover:text-foreground hover:underline"
+                  onClick={() => setShowPayAdvanced(true)}
                 >
-                  Public send
+                  Advanced: public send (visible on Voyager)
                 </button>
-              </div>
+              )}
 
               <p className="text-xs leading-relaxed text-muted">
                 {payMode === "private"
@@ -543,7 +581,7 @@ export default function ChatThreadPage() {
               }
             >
               <summary className="cursor-pointer select-none text-muted hover:text-foreground">
-                Anchor this sealed note
+                On-chain privacy options
               </summary>
               <label className="mt-2 flex cursor-pointer items-start gap-2 leading-snug">
                 <input
@@ -553,8 +591,9 @@ export default function ChatThreadPage() {
                   onChange={(e) => setAnchorOnChain(e.target.checked)}
                 />
                 <span>
-                  Anchor ciphertext hash on-chain (MessageMailbox). Optional
-                  proof-of-existence — not needed for a sealed note.
+                  Anchor ciphertext hash on-chain via STRK20 → MessageMailbox
+                  (default). Proves the sealed note existed without revealing
+                  content.
                 </span>
               </label>
             </details>

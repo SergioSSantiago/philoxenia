@@ -6,6 +6,23 @@
 
 Book & pay with people you trust on Starknet. **Trust who you trust. Pay trustless.**
 
+## For everyone
+
+Philoxenia is **private hospitality among friends** — not a public hotel site. You publish a place for people you trust, they Book & pay in STRK or DAI, and money settles in a smart contract. Optional **private payments** (STRK20) hide amounts on-chain; sealed chat keeps messages off the server.
+
+**Why not Airbnb?** No public listing directory, **0% protocol fee** on direct stays, trust-by-friendship instead of anonymous reviews, and optional crypto privacy Airbnb cannot offer.
+
+## Privacy stack
+
+| Technology | What it does in Philoxenia |
+|------------|---------------------------|
+| **STRK20 + Ready X** | Shield/unshield, private Book & pay, private chat sends |
+| **AVNU** | Private STRK ↔ DAI swap in the pool |
+| **BookingEscrow anonymizer** | Private fund into escrow |
+| **MessageMailbox** | On-chain anchor for sealed notes |
+
+See [strk20.md](./strk20.md) · [payments.md](./payments.md) · [privacy.md](./privacy.md)
+
 | Doc | Topic |
 |-----|--------|
 | [brand.md](./brand.md) | Logo (sleeping-head cameo) and header → `/` |

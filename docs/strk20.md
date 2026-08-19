@@ -4,7 +4,18 @@
 
 # STRK20 (Starknet Privacy)
 
-Philoxenia uses STRK20 for optional private STRK/DAI **booking fund** and for shield/unshield of **STRK and DAI** on Ready X. Official protocol docs remain authoritative.
+Philoxenia uses STRK20 for optional private STRK/DAI **booking fund**, **chat sends**, **AVNU private swaps**, and **MessageMailbox** anchors on Ready X. Official protocol docs remain authoritative.
+
+## In plain language
+
+When you **shield** STRK or DAI in Ready X, the amount moves into Starknet’s **privacy pool**. From there Philoxenia can:
+
+- **Book & pay** privately (anonymizer → escrow)
+- **Send STRK/DAI** to a friend in chat without exposing the amount on-chain
+- **Swap STRK ↔ DAI** privately via AVNU (inside the pool)
+- **Anchor** a sealed chat note hash on-chain (MessageMailbox)
+
+Shield and unshield still show a public ERC-20 leg — we label that honestly in the app.
 
 ## Official resources
 
@@ -29,8 +40,11 @@ Philoxenia does **not** implement the STRK20 protocol. It integrates via the **W
 
 ## Philoxenia paths (complete)
 
-1. **Wallet API** — shield / unshield / balances for STRK and DAI (`WalletAccountV6`, wallet API ≥ 0.10). **Ideal:** Ready X browser. Diagnose copy: **Chrome with the Ready X wallet extension is recommended**, or **open Philoxenia in the Ready X browser** (not “in-app browser” / “Chrome or iPhone”). Shield checklist: **Desktop:** Chrome with the Ready X wallet extension is recommended; **Phone:** open Philoxenia in the Ready X browser. `ReadyWalletNotice` (landing + auth modal): **Desktop:** Chrome with the Ready X wallet extension is recommended; **Phone:** download the Ready X wallet app and open Philoxenia in the Ready X browser. Connect busy: **Connecting Ready X…**.
+1. **Wallet API** — shield / unshield / balances for STRK and DAI (`WalletAccountV6`, wallet API ≥ 0.10).
 2. **Anonymizer** — private booking fund via `BookingEscrowAnonymizer.privacy_invoke` ([booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md))
+3. **AVNU private swap** — `executePrivateSwap` inside the pool ([payments.md](./payments.md)); sell token must be shielded first.
+4. **MessageMailbox** — optional sealed-note hash anchor ([message-mailbox.md](./message-mailbox.md))
+5. **Private peer transfer** — STRK20 `invoke` to friend wallet in chat
 
 ### Private fund actions (settle-all)
 
