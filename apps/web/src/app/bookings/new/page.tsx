@@ -330,7 +330,7 @@ function NewBookingForm() {
     ) {
       setRecording(true);
       setError(
-        "These nights are already paid on-chain. Recording the stay — do not Book & pay again."
+        "These nights are already paid on-chain. Recording Book & pay — do not Book & pay again."
       );
       try {
         const booking = await confirmPaidBookingWithRetry(existingPending);
@@ -484,7 +484,7 @@ function NewBookingForm() {
         clearPayInflight();
         setRecording(true);
         setError(
-          "Book & pay landed on Starknet. Recording the stay — do not Book & pay again."
+          "Book & pay landed on Starknet. Recording Book & pay — do not Book & pay again."
         );
         void confirmPaidBookingWithRetry(paid)
           .then((booking) => router.push(`/bookings/${booking.id}`))
@@ -547,7 +547,7 @@ function NewBookingForm() {
       <p className="mb-8 text-sm text-muted leading-relaxed">
         Use the calendar: tap each night you want. Nights not consecutive is fine.
         One tap selects, another deselects. Then Book & pay in STRK or DAI. If Ready X
-        already charged you, wait for Recording stay… — do not Book & pay
+        already charged you, wait for Recording Book & pay… — do not Book & pay
         twice; open My stays.
       </p>
 
@@ -719,7 +719,7 @@ function NewBookingForm() {
 
           {recording && (
             <p className="text-sm text-amber-800 leading-relaxed">
-              Book & pay landed on-chain. Recording the stay in Philoxenia —
+              Book & pay landed on-chain. Recording Book & pay in Philoxenia —
               do not tap Book & pay again.
             </p>
           )}
@@ -746,7 +746,7 @@ function NewBookingForm() {
             )}
             {payLocked ? (
               <Button type="button" disabled>
-                Recording stay…
+                Recording Book & pay…
               </Button>
             ) : !walletReady ? (
               <Button
@@ -763,7 +763,7 @@ function NewBookingForm() {
                 onClick={payAndBook}
               >
                 {recording
-                  ? "Recording stay…"
+                  ? "Recording Book & pay…"
                   : submitting
                     ? fundMode === "private"
                       ? "Private Book & pay…"

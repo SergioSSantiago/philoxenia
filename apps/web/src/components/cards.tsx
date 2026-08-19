@@ -45,9 +45,9 @@ export function stayStatusLabel(status: BookingStatus): string {
     case "cancelled":
       return "Nights freed";
     case "pending":
-      return "Recording stay…";
+      return "Recording Book & pay…";
     case "funded":
-      return "Paid — recording stay";
+      return "Paid — recording Book & pay";
     case "confirmed":
       return "Book & pay confirmed";
     case "refunded":

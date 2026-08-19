@@ -26,7 +26,7 @@ On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for **Private 
 
 1. [ ] Guest shields enough **STRK or DAI** on Ready X (match the pay asset)
 2. [ ] Book & pay nights → **Private**
-3. [ ] Confirm succeeds only after chain settle (fake txHash must fail). If Ready X throws after the tx, Book & pay shows **Recording stay…** — do not Book & pay twice.
+3. [ ] Confirm succeeds only after chain settle (fake txHash must fail). If Ready X throws after the tx, Book & pay shows **Recording Book & pay…** — do not Book & pay twice.
 4. [ ] Stay shows **Book & pay complete**, Voyager link, privacy = Private
 5. [ ] Host receives the pay asset; connector (if any) paid
 
