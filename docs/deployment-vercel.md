@@ -110,7 +110,7 @@ vercel ls philoxenia
 # or open https://vercel.com/sergiossantiagos-projects/philoxenia
 ```
 
-The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home`. **Ideal for Private Book & pay:** Ready X in-app browser (see [product.md](./product.md)). Auth modal: copy the link and open it inside Ready X (best for **Private Book & pay**). Connecting shows **Connecting Ready X…** (not “Ready X loading…”) until the session is ready.
+The web app uses the Philoxenia cameo as favicon (`apps/web/public/philoxenia-mark.png`). The header logo links to `/`. Sign-in is a Ready X modal on `/home`. Auth modal helper: **open Philoxenia in the Ready X browser** — copy the link and open it in the Ready X wallet app (not “Prefer the in-app browser”). Connecting shows **Connecting Ready X…** (not “Ready X loading…”) until the session is ready.
 
 **iPhone:** Safari can **Connect** via WalletConnect (`ready://` after the starknetkit patch). Login is two steps (Connect, then Sign in). **Private Book & pay** still prefers the Ready X in-app browser.
 

@@ -106,8 +106,8 @@ function notCapableReason(versions: string[], hadWallet: boolean): string {
   if (!hadWallet) {
     if (keys.length === 0) {
       return fx
-        ? "Ready X is not available on Firefox. Use Chrome + Ready X (Smart Wallet + Private). On iPhone, Safari can Connect; Private Book & pay needs the Ready X in-app browser."
-        : "Ready X not detected. Install Ready X in Chrome, enable Smart Wallet + Private, refresh, and reconnect. On iPhone, Safari can Connect; Private Book & pay needs the Ready X in-app browser.";
+        ? "Ready X is not available on Firefox. Chrome with the Ready X wallet extension is recommended, or download the Ready X wallet app and open Philoxenia in the Ready X browser."
+        : "Ready X not detected. Chrome with the Ready X wallet extension is recommended. On a phone, download the Ready X wallet app and open Philoxenia in the Ready X browser.";
     }
     return "A Starknet object is injected but Wallet API discovery failed. Unlock Ready X, Refresh Philoxenia, and reconnect.";
   }

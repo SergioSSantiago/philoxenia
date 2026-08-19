@@ -216,8 +216,8 @@ export function AuthModal() {
                     Get Ready X
                   </a>
                   <p className="text-xs text-muted leading-relaxed">
-                    Prefer the in-app browser? Copy the link and open it inside
-                    Ready X (best for Private Book & pay).
+                    On a phone, open Philoxenia in the Ready X browser. Copy
+                    the link and open it in the Ready X wallet app.
                   </p>
                   <button
                     type="button"

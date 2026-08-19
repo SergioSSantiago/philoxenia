@@ -49,8 +49,8 @@ See the full guide: **[connectors.md](./connectors.md)** — Earnings UI, friend
 
 ### What you must do (checklist)
 
-1. **Desktop:** Install **Ready X** from [ready.co](https://www.ready.co/) in **Chrome** (not Firefox). Enable **Smart Wallet** and **Private**.
-2. **iPhone:** Install **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** (not the older Ready / Crypto Card app). In Safari tap **Connect Ready X** (opens Ready X via `ready://` WalletConnect). For **Private Book & pay**, open the same URL in the **Ready X in-app browser**.
+1. **Desktop:** Chrome with the **Ready X** wallet extension is recommended.
+2. **Phone:** Download the **[Ready X](https://apps.apple.com/us/app/ready-x/id6744935604)** wallet app and open Philoxenia in the **Ready X browser**.
 3. Connect Ready X → **Approve in Ready X** (SNIP-12). On mobile Safari this is two steps: Connect, then Approve in Ready X (second open of Ready X).
 
 Braavos is not offered. There is no `/auth` page — Connect is a modal on `/home` (`ReadyWalletNotice` compact in the modal; full notice on the landing — **Desktop:** Chrome with the Ready X wallet extension is recommended; **Phone:** download the Ready X wallet app and open Philoxenia in the Ready X browser). Unsigned `/home` heading: **Book & pay with people you trust**. The StarknetKit picker labels the injected wallet **Ready X** (connector id remains `argentX`). Display name is optional; friends add you by **Ready X wallet** only. Auth label **Display name (friends add you by Ready X wallet)** (not “Display name (optional)”). Name field placeholder **Display name**. Connect busy state is **Connecting Ready X…**. iPhone modal: **Copy Philoxenia link for Ready X**. Invalid address: **Invalid Ready X wallet address**. Sign-in fail: **Invalid Ready X signature. Connect Ready X again.** Expired challenge: **Sign-in expired. Connect Ready X again.** Missing JWT: **Connect Ready X to continue.** Missing/expired `/invite/:token`: **This place invite isn’t available to Book & pay.** Missing stay: **This stay isn’t available to Book & pay.**

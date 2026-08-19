@@ -110,7 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const connector = pickReadyConnector(connectors);
     if (!connector) {
       throw new Error(
-        "Ready X not found. Install Ready X in Chrome (Smart Wallet + Private), or open Philoxenia in the Ready X app browser on iPhone."
+        "Ready X not found. Chrome with the Ready X wallet extension is recommended, or download the Ready X wallet app and open Philoxenia in the Ready X browser."
       );
     }
     await connectAsync({ connector });
@@ -125,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const connector = pickReadyConnector(connectors);
     if (!connector) {
       throw new Error(
-        "Ready X not found. Install Ready X in Chrome (Smart Wallet + Private), or open Philoxenia in the Ready X app browser on iPhone."
+        "Ready X not found. Chrome with the Ready X wallet extension is recommended, or download the Ready X wallet app and open Philoxenia in the Ready X browser."
       );
     }
     try {
