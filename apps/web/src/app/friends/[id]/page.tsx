@@ -222,7 +222,7 @@ export default function FriendProfilePage() {
                           <>
                             <span className="mx-2 text-border">·</span>
                             <span className="font-medium text-accent">
-                              You earn {listing.connectorRewardPercent}% connector reward
+                              You earn {listing.connectorRewardPercent}% connector of stay
                             </span>
                             <span className="text-muted"> if they Book & pay</span>
                           </>
@@ -230,7 +230,7 @@ export default function FriendProfilePage() {
                           <>
                             <span className="mx-2 text-border">·</span>
                             <span className="text-muted">
-                              No connector reward
+                              No connector % of stay
                             </span>
                           </>
                         )}

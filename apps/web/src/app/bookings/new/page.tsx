@@ -561,7 +561,7 @@ function NewBookingForm() {
             variant="secondary"
             onClick={() => router.push(`/listings/${listing.id}`)}
           >
-            Back to place
+            Back to this place
           </Button>
         </Card>
       ) : openNights.length === 0 ? (

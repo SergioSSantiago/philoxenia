@@ -89,7 +89,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
           <span className="text-muted"> / night</span>
           {listing.connectorRewardPercent > 0 ? (
             <span className="ml-2 text-xs text-accent">
-              {listing.connectorRewardPercent}% connector reward
+              {listing.connectorRewardPercent}% connector of stay
             </span>
           ) : null}
           <span className="mt-1 block text-xs text-muted">

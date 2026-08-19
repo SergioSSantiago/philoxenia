@@ -461,7 +461,7 @@ export default function ListingPage() {
                   <span className="font-medium text-foreground">
                     no connector
                   </span>
-                  . People who Book & pay through it do not create a connector reward.
+                  . People who Book & pay through it do not create a connector % of stay.
                   Friends who share your place become connectors on their own
                   place invites.
                 </p>
