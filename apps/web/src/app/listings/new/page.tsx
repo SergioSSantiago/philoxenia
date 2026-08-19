@@ -66,7 +66,7 @@ export default function CreateListingPage() {
         throw new Error("Add at least one place photo");
       }
       if (availableDays.length < 1) {
-        throw new Error("Open at least one night guests can Book & pay");
+        throw new Error("Open at least one night to Book & pay");
       }
       if (!cancellationTerms.trim()) {
         throw new Error("Write cancellation terms for this place");
@@ -138,7 +138,7 @@ export default function CreateListingPage() {
                 required
               />
               <span className="mt-1 block text-xs text-muted">
-            Used when you open nights guests can Book & pay. You can set a
+            Used when you open nights to Book & pay. You can set a
             different DAI price per night there.
               </span>
             </label>
@@ -172,15 +172,15 @@ export default function CreateListingPage() {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-lg text-foreground">Open nights guests can Book & pay</h2>
+            <h2 className="text-lg text-foreground">Open nights to Book & pay</h2>
             <p className="text-xs text-muted leading-relaxed">
               Same calendar as when you edit a place: tap nights one by one,
-              or add a range, and set per-night DAI list prices. Guests Book &amp;
+              or add a range, and set per-night DAI list prices. Book &amp;
               pay those nights in STRK or DAI.
             </p>
             {!pricePerNight || Number(pricePerNight) <= 0 ? (
               <p className="text-sm text-muted">
-                Enter a default DAI price above to open nights guests can Book
+                Enter a default DAI price above to open nights to Book
                 &amp; pay.
               </p>
             ) : (

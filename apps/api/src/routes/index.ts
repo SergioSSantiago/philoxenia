@@ -465,7 +465,7 @@ export async function registerRoutes(app: FastifyInstance) {
         }
         return reply
           .status(400)
-          .send({ error: "Open at least one night guests can Book & pay" });
+          .send({ error: "Open at least one night to Book & pay" });
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Could not save open nights";

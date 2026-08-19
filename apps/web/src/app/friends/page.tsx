@@ -334,7 +334,7 @@ export default function FriendsPage() {
       <section>
         <SectionTitle
           title="Friends to Book & pay"
-          subtitle="Tap a name or Ready X wallet to see places you can Book & pay. Remove ends the friendship for both of you."
+          subtitle="Tap a name or Ready X wallet to see places you can Book & pay. End friendship ends it for both of you."
         />
         {data.friends.length === 0 ? (
           <EmptyState message="No friends yet. Add someone by Ready X wallet address (0x optional) — they must Connect Ready X once, then you can Book & pay their places." />

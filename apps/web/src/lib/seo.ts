@@ -22,7 +22,7 @@ export const rootMetadata: Metadata = {
     "DAI",
     "Ready X",
     "Book & pay",
-    "trust network",
+    "friends to Book & pay",
     "earn as connector",
   ],
   authors: [{ name: "Sergio Sapiña Santiago", url: "https://github.com/SergioSSantiago" }],

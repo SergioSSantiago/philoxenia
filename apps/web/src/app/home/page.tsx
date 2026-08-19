@@ -113,7 +113,7 @@ export default function HomePage() {
         <section>
           <SectionTitle
             title="Places from friends to Book & pay"
-            subtitle="Book & pay STRK or DAI through your trust network"
+            subtitle="Places from friends to Book & pay — STRK or DAI"
           />
           {data.networkListings.length === 0 ? (
             <EmptyState message="No places from friends yet. Add someone by Ready X wallet on Friends to discover places you can Book & pay." />

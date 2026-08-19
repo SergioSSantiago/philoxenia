@@ -135,7 +135,7 @@ export default function ListingPage() {
       );
       setListing(updated);
       setDraftDays(null);
-      setAvailMsg("Open nights saved — guests can Book & pay.");
+      setAvailMsg("Open nights saved — friends can Book & pay.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save open nights");
     } finally {
@@ -286,7 +286,7 @@ export default function ListingPage() {
           <div className="mt-4">
             <p className="mb-3 text-sm font-medium text-foreground">
               {isHost
-                ? "Open nights guests can Book & pay"
+                ? "Open nights to Book & pay"
                 : "Open nights to Book & pay"}
             </p>
             {isHost ? (
@@ -462,7 +462,7 @@ export default function ListingPage() {
                   <span className="font-medium text-foreground">
                     no connector
                   </span>
-                  . Guests who Book & pay through it do not create a connector reward.
+                  . People who Book & pay through it do not create a connector reward.
                   Friends who share your place become connectors on their own
                   place invites.
                 </p>

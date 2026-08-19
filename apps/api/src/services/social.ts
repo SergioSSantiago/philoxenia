@@ -456,7 +456,7 @@ export async function createListing(
       }
     }
   } else {
-    throw new Error("Open at least one night guests can Book & pay");
+    throw new Error("Open at least one night to Book & pay");
   }
 
   dayRows.sort((a, b) => a.day.localeCompare(b.day));
