@@ -29,7 +29,7 @@ Philoxenia does **not** implement the STRK20 protocol. It integrates via the **W
 
 ## Philoxenia paths (complete)
 
-1. **Wallet API** — shield / unshield / balances for STRK and DAI (`WalletAccountV6`, wallet API ≥ 0.10). **Ideal:** Ready X in-app browser. Firefox / desktop legacy Ready usually lacks ≥ 0.10 → Private unavailable. Diagnose copy: **Private Book & pay** needs the Ready X in-app browser / Smart Wallet + Private (API ≥ 0.10). Profile, swap, chat, and Private Book & pay errors say **Ready X** (Chrome or iPhone). Shield panel: **Ready X session needed** when signing is missing. `ReadyWalletNotice` (landing + auth modal): **Private Book & pay** in the Ready X in-app browser. Connect busy: **Connecting Ready X…**.
+1. **Wallet API** — shield / unshield / balances for STRK and DAI (`WalletAccountV6`, wallet API ≥ 0.10). **Ideal:** Ready X in-app browser. Firefox / desktop legacy Ready usually lacks ≥ 0.10 → Private unavailable. Diagnose copy: **Private Book & pay** needs the Ready X in-app browser / Smart Wallet + Private (API ≥ 0.10). Profile, swap, chat, and Private Book & pay errors say **Ready X** (Chrome or iPhone). Shield panel: **Ready X session needed** when signing is missing. `ReadyWalletNotice` (landing + auth modal): **Desktop:** Chrome with the Ready X wallet extension is recommended; **Phone:** download the Ready X wallet app and open Philoxenia in the Ready X browser. Connect busy: **Connecting Ready X…**.
 2. **Anonymizer** — private booking fund via `BookingEscrowAnonymizer.privacy_invoke` ([booking-escrow-anonymizer.md](./booking-escrow-anonymizer.md))
 
 ### Private fund actions (settle-all)

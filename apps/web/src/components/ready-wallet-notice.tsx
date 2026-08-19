@@ -19,23 +19,18 @@ export function ReadyWalletNotice({
       </p>
       {compact ? (
         <p className="mt-1.5 text-xs leading-relaxed text-red-800/95">
-          <strong>Desktop:</strong> Chrome + Ready X extension,{" "}
-          <strong>Smart Wallet</strong> + <strong>Private</strong>.{" "}
-          <strong>iPhone:</strong> install{" "}
-          <strong>Ready X</strong>. Safari can <strong>Connect</strong>{" "}
-          (WalletConnect). For Private Book &amp; pay, open Philoxenia in the Ready X
-          in-app browser.{" "}
-          <strong>Firefox:</strong> no Ready X — no Private Book &amp; pay.
+          <strong>Desktop:</strong> Chrome with the Ready X wallet extension is
+          recommended. <strong>Phone:</strong> download the Ready X wallet app
+          and open Philoxenia in the Ready X browser.
         </p>
       ) : (
         <ul className="mt-2 list-disc space-y-1.5 pl-4 text-xs leading-relaxed text-red-800/95 sm:text-sm">
           <li>
-            <strong>Desktop:</strong> use <strong>Chrome</strong> with the{" "}
-            <strong>Ready X</strong> extension. Enable{" "}
-            <strong>Smart Wallet</strong> and <strong>Private</strong>.
+            <strong>Desktop:</strong> Chrome with the{" "}
+            <strong>Ready X</strong> wallet extension is recommended.
           </li>
           <li>
-            <strong>iPhone:</strong> install{" "}
+            <strong>Phone:</strong> Download the{" "}
             <a
               href="https://apps.apple.com/us/app/ready-x/id6744935604"
               target="_blank"
@@ -43,14 +38,8 @@ export function ReadyWalletNotice({
               className="font-semibold underline underline-offset-2"
             >
               Ready X
-            </a>
-            . From Safari you can <strong>Connect</strong> (WalletConnect
-            redirect into Ready X). For Private Book &amp; pay, prefer Philoxenia
-            inside the <strong>Ready X in-app browser</strong>.
-          </li>
-          <li>
-            <strong>Firefox:</strong> Ready X extension is unavailable — no
-            Private Book &amp; pay. Use Chrome + Ready X or the Ready X app browser.
+            </a>{" "}
+            wallet app and open Philoxenia in the Ready X browser.
           </li>
         </ul>
       )}

@@ -39,7 +39,6 @@ Landing intro: **publish places, Book & pay**, and connectors who earn by **shar
 Philoxenia connects **Ready X** only. Braavos is not supported.
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:12px 14px; border-radius:8px;">
-<strong>Desktop:</strong> Chrome + Ready X with <strong>Smart Wallet</strong> and <strong>Private</strong>.<br/>
-<strong>iPhone:</strong> Ready X — Safari Connect (WC) or <strong>app browser</strong> for Private.<br/>
-<strong>Firefox:</strong> no Ready X → no Private Book & pay.
+<strong>Desktop:</strong> Chrome with the Ready X wallet extension is recommended.<br/>
+<strong>Phone:</strong> Download the Ready X wallet app and open Philoxenia in the Ready X browser.
 </p>
