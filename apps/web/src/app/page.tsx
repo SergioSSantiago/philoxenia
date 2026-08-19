@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AuthorContact } from "@/components/author-contact";
 import { LandingFrame } from "@/components/landing-frame";
 import { ReadyWalletNotice } from "@/components/ready-wallet-notice";
 import { Button } from "@/components/ui";
@@ -115,15 +116,11 @@ export default function LandingPage() {
           <span aria-label="Switzerland" role="img">
             🇨🇭
           </span>{" "}
-          by{" "}
-          <a
-            href="https://github.com/SergioSSantiago"
-            className="text-foreground underline-offset-2 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Sergio SSantiago
-          </a>
+          by <AuthorContact />
+        </p>
+        <p className="mx-auto mt-3 max-w-md text-xs leading-relaxed">
+          Bugs, questions, or anything else: tap the name. That is the only
+          contact point.
         </p>
       </footer>
     </LandingFrame>
