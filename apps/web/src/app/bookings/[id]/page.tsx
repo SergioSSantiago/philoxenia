@@ -78,7 +78,7 @@ export default function BookingDetailPage() {
   if (!booking) {
     return (
       <Shell>
-        <p className="text-muted">Loading stay…</p>
+        <p className="text-muted">Loading this Book & pay…</p>
       </Shell>
     );
   }

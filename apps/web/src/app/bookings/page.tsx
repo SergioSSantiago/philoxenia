@@ -31,7 +31,7 @@ export default function BookingsPage() {
         subtitle="Cards show You host or You stay. Book & pay is STRK or DAI; cancel only frees nights."
       />
       {bookings == null ? (
-        <p className="text-sm text-muted">Loading stays…</p>
+        <p className="text-sm text-muted">Loading Book & pay stays…</p>
       ) : bookings.length === 0 ? (
         <EmptyState message="No Book & pay stays yet. Book & pay a friend’s place, or wait after a place invite." />
       ) : (
