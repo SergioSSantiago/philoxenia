@@ -155,7 +155,7 @@ export function LocationMapPicker({
     setError("");
     const q = query.trim();
     if (q.length < 3) {
-      setError("Type at least 3 characters to search");
+      setError("Type at least 3 characters to Search this place");
       return;
     }
     setSearching(true);
@@ -163,7 +163,7 @@ export function LocationMapPicker({
       const results = await searchPlaces(q);
       setHits(results);
       if (results.length === 0) {
-        setError("No places found — try a more specific address");
+        setError("No places found — search a more specific address");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not find that place");

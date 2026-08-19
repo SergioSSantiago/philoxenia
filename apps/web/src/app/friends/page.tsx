@@ -54,7 +54,7 @@ export default function FriendsPage() {
       router.replace("/home");
       return;
     }
-    load().catch(() => setActionError("Could not load friends to Book & pay."));
+    load().catch(() => setActionError("Could not load friends to Book & pay"));
     const id = window.setInterval(() => {
       if (document.visibilityState === "visible") {
         load().catch(() => undefined);
@@ -83,7 +83,7 @@ export default function FriendsPage() {
       setResults(users);
       if (users.length === 0) {
         setSearchError(
-          "No Philoxenia user with that Ready X wallet. They must Connect Ready X once before you can add them."
+          "No one on Philoxenia with that Ready X wallet. They must Connect Ready X once before you can add them."
         );
       }
     } catch (err) {
@@ -321,7 +321,7 @@ export default function FriendsPage() {
                         )
                       }
                     >
-                      {busyId === r.id ? "Cancelling…" : "Cancel friend request to Book & pay"}
+                      {busyId === r.id ? "Cancelling friend request…" : "Cancel friend request to Book & pay"}
                     </Button>
                   }
                 />

@@ -306,7 +306,7 @@ export async function registerRoutes(app: FastifyInstance) {
         const message =
           err instanceof Error
             ? err.message
-            : "Could not load this friend’s places to Book & pay";
+            : "Could not load places to Book & pay";
         const status = message.includes("Connect Ready X once")
           ? 404
           : message.includes("Not friends")
