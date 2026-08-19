@@ -217,7 +217,7 @@ export default function BookingDetailPage() {
             </div>
           )}
           <div className="flex justify-between">
-            <span className="text-muted">Host paid at Book & pay</span>
+            <span className="text-muted">Paid who publishes this place at Book & pay</span>
             <span>
               {formatTokenAmount(booking.hostAmount)} {booking.paymentAsset}
             </span>
@@ -267,7 +267,7 @@ export default function BookingDetailPage() {
         <div className="rounded-xl border border-border bg-background/80 px-4 py-3 text-xs leading-relaxed text-muted">
           <p className="font-medium text-foreground">Cancellation terms</p>
           <p className="mt-1">
-            Book & pay settles immediately (host + connector paid in the same tx). There
+            Book & pay settles immediately (who publishes this place + connector paid in the same tx). There
             is <span className="text-foreground">no escrow clawback</span> after
             settlement. Cancelling only frees nights. Money return is social: agree
             in Messages, then Send STRK or DAI.

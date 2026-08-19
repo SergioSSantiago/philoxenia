@@ -24,7 +24,7 @@ export default function CreateListingPage() {
   const [pricePerNight, setPricePerNight] = useState("");
   const [connectorRewardPercent, setConnectorRewardPercent] = useState(5);
   const [cancellationTerms, setCancellationTerms] = useState(
-    "Cancel frees the nights only. Book & pay already paid the host (and connector) on-chain — any money return is agreed in Messages with Send STRK or DAI. No automatic clawback."
+    "Cancel frees the nights only. Book & pay already paid who publishes this place (and connector) on-chain — any money return is agreed in Messages with Send STRK or DAI. No automatic clawback."
   );
   const [photos, setPhotos] = useState<string[]>([]);
   const [mapLocation, setMapLocation] = useState<MapLocationValue | null>(null);
@@ -203,7 +203,7 @@ export default function CreateListingPage() {
             <h2 className="text-lg text-foreground">Cancellation terms</h2>
             <p className="text-xs text-muted leading-relaxed">
               Off-chain policy only — escrow does not enforce it. After Book &amp;
-              pay, host and connector already have the funds. Cancel frees
+              pay, who publishes this place and the connector already have the funds. Cancel frees
               nights; any return is Send STRK or DAI in Messages. Write terms
               friends to Book & pay will honour.
             </p>

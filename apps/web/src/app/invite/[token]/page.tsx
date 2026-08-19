@@ -115,11 +115,11 @@ export default function InvitePage() {
           <span className="font-medium text-foreground">
             {invite.host.displayName}
           </span>
-          . You must be friends with the host to view and Book & pay (STRK or
+          . You must be friends with who publishes this place to view and Book & pay (STRK or
           DAI).
           {invite.hasConnector && invite.connector
             ? " If you Book & pay through this place invite, the connector reward goes to their Ready X wallet."
-            : " This host place invite has no connector reward."}
+            : " This place invite has no connector reward."}
         </p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -130,7 +130,7 @@ export default function InvitePage() {
               <p className="text-xs font-medium uppercase tracking-wide text-muted">
                 Connector
               </p>
-              <p className="mt-1 text-sm text-muted">None — host place invite</p>
+              <p className="mt-1 text-sm text-muted">None — they published this place invite</p>
             </div>
           )}
           <UserBadge user={invite.host} role="Publishes this place" />
