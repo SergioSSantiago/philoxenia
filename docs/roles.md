@@ -26,7 +26,7 @@ Philoxenia has **no public marketplace**. The network grows only when someone in
 - **Trust-native** — you only introduce people you actually know; guests arrive with a vouch, not a cold public listing
 - **Protocol takes a thin cut of *your* reward only** — 10% of the connector share (never of direct host↔guest stays)
 
-**Example:** guest pays **1,000 DAI**, host set **5%** connector → **you 45 DAI**, protocol 5 DAI, host 950 DAI.
+**Example:** they Book & pay **1,000 DAI**, **5%** connector → **you 45 DAI**, protocol 5 DAI, **950 DAI** to who publishes this place.
 
 ### How to start earning (2 minutes)
 

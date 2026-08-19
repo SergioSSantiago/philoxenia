@@ -21,7 +21,7 @@ Roles overview (Host · Guest · Connector): **[roles.md](./roles.md)**
 | No inventory, no hosting | You don’t publish a place — you introduce guests |
 | Aligned with the protocol | Philoxenia only earns **10% of your connector reward** (not of the whole stay). Direct **Book & pay** stays **0%** protocol |
 
-**Example:** guest pays **1,000 DAI**, host set **5%** connector → you receive **45 DAI**, protocol **5 DAI**, host **950 DAI**.
+**Example:** they Book & pay **1,000 DAI**, **5%** connector → you receive **45 DAI**, protocol **5 DAI**, **950 DAI** to who publishes this place.
 
 Hosts who set a healthy connector % make their friends want to share. Connectors who share make hosts get filled nights. Guests get a warm introduction instead of a cold marketplace.
 

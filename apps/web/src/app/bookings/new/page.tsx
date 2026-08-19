@@ -545,7 +545,7 @@ function NewBookingForm() {
       <h1 className="mb-2 text-4xl">Book & pay</h1>
       <p className="mb-2 text-muted">{listing.title}</p>
       <p className="mb-8 text-sm text-muted leading-relaxed">
-        Use the calendar: tap each night you want (they need not be consecutive).
+        Use the calendar: tap each night you want. Nights not consecutive is fine.
         One tap selects, another deselects. Then Book & pay in STRK or DAI. If Ready X
         already charged you, wait for Recording stay… — do not Book & pay
         twice; open My stays.
@@ -567,7 +567,7 @@ function NewBookingForm() {
       ) : openNights.length === 0 ? (
         <Card>
           <p className="text-sm text-muted">
-            No open nights. Ask the host to open nights you can Book & pay.
+            No open nights. Ask them to open nights to Book & pay.
           </p>
         </Card>
       ) : (
@@ -704,7 +704,7 @@ function NewBookingForm() {
                   <p className="text-xs text-muted leading-relaxed">
                     {fundMode === "private"
                       ? "Book & pay from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records who publishes this place, who Book & pay, and amounts. Shield the Book & pay asset on Ready X first — proofs can take a while."
-                      : "Public Book & pay: Approve in Ready X, then fund. Visible on explorers."}
+                      : "Public Book & pay: Approve in Ready X, then fund. Visible on Voyager."}
                   </p>
                 </div>
               )}

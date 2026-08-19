@@ -511,7 +511,7 @@ export default function ChatThreadPage() {
             <p className="mb-2 text-xs text-amber-800">
               {conversation.friend.messagePublicKey
                 ? "Preparing sealed Messages keys…"
-            : "Ask your friend to open Messages once so their sealed Messages key is published."}
+            : "Ask them to open sealed Messages once so their sealed Messages key is published."}
             </p>
           )}
           <div className="flex items-end gap-2">

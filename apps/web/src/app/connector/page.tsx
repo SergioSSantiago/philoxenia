@@ -131,7 +131,7 @@ export default function ConnectorPage() {
         </ol>
         <p className="text-xs leading-relaxed text-muted">
           Example: a 1,000 DAI stay with 5% connector → you get 45 DAI, protocol
-          5 DAI, host 950 DAI.
+          5 DAI, 950 DAI to who publishes this place.
         </p>
       </Card>
 
