@@ -86,7 +86,7 @@ export default function LandingPage() {
         {[
           {
             title: "Publish places",
-            body: "Publish places for friends. Set a connector % so your network wants to bring guests. Direct Book & pay stays 0% protocol.",
+            body: "Publish places for friends. Set a connector % so friends share a place invite and earn. Direct Book & pay stays 0% protocol.",
           },
           {
             title: "Earn as a connector",

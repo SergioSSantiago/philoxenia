@@ -164,7 +164,7 @@ export default function HomePage() {
             subtitle="Recent Book & pay stays — You host or You stay"
           />
           {data.myBookings.length === 0 ? (
-            <EmptyState message="No Book & pay stays yet. Book & pay a friend’s place, or wait for a guest after a place invite." />
+            <EmptyState message="No Book & pay stays yet. Book & pay a friend’s place, or wait after a place invite." />
           ) : (
             <div className="space-y-4">
               {data.myBookings.slice(0, 5).map((b) => (

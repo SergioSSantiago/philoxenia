@@ -142,7 +142,7 @@ export default function FriendsPage() {
   return (
     <Shell>
       <SectionTitle
-        title="Friends"
+        title="Friends to Book & pay"
         subtitle="Add people by Ready X wallet address only — display names are not searchable."
       />
 

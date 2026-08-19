@@ -121,7 +121,7 @@ export default function CreateListingPage() {
                 className="mt-1 min-h-28 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="What makes this place special for a friend who Book & pay?"
+                placeholder="What makes this place special for a friend who can Book & pay?"
                 required
               />
             </label>
@@ -205,7 +205,7 @@ export default function CreateListingPage() {
               Off-chain policy only — escrow does not enforce it. After Book &amp;
               pay, host and connector already have the funds. Cancel frees
               nights; any return is Send STRK or DAI in Messages. Write terms
-              your network will honour.
+              friends to Book & pay will honour.
             </p>
             <textarea
               className="min-h-24 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm"

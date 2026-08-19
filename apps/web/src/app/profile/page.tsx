@@ -115,7 +115,7 @@ export default function ProfilePage() {
         <Card>
           <WalletAddress address={user.walletAddress} />
           <p className="mt-4 text-sm text-muted leading-relaxed">
-            Share this Ready X wallet so trusted friends can add you. They Book
+            Share this Ready X wallet so friends can add you. They Book
             & pay in STRK or DAI.
           </p>
         </Card>
