@@ -48,7 +48,7 @@ function SearchResultAction({
   if (relationship === "friend") {
     return (
       <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-        <span className="text-sm text-muted">Already friends</span>
+        <span className="text-sm text-muted">Already friends to Book & pay</span>
         <Button className="w-full sm:w-auto" onClick={() => onMessages(user.id)}>
           Messages
         </Button>
@@ -59,7 +59,7 @@ function SearchResultAction({
   if (relationship === "pending_outgoing" && requestId) {
     return (
       <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-        <span className="text-sm text-muted">Request pending</span>
+        <span className="text-sm text-muted">Friend request sent</span>
         <Button
           variant="secondary"
           className="w-full sm:w-auto"
