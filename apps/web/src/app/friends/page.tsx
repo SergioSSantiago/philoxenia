@@ -66,7 +66,7 @@ function SearchResultAction({
           disabled={busy}
           onClick={() => onCancel(requestId)}
         >
-          {busy ? "Cancelling friend request…" : "Cancel friend request"}
+          {busy ? "Cancelling friend request…" : "Cancel friend request to Book & pay"}
         </Button>
       </div>
     );
@@ -89,7 +89,7 @@ function SearchResultAction({
           disabled={busy}
           onClick={() => onReject(requestId)}
         >
-          Reject
+          Reject to Book & pay
         </Button>
       </div>
     );
