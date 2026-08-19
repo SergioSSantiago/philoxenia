@@ -165,7 +165,7 @@ export async function sendFriendRequest(fromUserId: string, toUserId: string) {
   });
   if (reverse) {
     throw new Error(
-      "They already sent you a request — check Incoming requests"
+      "They already sent you a request — check Friend requests to Book & pay"
     );
   }
 
@@ -296,7 +296,7 @@ export async function cancelFriendRequest(
 
 export async function removeFriend(currentUserId: string, friendId: string) {
   if (currentUserId === friendId) {
-    throw new Error("You can’t remove yourself.");
+    throw new Error("You can’t end friendship with yourself.");
   }
 
   const [userAId, userBId] = orderedPair(currentUserId, friendId);
@@ -799,7 +799,7 @@ export async function deleteListing(listingId: string, hostId: string) {
   for (const b of paid) {
     if (hasActivePaidNights(b.nights, b.checkOut, todayKey)) {
       throw new Error(
-        "Cannot delete this place while it has active Book & pay stays. Wait until those stays are past, or mark them cancelled with the guest."
+        "Cannot delete this place while it has active Book & pay stays. Wait until those stays are past, or Free nights on those stays."
       );
     }
   }
@@ -1118,8 +1118,8 @@ export async function quoteBooking(
     nightBreakdown: prepared.nightBreakdown,
     note:
       paymentAsset === "DAI"
-        ? "List prices are DAI per night. Book & pay in DAI settles 1:1. Host + connector are paid immediately."
-        : "List prices are DAI per night. STRK amount uses the live DAI/STRK market rate at quote time. Host + connector are paid immediately.",
+        ? "List prices are DAI per night. Book & pay in DAI settles 1:1. Who publishes this place and the connector are paid immediately."
+        : "List prices are DAI per night. STRK amount uses the live DAI/STRK market rate at quote time. Who publishes this place and the connector are paid immediately.",
   };
 }
 

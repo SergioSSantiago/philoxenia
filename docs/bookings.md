@@ -51,7 +51,7 @@ Fake or unrelated hashes are rejected. Confirm also posts a chat/bell notice: **
 
 | Method | Path | Notes |
 |--------|------|-------|
-| POST | `/bookings/quote` | Quote |
+| POST | `/bookings/quote` | Quote. Note: **Who publishes this place and the connector are paid immediately** (not “Host + connector”) |
 | POST | `/bookings/confirm` | Verified create → `completed`. Fallback fail **Could not record this Book & pay stay** (not “Confirm booking failed”). Direct POST `/bookings` is rejected: **Stays are recorded only after Book & pay.** |
 | POST | `/bookings/recover` | Recover a settled Book & pay. Fallback fail **Could not recover this Book & pay stay** |
 | POST | `/bookings/:id/social-cancel` | Free nights. Confirm ends **Free these nights?** Fail **Could not free these nights** |

@@ -343,8 +343,8 @@ export default function ListingPage() {
           </div>
 
           <p className="mt-4 text-sm text-muted leading-relaxed">
-            Cancellation terms: {listing.cancellationTerms}. After Book & pay, host
-            and connector already have the funds — cancel frees nights; any
+            Cancellation terms: {listing.cancellationTerms}. After Book & pay, who
+            publishes this place and the connector already have the funds — cancel frees nights; any
             return is Send STRK or DAI in Messages.
           </p>
 
@@ -416,7 +416,7 @@ export default function ListingPage() {
 
           {isHost && (
             <p className="mt-3 text-sm text-muted">
-              You own this place — Book & pay is disabled for the host.
+              You published this place — Book & pay is disabled here.
             </p>
           )}
 

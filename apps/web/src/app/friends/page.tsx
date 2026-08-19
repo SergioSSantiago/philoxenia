@@ -162,7 +162,7 @@ export default function FriendsPage() {
       <Card className="mb-8">
         {!showAdd ? (
           <Button className="w-full sm:w-auto" onClick={() => setShowAdd(true)}>
-            Add friend by Ready X wallet
+            Add by Ready X wallet
           </Button>
         ) : (
           <div>
