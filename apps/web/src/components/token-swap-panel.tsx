@@ -82,7 +82,7 @@ export function TokenSwapPanel() {
       await reconnectWallet();
       setNotice({
         title: "Ready X connected",
-        body: "You can quote and swap STRK ↔ DAI now.",
+        body: "You can swap STRK ↔ DAI now.",
         tone: "info",
         primaryLabel: "Got it",
       });
