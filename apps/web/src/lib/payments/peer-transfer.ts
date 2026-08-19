@@ -52,7 +52,7 @@ export async function transferToFriendPrivate(
   const session = await resolvePrivacyWallet(account.address);
   if (!session?.privacyCapable) {
     throw new Error(
-      "Private send needs Ready X with Smart Wallet + Private (wallet API ≥ 0.10). Or choose Public."
+      "Private Send STRK or DAI needs Chrome with the Ready X wallet extension, or Philoxenia in the Ready X browser. Or choose Public."
     );
   }
 

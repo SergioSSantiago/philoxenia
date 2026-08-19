@@ -73,7 +73,7 @@ export default function LandingPage() {
             receive the connector % on settle — paid in STRK or DAI
             (same asset they Book &amp; pay). No inventory required. Friends who
             publish fill nights; people Book &amp; pay with a vouch; you get paid
-            for the introduction.
+            when they Book &amp; pay through your place invite.
           </p>
           <div className="mt-6">
             <Link href="/connector">

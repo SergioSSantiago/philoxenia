@@ -41,7 +41,7 @@ export function landingJsonLd() {
           "Private friend-based hospitality",
           "Publish places for friends",
           "Book & pay with Starknet escrow",
-          "Connector introductions that earn on settle",
+          "Share a place invite and earn on Book & pay",
           "STRK20 Private Book & pay with Ready X",
           "Book & pay STRK or DAI",
         ],
