@@ -100,7 +100,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         hint={
           STRK20_PRIVACY_ENABLED
             ? compact
-              ? "Public · shield for Private Book & pay"
+              ? "Public · shield STRK or DAI on Ready X for Private Book & pay"
               : "Public balance · shield STRK or DAI on Ready X for Private Book & pay"
             : undefined
         }
@@ -113,8 +113,8 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
         hint={
           STRK20_PRIVACY_ENABLED
             ? compact
-              ? "Public · shield for Private Book & pay"
-              : "Public balance · shield on Ready X for Private Book & pay"
+              ? "Public · shield STRK or DAI on Ready X for Private Book & pay"
+              : "Public balance · shield STRK or DAI on Ready X for Private Book & pay"
             : undefined
         }
       />

@@ -116,7 +116,7 @@ export default function HomePage() {
             subtitle="Places from friends to Book & pay — STRK or DAI"
           />
           {data.networkListings.length === 0 ? (
-            <EmptyState message="No places from friends yet. Add someone by Ready X wallet on Friends to discover places you can Book & pay." />
+            <EmptyState message="No places from friends yet. Add by Ready X wallet on Friends to discover places you can Book & pay." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.networkListings.map((l) => (
