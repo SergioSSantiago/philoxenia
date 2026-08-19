@@ -15,6 +15,10 @@
     "lint": "npm run lint -w @philoxenia/web && npm run lint -w @philoxenia/api",
     "typecheck": "npm run typecheck -w @philoxenia/web && npm run typecheck -w @philoxenia/api && npm run typecheck -w @philoxenia/shared"
   },
+  "dependencies": {
+    "@avnu/avnu-sdk": "^4.2.0",
+    "starknet": "10.7.0"
+  },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "dotenv-cli": "^8.0.0",
