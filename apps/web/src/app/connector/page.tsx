@@ -114,7 +114,7 @@ export default function ConnectorPage() {
           <li>
             <span className="font-medium">1. Pick a friend&apos;s place</span>
             {" — "}
-            only places from people you already trust appear here.
+            only places from Friends to Book & pay appear here.
           </li>
           <li>
             <span className="font-medium">2. Share your place invite</span>
@@ -125,7 +125,7 @@ export default function ConnectorPage() {
           <li>
             <span className="font-medium">3. They Book &amp; pay</span>
             {" — "}
-            you receive the host&apos;s connector % on settle in STRK or DAI
+            you receive the connector % on settle in STRK or DAI
             (Philoxenia takes 10% of that reward only).
           </li>
         </ol>

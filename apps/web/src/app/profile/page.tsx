@@ -78,7 +78,7 @@ export default function ProfilePage() {
           </p>
           <form onSubmit={handleSaveName} className="mt-4 space-y-3">
             <label className="block text-sm">
-              <span className="text-muted">Name shown to others</span>
+              <span className="text-muted">Display name (friends add you by Ready X wallet)</span>
               <TextInput
                 className="mt-1"
                 value={displayName}

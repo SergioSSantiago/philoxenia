@@ -704,7 +704,7 @@ function NewBookingForm() {
                   <p className="text-xs text-muted leading-relaxed">
                     {fundMode === "private"
                       ? "Book & pay from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records who publishes this place, who Book & pay, and amounts. Shield the Book & pay asset on Ready X first — proofs can take a while."
-                      : "Public Book & pay: approve in Ready X, then fund. Visible on explorers."}
+                      : "Public Book & pay: Approve in Ready X, then fund. Visible on explorers."}
                   </p>
                 </div>
               )}
