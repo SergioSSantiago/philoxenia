@@ -178,7 +178,7 @@ export function TokenSwapPanel() {
 
         {!walletReady && (
           <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
-            Connect Ready X to quote and swap.
+            Connect Ready X to swap STRK ↔ DAI.
             <div className="mt-2">
               <Button
                 type="button"

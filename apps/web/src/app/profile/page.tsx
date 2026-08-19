@@ -66,7 +66,7 @@ export default function ProfilePage() {
     <Shell>
       <SectionTitle
         title="Ready X"
-        subtitle="Friends add you by Ready X wallet. Shield STRK or DAI here for Private Book & pay; swap is public AVNU."
+        subtitle="Friends add you by Ready X wallet. Shield STRK or DAI here for Private Book & pay; swap STRK ↔ DAI is public."
       />
 
       <div className="space-y-6">

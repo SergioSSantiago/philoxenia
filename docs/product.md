@@ -28,7 +28,7 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct **Book & pay**)
 - **Payment privacy** — STRK20 for STRK and DAI when Ready X has Smart Wallet + Private enabled (**Private Book & pay**)
 - **Sealed chat + peer pay** — E2E messages between friends; public or private peer transfers
-- **STRK ↔ DAI swap** — public AVNU swap on Ready X (and from Home)
+- **STRK ↔ DAI swap** — public swap STRK ↔ DAI on Ready X (and from Home)
 
 ## What Philoxenia is not
 
