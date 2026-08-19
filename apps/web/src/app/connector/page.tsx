@@ -308,7 +308,7 @@ export default function ConnectorPage() {
 
         {data && (
           <Card className="mb-6">
-            <p className="text-sm text-muted">Total earned</p>
+            <p className="text-sm text-muted">Total from Book & pay</p>
             <p className="mt-1 text-3xl text-foreground">
               {formatTokenAmount(data.totalEarned)}
             </p>
@@ -332,13 +332,13 @@ export default function ConnectorPage() {
                     {b.listing?.title ?? "Book & pay stay"}
                   </p>
                   <p className="mt-1 text-sm text-muted">
-                    Reward: {formatTokenAmount(b.connectorRewardAmount)}{" "}
+                    You earned: {formatTokenAmount(b.connectorRewardAmount)}{" "}
                     {b.paymentAsset}
                     {b.connectorRewardPercent
                       ? ` (${b.connectorRewardPercent}%)`
                       : ""}
                     {" · "}
-                    open stay
+                    View stay
                   </p>
                 </Card>
               </Link>
