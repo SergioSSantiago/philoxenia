@@ -361,7 +361,7 @@ export default function FriendsPage() {
                         runAction(
                           friend.id,
                           () => api.post(`/friends/remove/${friend.id}`),
-                          "Friend removed — you can no longer Book & pay their places."
+                          "Friendship ended — you can no longer Book & pay their places."
                         )
                       }
                     >

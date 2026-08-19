@@ -417,7 +417,7 @@ export default function ChatThreadPage() {
               <p className="text-xs leading-relaxed text-muted">
                 {payMode === "private"
                   ? "From your shielded STRK or DAI via STRK20 (Ready X · Smart Wallet + Private). Amount stays private; shield that asset on Ready X first."
-                  : "Send STRK or DAI on-chain via Ready X. Amount and both wallets are visible on explorers."}
+                  : "Send STRK or DAI on-chain via Ready X. Amount and both wallets are visible on Voyager."}
               </p>
 
               {!walletReady && (

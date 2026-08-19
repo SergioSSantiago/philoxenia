@@ -410,7 +410,7 @@ export async function createListing(
       throw new Error("Place photos must be uploaded images or https URLs");
     }
     if (photo.startsWith("data:image/") && photo.length > 900_000) {
-      throw new Error("A place photo is too large — compress and try again");
+      throw new Error("A place photo is too large — compress and add this place photo again");
     }
   }
 
@@ -870,7 +870,7 @@ export async function getFriendProfile(viewerId: string, friendId: string) {
 
   const friends = await areFriends(viewerId, friendId);
   if (!friends) {
-    throw new Error("Not friends with this user — you must be friends to Book & pay their places");
+    throw new Error("Not friends with this person — you must be friends to Book & pay their places");
   }
 
   const friend = await getUserById(friendId);
