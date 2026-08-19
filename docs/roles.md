@@ -30,7 +30,7 @@ Philoxenia has **no public marketplace**. The network grows only when someone in
 
 ### How to start earning (2 minutes)
 
-1. Add friends who host (**Ready X wallet**).
+1. Add **Friends to Book & pay** by **Ready X wallet**.
 2. Open **Earnings** in the nav (`/connector`) — see their places and your earn %.
 3. Tap **Share place invite & earn** → the place invite is copied. Send it in Messages / WhatsApp.
 4. When they **Book & pay** through your place invite, track rewards on Earnings.

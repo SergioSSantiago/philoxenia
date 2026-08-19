@@ -484,9 +484,9 @@ export default function ChatThreadPage() {
         <div className="relative flex-1 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--accent-soft)_0%,_transparent_55%)] px-3 py-4 sm:px-5">
           {messages.length === 0 && (
             <div className="mx-auto mt-8 max-w-sm text-center">
-              <p className="text-lg text-foreground">Say hello — sealed note</p>
+              <p className="text-lg text-foreground">Start a sealed note to Book & pay</p>
               <p className="mt-2 text-sm text-muted">
-                Your first note is encrypted before it leaves this browser.
+                Your first sealed note to Book & pay is encrypted before it leaves this browser.
               </p>
             </div>
           )}

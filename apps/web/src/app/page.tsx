@@ -32,7 +32,7 @@ export default function LandingPage() {
           Philoxenia is private hospitality on Starknet — publish places, Book
           &amp; pay, and{" "}
           <strong className="font-medium text-foreground">connectors</strong>{" "}
-          who earn by introducing trusted people to trusted places. No public
+          who earn by sharing a place invite. No public
           marketplace.
         </p>
         <p className="mx-auto mt-3 max-w-2xl text-base text-muted sm:text-lg">

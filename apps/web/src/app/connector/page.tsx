@@ -294,7 +294,7 @@ export default function ConnectorPage() {
         {networkListings !== null && networkListings.length === 0 && (
           <div className="mt-4">
             <Link href="/friends">
-              <Button variant="secondary">Add friends</Button>
+              <Button variant="secondary">Friends to Book & pay</Button>
             </Link>
           </div>
         )}
