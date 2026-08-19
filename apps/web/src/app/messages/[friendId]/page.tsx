@@ -423,8 +423,8 @@ export default function ChatThreadPage() {
               {!walletReady && (
                 <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-950">
                   Philoxenia is signed in, but Ready X is not connected for
-                  signing. Connect Ready X (Chrome or iPhone) before sending
-                  (Public or Private).
+                  signing. Connect Ready X (Chrome extension or Ready X browser)
+                  before sending (Public or Private).
                 </div>
               )}
 

@@ -201,8 +201,8 @@ export function Strk20PrivacyPanel() {
             </div>
             <ol className="list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted">
               <li>
-                Desktop: unlock Ready X in Chrome (not Firefox). iPhone: open
-                Philoxenia in the Ready X in-app browser for Private Book & pay.
+                Desktop: Chrome with the Ready X wallet extension is recommended.
+                Phone: open Philoxenia in the Ready X browser.
               </li>
               <li>Enable Smart Wallet and Private.</li>
               <li>Tap Reconnect Ready X and approve again.</li>

@@ -59,7 +59,7 @@ Philoxenia records `privacyMode` on the payment row and surfaces it on booking r
 
 ## Fallback policy
 
-When the guest selects **Private**, there is **no silent public fallback**. Failure surfaces an error (shield more, update Ready X, or choose Public explicitly). Wallet errors and chat reconnect copy name **Ready X** (Chrome or iPhone), not a generic Ready extension.
+When the guest selects **Private**, there is **no silent public fallback**. Failure surfaces an error (shield more, update Ready X, or choose Public explicitly). Wallet errors and chat reconnect copy name **Ready X** (Chrome extension or Ready X browser), not “Chrome or iPhone” or a generic Ready extension.
 
 When the guest selects **Public**, or privacy is disabled (`NEXT_PUBLIC_STRK20_PRIVACY=false`), the public ERC-20 multicall is used and labeled `public`.
 

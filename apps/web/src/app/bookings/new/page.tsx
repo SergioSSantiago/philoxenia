@@ -301,7 +301,7 @@ function NewBookingForm() {
       setError(
         err instanceof Error
           ? err.message
-          : "Could not reconnect Ready X. Open Ready X (Chrome or iPhone). Try Ready X again."
+          : "Could not reconnect Ready X. Chrome with the Ready X wallet extension is recommended, or open Philoxenia in the Ready X browser. Try Ready X again."
       );
     } finally {
       setReconnecting(false);
@@ -729,8 +729,8 @@ function NewBookingForm() {
           {!walletReady && quote && range.ok && !payLocked && (
             <p className="text-sm text-amber-800 leading-relaxed">
               Ready X is signed in for Philoxenia but not connected for
-              transactions. Tap Connect Ready X (Chrome or iPhone) to Book &
-              pay Public or Private.
+              transactions. Tap Connect Ready X (Chrome extension or Ready X
+              browser) to Book & pay Public or Private.
             </p>
           )}
 

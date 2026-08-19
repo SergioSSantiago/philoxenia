@@ -114,11 +114,11 @@ function notCapableReason(versions: string[], hadWallet: boolean): string {
 
   if (versions.length === 0) {
     return fx
-      ? "Ready X connected but did not report wallet API versions. Firefox has no Ready X — use Chrome + Ready X with Smart Wallet + Private. On iPhone, Private Book & pay needs the Ready X in-app browser."
+      ? "Ready X connected but did not report wallet API versions. Firefox has no Ready X — Chrome with the Ready X wallet extension is recommended, or download the Ready X wallet app and open Philoxenia in the Ready X browser."
       : "Ready X is connected for login, but Private Book & pay needs Smart Wallet + Private enabled (wallet API ≥ 0.10). Unlock Ready X, turn those on, then tap Reconnect Ready X. If it still fails, Refresh Philoxenia.";
   }
 
-  return `Ready X wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private Book & pay). Update Ready X${fx ? " — Firefox has no Ready X; switch to Chrome, or the Ready X in-app browser on iPhone" : ""}, enable Smart Wallet + Private, and reconnect.`;
+  return `Ready X wallet API is ${versions.join(", ")} (need ≥ 0.10 for Private Book & pay). Update Ready X${fx ? " — Firefox has no Ready X; Chrome with the Ready X wallet extension is recommended, or open Philoxenia in the Ready X browser" : ""}, enable Smart Wallet + Private, and reconnect.`;
 }
 
 /**

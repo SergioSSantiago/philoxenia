@@ -75,7 +75,7 @@ export function TokenSwapPanel() {
     setReconnecting(true);
     setNotice({
       title: "Connecting Ready X",
-      body: "Approve in Ready X (Chrome or iPhone). Swaps need a live signing session.",
+      body: "Approve in Ready X (Chrome extension or Ready X browser). Swaps need a live signing session.",
       tone: "info",
     });
     try {

@@ -77,7 +77,7 @@ export function AuthModal() {
       // In-app or mobile Safari/Chrome: Ready mobile connector (redirect / inject).
       if (isInArgentMobileAppBrowser() || isMobileBrowser()) {
         const connector = pickReadyConnector(connectors);
-        if (!connector) throw new Error("Ready X is not available. Use Chrome or the Ready X app.");
+        if (!connector) throw new Error("Ready X is not available. Chrome with the Ready X wallet extension is recommended, or download the Ready X wallet app.");
         await connectAsync({ connector });
         return;
       }
@@ -213,7 +213,7 @@ export function AuthModal() {
                     rel="noopener noreferrer"
                     className="block font-medium text-accent underline-offset-2 hover:underline"
                   >
-                    Get Ready X
+                    Download Ready X wallet app
                   </a>
                   <p className="text-xs text-muted leading-relaxed">
                     On a phone, open Philoxenia in the Ready X browser. Copy
