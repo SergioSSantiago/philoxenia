@@ -59,7 +59,7 @@ export function LandingNetworkStats({
       value: stats ? formatCount(stats.users) : "—",
     },
     {
-      label: "countries",
+      label: "countries with places",
       value: stats ? formatCount(stats.countries) : "—",
     },
     {
