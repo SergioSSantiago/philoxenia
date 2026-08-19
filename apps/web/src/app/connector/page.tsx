@@ -313,7 +313,8 @@ export default function ConnectorPage() {
               {formatTokenAmount(data.totalEarned)}
             </p>
             <p className="mt-1 text-xs text-muted">
-              Across settled introductions (asset shown per stay below)
+              Across Book & pay through your place invites (asset shown per stay
+              below)
             </p>
           </Card>
         )}
