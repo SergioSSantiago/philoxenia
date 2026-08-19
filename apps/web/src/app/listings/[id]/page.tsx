@@ -450,7 +450,7 @@ export default function ListingPage() {
               {shareHasConnector ? (
                 <p className="text-muted leading-relaxed">
                   You are the connector for this place invite. When someone opens it,
-                  Philoxenia saves that attribution. If they become friends with
+                  Philoxenia records who earns the connector % of stay. If they become friends with
                   who publishes this place and Book & pay, your reward is paid in STRK or DAI (same
                   asset they paid) to your Ready X wallet on settle — not by
                   sharing the Ready X wallet.

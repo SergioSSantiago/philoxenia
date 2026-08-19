@@ -129,10 +129,10 @@ export default function HomePage() {
         <section>
           <SectionTitle
             title="Place invites to Book & pay"
-            subtitle="Last place invite wins connector attribution"
+            subtitle="Last place invite wins connector % of stay"
           />
           {data.sharedListings.length === 0 ? (
-            <EmptyState message="No place invites yet. Open a friend’s place invite to Book & pay — last place invite wins connector attribution." />
+            <EmptyState message="No place invites yet. Open a friend’s place invite to Book & pay — last place invite wins connector % of stay." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.sharedListings.map((l) => (
