@@ -398,7 +398,7 @@ export default function ListingPage() {
           <ConfirmDialog
             open={deleteOpen}
             title="Delete this place?"
-            body="This permanently removes the place, its photos, and calendar. You can only delete if there are no active Book & pay stays — past stays are fine."
+            body="This permanently deletes this place, its photos, and calendar. You can only delete if there are no active Book & pay stays — past stays are fine."
             confirmLabel="Delete this place"
             busyLabel="Deleting this place…"
             cancelLabel="Keep this place"

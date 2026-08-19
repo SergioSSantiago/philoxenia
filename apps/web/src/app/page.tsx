@@ -91,7 +91,7 @@ export default function LandingPage() {
           },
           {
             title: "Earn as a connector",
-            body: "Introduce someone you trust to a friend’s place. Earn the connector % set on the place in STRK or DAI when they Book & pay — Philoxenia takes 10% of that reward only.",
+            body: "Share a friend’s place invite. Earn the connector % set on the place in STRK or DAI when they Book & pay — Philoxenia takes 10% of that reward only.",
           },
           {
             title: "Book & pay",

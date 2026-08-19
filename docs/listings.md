@@ -26,7 +26,7 @@ Paid guest nights stay in inventory as **locked** (`booked`). Guest and host cal
 
 `DELETE /my-listings/:id` (host only).
 
-Allowed when there are **no active Book & pay stays** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete. Confirm: **Delete this place?** Busy: **Deleting this place…** (not “Working…”). Defaults if a dialog omits labels: **Confirm this place** / **Working on this place…** (not “Confirm” / “Working…”). Keep: **Keep this place**. API error if still active: **Cannot delete this place while it has active Book & pay stays.** Wait until those stays are past, or **Free nights** on those stays (not “mark them cancelled with the guest”).
+Allowed when there are **no active Book & pay stays** (funded / confirmed / completed with a night today or in the future). Past paid stays do not block delete. Confirm: **Delete this place?** Body: **This permanently deletes this place** (not “removes the place”). Busy: **Deleting this place…** (not “Working…”). Defaults if a dialog omits labels: **Confirm this place** / **Working on this place…** (not “Confirm” / “Working…”). Keep: **Keep this place**. API error if still active: **Cannot delete this place while it has active Book & pay stays.** Wait until those stays are past, or **Free nights** on those stays (not “mark them cancelled with the guest”).
 
 ## Cancellation vs escrow
 

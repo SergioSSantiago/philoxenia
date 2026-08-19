@@ -125,7 +125,7 @@ export default function FriendsPage() {
       await load();
       setActionOk(okMessage);
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Could not update Friends to Book & pay");
+      setActionError(err instanceof Error ? err.message : "Could not update this friend request to Book & pay");
     } finally {
       setBusyId(null);
     }

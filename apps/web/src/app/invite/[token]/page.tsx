@@ -67,7 +67,7 @@ export default function InvitePage() {
       await api.post("/friends/request", { toUserId: invite!.hostId });
       await loadInvite();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not send the friend request to Book & pay.");
+      setError(err instanceof Error ? err.message : "Could not send friend request to Book & pay");
     } finally {
       setBusy(false);
     }
