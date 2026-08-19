@@ -96,7 +96,7 @@ export default function HomePage() {
             </Link>
             <Link href="/profile" className="block">
               <Button variant="ghost" className="w-full text-xs">
-                Edit profile
+                Edit Ready X
               </Button>
             </Link>
           </Card>

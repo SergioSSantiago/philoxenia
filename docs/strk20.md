@@ -4,7 +4,7 @@
 
 # STRK20 (Starknet Privacy)
 
-Philoxenia uses STRK20 for optional private STRK/DAI **booking fund** and for shield/unshield of **STRK and DAI** on Profile. Official protocol docs remain authoritative.
+Philoxenia uses STRK20 for optional private STRK/DAI **booking fund** and for shield/unshield of **STRK and DAI** on Ready X. Official protocol docs remain authoritative.
 
 ## Official resources
 

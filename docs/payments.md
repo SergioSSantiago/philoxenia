@@ -35,7 +35,7 @@ Located in `apps/web/src/lib/payments/`:
 
 Private fund (default when Ready X wallet API ≥ 0.10):
 
-1. **Anonymizer (live)** — `withdraw` to helper + `privacy_invoke` (no silent public fallback). If the wallet lacks STRK20, Book & pay errors: **Private Book & pay needs Ready X** (wallet API ≥ 0.10) — then shield on Profile, or choose Public. User-abort and failure copy is **Private Book & pay cancelled/failed** (no public fallback).
+1. **Anonymizer (live)** — `withdraw` to helper + `privacy_invoke` (no silent public fallback). If the wallet lacks STRK20, Book & pay errors: **Private Book & pay needs Ready X** (wallet API ≥ 0.10) — then shield on Ready X, or choose Public. Failure: **Shield enough {asset} on Ready X. Try Ready X again.** User-abort and failure copy is **Private Book & pay cancelled/failed** (no public fallback).
 2. Shadow-account backup only if `NEXT_PUBLIC_STRK20_SHADOW_FALLBACK=1` (Ready X lacks it by default)
 3. **Public Book & pay** only when the guest explicitly chooses Public (UI label, not “Public ERC-20”)
 
@@ -51,7 +51,7 @@ Public swaps use [@avnu/avnu-sdk](https://docs.avnu.fi) (`getQuotes` + `executeS
 
 | Surface | Mode | Notes |
 |---------|------|--------|
-| `/home` | `compact` | Public STRK **and DAI** hints “shield for Private Book & pay”. Crash fallback: **Balances unavailable right now. Ready X is still connected — try Shield & swap on Profile.** |
+| `/home` | `compact` | Public STRK **and DAI** hints “shield for Private Book & pay”. Crash fallback: **Balances unavailable right now. Ready X is still connected — try Shield & swap on Ready X.** Compact hint **shield STRK or DAI on Ready X** (not “on Profile”). |
 | `/profile` | full | Page title **Ready X** (not “Profile”). Same public rows + `Strk20PrivacyPanel` heading **Shield for Private Book & pay** (shield / unshield **STRK or DAI**). Helper **Shield and unshield amounts are public on-chain** (not “Deposit/withdraw … onchain”). Busy shield: **Approve {asset} shield (public amount)** (not “deposit”). Reconnect busy **Reconnecting Ready X…** (not “Reconnecting…”). Disconnect heading **Ready X in this browser** (not “Session”). Notices: **Ready X session needed** (not a generic Ready session); shield/unshield fail **Could not shield or unshield STRK or DAI**. Incapable wallet: **This Ready X wallet does not expose STRK20 yet**. Not Private yet: **Ready X is not Private-capable yet** (not “Still not privacy-capable”). Ready notice **Shielded STRK or DAI ready for Private Book & pay** (not “Private balances ready”). Unshield busy **Unshielding {asset} to public STRK or DAI**. Asset group **STRK or DAI** (not “Token”). If it still fails, **Refresh Philoxenia** (not “refresh this page”). Reload **Refresh Philoxenia** (not “Refresh page”). Reconnect fail **Try Ready X again** (not “Try again”) |
 
 If the JWT session is still valid but Ready X is disconnected, public balances still load from the session wallet address. **Connect Ready X** is required to sign (shield, **Private Book & pay**, settle, swap). `/bookings/new` says the same when Book & pay is blocked.

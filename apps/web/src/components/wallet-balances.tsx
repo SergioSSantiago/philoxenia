@@ -101,7 +101,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
           STRK20_PRIVACY_ENABLED
             ? compact
               ? "Public · shield for Private Book & pay"
-              : "Public balance · shield STRK or DAI on Profile for Private Book & pay"
+              : "Public balance · shield STRK or DAI on Ready X for Private Book & pay"
             : undefined
         }
       />
@@ -114,7 +114,7 @@ function WalletBalancesContent({ compact = false }: { compact?: boolean }) {
           STRK20_PRIVACY_ENABLED
             ? compact
               ? "Public · shield for Private Book & pay"
-              : "Public balance · shield on Profile for Private Book & pay"
+              : "Public balance · shield on Ready X for Private Book & pay"
             : undefined
         }
       />
@@ -152,7 +152,7 @@ class WalletBalancesErrorBoundary extends Component<
     if (this.state.failed) {
       return (
         <p className="text-sm text-muted">
-          Balances unavailable right now. Ready X is still connected — try Shield & swap on Profile.
+          Balances unavailable right now. Ready X is still connected — try Shield & swap on Ready X.
         </p>
       );
     }

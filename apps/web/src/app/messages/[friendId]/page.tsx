@@ -416,7 +416,7 @@ export default function ChatThreadPage() {
 
               <p className="text-xs leading-relaxed text-muted">
                 {payMode === "private"
-                  ? "From your shielded STRK or DAI via STRK20 (Ready X · Smart Wallet + Private). Amount stays private; shield that asset on Profile first."
+                  ? "From your shielded STRK or DAI via STRK20 (Ready X · Smart Wallet + Private). Amount stays private; shield that asset on Ready X first."
                   : "Send STRK or DAI on-chain via Ready X. Amount and both wallets are visible on explorers."}
               </p>
 
@@ -519,7 +519,7 @@ export default function ChatThreadPage() {
               ref={composerRef}
               rows={1}
               className="max-h-32 min-h-[44px] flex-1 resize-none rounded-2xl border border-border bg-background px-4 py-3 text-sm leading-snug outline-none ring-accent/30 focus:ring-2"
-              placeholder="Write a sealed note…"
+              placeholder="Write a sealed note to Book & pay"
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={onComposerKeyDown}
@@ -531,7 +531,7 @@ export default function ChatThreadPage() {
               disabled={busy || !text.trim() || !canSeal}
               className="shrink-0 !rounded-2xl"
             >
-              Send
+              Send sealed note
             </Button>
           </div>
           {mailboxReady && (

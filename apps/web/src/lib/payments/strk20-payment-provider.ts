@@ -211,7 +211,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
     const capable = await this.detectPrivacySupport();
     if (!capable) {
       throw new Error(
-        "Private Book & pay needs Ready X with STRK20 (wallet API ≥ 0.10). Update Ready X, shield on Profile, then retry — or choose Public."
+        "Private Book & pay needs Ready X with STRK20 (wallet API ≥ 0.10). Update Ready X, shield on Ready X. Try Ready X again — or choose Public."
       );
     }
 
@@ -278,7 +278,7 @@ export class Strk20PaymentProvider implements PaymentProvider {
     }
     if (/INSUFFICIENT_PRIVATE_BALANCE|insufficient private/i.test(detail)) {
       throw new Error(
-        `Private Book & pay failed (no public fallback). ${detail}. Shield enough ${this.asset} on Profile, then retry.`
+        `Private Book & pay failed (no public fallback). ${detail}. Shield enough ${this.asset} on Ready X. Try Ready X again.`
       );
     }
     throw new Error(`Private Book & pay failed (no public fallback). ${detail}`);
