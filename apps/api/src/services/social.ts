@@ -13,6 +13,11 @@ import {
   splitBookingTotal,
   daysBetween,
 } from "../lib/utils.js";
+import {
+  normalizeWalletSearchQuery,
+  walletQueryMatchesAddress,
+  type FriendSearchResponse,
+} from "@philoxenia/shared";
 import { writeAuditLog } from "../lib/audit.js";
 import {
   inspectEscrowSettledTx,
@@ -111,13 +116,19 @@ export async function updateUserMessagePublicKey(
   return toUserResponse(updated);
 }
 
-export async function searchUsers(query: string, currentUserId: string) {
-  let normalized = query.trim().toLowerCase().replace(/\s/g, "");
-  if (!normalized) return [];
-  if (!normalized.startsWith("0x")) {
-    normalized = `0x${normalized}`;
+export async function searchUsers(
+  query: string,
+  currentUserId: string
+): Promise<FriendSearchResponse> {
+  const normalized = normalizeWalletSearchQuery(query);
+  if (!normalized || normalized.length < 6) {
+    return { self: false, users: [] };
   }
-  if (normalized.length < 6) return [];
+
+  const currentUser = await db.query.users.findFirst({
+    where: eq(schema.users.id, currentUserId),
+  });
+  if (!currentUser) return { self: false, users: [] };
 
   const results = await db.query.users.findMany({
     where: and(
@@ -127,12 +138,70 @@ export async function searchUsers(query: string, currentUserId: string) {
     limit: 20,
   });
 
-  return results.map(toUserResponse);
+  const self =
+    results.length === 0 &&
+    walletQueryMatchesAddress(normalized, currentUser.walletAddress);
+
+  if (results.length === 0) {
+    return { self, users: [] };
+  }
+
+  const friendIds = new Set(await getFriendIds(currentUserId));
+
+  const [pendingOutgoing, pendingIncoming] = await Promise.all([
+    db.query.friendRequests.findMany({
+      where: and(
+        eq(schema.friendRequests.fromUserId, currentUserId),
+        eq(schema.friendRequests.status, "pending")
+      ),
+    }),
+    db.query.friendRequests.findMany({
+      where: and(
+        eq(schema.friendRequests.toUserId, currentUserId),
+        eq(schema.friendRequests.status, "pending")
+      ),
+    }),
+  ]);
+
+  const outgoingByUser = new Map(
+    pendingOutgoing.map((r) => [r.toUserId, r.id] as const)
+  );
+  const incomingByUser = new Map(
+    pendingIncoming.map((r) => [r.fromUserId, r.id] as const)
+  );
+
+  const users = results.map((row) => {
+    const user = toUserResponse(row);
+    if (friendIds.has(row.id)) {
+      return { user, relationship: "friend" as const };
+    }
+    const outId = outgoingByUser.get(row.id);
+    if (outId) {
+      return {
+        user,
+        relationship: "pending_outgoing" as const,
+        requestId: outId,
+      };
+    }
+    const inId = incomingByUser.get(row.id);
+    if (inId) {
+      return {
+        user,
+        relationship: "pending_incoming" as const,
+        requestId: inId,
+      };
+    }
+    return { user, relationship: "none" as const };
+  });
+
+  return { self: false, users };
 }
 
 export async function sendFriendRequest(fromUserId: string, toUserId: string) {
   if (fromUserId === toUserId) {
-    throw new Error("You can’t send a friend request to yourself");
+    throw new Error(
+      "That’s your own Ready X wallet — friends add you from yours on this page."
+    );
   }
 
   const alreadyFriends = await areFriends(fromUserId, toUserId);

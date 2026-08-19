@@ -15,6 +15,13 @@ export {
   percentToBps,
 } from "./fees.js";
 export { formatTokenAmount, formatDaiPrice } from "./format.js";
+export {
+  normalizeWalletSearchQuery,
+  walletQueryMatchesAddress,
+  type FriendSearchHit,
+  type FriendSearchRelationship,
+  type FriendSearchResponse,
+} from "./wallet-search.js";
 
 export type BookingStatus =
   | "pending"

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { User, FriendRequest } from "@philoxenia/shared";
+import type { User, FriendRequest, FriendSearchHit } from "@philoxenia/shared";
+import { normalizeWalletSearchQuery } from "@philoxenia/shared";
 import {
   Shell,
   SectionTitle,
@@ -24,10 +25,85 @@ interface FriendsData {
   pendingOutgoing: FriendRequest[];
 }
 
-function normalizeWalletQuery(raw: string): string {
-  let q = raw.trim().toLowerCase().replace(/\s/g, "");
-  if (q && !q.startsWith("0x")) q = `0x${q}`;
-  return q;
+function SearchResultAction({
+  hit,
+  busyId,
+  onAdd,
+  onAccept,
+  onReject,
+  onCancel,
+  onMessages,
+}: {
+  hit: FriendSearchHit;
+  busyId: string | null;
+  onAdd: (userId: string) => void;
+  onAccept: (requestId: string) => void;
+  onReject: (requestId: string) => void;
+  onCancel: (requestId: string) => void;
+  onMessages: (userId: string) => void;
+}) {
+  const { user, relationship, requestId } = hit;
+  const busy = busyId === user.id || (requestId != null && busyId === requestId);
+
+  if (relationship === "friend") {
+    return (
+      <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+        <span className="text-sm text-muted">Already friends</span>
+        <Button className="w-full sm:w-auto" onClick={() => onMessages(user.id)}>
+          Messages
+        </Button>
+      </div>
+    );
+  }
+
+  if (relationship === "pending_outgoing" && requestId) {
+    return (
+      <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+        <span className="text-sm text-muted">Request pending</span>
+        <Button
+          variant="secondary"
+          className="w-full sm:w-auto"
+          disabled={busy}
+          onClick={() => onCancel(requestId)}
+        >
+          {busy ? "Cancelling friend request…" : "Cancel friend request"}
+        </Button>
+      </div>
+    );
+  }
+
+  if (relationship === "pending_incoming" && requestId) {
+    return (
+      <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+        <Button
+          variant="secondary"
+          className="w-full sm:w-auto"
+          disabled={busy}
+          onClick={() => onAccept(requestId)}
+        >
+          {busy ? "Accepting…" : "Accept to Book & pay"}
+        </Button>
+        <Button
+          variant="ghost"
+          className="w-full sm:w-auto"
+          disabled={busy}
+          onClick={() => onReject(requestId)}
+        >
+          Reject
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Button
+      className="w-full sm:w-auto"
+      disabled={busy}
+      onClick={() => onAdd(user.id)}
+    >
+      {busy ? "Sending friend request…" : "Add friend by Ready X wallet address"}
+    </Button>
+  );
 }
 
 export default function FriendsPage() {
@@ -36,7 +112,7 @@ export default function FriendsPage() {
   const { refresh: refreshNotifications } = useNotifications();
   const [data, setData] = useState<FriendsData | null>(null);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<User[]>([]);
+  const [results, setResults] = useState<FriendSearchHit[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [searchError, setSearchError] = useState("");
   const [actionError, setActionError] = useState("");
@@ -68,7 +144,7 @@ export default function FriendsPage() {
     setSearchError("");
     setActionError("");
     setActionOk("");
-    const normalized = normalizeWalletQuery(query);
+    const normalized = normalizeWalletSearchQuery(query);
     if (normalized.length < 6) {
       setSearchError(
         "Enter at least 4 hex characters of a Ready X wallet (0x is added if missing)."
@@ -77,11 +153,16 @@ export default function FriendsPage() {
       return;
     }
     try {
-      const users = await api.get<User[]>(
-        `/friends/search?q=${encodeURIComponent(normalized)}`
-      );
-      setResults(users);
-      if (users.length === 0) {
+      const response = await api.get<{
+        self: boolean;
+        users: FriendSearchHit[];
+      }>(`/friends/search?q=${encodeURIComponent(normalized)}`);
+      setResults(response.users);
+      if (response.self) {
+        setSearchError(
+          "That’s your own Ready X wallet — friends add you from yours above, not by searching yourself."
+        );
+      } else if (response.users.length === 0) {
         setSearchError(
           "No one on Philoxenia with that Ready X wallet. They must Connect Ready X once before you can add them."
         );
@@ -109,6 +190,37 @@ export default function FriendsPage() {
       );
     } finally {
       setBusyId(null);
+    }
+  }
+
+  async function runSearchAction(
+    id: string,
+    action: () => Promise<unknown>,
+    okMessage: string
+  ) {
+    await runAction(id, action, okMessage);
+    if (!query.trim()) return;
+    const normalized = normalizeWalletSearchQuery(query);
+    if (normalized.length < 6) return;
+    try {
+      const response = await api.get<{
+        self: boolean;
+        users: FriendSearchHit[];
+      }>(`/friends/search?q=${encodeURIComponent(normalized)}`);
+      setResults(response.users);
+      if (response.self) {
+        setSearchError(
+          "That’s your own Ready X wallet — friends add you from yours above, not by searching yourself."
+        );
+      } else if (response.users.length === 0) {
+        setSearchError(
+          "No one on Philoxenia with that Ready X wallet. They must Connect Ready X once before you can add them."
+        );
+      } else {
+        setSearchError("");
+      }
+    } catch {
+      /* keep prior results */
     }
   }
 
@@ -162,7 +274,7 @@ export default function FriendsPage() {
       <Card className="mb-8">
         {!showAdd ? (
           <Button className="w-full sm:w-auto" onClick={() => setShowAdd(true)}>
-            Add by Ready X wallet
+            Add friend by Ready X wallet address
           </Button>
         ) : (
           <div>
@@ -206,18 +318,38 @@ export default function FriendsPage() {
               <p className="mt-3 text-sm text-muted">{searchError}</p>
             )}
             <div className="mt-4 space-y-2">
-              {results.map((found) => (
+              {results.map((hit) => (
                 <UserRow
-                  key={found.id}
-                  user={found}
+                  key={hit.user.id}
+                  user={hit.user}
                   action={
-                    <Button
-                      className="w-full sm:w-auto"
-                      disabled={busyId === found.id}
-                      onClick={() => sendRequest(found.id)}
-                    >
-                      {busyId === found.id ? "Sending friend request…" : "Add by Ready X wallet"}
-                    </Button>
+                    <SearchResultAction
+                      hit={hit}
+                      busyId={busyId}
+                      onAdd={sendRequest}
+                      onAccept={(requestId) =>
+                        runSearchAction(
+                          requestId,
+                          () => api.post(`/friends/accept/${requestId}`),
+                          "Friend request accepted — Book & pay their places."
+                        )
+                      }
+                      onReject={(requestId) =>
+                        runSearchAction(
+                          requestId,
+                          () => api.post(`/friends/reject/${requestId}`),
+                          "Friend request rejected."
+                        )
+                      }
+                      onCancel={(requestId) =>
+                        runSearchAction(
+                          requestId,
+                          () => api.post(`/friends/cancel/${requestId}`),
+                          "Friend request cancelled."
+                        )
+                      }
+                      onMessages={(userId) => router.push(`/messages/${userId}`)}
+                    />
                   }
                 />
               ))}
