@@ -64,7 +64,7 @@ Signed-in home uses `GET /home` (JWT): friends, network places, shared places, o
 ## Web (`apps/web`)
 
 - **Framework:** Next.js 15 (App Router), React, Tailwind CSS
-- **Wallet:** Ready X via `apps/web/src/lib/wallet-connectors.ts`. Safari Connect uses WalletConnect (`ready://` after `patches/starknetkit+3.4.3.patch`). **Ideal for STRK20:** Ready X in-app browser (`isInArgentMobileAppBrowser` / wallet API ≥ 0.10). Firefox / desktop tabs often inject only legacy Ready.
+- **Wallet:** Ready X via `apps/web/src/lib/wallet-connectors.ts`. Ready mobile dapp description **Book & pay with people you trust on Starknet** (not “Private P2P hospitality on Starknet”). Safari Connect uses WalletConnect (`ready://` after `patches/starknetkit+3.4.3.patch`). **Ideal for STRK20:** Ready X in-app browser (`isInArgentMobileAppBrowser` / wallet API ≥ 0.10). Firefox / desktop tabs often inject only legacy Ready.
 - **State:** React context for auth (`auth-context.tsx`); JWT in localStorage
 - **API client:** `lib/api.ts` (Bearer JWT)
 - **Brand:** `components/brand-lockup.tsx` → `/`; landing hero shows live `LandingNetworkStats`

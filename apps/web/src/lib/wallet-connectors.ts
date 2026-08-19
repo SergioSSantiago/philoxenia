@@ -46,7 +46,7 @@ function readyMobileConnector() {
       dappName: "Philoxenia",
       url: dappUrl(),
       chainId,
-      description: "Private P2P hospitality on Starknet",
+      description: "Book & pay with people you trust on Starknet",
       icons: ["https://philoxenia-iota.vercel.app/philoxenia-mark.png"],
       rpcUrl: rpc,
       ...(projectId ? { projectId } : {}),
