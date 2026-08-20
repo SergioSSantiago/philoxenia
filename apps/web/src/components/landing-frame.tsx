@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
+import { LandingListingMarquee } from "@/components/landing-listing-marquee";
 import { LandingNetworkStats } from "@/components/landing-network-stats";
 import { Button } from "@/components/ui";
 
@@ -47,9 +48,8 @@ export function LandingFrame({ children }: { children: ReactNode }) {
       if (!slot) return;
       const slotBox = slot.getBoundingClientRect();
       const startX = window.innerWidth / 2 - (slotBox.width * HERO_SCALE) / 2;
-      // Keep brand slightly above true center so stats fit under it
       const startY =
-        window.innerHeight * 0.42 - (slotBox.height * HERO_SCALE) / 2;
+        window.innerHeight * 0.28 - (slotBox.height * HERO_SCALE) / 2;
       const scale = HERO_SCALE + (1 - HERO_SCALE) * t;
 
       setStyle({
@@ -108,16 +108,21 @@ export function LandingFrame({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      {/* Mobile first viewport: brand + live stats */}
+      {/* Mobile first viewport: brand + places ribbon + live stats */}
       <div
-        className="flex h-[100svh] flex-col items-center justify-center gap-10 px-5 md:hidden"
+        className="flex h-[100svh] flex-col items-center justify-center gap-7 px-0 pt-16 pb-6 md:hidden"
         style={{
           opacity: 1 - progress,
           pointerEvents: progress > 0.5 ? "none" : "auto",
         }}
       >
-        <BrandLockup size="hero" />
-        <LandingNetworkStats />
+        <div className="px-5">
+          <BrandLockup size="hero" />
+        </div>
+        <LandingListingMarquee />
+        <div className="px-5">
+          <LandingNetworkStats />
+        </div>
       </div>
 
       {/* Desktop brand (scroll-dock animation) */}
@@ -128,8 +133,14 @@ export function LandingFrame({ children }: { children: ReactNode }) {
         <BrandLockup size="large" />
       </div>
 
-      {/* Desktop stats sit under the oversized brand, fade on scroll */}
-      <div className="pointer-events-none fixed inset-x-0 top-[58%] z-[55] hidden -translate-y-1/2 px-6 md:block">
+      {/* Desktop: places ribbon under brand, stats quieter below */}
+      <div
+        className="pointer-events-auto fixed inset-x-0 top-[58%] z-[55] hidden w-full -translate-y-1/2 md:block"
+        style={{ opacity: Math.max(0, 1 - progress * 1.25) }}
+      >
+        <LandingListingMarquee opacity={1} />
+      </div>
+      <div className="pointer-events-none fixed inset-x-0 top-[82%] z-[55] hidden -translate-y-1/2 px-6 md:block">
         <LandingNetworkStats opacity={statsOpacity} />
       </div>
 
