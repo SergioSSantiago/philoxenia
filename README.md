@@ -123,6 +123,10 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 |-----|-----|
 | Web | https://philoxenia-iota.vercel.app |
 | API | https://philoxenia-api.vercel.app |
+| **Demo page** | https://philoxenia-iota.vercel.app/demo |
+| **Demo video (MP4)** | https://philoxenia-iota.vercel.app/demo/philoxenia-commercial.mp4 |
+
+The commercial (~1 min) shows friend listings with real place photos, Home, Friends, Earnings, Messages, Bookings, and Ready X privacy (STRK20 + AVNU). The STRK20 hackathon hub reads these URLs from root [`strk20.json`](./strk20.json) (`demo_url` + `demo_video`) on each refresh.
 
 ### Smart contract (Starknet mainnet)
 
@@ -244,7 +248,16 @@ See [docs/connectors.md](./docs/connectors.md).
 
 ## STRK20 Private Sprint
 
-Registered for the [STRK20 Private Sprint](https://github.com/starkience/strk20-hackathon). Progress tracked in [`strk20.json`](./strk20.json).
+Registered for the [STRK20 Private Sprint](https://github.com/starkience/strk20-hackathon). Judges and the hub read submission fields from root [`strk20.json`](./strk20.json) (refreshed ~every 30 minutes):
+
+| Field | Value |
+|-------|--------|
+| `demo_url` | https://philoxenia-iota.vercel.app |
+| `demo_video` | https://philoxenia-iota.vercel.app/demo/philoxenia-commercial.mp4 |
+| `contracts` | BookingEscrow anonymizer + STRK/DAI escrows (mainnet) |
+| `transactions` | Mainnet txs touching the STRK20 privacy pool |
+
+Also: [demo page](https://philoxenia-iota.vercel.app/demo) · [docs/demo-checklist.md](./docs/demo-checklist.md)
 
 - Mainnet pool: `0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a`
 - Mainnet RPC: set `ALCHEMY_API_KEY` in `.env` — **never commit that file**

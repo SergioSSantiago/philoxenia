@@ -14,6 +14,16 @@ Book & pay with people you trust on Starknet. **Trust who you trust. Pay trustle
 
 See the comparison in the [root README](../README.md#why-philoxenia-instead-of-airbnb).
 
+## Demo (live + hackathon)
+
+| | URL |
+|--|-----|
+| App | https://philoxenia-iota.vercel.app |
+| Demo page | https://philoxenia-iota.vercel.app/demo |
+| Commercial video (MP4) | https://philoxenia-iota.vercel.app/demo/philoxenia-commercial.mp4 |
+
+The video walks Home listings (real place photos), place detail, Friends, Earnings, Messages, Bookings, and Ready X private pay. Submission fields for the STRK20 hub are in root [`strk20.json`](../strk20.json) (`demo_url`, `demo_video`, `contracts`, `transactions`). Happy-path checklist: [demo-checklist.md](./demo-checklist.md).
+
 ## Privacy stack
 
 | Technology | What it does in Philoxenia |
@@ -53,4 +63,4 @@ See [strk20.md](./strk20.md) · [payments.md](./payments.md) · [privacy.md](./p
 
 Root summaries: [ARCHITECTURE.md](../ARCHITECTURE.md), [PRIVACY.md](../PRIVACY.md), [SECURITY.md](../SECURITY.md), [STRK20_INTEGRATION_PLAN.md](../STRK20_INTEGRATION_PLAN.md) (complete).
 
-Hackathon submission fields live in repo-root [`strk20.json`](../strk20.json) (`demo_url`, `demo_video`, txs, contracts).
+Hackathon submission fields live in repo-root [`strk20.json`](../strk20.json) (`demo_url`, `demo_video`, txs, contracts). The hub reads that file from the repo; keep `demo_video` as the absolute MP4 URL above.

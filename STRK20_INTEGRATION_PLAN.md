@@ -123,4 +123,7 @@ Not planned for this product release:
 - https://github.com/starkware-libs/starknet-privacy
 - https://starknet-js.com/docs/next/guides/account/walletAccount/#with-get-starknet-v6
 - Pool: https://voyager.online/contract/0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a
-- Demo video: https://github.com/SergioSSantiago/philoxenia/releases/download/strk20-demo-v2/philoxenia-commercial.mp4
+- Demo video: https://philoxenia-iota.vercel.app/demo/philoxenia-commercial.mp4
+- Demo page: https://philoxenia-iota.vercel.app/demo
+- Live app (`demo_url`): https://philoxenia-iota.vercel.app
+- Hub fields: root `strk20.json`

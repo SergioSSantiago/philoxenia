@@ -4,6 +4,16 @@ Use **two Ready X wallets** (Chrome + Smart Wallet + Private, or Ready X on iPho
 
 On iPhone, Safari can **Connect** via WalletConnect (`ready://`); for **Private Book & pay** in section C, open Philoxenia in the **Ready X in-app browser**.
 
+## Commercial demo video
+
+| | URL |
+|--|-----|
+| Demo page | https://philoxenia-iota.vercel.app/demo |
+| MP4 | https://philoxenia-iota.vercel.app/demo/philoxenia-commercial.mp4 |
+| Hackathon field | `demo_video` in root [`strk20.json`](../strk20.json) |
+
+Shows friend listings with real place photos plus Home, Friends, Earnings, Messages, Bookings, and Ready X privacy. Keep this URL in sync when replacing the file at `apps/web/public/demo/philoxenia-commercial.mp4`.
+
 ## A. Social + place
 
 1. [ ] Wallet A signs in; set display name
