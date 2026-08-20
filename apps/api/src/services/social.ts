@@ -1031,6 +1031,37 @@ export async function createListingShare(
   };
 }
 
+/** Last-touch attribution for (guest, listing) → this share’s connector. */
+export async function attributeShareIntroduction(
+  share: {
+    id: string;
+    connectorId: string | null;
+    hostId: string;
+    listingId: string;
+  },
+  guestId: string
+) {
+  await db
+    .insert(schema.shareIntroductions)
+    .values({
+      shareId: share.id,
+      guestId,
+      connectorId: share.connectorId,
+      hostId: share.hostId,
+      listingId: share.listingId,
+    })
+    .onConflictDoUpdate({
+      target: [
+        schema.shareIntroductions.guestId,
+        schema.shareIntroductions.listingId,
+      ],
+      set: {
+        shareId: share.id,
+        connectorId: share.connectorId,
+      },
+    });
+}
+
 export async function resolveInvite(token: string, guestId?: string) {
   const share = await db.query.listingShares.findFirst({
     where: eq(schema.listingShares.token, token),
@@ -1075,25 +1106,7 @@ export async function resolveInvite(token: string, guestId?: string) {
 
     // Always attribute the opened share (last-touch). Multiple connectors can
     // share the same listing; the link the guest opens decides the connector.
-    await db
-      .insert(schema.shareIntroductions)
-      .values({
-        shareId: share.id,
-        guestId,
-        connectorId: share.connectorId,
-        hostId: share.hostId,
-        listingId: share.listingId,
-      })
-      .onConflictDoUpdate({
-        target: [
-          schema.shareIntroductions.guestId,
-          schema.shareIntroductions.listingId,
-        ],
-        set: {
-          shareId: share.id,
-          connectorId: share.connectorId,
-        },
-      });
+    await attributeShareIntroduction(share, guestId);
   }
 
   return {

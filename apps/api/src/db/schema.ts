@@ -301,9 +301,10 @@ export const messageKindEnum = pgEnum("message_kind", [
   "text",
   "transfer",
   "booking",
+  "place_invite",
 ]);
 
-/** Direct messages between friends (text, peer transfers, booking notices). */
+/** Direct messages between friends (text, peer transfers, booking notices, place invites). */
 export const directMessages = pgTable(
   "direct_messages",
   {
@@ -320,6 +321,13 @@ export const directMessages = pgTable(
     amount: numeric("amount", { precision: 78, scale: 18 }),
     txHash: text("tx_hash"),
     bookingId: uuid("booking_id").references(() => bookings.id, {
+      onDelete: "set null",
+    }),
+    /** Place invite shared in Messages (connector attribution). */
+    shareId: uuid("share_id").references(() => listingShares.id, {
+      onDelete: "set null",
+    }),
+    listingId: uuid("listing_id").references(() => listings.id, {
       onDelete: "set null",
     }),
     createdAt: timestamp("created_at", { withTimezone: true })

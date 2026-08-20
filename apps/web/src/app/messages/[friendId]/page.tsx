@@ -14,9 +14,10 @@ import { useAccount } from "@starknet-react/core";
 import type {
   ChatConversation,
   ChatMessage,
+  Listing,
   PaymentAsset,
 } from "@philoxenia/shared";
-import { formatTokenAmount } from "@philoxenia/shared";
+import { formatDaiPrice, formatTokenAmount } from "@philoxenia/shared";
 import { Shell, Button, TextInput } from "@/components/ui";
 import { ActionNotice } from "@/components/action-notice";
 import { useAuth } from "@/lib/auth-context";
@@ -62,6 +63,9 @@ export default function ChatThreadPage() {
   const [busy, setBusy] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
   const [showPay, setShowPay] = useState(false);
+  const [showSharePicker, setShowSharePicker] = useState(false);
+  const [shareableListings, setShareableListings] = useState<Listing[]>([]);
+  const [shareLoading, setShareLoading] = useState(false);
   const [payMode, setPayMode] = useState<"private" | "public">("private");
   const [privacyCapable, setPrivacyCapable] = useState(false);
   const [anchorOnChain, setAnchorOnChain] = useState(true);
@@ -341,6 +345,52 @@ export default function ChatThreadPage() {
     await executeTransfer(account, payAmount, asset, payMode);
   }
 
+  async function openSharePicker() {
+    setShowSharePicker(true);
+    setShowPay(false);
+    setError("");
+    setShareLoading(true);
+    try {
+      const [network, mine] = await Promise.all([
+        api.get<Listing[]>("/my-network/listings"),
+        api.get<Listing[]>("/my-listings"),
+      ]);
+      const friendId = params.friendId;
+      const byId = new Map<string, Listing>();
+      for (const listing of [...mine, ...network]) {
+        // Don’t offer the friend’s own places back to them in this thread
+        if (listing.hostId === friendId) continue;
+        byId.set(listing.id, listing);
+      }
+      setShareableListings([...byId.values()]);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not load places to share"
+      );
+      setShareableListings([]);
+    } finally {
+      setShareLoading(false);
+    }
+  }
+
+  async function sendPlaceInvite(listingId: string) {
+    setBusy(true);
+    setError("");
+    try {
+      await api.post(`/messages/${params.friendId}/place-invite`, {
+        listingId,
+      });
+      setShowSharePicker(false);
+      await load();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not share this place"
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function onComposerKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -395,14 +445,106 @@ export default function ChatThreadPage() {
               </Link>
             </p>
           </div>
-          <Button
-            variant="secondary"
-            className="shrink-0 !px-3 !py-2 text-xs sm:text-sm"
-            onClick={() => setShowPay((v) => !v)}
-          >
-            {showPay ? "Close Send STRK or DAI" : "Send STRK or DAI"}
-          </Button>
+          <div className="flex shrink-0 flex-wrap justify-end gap-2">
+            <Button
+              variant="secondary"
+              className="!px-3 !py-2 text-xs sm:text-sm"
+              onClick={() => {
+                if (showSharePicker) {
+                  setShowSharePicker(false);
+                  return;
+                }
+                void openSharePicker();
+              }}
+            >
+              {showSharePicker ? "Close place invite" : "Share place invite"}
+            </Button>
+            <Button
+              variant="secondary"
+              className="!px-3 !py-2 text-xs sm:text-sm"
+              onClick={() => {
+                setShowPay((v) => !v);
+                setShowSharePicker(false);
+              }}
+            >
+              {showPay ? "Close Send STRK or DAI" : "Send STRK or DAI"}
+            </Button>
+          </div>
         </header>
+
+        {showSharePicker && (
+          <div className="max-h-[40vh] overflow-y-auto border-b border-border bg-background/80 px-4 py-4">
+            <p className="text-sm text-muted">
+              Pick a place you can share.{" "}
+              <span className="font-medium text-foreground">
+                {conversation.friend.displayName}
+              </span>{" "}
+              gets a card to Book & pay — if you earn as connector, attribution
+              is saved when you send.
+            </p>
+            {shareLoading ? (
+              <p className="mt-4 text-sm text-muted">Loading places to share…</p>
+            ) : shareableListings.length === 0 ? (
+              <p className="mt-4 text-sm text-muted">
+                No places to share yet. Add friends who publish a place, or
+                publish your own on My places.
+              </p>
+            ) : (
+              <ul className="mt-4 space-y-2">
+                {shareableListings.map((listing) => {
+                  const photo = listing.photos[0];
+                  const isMine = listing.hostId === user?.id;
+                  return (
+                    <li key={listing.id}>
+                      <button
+                        type="button"
+                        disabled={busy}
+                        onClick={() => void sendPlaceInvite(listing.id)}
+                        className="flex w-full items-center gap-3 rounded-xl border border-border bg-surface p-2.5 text-left transition hover:border-accent/40 hover:bg-accent-soft/30 disabled:opacity-60"
+                      >
+                        <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-accent-soft/40">
+                          {photo ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={photo}
+                              alt=""
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-[10px] text-muted">
+                              No photo
+                            </div>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate font-medium text-foreground">
+                            {listing.title}
+                          </p>
+                          <p className="truncate text-xs text-muted">
+                            {listing.location}
+                            {listing.host && !isMine
+                              ? ` · ${listing.host.displayName}`
+                              : isMine
+                                ? " · Your place"
+                                : ""}
+                          </p>
+                          <p className="mt-0.5 text-xs text-muted">
+                            {formatDaiPrice(listing.pricePerNight)} / night
+                            {!isMine && listing.connectorRewardPercent > 0
+                              ? ` · You earn ${listing.connectorRewardPercent}% connector of stay`
+                              : isMine
+                                ? " · No connector reward"
+                                : ""}
+                          </p>
+                        </div>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        )}
 
         {showPay && (
           <div className="border-b border-border bg-background/80 px-4 py-4">
@@ -643,6 +785,7 @@ function MessageBubble({
 }) {
   const isSystem = message.kind === "booking";
   const isTransfer = message.kind === "transfer";
+  const placeInvite = message.placeInvite;
 
   if (isSystem) {
     return (
@@ -656,6 +799,75 @@ function MessageBubble({
             View stay
           </Link>
         )}
+      </div>
+    );
+  }
+
+  if (message.kind === "place_invite" && placeInvite) {
+    const photo = placeInvite.photos[0];
+    return (
+      <div
+        className={`flex ${mine ? "justify-end" : "justify-start"} animate-[fadeUp_0.28s_ease-out]`}
+      >
+        <div
+          className={`max-w-[min(85%,20rem)] overflow-hidden rounded-2xl border border-border bg-surface shadow-sm ${
+            mine ? "rounded-br-md" : "rounded-bl-md"
+          }`}
+        >
+          <div className="aspect-[16/10] bg-accent-soft/40">
+            {photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={photo}
+                alt={placeInvite.title}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center text-sm text-muted">
+                No place photo
+              </div>
+            )}
+          </div>
+          <div className="p-3.5">
+            <p className="text-[10px] uppercase tracking-wide text-accent">
+              Place invite
+              {placeInvite.hasConnector ? " · connector" : ""}
+            </p>
+            <p className="mt-1 text-base font-medium text-foreground">
+              {placeInvite.title}
+            </p>
+            <p className="mt-0.5 text-xs text-muted">{placeInvite.location}</p>
+            <p className="mt-2 text-sm">
+              <span className="font-medium text-foreground">
+                {formatDaiPrice(placeInvite.pricePerNight)}
+              </span>
+              <span className="text-muted"> / night</span>
+              {placeInvite.hasConnector &&
+              placeInvite.connectorRewardPercent > 0 ? (
+                <span className="ml-2 text-xs text-accent">
+                  {placeInvite.connectorRewardPercent}% connector of stay
+                </span>
+              ) : null}
+            </p>
+            <p className="mt-1 text-xs text-muted">
+              Publishes this place: {placeInvite.hostDisplayName}
+            </p>
+            <Link
+              href={placeInvite.inviteUrl}
+              className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-accent px-3 py-2.5 text-sm font-medium text-white transition hover:opacity-95"
+            >
+              Open to Book & pay
+            </Link>
+            <p className="mt-2 text-[10px] tabular-nums text-muted">
+              {new Date(message.createdAt).toLocaleString([], {
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+          </div>
+        </div>
       </div>
     );
   }

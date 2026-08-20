@@ -74,7 +74,22 @@ export interface AppNotification {
   createdAt: string;
 }
 
-export type MessageKind = "text" | "transfer" | "booking";
+export type MessageKind = "text" | "transfer" | "booking" | "place_invite";
+
+/** Card payload when a friend shares a place invite in Messages. */
+export interface ChatPlaceInvite {
+  shareId: string;
+  listingId: string;
+  inviteToken: string;
+  inviteUrl: string;
+  title: string;
+  location: string;
+  photos: string[];
+  pricePerNight: string;
+  connectorRewardPercent: number;
+  hasConnector: boolean;
+  hostDisplayName: string;
+}
 
 export interface ChatMessage {
   id: string;
@@ -86,6 +101,9 @@ export interface ChatMessage {
   amount: string | null;
   txHash: string | null;
   bookingId: string | null;
+  shareId?: string | null;
+  listingId?: string | null;
+  placeInvite?: ChatPlaceInvite | null;
   createdAt: string;
   sender?: User;
   recipient?: User;

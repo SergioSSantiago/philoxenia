@@ -100,5 +100,13 @@ export const directMessagesRelations = relations(
       fields: [schema.directMessages.bookingId],
       references: [schema.bookings.id],
     }),
+    share: one(schema.listingShares, {
+      fields: [schema.directMessages.shareId],
+      references: [schema.listingShares.id],
+    }),
+    listing: one(schema.listings, {
+      fields: [schema.directMessages.listingId],
+      references: [schema.listings.id],
+    }),
   })
 );

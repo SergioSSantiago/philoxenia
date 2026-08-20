@@ -887,6 +887,34 @@ export async function registerRoutes(app: FastifyInstance) {
   );
 
   app.post(
+    "/messages/:friendId/place-invite",
+    { preHandler: [authenticate] },
+    async (request, reply) => {
+      const { friendId } = request.params as { friendId: string };
+      const body = z
+        .object({ listingId: z.string().uuid() })
+        .parse(request.body);
+      try {
+        return await chat.sendPlaceInviteMessage(
+          request.user.userId,
+          friendId,
+          body.listingId
+        );
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Could not share this place";
+        const status =
+          message.includes("available") || message.includes("publishes")
+            ? 400
+            : message.includes("can’t share") || message.includes("friends")
+              ? 403
+              : 400;
+        return reply.status(status).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
     "/messages/:friendId/transfer",
     { preHandler: [authenticate] },
     async (request, reply) => {

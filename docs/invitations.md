@@ -28,6 +28,7 @@ Host or friend of host
 
 - Many active shares can exist for one listing (one per share action).
 - When a logged-in guest opens a place invite, `share_introductions` for `(guest, listing)` is **upserted** to that share’s connector (last-touch).
+- When a friend sends a **place invite in Messages**, the same introduction is upserted for the recipient **on send** (they need not open an external link).
 - At booking, `resolveConnectorForBooking` reads that introduction:
   - `connectorId` null (host place invite) → direct booking, 0% connector
   - connector still friends with host → that connector earns the reward on settle

@@ -67,6 +67,8 @@ export default function MessagesPage() {
               preview = t.lastMessage.body || "Send STRK or DAI";
             } else if (t.lastMessage?.kind === "booking") {
               preview = t.lastMessage.body || "Book & pay update";
+            } else if (t.lastMessage?.kind === "place_invite") {
+              preview = t.lastMessage.body || "Place invite";
             } else if (body) {
               preview = await previewBody(user?.walletAddress, body);
             }

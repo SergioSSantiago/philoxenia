@@ -1,16 +1,54 @@
 import { and, asc, desc, eq, inArray, or } from "drizzle-orm";
+import type { ChatPlaceInvite } from "@philoxenia/shared";
 import { db, schema } from "../db/index.js";
 import { areFriends } from "../lib/authorization.js";
 import { createNotification } from "./notifications.js";
 import { toUserResponse } from "./auth.js";
+import {
+  attributeShareIntroduction,
+  createListingShare,
+} from "./social.js";
+
+type MessageRow = typeof schema.directMessages.$inferSelect;
+type UserRow = typeof schema.users.$inferSelect;
+type ListingRow = typeof schema.listings.$inferSelect;
+type ShareRow = typeof schema.listingShares.$inferSelect;
+
+function mapPlaceInvite(
+  share: ShareRow | null | undefined,
+  listing: (ListingRow & { host?: UserRow | null }) | null | undefined
+): ChatPlaceInvite | null {
+  if (!share || !listing) return null;
+  const host = listing.host;
+  return {
+    shareId: share.id,
+    listingId: listing.id,
+    inviteToken: share.token,
+    inviteUrl: `/invite/${share.token}`,
+    title: listing.title,
+    location: listing.location,
+    photos: listing.photos ?? [],
+    pricePerNight: String(listing.pricePerNight),
+    connectorRewardPercent: listing.connectorRewardPercent,
+    hasConnector: share.connectorId !== null,
+    hostDisplayName: host?.displayName ?? "Host",
+  };
+}
 
 function mapMessage(
-  row: typeof schema.directMessages.$inferSelect,
+  row: MessageRow,
   relations?: {
-    sender?: typeof schema.users.$inferSelect;
-    recipient?: typeof schema.users.$inferSelect;
+    sender?: UserRow;
+    recipient?: UserRow;
+    share?: ShareRow | null;
+    listing?: (ListingRow & { host?: UserRow | null }) | null;
   }
 ) {
+  const placeInvite =
+    row.kind === "place_invite"
+      ? mapPlaceInvite(relations?.share, relations?.listing)
+      : null;
+
   return {
     id: row.id,
     senderId: row.senderId,
@@ -21,6 +59,9 @@ function mapMessage(
     amount: row.amount,
     txHash: row.txHash,
     bookingId: row.bookingId,
+    shareId: row.shareId ?? null,
+    listingId: row.listingId ?? null,
+    placeInvite,
     createdAt: row.createdAt.toISOString(),
     sender: relations?.sender ? toUserResponse(relations.sender) : undefined,
     recipient: relations?.recipient
@@ -110,7 +151,12 @@ export async function getConversation(userId: string, friendId: string) {
         eq(schema.directMessages.recipientId, userId)
       )
     ),
-    with: { sender: true, recipient: true },
+    with: {
+      sender: true,
+      recipient: true,
+      share: true,
+      listing: { with: { host: true } },
+    },
     orderBy: [asc(schema.directMessages.createdAt)],
     limit: 200,
   });
@@ -121,6 +167,8 @@ export async function getConversation(userId: string, friendId: string) {
       mapMessage(m, {
         sender: m.sender ?? undefined,
         recipient: m.recipient ?? undefined,
+        share: m.share ?? null,
+        listing: m.listing ?? null,
       })
     ),
   };
@@ -157,11 +205,83 @@ export async function sendTextMessage(
     userId: recipientId,
     type: "message",
     title: sealed ? "New sealed note" : "New note",
-    body: sealed ? "Encrypted on your device — open Messages to read this sealed note" : trimmed.slice(0, 120),
+    body: sealed
+      ? "Encrypted on your device — open Messages to read this sealed note"
+      : trimmed.slice(0, 120),
     href: `/messages/${senderId}`,
   });
 
   return mapMessage(row);
+}
+
+/**
+ * Share a place invite into a Messages thread.
+ * Creates a listing share (connector = sender when not host), attributes the
+ * recipient immediately (last-touch), and posts a place-invite card.
+ */
+export async function sendPlaceInviteMessage(
+  senderId: string,
+  recipientId: string,
+  listingId: string
+) {
+  await requireFriendship(senderId, recipientId);
+
+  const listing = await db.query.listings.findFirst({
+    where: eq(schema.listings.id, listingId),
+    with: { host: true },
+  });
+  if (!listing) {
+    throw new Error("This place isn’t available to Book & pay.");
+  }
+
+  if (recipientId === listing.hostId) {
+    throw new Error(
+      "You can’t send a place invite to who publishes this place."
+    );
+  }
+
+  const shareResult = await createListingShare(listingId, senderId);
+  const share = await db.query.listingShares.findFirst({
+    where: eq(schema.listingShares.id, shareResult.id),
+  });
+  if (!share) {
+    throw new Error("Could not create this place invite");
+  }
+
+  // Attribute as soon as the place invite is sent in chat — guest need not
+  // open an external link for the connector to be recorded (last-touch).
+  await attributeShareIntroduction(share, recipientId);
+
+  const earnHint =
+    share.connectorId !== null && listing.connectorRewardPercent > 0
+      ? ` · ${listing.connectorRewardPercent}% connector of stay`
+      : "";
+  const body = `Place invite: ${listing.title}${earnHint}`;
+
+  const [row] = await db
+    .insert(schema.directMessages)
+    .values({
+      senderId,
+      recipientId,
+      kind: "place_invite",
+      body,
+      shareId: share.id,
+      listingId: listing.id,
+    })
+    .returning();
+
+  await createNotification({
+    userId: recipientId,
+    type: "message",
+    title: "Place invite in Messages",
+    body: `${listing.title} — open to Book & pay`,
+    href: `/messages/${senderId}`,
+  });
+
+  return mapMessage(row, {
+    share,
+    listing,
+  });
 }
 
 export async function recordTransferMessage(
