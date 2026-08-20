@@ -1,11 +1,11 @@
 You already stay with friends. Or you would — if paying weren’t awkward, and Airbnb didn’t put your home on the internet for strangers.
 
-Philoxenia is the missing option. Hospitality among people you already know. Private by design. Trustless pay.
+Philoxenia is the missing option. Real places from people you trust — a loft in Florence, a flat in Lausanne — not a public marketplace.
 
-Listings stay inside your circle — not a public search. Direct stays: zero percent protocol fee. Money is held in a smart contract — not a platform bank account.
+On Home, you only see friends’ listings. Open a place, see real photos, and Book and pay in STRK or DAI. Private by default with Ready X and STRK20.
 
-Book and pay in STRK or DAI. Shield on Ready X, then pay privately with STRK20 — so on-chain spectators don’t see how much you paid. Swap privately with AVNU inside the privacy pool. Chat stays sealed.
+Friends are added by wallet. Messages stay sealed. Earnings lets you share a place invite and earn when someone Books and pays. Your stays settle on-chain — zero percent protocol fee on a direct booking.
 
-A friend can introduce you and earn as a connector. Guests arrive with a vouch. Hosts fill nights. Philoxenia only takes a thin cut of that connector reward.
+Shield, private swap with AVNU, and private Book and pay — amounts stay off the public trail when you want them to.
 
-Trust who you trust. Pay trustless. Philoxenia — private peer-to-peer hospitality on Starknet.
+Trust who you trust. Pay trustless. Philoxenia.
