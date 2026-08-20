@@ -39,6 +39,15 @@ describe("countryFromLocation", () => {
     expect(looksLikePostalCode("España")).toBe(false);
     expect(looksLikePostalCode("1005")).toBe(true);
     expect(looksLikePostalCode("46400")).toBe(true);
+    expect(looksLikePostalCode("")).toBe(false);
+    expect(looksLikePostalCode("AB12 3CD")).toBe(true);
+  });
+
+  it("normalizes country aliases", () => {
+    expect(countryFromLocation("Berlin, Deutschland")).toBe("germany");
+    expect(countryFromLocation("Paris, France")).toBe("france");
+    expect(countryFromLocation("London, UK")).toBe("united kingdom");
+    expect(countryFromLocation("")).toBeNull();
   });
 });
 

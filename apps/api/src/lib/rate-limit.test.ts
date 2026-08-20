@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { rateLimitCheck } from "../lib/rate-limit.js";
+import { clientIp, rateLimitCheck } from "../lib/rate-limit.js";
 import { hash } from "starknet";
 
 describe("rateLimitCheck", () => {
@@ -11,6 +11,18 @@ describe("rateLimitCheck", () => {
     const blocked = rateLimitCheck(key, 3, 60_000);
     expect(blocked.ok).toBe(false);
     expect(blocked.retryAfterSec).toBeGreaterThan(0);
+  });
+});
+
+describe("clientIp", () => {
+  it("uses the first x-forwarded-for hop", () => {
+    expect(
+      clientIp({ "x-forwarded-for": " 1.1.1.1, 2.2.2.2 " }, "unknown")
+    ).toBe("1.1.1.1");
+  });
+
+  it("falls back when the header is missing", () => {
+    expect(clientIp({}, "127.0.0.1")).toBe("127.0.0.1");
   });
 });
 

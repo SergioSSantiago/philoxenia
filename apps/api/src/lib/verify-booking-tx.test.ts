@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  listSettledEscrowTxHashes,
+  SEEDED_SETTLED_TXS,
   txHashVariants,
   uuidToOnChainId,
   weiToTokenAmount,
@@ -31,5 +33,19 @@ describe("txHashVariants", () => {
     expect(variants).toContain(
       "0x5bac436e2a9775719de94e0ec1ea62f1cbc9737b23dd780230df66a53cc7813"
     );
+  });
+});
+
+describe("listSettledEscrowTxHashes", () => {
+  it("returns seeded orphan pays for the known guest", async () => {
+    const hashes = await listSettledEscrowTxHashes(
+      "0x04912f27036fd23f51cb9cfe719ea0d875bfc462b5f2af8f110a3b1832bb2f59"
+    );
+    expect(hashes.length).toBe(SEEDED_SETTLED_TXS.length);
+    expect(hashes.every((h) => h.startsWith("0x"))).toBe(true);
+  });
+
+  it("returns nothing for an unrelated guest", async () => {
+    expect(await listSettledEscrowTxHashes("0x1")).toEqual([]);
   });
 });

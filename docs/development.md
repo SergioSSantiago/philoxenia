@@ -88,16 +88,10 @@ scarb test
 ## Testing
 
 ```bash
-npm test              # API unit tests (vitest)
+npm test              # shared + API + web unit tests, then Cairo
 npm run test:contracts
 npm run typecheck
 npm run lint
-```
-
-Web payment provider tests:
-
-```bash
-npm test -w @philoxenia/web
 ```
 
 ## Project commands
@@ -107,6 +101,7 @@ npm test -w @philoxenia/web
 | `npm run dev` | API + web concurrently |
 | `npm run build` | Build shared, api, web |
 | `npm run typecheck` | TypeScript check all packages |
+| `npm run test` | Shared, API, web unit tests, then Cairo |
 | `npm run test:contracts` | Cairo tests |
 
 ## API development notes
