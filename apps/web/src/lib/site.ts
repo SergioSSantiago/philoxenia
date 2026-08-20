@@ -11,4 +11,4 @@ export const SITE_NAME = "Philoxenia";
 export const SITE_TAGLINE = "Trust who you trust. Pay trustless.";
 
 export const SITE_DESCRIPTION =
-  "Book & pay with people you trust on Starknet. Friends publish places, Book & pay STRK or DAI, and connectors earn by sharing a place invite — no public marketplace.";
+  "Stay with people you already trust — without listing your home on a public marketplace. Philoxenia lets friends Book & pay privately; money settles in a smart contract, not a platform bank account.";

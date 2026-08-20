@@ -10,11 +10,20 @@
 
 Built with [Cursor](https://cursor.com) AI-assisted development (disclosed, not hidden).
 
-## For everyone — what Philoxenia is
+## The problem Philoxenia solves
 
-Philoxenia is a way to **stay at a friend’s place** (or a friend-of-a-friend’s) and **pay safely**, without posting your home on a giant public website. You already know who you trust — Philoxenia lets you **Book & pay** those people in **STRK or DAI**, with optional **private payments** so strangers on the blockchain cannot see how much you paid. No hotel chain, no random guests, no platform taking a cut on every night you host directly.
+People already stay with friends. That is the oldest form of hospitality. The internet gave us two bad tools for it:
 
-Think of it as **Airbnb between friends**: listings stay inside your trust circle, chat is sealed, and money is held in a **smart contract** until the stay is settled — not in Philoxenia’s bank account.
+1. **Public marketplaces (Airbnb and the like).** Your spare room becomes a listing for the world. Strangers request dates. The platform takes a large cut. Your identity, card, and stay history sit with a corporation.
+2. **Informal chat + cash / bank transfer.** Awkward to ask for money. No hold if plans change. No record. A friend-of-a-friend intro dies in a WhatsApp group.
+
+**Philoxenia exists for the missing middle:** stay with people you already trust (or one introduction away), pay like professionals, keep the place off the public internet, and keep amounts private when you want.
+
+You do not need to understand wallets to get the idea: **friend hospitality with a clean, private checkout** — not a hotel search, not a public home-share site.
+
+## For everyone — how it works
+
+You publish a place **only for friends**. They Book & pay in STRK or DAI. Money is held in a **smart contract** (not Philoxenia’s bank). Chat is sealed. Optional **private payments** hide how much you paid from on-chain spectators. Direct stays: **0% protocol fee**. A friend who introduces a guest (connector) can earn a % — that is how the network grows without a public directory.
 
 ## Privacy & payments stack (what we use)
 
@@ -40,7 +49,7 @@ Mainnet privacy pool: [`0x040337b1…812a`](https://voyager.online/contract/0x04
 | **Social layer** | Friends, connectors who earn by vouching | Reviews from strangers |
 | **Best for** | “I trust Marco — I’ll stay at his flat in Florence” | “I need any place in Florence this weekend” |
 
-Philoxenia is **not** trying to replace hotels or mass tourism. It is for **private hospitality among people who already trust each other**, with modern crypto rails when you want them.
+Philoxenia is **not** trying to replace hotels or “any place in Florence this weekend.” It solves **friend stays that today leak onto Airbnb or die in a chat**.
 
 <p style="border:2px solid #b91c1c; background:#fef2f2; color:#991b1b; padding:14px 16px; border-radius:10px; line-height:1.5;">
 <strong style="color:#7f1d1d;">⚠ Required before you start — Ready X setup</strong><br/><br/>

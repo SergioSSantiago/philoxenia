@@ -30,18 +30,21 @@ export default function LandingPage() {
           Pay trustless.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted">
-          Book &amp; pay with people you trust on Starknet — publish places, Book
-          &amp; pay, and{" "}
-          <strong className="font-medium text-foreground">connectors</strong>{" "}
-          who earn by sharing a place invite. No public
-          marketplace.
+          <strong className="font-medium text-foreground">
+            The problem:
+          </strong>{" "}
+          you already stay with friends — or would, if it were not awkward. Airbnb
+          puts your home on the internet for strangers and takes a cut. Chat and
+          cash have no protection. Philoxenia is the missing option: hospitality
+          among people you already know, with a clean private payment.
         </p>
         <p className="mx-auto mt-3 max-w-2xl text-base text-muted sm:text-lg">
-          Direct Book &amp; pay:{" "}
+          Direct stays:{" "}
           <span className="whitespace-nowrap">
             <strong className="font-medium text-foreground">0%</strong> protocol
-            fee.
+            fee
           </span>
+          . Listings stay inside your circle — not a public search.
         </p>
 
         <div className="mx-auto mt-8 max-w-2xl text-left">
@@ -64,39 +67,34 @@ export default function LandingPage() {
       <section className="mx-auto max-w-5xl px-6 py-8">
         <div className="rounded-2xl border border-accent/25 bg-accent-soft/40 px-6 py-8 text-center sm:px-10">
           <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent">
-            Start here
+            Why this exists
           </p>
           <h2 className="mt-2 text-2xl text-foreground sm:text-3xl">
-            Earn as a connector
+            Friend stays, without Airbnb or awkward cash
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Share a friend&apos;s place invite. When they Book &amp; pay, you
-            receive the connector % on settle — paid in STRK or DAI
-            (same asset they Book &amp; pay). No inventory required. Friends who
-            publish fill nights; people Book &amp; pay with a vouch; you get paid
-            when they Book &amp; pay through your place invite.
+            Airbnb is built for strangers. Philoxenia is built for people you
+            already trust — and for a friend who can introduce you. Money is held
+            in a smart contract (not our bank). Private STRK or DAI keeps the
+            amount off the public chain when you want it. Direct Book &amp; pay:
+            0% to us.
           </p>
-          <div className="mt-6">
-            <Link href="/connector">
-              <Button>Connect Ready X &amp; open Earnings</Button>
-            </Link>
-          </div>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-5xl gap-12 px-6 py-16 md:grid-cols-3 md:gap-16">
         {[
           {
-            title: "Publish places",
-            body: "Publish places for friends. Set a connector % so friends share a place invite and earn. Direct Book & pay stays 0% protocol.",
+            title: "Host without going public",
+            body: "Open nights only to friends (and guests they introduce). No directory, no random requests, no platform fee on a direct stay.",
           },
           {
-            title: "Earn as a connector",
-            body: "Share a friend’s place invite. Earn the connector % set on the place in STRK or DAI when they Book & pay — Philoxenia takes 10% of that reward only.",
+            title: "Introduce and earn",
+            body: "Share a friend’s place invite. When they Book & pay, you earn the connector % — Philoxenia takes 10% of that reward only.",
           },
           {
-            title: "Book & pay",
-            body: "Book & pay through friendship or a place invite. STRK or DAI, Public or Private (STRK20) when Ready X supports it. Settle is trustless on Starknet.",
+            title: "Pay without the awkwardness",
+            body: "Book & pay in STRK or DAI. Private by default with Ready X. Chat is sealed. Settlement is automatic — no chasing a transfer.",
           },
         ].map((item) => (
           <div key={item.title}>

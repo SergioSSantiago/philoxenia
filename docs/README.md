@@ -8,9 +8,11 @@ Book & pay with people you trust on Starknet. **Trust who you trust. Pay trustle
 
 ## For everyone
 
-Philoxenia is **private hospitality among friends** — not a public hotel site. You publish a place for people you trust, they Book & pay in STRK or DAI, and money settles in a smart contract. Optional **private payments** (STRK20) hide amounts on-chain; sealed chat keeps messages off the server.
+**Problem:** friend stays are either put on Airbnb (public, expensive) or settled over chat (awkward, unprotected).
 
-**Why not Airbnb?** No public listing directory, **0% protocol fee** on direct stays, trust-by-friendship instead of anonymous reviews, and optional crypto privacy Airbnb cannot offer.
+**Philoxenia:** hospitality among people you already trust — listings stay in your circle, money settles in a smart contract, payments can stay private (STRK20). Direct stays: **0% protocol fee**. A connector earns by introducing a guest; that is how the network grows without a public search.
+
+See the comparison in the [root README](../README.md#why-philoxenia-instead-of-airbnb).
 
 ## Privacy stack
 

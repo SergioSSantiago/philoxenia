@@ -38,8 +38,8 @@ export function landingJsonLd() {
             "Direct Book & pay: 0% protocol fee. Connectors earn the connector % set on the place; Philoxenia takes 10% of that connector reward only.",
         },
         featureList: [
-          "Private friend-based hospitality",
-          "Publish places for friends",
+          "Friend stays without a public marketplace",
+          "Publish places for friends only",
           "Book & pay with Starknet escrow",
           "Share a place invite and earn on Book & pay",
           "STRK20 Private Book & pay with Ready X",

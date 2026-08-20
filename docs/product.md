@@ -18,7 +18,9 @@ The header lockup (name + sleeping-head cameo) always opens `/`. See [brand.md](
 
 ## Problem
 
-Traditional home-sharing platforms are public marketplaces with platform fees and broad data exposure. Philoxenia targets hosts and guests who already trust each other — or are one introduction away — and want trustless settlement without a public directory of places.
+**Main job:** make it possible to host and stay with people you already trust — without putting the home on a public marketplace, and without settling the stay over awkward cash or chat.
+
+Airbnb solves *finding a stranger’s place*. Most people who would host a friend do not want that. Informal friend-stays solve *trust* but fail on *money and coordination*. Philoxenia sits in between: friend-based discovery, trustless settlement, optional private pay, 0% protocol fee on direct stays. Growth is introductions (connectors), not ads or a public directory.
 
 ## What Philoxenia is
 
@@ -28,7 +30,7 @@ Traditional home-sharing platforms are public marketplaces with platform fees an
 - **Trustless settlement** — escrow on Starknet; protocol earns **only** 10% of connector rewards (0% on direct **Book & pay**)
 - **Payment privacy** — STRK20 for STRK and DAI when Ready X has Smart Wallet + Private enabled (**Private Book & pay**)
 - **Sealed chat + peer pay** — E2E messages between friends; public or private peer transfers
-- **STRK ↔ DAI swap** — public swap STRK ↔ DAI on Ready X (and from Home)
+- **STRK ↔ DAI swap** — private swap by default on Ready X (public swap in Advanced)
 
 ## What Philoxenia is not
 
