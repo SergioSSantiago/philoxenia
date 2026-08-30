@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import type { PaymentAsset } from "@philoxenia/shared";
+import { AvnuSponsorNotice } from "@/components/avnu-sponsor-notice";
 import { Button } from "@/components/ui";
 import { buildLayerswapFundUrl } from "@/lib/on-ramp/layerswap";
-import { isSponsoredGasEnabled } from "@/lib/payments/paymaster";
 
 type FundWalletPanelProps = {
   walletAddress: string;
@@ -32,10 +32,8 @@ export function FundWalletPanel({
         <p className="font-medium text-foreground">Need STRK or DAI to Book & pay?</p>
         <p className="mt-1 text-muted">
           Add funds to your Ready X wallet with Layerswap (card, bank, or bridge).
-          {isSponsoredGasEnabled()
-            ? " Philoxenia can sponsor gas on Book & pay when your balance is low on STRK."
-            : null}
         </p>
+        <AvnuSponsorNotice className="mt-1 text-emerald-800" />
         <div className="mt-3 flex flex-wrap gap-2">
           {(["STRK", "DAI"] as const).map((token) => (
             <button
@@ -71,10 +69,8 @@ export function FundWalletPanel({
         <p className="mt-0.5 text-xs leading-relaxed text-muted">
           Bridge or buy into your Ready X wallet with Layerswap — then shield on
           Ready X for Private Book & pay.
-          {isSponsoredGasEnabled()
-            ? " Public Book & pay gas can be sponsored by Philoxenia."
-            : null}
         </p>
+        <AvnuSponsorNotice className="text-xs leading-relaxed text-emerald-800" />
       </div>
       <div className="flex gap-2" role="group" aria-label="Asset to receive">
         {(["STRK", "DAI"] as const).map((token) => (

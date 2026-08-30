@@ -23,7 +23,10 @@ import { createPaymentProvider } from "@/lib/payments/strk20-payment-provider";
 import { onChainIdFromUuid } from "@/lib/payments/escrow-actions";
 import { diagnosePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 import { privacyLabel } from "@/lib/payments/payment-provider";
-import { isSponsoredGasEnabled } from "@/lib/payments/paymaster";
+import {
+  formatAvnuCreditsLabel,
+  useAvnuSponsorStatus,
+} from "@/lib/avnu/use-avnu-sponsor-status";
 import {
   STRK20_PRIVACY_ENABLED,
   escrowAddressForAsset,
@@ -125,6 +128,8 @@ function NewBookingForm() {
 
   const walletReady = Boolean(account && address);
   const payLocked = submitting || recording;
+  const { sponsorReady, creditsStrk } = useAvnuSponsorStatus();
+  const avnuCredits = formatAvnuCreditsLabel(creditsStrk);
 
   useEffect(() => {
     if (!token) return;
@@ -719,8 +724,8 @@ function NewBookingForm() {
                     {fundMode === "private"
                       ? "Book & pay from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records who publishes this place, who Book & pay, and amounts. Shield the Book & pay asset on Ready X first — proofs can take a while."
                       : `Public Book & pay: Approve in Ready X, then fund. Visible on Voyager.${
-                          isSponsoredGasEnabled()
-                            ? " Gas can be sponsored — you still need enough STRK or DAI for the stay."
+                          sponsorReady
+                            ? ` Gas sponsored by AVNU${avnuCredits ? ` (${avnuCredits} credits)` : ""} — you still need enough STRK or DAI for the stay.`
                             : ""
                         }`}
                   </p>

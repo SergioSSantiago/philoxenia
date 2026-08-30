@@ -7,6 +7,7 @@ import type { PaymentAsset } from "@philoxenia/shared";
 import { ActionNotice } from "@/components/action-notice";
 import { Button, TextInput } from "@/components/ui";
 import { useAuth } from "@/lib/auth-context";
+import { useAvnuSponsorStatus } from "@/lib/avnu/use-avnu-sponsor-status";
 import {
   AVNU_SWAP_SLIPPAGE,
   executeAvnuPrivateSwap,
@@ -36,8 +37,7 @@ export function TokenSwapPanel() {
   const [privacyCapable, setPrivacyCapable] = useState(false);
   const [privacyHint, setPrivacyHint] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [sponsoredGas, setSponsoredGas] = useState(false);
-  const [avnuHint, setAvnuHint] = useState<string | null>(null);
+  const { sponsorReady: sponsoredGas, hint: avnuHint } = useAvnuSponsorStatus();
   const [msg, setMsg] = useState("");
   const [notice, setNotice] = useState<{
     title: string;
@@ -47,25 +47,6 @@ export function TokenSwapPanel() {
   } | null>(null);
   const quoteReq = useRef(0);
   const walletReady = Boolean(account && address);
-
-  useEffect(() => {
-    fetch("/api/avnu/status")
-      .then((response) => response.json())
-      .then(
-        (data: {
-          sponsoredGasEnabled?: boolean;
-          sponsorReady?: boolean;
-          hint?: string | null;
-        }) => {
-          setSponsoredGas(Boolean(data.sponsoredGasEnabled && data.sponsorReady));
-          setAvnuHint(data.hint ?? null);
-        }
-      )
-      .catch(() => {
-        setSponsoredGas(false);
-        setAvnuHint(null);
-      });
-  }, []);
 
   useEffect(() => {
     if (!address) {
