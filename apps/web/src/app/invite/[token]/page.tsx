@@ -11,7 +11,7 @@ import { api, API_GENERIC_ERROR } from "@/lib/api";
 export default function InvitePage() {
   const params = useParams<{ token: string }>();
   const router = useRouter();
-  const { user, token, connectWallet, signIn, openSignIn } = useAuth();
+  const { user, token, continueWithReadyX } = useAuth();
   const [invite, setInvite] = useState<InviteResolution | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -61,13 +61,31 @@ export default function InvitePage() {
     setError("");
     try {
       if (!token) {
-        openSignIn();
-        return;
+        await continueWithReadyX();
       }
       await api.post("/friends/request", { toUserId: invite!.hostId });
       await loadInvite();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not send friend request to Book & pay");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function continueFromInvite() {
+    setBusy(true);
+    setError("");
+    try {
+      await continueWithReadyX();
+      const data = await loadInvite();
+      if (!data.canViewListing && !data.friendshipPending) {
+        await api.post("/friends/request", { toUserId: data.hostId });
+        await loadInvite();
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not continue with Ready X"
+      );
     } finally {
       setBusy(false);
     }
@@ -142,13 +160,15 @@ export default function InvitePage() {
           <div className="mt-8 space-y-3">
             <Button
               className="w-full"
-              onClick={async () => {
-                await connectWallet();
-                await signIn();
-              }}
+              disabled={busy}
+              onClick={() => void continueFromInvite()}
             >
-              Connect Ready X to Book & pay
+              {busy ? "Opening Ready X…" : "Continue with Ready X"}
             </Button>
+            <p className="text-center text-xs text-muted leading-relaxed">
+              One step in Ready X — then we ask{" "}
+              {invite.host.displayName} to be friends so you can Book & pay.
+            </p>
           </div>
         ) : invite.friendshipPending ? (
           <p className="mt-8 text-sm text-muted leading-relaxed">

@@ -33,6 +33,8 @@ interface AuthContextValue {
   reconnectWallet: () => Promise<void>;
   disconnect: () => void;
   signIn: (displayName?: string) => Promise<void>;
+  /** Connect Ready X (if needed) then sign in — one user-facing step. */
+  continueWithReadyX: (displayName?: string) => Promise<void>;
   refreshUser: () => Promise<User>;
   updateDisplayName: (displayName: string) => Promise<User>;
 }
@@ -62,6 +64,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     expiresAt: string;
     walletAddress: string;
   } | null>(null);
+  const addressRef = useRef<string | undefined>(undefined);
+  const accountRef = useRef(account);
+
+  useEffect(() => {
+    addressRef.current = address;
+    accountRef.current = account;
+  }, [address, account]);
 
   const openSignIn = useCallback(() => setSignInOpen(true), []);
   const closeSignIn = useCallback(() => setSignInOpen(false), []);
@@ -186,29 +195,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = useCallback(
     async (displayName?: string) => {
-      if (!address || !account) {
-        throw new Error("Ready X is not connected. Tap Connect Ready X.");
+      const walletAddress = addressRef.current;
+      const signingAccount = accountRef.current;
+      if (!walletAddress || !signingAccount) {
+        throw new Error("Ready X is not connected. Tap Continue with Ready X.");
       }
 
       const cached = challengeRef.current;
       const freshEnough =
         cached &&
-        cached.walletAddress === address &&
+        cached.walletAddress === walletAddress &&
         Date.parse(cached.expiresAt) - Date.now() > 8_000;
 
-      // Prefer a prefetched challenge so Sign in can call the wallet in the
-      // same user gesture (required for iOS to reopen Ready).
       const challenge = freshEnough
         ? cached
         : await api.post<{
             message: string;
             nonce: string;
             expiresAt: string;
-          }>("/auth/challenge", { walletAddress: address });
+          }>("/auth/challenge", { walletAddress });
 
-      // Keep challenge until verify succeeds so a failed attempt can retry
-      // without getting stuck on "Preparing signature…".
-      challengeRef.current = { ...challenge, walletAddress: address };
+      challengeRef.current = { ...challenge, walletAddress };
       setChallengeReady(true);
 
       const typedData = buildPhiloxeniaAuthTypedData({
@@ -218,10 +225,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       let signature: unknown;
       try {
-        // On mobile WC, starknetkit opens argent://app/wc/request. After an
-        // await (challenge fetch), iOS may block that — reopen explicitly.
         openReadyForSignRequest();
-        const signPromise = account.signMessage(typedData);
+        const signPromise = signingAccount.signMessage(typedData);
         const retry = window.setTimeout(() => openReadyForSignRequest(), 500);
         try {
           signature = await signPromise;
@@ -243,7 +248,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const session = await api.post<{ token: string; user: User }>(
           "/auth/verify",
           {
-            walletAddress: address,
+            walletAddress,
             signature: sigArray,
             displayName,
           }
@@ -257,7 +262,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         persistSession(session.token, session.user);
         setSignInOpen(false);
       } catch (err) {
-        // Consume used/invalid challenge and mint a fresh one for the next tap.
         challengeRef.current = null;
         setChallengeReady(false);
         try {
@@ -265,16 +269,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             message: string;
             nonce: string;
             expiresAt: string;
-          }>("/auth/challenge", { walletAddress: address });
-          challengeRef.current = { ...next, walletAddress: address };
+          }>("/auth/challenge", { walletAddress });
+          challengeRef.current = { ...next, walletAddress };
           setChallengeReady(true);
         } catch {
-          // leave challengeReady false; UI will show Preparing until address effect retries
+          // prefetch retry on next tap
         }
         throw new Error(formatWalletError(err));
       }
     },
-    [address, account]
+    []
+  );
+
+  const waitForConnectedWallet = useCallback(async (timeoutMs = 12_000) => {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      if (addressRef.current && accountRef.current) return;
+      await new Promise((r) => setTimeout(r, 120));
+    }
+    throw new Error(
+      "Ready X did not connect in time. Open Philoxenia in the Ready X browser or unlock the extension, then try again."
+    );
+  }, []);
+
+  const continueWithReadyX = useCallback(
+    async (displayName?: string) => {
+      if (!addressRef.current || !accountRef.current) {
+        await connectWallet();
+        await waitForConnectedWallet();
+      }
+      await signIn(displayName);
+    },
+    [connectWallet, signIn, waitForConnectedWallet]
   );
 
   const disconnect = useCallback(() => {
@@ -284,7 +310,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     api.setToken(null);
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
-    setSignInOpen(true);
   }, [disconnectWallet]);
 
   const value = useMemo(
@@ -300,6 +325,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       reconnectWallet,
       disconnect,
       signIn,
+      continueWithReadyX,
       refreshUser,
       updateDisplayName,
     }),
@@ -315,6 +341,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       reconnectWallet,
       disconnect,
       signIn,
+      continueWithReadyX,
       refreshUser,
       updateDisplayName,
     ]

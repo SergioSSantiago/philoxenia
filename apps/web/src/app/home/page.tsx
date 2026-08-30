@@ -28,15 +28,12 @@ export default function HomePage() {
   useEffect(() => {
     if (isLoading) return;
     if (!token) {
-      openSignIn();
       setData(null);
       return;
     }
 
-    api.get<HomeData>("/home").then(setData).catch(() => {
-      openSignIn();
-    });
-  }, [token, isLoading, openSignIn]);
+    api.get<HomeData>("/home").then(setData).catch(() => setData(null));
+  }, [token, isLoading]);
 
   if (isLoading) {
     return (
@@ -52,10 +49,12 @@ export default function HomePage() {
         <div className="mb-8 sm:mb-10">
           <h1 className="text-3xl sm:text-4xl">Book & pay with people you trust</h1>
           <p className="mt-2 text-sm text-muted sm:text-base">
-            Connect Ready X to Book & pay places from people you trust.
+            Open a <strong className="font-medium text-foreground">place invite</strong>{" "}
+            from a friend first when you can — then continue with Ready X to join,
+            message, and Book & pay privately.
           </p>
         </div>
-        <Button onClick={openSignIn}>Connect Ready X</Button>
+        <Button onClick={openSignIn}>Continue with Ready X</Button>
         <AuthModal />
       </Shell>
     );

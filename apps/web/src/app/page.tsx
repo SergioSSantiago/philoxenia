@@ -39,6 +39,11 @@ export default function LandingPage() {
           among people you already know, with a clean private payment.
         </p>
         <p className="mx-auto mt-3 max-w-2xl text-base text-muted sm:text-lg">
+          Got a <strong className="font-medium text-foreground">place invite</strong>{" "}
+          from a friend? Open that link first — you only need Ready X when you
+          are ready to join and Book &amp; pay.
+        </p>
+        <p className="mx-auto mt-3 max-w-2xl text-base text-muted sm:text-lg">
           Direct stays:{" "}
           <span className="whitespace-nowrap">
             <strong className="font-medium text-foreground">0%</strong> protocol
@@ -47,13 +52,9 @@ export default function LandingPage() {
           . Listings stay inside your circle — not a public search.
         </p>
 
-        <div className="mx-auto mt-8 max-w-2xl text-left">
-          <ReadyWalletNotice />
-        </div>
-
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link href="/home">
-            <Button>See places to Book &amp; pay</Button>
+            <Button>Continue with Ready X</Button>
           </Link>
           <Link href="/connector">
             <Button variant="secondary">Earn as a connector</Button>
@@ -62,6 +63,15 @@ export default function LandingPage() {
             <Button variant="ghost">List your place</Button>
           </Link>
         </div>
+
+        <details className="mx-auto mt-8 max-w-2xl text-left text-sm text-muted">
+          <summary className="cursor-pointer select-none text-foreground">
+            Private Book &amp; pay — Ready X setup
+          </summary>
+          <div className="mt-3">
+            <ReadyWalletNotice />
+          </div>
+        </details>
       </section>
 
       <section className="mx-auto max-w-5xl px-6 py-8">
