@@ -42,6 +42,10 @@ export function formatWalletError(err: unknown): string {
     return "Starknet could not read this account (RPC). Check mainnet in Ready X, then Approve in Ready X again.";
   }
 
+  if (/INSUFFICIENT_PRIVATE_BALANCE|insufficient private/i.test(msg)) {
+    return "Not enough shielded balance for a private swap. Shield the token you want to sell on Profile first — or use Public swap in Advanced.";
+  }
+
   return msg || "Could not complete the Ready X request.";
 }
 

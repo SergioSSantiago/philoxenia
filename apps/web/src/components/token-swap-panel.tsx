@@ -15,6 +15,7 @@ import {
   formatSwapAmount,
   quoteAvnuSwap,
 } from "@/lib/payments/avnu-swap";
+import { createStrk20Provider } from "@/lib/payments/strk20-payment-provider";
 import { diagnosePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 import { formatWalletError } from "@/lib/wallet-errors";
 
@@ -38,6 +39,7 @@ export function TokenSwapPanel() {
   const [privacyHint, setPrivacyHint] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const { sponsorReady: sponsoredGas, hint: avnuHint } = useAvnuSponsorStatus();
+  const [shieldedBalance, setShieldedBalance] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
   const [notice, setNotice] = useState<{
     title: string;
@@ -65,6 +67,25 @@ export function TokenSwapPanel() {
       cancelled = true;
     };
   }, [address]);
+
+  useEffect(() => {
+    if (!account || !privacyCapable || swapMode !== "private") {
+      setShieldedBalance(null);
+      return;
+    }
+    let cancelled = false;
+    void createStrk20Provider(account, sellAsset)
+      .getPrivateBalance()
+      .then((balance) => {
+        if (!cancelled) setShieldedBalance(balance);
+      })
+      .catch(() => {
+        if (!cancelled) setShieldedBalance(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [account, privacyCapable, sellAsset, swapMode]);
 
   const refreshQuote = useCallback(async () => {
     if (!address || !amount.trim()) {
@@ -203,12 +224,26 @@ export function TokenSwapPanel() {
       const needsReconnect =
         /not connected|reconnect|Ready|STRK20|privacy|signing|session|wallet/i.test(
           body
+        ) && !/INSUFFICIENT_PRIVATE_BALANCE|shielded balance/i.test(body);
+      const needsShield =
+        /INSUFFICIENT_PRIVATE_BALANCE|insufficient private|shielded balance/i.test(
+          body
         );
       setNotice({
-        title: needsReconnect ? "Ready X session needed" : "Could not swap STRK or DAI",
-        body,
+        title: needsShield
+          ? "Shield first, or use public swap"
+          : needsReconnect
+            ? "Ready X session needed"
+            : "Could not swap STRK or DAI",
+        body: needsShield
+          ? `Private swap spends shielded ${sellAsset} in the STRK20 pool — your public ${sellAsset} balance is separate. On Profile, scroll to Shield STRK or DAI and shield at least ${amount.trim() || "the swap amount"} ${sellAsset}, then try again.`
+          : body,
         tone: "error",
-        primaryLabel: needsReconnect ? "Connect Ready X" : "Got it",
+        primaryLabel: needsShield
+          ? "Use public swap"
+          : needsReconnect
+            ? "Connect Ready X"
+            : "Got it",
       });
       setMsg(body);
     } finally {
@@ -340,6 +375,14 @@ export function TokenSwapPanel() {
                 {sellAsset}
               </span>
             </div>
+            {swapMode === "private" && privacyCapable && (
+              <p className="mt-1 text-xs text-muted">
+                Shielded {sellAsset}: {shieldedBalance ?? "…"}
+                {shieldedBalance === "0"
+                  ? " — shield on Profile before a private swap."
+                  : null}
+              </p>
+            )}
           </label>
 
           <button
@@ -406,6 +449,12 @@ export function TokenSwapPanel() {
         busy={reconnecting || busy}
         primaryLabel={notice?.primaryLabel}
         onPrimary={() => {
+          if (notice?.primaryLabel === "Use public swap") {
+            setSwapMode("public");
+            setShowAdvanced(true);
+            setNotice(null);
+            return;
+          }
           if (
             notice?.primaryLabel === "Connect Ready" ||
             notice?.primaryLabel === "Connect Ready X" ||
