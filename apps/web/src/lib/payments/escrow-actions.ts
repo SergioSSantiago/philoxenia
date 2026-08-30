@@ -1,4 +1,5 @@
 import { AccountInterface, CallData, cairo } from "starknet";
+import { executeAccountCalls } from "@/lib/payments/execute-account";
 
 /** Derive the on-chain u256 booking id used by BookingEscrow from the API UUID. */
 export function onChainIdFromUuid(uuid: string): string {
@@ -10,7 +11,7 @@ export async function settleEscrowBooking(
   escrowAddress: string,
   onChainBookingId: string
 ): Promise<string> {
-  const { transaction_hash } = await account.execute({
+  const { transaction_hash } = await executeAccountCalls(account, {
     contractAddress: escrowAddress,
     entrypoint: "settle_booking",
     calldata: CallData.compile({
@@ -25,7 +26,7 @@ export async function refundEscrowBooking(
   escrowAddress: string,
   onChainBookingId: string
 ): Promise<string> {
-  const { transaction_hash } = await account.execute({
+  const { transaction_hash } = await executeAccountCalls(account, {
     contractAddress: escrowAddress,
     entrypoint: "refund_booking",
     calldata: CallData.compile({

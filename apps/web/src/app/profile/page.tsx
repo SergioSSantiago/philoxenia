@@ -13,6 +13,7 @@ import { WalletAddress } from "@/components/wallet-address";
 import { WalletBalances } from "@/components/wallet-balances";
 import { Strk20PrivacyPanel } from "@/components/strk20-privacy-panel";
 import { ShieldedStakingPanel } from "@/components/shielded-staking-panel";
+import { FundWalletPanel } from "@/components/fund-wallet-panel";
 import { TokenSwapPanel } from "@/components/token-swap-panel";
 import { useAuth } from "@/lib/auth-context";
 import { formatWalletError } from "@/lib/wallet-errors";
@@ -101,6 +102,10 @@ export default function ProfilePage() {
 
         <Card>
           <WalletBalances />
+        </Card>
+
+        <Card>
+          <FundWalletPanel walletAddress={user.walletAddress} />
         </Card>
 
         <Card>

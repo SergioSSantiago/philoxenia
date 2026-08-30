@@ -16,12 +16,14 @@ import {
   GuestNightCalendar,
   nightsToStayRange,
 } from "@/components/guest-night-calendar";
+import { FundWalletPanel } from "@/components/fund-wallet-panel";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import { createPaymentProvider } from "@/lib/payments/strk20-payment-provider";
 import { onChainIdFromUuid } from "@/lib/payments/escrow-actions";
 import { diagnosePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 import { privacyLabel } from "@/lib/payments/payment-provider";
+import { isSponsoredGasEnabled } from "@/lib/payments/paymaster";
 import {
   STRK20_PRIVACY_ENABLED,
   escrowAddressForAsset,
@@ -716,7 +718,11 @@ function NewBookingForm() {
                   <p className="text-xs text-muted leading-relaxed">
                     {fundMode === "private"
                       ? "Book & pay from shielded STRK or DAI via the Philoxenia anonymizer (pool → helper → escrow). Escrow still records who publishes this place, who Book & pay, and amounts. Shield the Book & pay asset on Ready X first — proofs can take a while."
-                      : "Public Book & pay: Approve in Ready X, then fund. Visible on Voyager."}
+                      : `Public Book & pay: Approve in Ready X, then fund. Visible on Voyager.${
+                          isSponsoredGasEnabled()
+                            ? " Gas can be sponsored — you still need enough STRK or DAI for the stay."
+                            : ""
+                        }`}
                   </p>
                 </div>
               )}
@@ -727,6 +733,14 @@ function NewBookingForm() {
                   : "STRK amount refreshes from the live DAI market rate when you Book & pay."}
               </p>
             </Card>
+          )}
+
+          {quote && range.ok && user && (
+            <FundWalletPanel
+              compact
+              walletAddress={user.walletAddress}
+              defaultAsset={paymentAsset}
+            />
           )}
 
           {recording && (

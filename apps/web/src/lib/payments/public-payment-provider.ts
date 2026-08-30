@@ -8,6 +8,7 @@ import type {
   PaymentProviderCapabilities,
 } from "./payment-provider";
 import { callContract } from "./rpc-call";
+import { executeAccountCalls } from "./execute-account";
 
 function parseAmount(amount: string): bigint {
   const [whole, frac = ""] = amount.split(".");
@@ -105,7 +106,7 @@ export class PublicPaymentProvider implements PaymentProvider {
       }),
     });
 
-    const { transaction_hash } = await this.account.execute(calls);
+    const { transaction_hash } = await executeAccountCalls(this.account, calls);
 
     return {
       status: "confirmed",
