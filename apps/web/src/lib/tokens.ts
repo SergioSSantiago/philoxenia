@@ -10,6 +10,11 @@ export const DAI_TOKEN_ADDRESS =
   process.env.NEXT_PUBLIC_DAI_TOKEN_ADDRESS ??
   "0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3";
 
+/** Endur xSTRK (ERC-4626 LST) on Starknet mainnet */
+export const XSTRK_TOKEN_ADDRESS =
+  process.env.NEXT_PUBLIC_XSTRK_TOKEN_ADDRESS ??
+  "0x28d709c875c0ceac3dce7065bec5328186dc89fe254527084d1689910954b0a";
+
 /** STRK BookingEscrow (constructor token = STRK). */
 export const STRK_BOOKING_ESCROW_ADDRESS =
   process.env.NEXT_PUBLIC_BOOKING_ESCROW_ADDRESS ??

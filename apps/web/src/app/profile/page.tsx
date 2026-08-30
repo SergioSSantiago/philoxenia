@@ -12,6 +12,7 @@ import {
 import { WalletAddress } from "@/components/wallet-address";
 import { WalletBalances } from "@/components/wallet-balances";
 import { Strk20PrivacyPanel } from "@/components/strk20-privacy-panel";
+import { ShieldedStakingPanel } from "@/components/shielded-staking-panel";
 import { TokenSwapPanel } from "@/components/token-swap-panel";
 import { useAuth } from "@/lib/auth-context";
 import { formatWalletError } from "@/lib/wallet-errors";
@@ -66,7 +67,7 @@ export default function ProfilePage() {
     <Shell>
       <SectionTitle
         title="Ready X"
-        subtitle="Shield STRK or DAI first, then private Book & pay, swap, and chat sends. Private is the default when Ready X supports it."
+        subtitle="Shield STRK or DAI, stake privately with Endur xSTRK, then private Book & pay, swap, and chat sends."
       />
 
       <div className="space-y-6">
@@ -104,6 +105,10 @@ export default function ProfilePage() {
 
         <Card>
           <Strk20PrivacyPanel />
+        </Card>
+
+        <Card>
+          <ShieldedStakingPanel />
         </Card>
 
         <Card>
