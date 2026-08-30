@@ -36,6 +36,8 @@ export function TokenSwapPanel() {
   const [privacyCapable, setPrivacyCapable] = useState(false);
   const [privacyHint, setPrivacyHint] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [sponsoredGas, setSponsoredGas] = useState(false);
+  const [avnuHint, setAvnuHint] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
   const [notice, setNotice] = useState<{
     title: string;
@@ -45,6 +47,25 @@ export function TokenSwapPanel() {
   } | null>(null);
   const quoteReq = useRef(0);
   const walletReady = Boolean(account && address);
+
+  useEffect(() => {
+    fetch("/api/avnu/status")
+      .then((response) => response.json())
+      .then(
+        (data: {
+          sponsoredGasEnabled?: boolean;
+          sponsorReady?: boolean;
+          hint?: string | null;
+        }) => {
+          setSponsoredGas(Boolean(data.sponsoredGasEnabled && data.sponsorReady));
+          setAvnuHint(data.hint ?? null);
+        }
+      )
+      .catch(() => {
+        setSponsoredGas(false);
+        setAvnuHint(null);
+      });
+  }, []);
 
   useEffect(() => {
     if (!address) {
@@ -247,6 +268,18 @@ export function TokenSwapPanel() {
                 </a>
                 . Routes and amounts are visible on Voyager. Slippage{" "}
                 {(AVNU_SWAP_SLIPPAGE * 100).toFixed(0)}%.
+              </>
+            )}
+            {sponsoredGas && (
+              <>
+                {" "}
+                Network fees may be sponsored by AVNU when your balance allows.
+              </>
+            )}
+            {avnuHint && !sponsoredGas && (
+              <>
+                {" "}
+                <span className="text-amber-800">{avnuHint}</span>
               </>
             )}
           </p>

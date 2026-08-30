@@ -8,6 +8,10 @@ import {
 } from "@avnu/avnu-sdk";
 import type { AccountInterface } from "starknet";
 import type { PaymentAsset } from "@philoxenia/shared";
+import {
+  getAvnuClientOptions,
+  getAvnuSwapPaymasterParams,
+} from "@/lib/avnu/client";
 import { tokenAddressForAsset } from "@/lib/tokens";
 import { resolvePrivacyWallet } from "@/lib/payments/wallet-account-v6";
 
@@ -45,14 +49,17 @@ export async function quoteAvnuSwap(input: {
     throw new Error("Choose different tokens to swap STRK ↔ DAI");
   }
   const sellAmount = parseSwapAmount(input.sellAmount);
-  const quotes = await getQuotes({
-    sellTokenAddress: tokenAddressForAsset(input.sellAsset),
-    buyTokenAddress: tokenAddressForAsset(input.buyAsset),
-    sellAmount,
-    takerAddress: input.takerAddress,
-    size: 1,
-    integratorName: "Philoxenia",
-  });
+  const quotes = await getQuotes(
+    {
+      sellTokenAddress: tokenAddressForAsset(input.sellAsset),
+      buyTokenAddress: tokenAddressForAsset(input.buyAsset),
+      sellAmount,
+      takerAddress: input.takerAddress,
+      size: 1,
+      integratorName: "Philoxenia",
+    },
+    getAvnuClientOptions()
+  );
   const quote = quotes[0];
   if (!quote) throw new Error("No AVNU route to swap STRK ↔ DAI right now");
   return quote;
@@ -62,12 +69,17 @@ export async function executeAvnuSwap(input: {
   account: AccountInterface;
   quote: Quote;
 }): Promise<{ transactionHash: string }> {
-  const result = await executeSwap({
-    provider: input.account,
-    quote: input.quote,
-    slippage: SLIPPAGE,
-    executeApprove: true,
-  });
+  const paymaster = getAvnuSwapPaymasterParams();
+  const result = await executeSwap(
+    {
+      provider: input.account,
+      quote: input.quote,
+      slippage: SLIPPAGE,
+      executeApprove: true,
+      ...(paymaster ? { paymaster } : {}),
+    },
+    getAvnuClientOptions()
+  );
   return { transactionHash: result.transactionHash };
 }
 
@@ -89,14 +101,17 @@ export async function executeAvnuPrivateSwap(input: {
   }
 
   const prover = createStrk20WalletProver(session.account);
-  const result = await executePrivateSwap({
-    quote: input.quote,
-    slippage: SLIPPAGE,
-    takerAddress: input.walletAddress,
-    poolAddress: PRIVACY_POOL_ADDRESS,
-    feeMode: { poolFeeToken: input.quote.sellTokenAddress },
-    prover,
-  });
+  const result = await executePrivateSwap(
+    {
+      quote: input.quote,
+      slippage: SLIPPAGE,
+      takerAddress: input.walletAddress,
+      poolAddress: PRIVACY_POOL_ADDRESS,
+      feeMode: { poolFeeToken: input.quote.sellTokenAddress },
+      prover,
+    },
+    getAvnuClientOptions()
+  );
   return { transactionHash: result.transactionHash };
 }
 
