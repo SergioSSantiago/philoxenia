@@ -37,7 +37,6 @@ export function TokenSwapPanel() {
   const [swapMode, setSwapMode] = useState<SwapMode>("private");
   const [privacyCapable, setPrivacyCapable] = useState(false);
   const [privacyHint, setPrivacyHint] = useState("");
-  const [showAdvanced, setShowAdvanced] = useState(false);
   const { sponsorReady: sponsoredGas, hint: avnuHint } = useAvnuSponsorStatus();
   const [shieldedBalance, setShieldedBalance] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
@@ -61,7 +60,6 @@ export function TokenSwapPanel() {
       if (cancelled) return;
       setPrivacyCapable(result.capable);
       setPrivacyHint(result.reason ?? "");
-      if (result.capable) setSwapMode("private");
     });
     return () => {
       cancelled = true;
@@ -166,7 +164,7 @@ export function TokenSwapPanel() {
         title: "Private swap needs Ready X Private",
         body:
           privacyHint ||
-          "Shield the sell token on Ready X first (wallet API ≥ 0.10). Or use Public swap in Advanced.",
+          "Shield the sell token on Ready X first (wallet API ≥ 0.10). Or choose Public swap.",
         tone: "warn",
         primaryLabel: "Got it",
       });
@@ -326,32 +324,20 @@ export function TokenSwapPanel() {
                 : "border border-border bg-surface text-muted hover:text-foreground"
             }`}
           >
-            Private swap (default)
+            Private swap
           </button>
-          {(!privacyCapable || showAdvanced) && (
-            <button
-              type="button"
-              onClick={() => setSwapMode("public")}
-              className={`rounded-full px-4 py-2 text-sm transition ${
-                swapMode === "public"
-                  ? "bg-accent text-white"
-                  : "border border-border bg-surface text-muted hover:text-foreground"
-              }`}
-            >
-              Public swap
-            </button>
-          )}
-        </div>
-
-        {privacyCapable && !showAdvanced && swapMode === "private" && (
           <button
             type="button"
-            className="text-xs text-muted underline-offset-2 hover:text-foreground hover:underline"
-            onClick={() => setShowAdvanced(true)}
+            onClick={() => setSwapMode("public")}
+            className={`rounded-full px-4 py-2 text-sm transition ${
+              swapMode === "public"
+                ? "bg-accent text-white"
+                : "border border-border bg-surface text-muted hover:text-foreground"
+            }`}
           >
-            Advanced: public swap (visible on Voyager)
+            Public swap
           </button>
-        )}
+        </div>
 
         {swapMode === "private" && !privacyCapable && (
           <p className="text-xs leading-relaxed text-amber-800">
@@ -360,55 +346,58 @@ export function TokenSwapPanel() {
           </p>
         )}
 
-        <div className="grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
-          <label className="block text-sm">
-            You sell
-            <div className="mt-1 flex gap-2">
-              <TextInput
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                inputMode="decimal"
-                disabled={busy}
-              />
-              <span className="inline-flex min-w-[4.5rem] items-center justify-center rounded-xl border border-border bg-surface px-3 text-sm font-medium">
-                {sellAsset}
-              </span>
-            </div>
-            {swapMode === "private" && privacyCapable && (
-              <p className="mt-1 text-xs text-muted">
-                Shielded {sellAsset}: {shieldedBalance ?? "…"}
-                {shieldedBalance === "0"
-                  ? " — shield on Profile before a private swap."
-                  : null}
-              </p>
-            )}
-          </label>
-
-          <button
-            type="button"
-            onClick={flipDirection}
-            className="mb-1 flex h-11 w-11 items-center justify-center self-end rounded-full border border-border bg-surface text-lg text-foreground transition hover:bg-accent-soft/50"
-            aria-label="Flip STRK ↔ DAI"
-          >
-            ⇄
-          </button>
-
-          <label className="block text-sm">
-            You receive (est.)
-            <div className="mt-1 flex gap-2">
-              <div className="flex min-h-[44px] flex-1 items-center rounded-xl border border-border bg-background px-4 font-mono text-sm tabular-nums text-foreground">
-                {quoting
-                  ? "…"
-                  : quote
-                    ? formatSwapAmount(quote.buyAmount)
-                    : "—"}
+        <div className="space-y-1">
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
+            <div>
+              <p className="mb-1 text-sm text-foreground">You sell</p>
+              <div className="flex gap-2">
+                <TextInput
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="0.00"
+                  inputMode="decimal"
+                  disabled={busy}
+                  aria-label={`Amount of ${sellAsset} to sell`}
+                />
+                <span className="inline-flex min-w-[4.5rem] shrink-0 items-center justify-center rounded-xl border border-border bg-surface px-3 text-sm font-medium">
+                  {sellAsset}
+                </span>
               </div>
-              <span className="inline-flex min-w-[4.5rem] items-center justify-center rounded-xl border border-border bg-surface px-3 text-sm font-medium">
-                {buyAsset}
-              </span>
             </div>
-          </label>
+
+            <button
+              type="button"
+              onClick={flipDirection}
+              className="flex h-11 w-11 shrink-0 items-center justify-center justify-self-center rounded-full border border-border bg-surface text-lg text-foreground transition hover:bg-accent-soft/50 sm:mb-0"
+              aria-label="Flip STRK ↔ DAI"
+            >
+              ⇄
+            </button>
+
+            <div>
+              <p className="mb-1 text-sm text-foreground">You receive (est.)</p>
+              <div className="flex gap-2">
+                <div className="flex min-h-[44px] flex-1 items-center rounded-xl border border-border bg-background px-4 font-mono text-sm tabular-nums text-foreground">
+                  {quoting
+                    ? "…"
+                    : quote
+                      ? formatSwapAmount(quote.buyAmount)
+                      : "—"}
+                </div>
+                <span className="inline-flex min-w-[4.5rem] shrink-0 items-center justify-center rounded-xl border border-border bg-surface px-3 text-sm font-medium">
+                  {buyAsset}
+                </span>
+              </div>
+            </div>
+          </div>
+          {swapMode === "private" && privacyCapable && (
+            <p className="text-xs text-muted">
+              Shielded {sellAsset}: {shieldedBalance ?? "…"}
+              {shieldedBalance === "0"
+                ? " — shield on Profile before a private swap."
+                : null}
+            </p>
+          )}
         </div>
 
         {quote && (
@@ -451,7 +440,6 @@ export function TokenSwapPanel() {
         onPrimary={() => {
           if (notice?.primaryLabel === "Use public swap") {
             setSwapMode("public");
-            setShowAdvanced(true);
             setNotice(null);
             return;
           }

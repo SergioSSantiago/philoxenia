@@ -43,7 +43,7 @@ export function formatWalletError(err: unknown): string {
   }
 
   if (/INSUFFICIENT_PRIVATE_BALANCE|insufficient private/i.test(msg)) {
-    return "Not enough shielded balance for a private swap. Shield the token you want to sell on Profile first — or use Public swap in Advanced.";
+    return "Not enough shielded balance for a private swap. Shield the token you want to sell on Profile first — or choose Public swap.";
   }
 
   return msg || "Could not complete the Ready X request.";
