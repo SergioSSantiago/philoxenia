@@ -11,7 +11,7 @@ import { api, API_GENERIC_ERROR } from "@/lib/api";
 export default function InvitePage() {
   const params = useParams<{ token: string }>();
   const router = useRouter();
-  const { user, token, continueWithReadyX } = useAuth();
+  const { user, token, startSignIn, signingIn } = useAuth();
   const [invite, setInvite] = useState<InviteResolution | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -61,7 +61,7 @@ export default function InvitePage() {
     setError("");
     try {
       if (!token) {
-        await continueWithReadyX();
+        await startSignIn();
       }
       await api.post("/friends/request", { toUserId: invite!.hostId });
       await loadInvite();
@@ -76,7 +76,7 @@ export default function InvitePage() {
     setBusy(true);
     setError("");
     try {
-      await continueWithReadyX();
+      await startSignIn();
       const data = await loadInvite();
       if (!data.canViewListing && !data.friendshipPending) {
         await api.post("/friends/request", { toUserId: data.hostId });
@@ -160,10 +160,10 @@ export default function InvitePage() {
           <div className="mt-8 space-y-3">
             <Button
               className="w-full"
-              disabled={busy}
+              disabled={busy || signingIn}
               onClick={() => void continueFromInvite()}
             >
-              {busy ? "Opening Ready X…" : "Continue with Ready X"}
+              {busy || signingIn ? "Opening Ready X…" : "Continue with Ready X"}
             </Button>
             <p className="text-center text-xs text-muted leading-relaxed">
               One step in Ready X — then we ask{" "}

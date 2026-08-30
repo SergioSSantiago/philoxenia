@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useAccount } from "@starknet-react/core";
 import type { Listing, Booking, User } from "@philoxenia/shared";
-import { AuthModal } from "@/components/auth-modal";
+import { ContinueWithReadyXButton } from "@/components/continue-ready-button";
 import { Shell, SectionTitle, EmptyState, Button, Card } from "@/components/ui";
 import { ListingCard, BookingCard } from "@/components/cards";
 import { WalletAddress } from "@/components/wallet-address";
@@ -22,8 +23,17 @@ interface HomeData {
 }
 
 export default function HomePage() {
-  const { user, token, isLoading, openSignIn } = useAuth();
+  const { user, token, isLoading, startSignIn, signingIn } = useAuth();
+  const { address, account } = useAccount();
   const [data, setData] = useState<HomeData | null>(null);
+  const autoSignAttempted = useRef(false);
+
+  useEffect(() => {
+    if (isLoading || user || signingIn || autoSignAttempted.current) return;
+    if (!address || !account) return;
+    autoSignAttempted.current = true;
+    void startSignIn();
+  }, [isLoading, user, signingIn, address, account, startSignIn]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -54,8 +64,12 @@ export default function HomePage() {
             message, and Book & pay privately.
           </p>
         </div>
-        <Button onClick={openSignIn}>Continue with Ready X</Button>
-        <AuthModal />
+        <ContinueWithReadyXButton className="w-full sm:w-auto" />
+        {signingIn ? (
+          <p className="mt-3 text-sm text-muted">
+            Approve in Ready X to join Philoxenia.
+          </p>
+        ) : null}
       </Shell>
     );
   }

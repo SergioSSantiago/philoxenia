@@ -9,9 +9,9 @@ import {
   type ReactNode,
 } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
+import { ContinueWithReadyXButton } from "@/components/continue-ready-button";
 import { LandingListingMarquee } from "@/components/landing-listing-marquee";
 import { LandingNetworkStats } from "@/components/landing-network-stats";
-import { Button } from "@/components/ui";
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -102,9 +102,7 @@ export function LandingFrame({ children }: { children: ReactNode }) {
           >
             <BrandLockup size="large" />
           </div>
-          <Link href="/home">
-            <Button variant="secondary">Continue with Ready X</Button>
-          </Link>
+          <ContinueWithReadyXButton variant="secondary" />
         </div>
       </header>
 

@@ -25,9 +25,11 @@ interface AuthContextValue {
   isLoading: boolean;
   /** True once a fresh auth challenge is cached for the connected wallet. */
   challengeReady: boolean;
-  signInOpen: boolean;
-  openSignIn: () => void;
-  closeSignIn: () => void;
+  signingIn: boolean;
+  signInError: string | null;
+  clearSignInError: () => void;
+  /** Connect + sign in one user action (no modal). */
+  startSignIn: (displayName?: string) => Promise<void>;
   connectWallet: () => Promise<void>;
   /** Disconnect then connect again — use when Private/STRK20 needs a live API session. */
   reconnectWallet: () => Promise<void>;
@@ -56,7 +58,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [signInOpen, setSignInOpen] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
+  const [signInError, setSignInError] = useState<string | null>(null);
   const [challengeReady, setChallengeReady] = useState(false);
   const challengeRef = useRef<{
     message: string;
@@ -72,8 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     accountRef.current = account;
   }, [address, account]);
 
-  const openSignIn = useCallback(() => setSignInOpen(true), []);
-  const closeSignIn = useCallback(() => setSignInOpen(false), []);
+  const clearSignInError = useCallback(() => setSignInError(null), []);
 
   const applyUser = useCallback((next: User) => {
     setUser(next);
@@ -260,7 +262,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session.user);
         api.setToken(session.token);
         persistSession(session.token, session.user);
-        setSignInOpen(false);
+        setSignInError(null);
+        if (typeof window !== "undefined" && window.location.pathname === "/") {
+          window.location.assign("/home");
+        }
       } catch (err) {
         challengeRef.current = null;
         setChallengeReady(false);
@@ -303,6 +308,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [connectWallet, signIn, waitForConnectedWallet]
   );
 
+  const startSignIn = useCallback(
+    async (displayName?: string) => {
+      setSignInError(null);
+      setSigningIn(true);
+      try {
+        await continueWithReadyX(displayName);
+      } catch (err) {
+        setSignInError(formatWalletError(err));
+        throw err;
+      } finally {
+        setSigningIn(false);
+      }
+    },
+    [continueWithReadyX]
+  );
+
   const disconnect = useCallback(() => {
     disconnectWallet();
     setToken(null);
@@ -318,9 +339,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       token,
       isLoading,
       challengeReady,
-      signInOpen,
-      openSignIn,
-      closeSignIn,
+      signingIn,
+      signInError,
+      clearSignInError,
+      startSignIn,
       connectWallet,
       reconnectWallet,
       disconnect,
@@ -334,9 +356,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       token,
       isLoading,
       challengeReady,
-      signInOpen,
-      openSignIn,
-      closeSignIn,
+      signingIn,
+      signInError,
+      clearSignInError,
+      startSignIn,
       connectWallet,
       reconnectWallet,
       disconnect,

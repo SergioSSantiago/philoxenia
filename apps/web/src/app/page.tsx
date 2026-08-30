@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthorContact } from "@/components/author-contact";
+import { ContinueWithReadyXButton } from "@/components/continue-ready-button";
 import { LandingFrame } from "@/components/landing-frame";
 import { ReadyWalletNotice } from "@/components/ready-wallet-notice";
 import { Button } from "@/components/ui";
@@ -53,9 +54,7 @@ export default function LandingPage() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link href="/home">
-            <Button>Continue with Ready X</Button>
-          </Link>
+          <ContinueWithReadyXButton />
           <Link href="/connector">
             <Button variant="secondary">Earn as a connector</Button>
           </Link>

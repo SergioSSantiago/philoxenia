@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { BrandLockup } from "@/components/brand-lockup";
+import { ContinueWithReadyXButton } from "@/components/continue-ready-button";
 import { NotificationBell } from "@/components/notification-bell";
 import { useAuth } from "@/lib/auth-context";
 
@@ -50,20 +51,12 @@ export function Shell({
   children: ReactNode;
   wide?: boolean;
 }) {
-  const { user, openSignIn } = useAuth();
+  const { user } = useAuth();
   const pathname = usePathname();
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   /** Content column only; header/nav always use the wide rail. */
   const contentWidth = wide ? "max-w-6xl" : "max-w-4xl";
   const headerWidth = "max-w-6xl";
-
-  function handleConnect() {
-    openSignIn();
-    if (pathname !== "/home") {
-      router.push("/home");
-    }
-  }
 
   useEffect(() => {
     setMenuOpen(false);
@@ -114,13 +107,7 @@ export function Shell({
                 </Link>
               </>
             ) : (
-              <button
-                type="button"
-                onClick={handleConnect}
-                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-accent/90 touch-manipulation"
-              >
-                Continue with Ready X
-              </button>
+              <ContinueWithReadyXButton className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-accent/90 touch-manipulation" />
             )}
             {user && (
               <button

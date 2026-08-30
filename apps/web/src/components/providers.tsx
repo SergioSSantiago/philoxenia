@@ -5,6 +5,7 @@ import { StarknetConfig, jsonRpcProvider } from "@starknet-react/core";
 import type { ReactNode } from "react";
 import { AuthProvider } from "@/lib/auth-context";
 import { NotificationsProvider } from "@/lib/notifications-context";
+import { SignInErrorNotice } from "@/components/sign-in-error-notice";
 import { availableConnectors } from "@/lib/wallet-connectors";
 import { useMainnet } from "@/lib/starknet-config";
 import { publicMainnetRpcFallback } from "@philoxenia/shared";
@@ -41,6 +42,7 @@ export function Providers({ children }: { children: ReactNode }) {
     >
       <AuthProvider>
         <NotificationsProvider>{children}</NotificationsProvider>
+        <SignInErrorNotice />
       </AuthProvider>
     </StarknetConfig>
   );
