@@ -102,7 +102,7 @@ export function LandingFrame({ children }: { children: ReactNode }) {
           >
             <BrandLockup size="large" />
           </div>
-          <ContinueWithReadyXButton variant="secondary" />
+          <ContinueWithReadyXButton variant="secondary" signedInHref="/home" />
         </div>
       </header>
 
@@ -120,6 +120,12 @@ export function LandingFrame({ children }: { children: ReactNode }) {
         <LandingListingMarquee />
         <div className="px-5">
           <LandingNetworkStats />
+        </div>
+        <div className="px-5">
+          <ContinueWithReadyXButton
+            className="w-full"
+            signedInHref="/home"
+          />
         </div>
       </div>
 

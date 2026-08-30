@@ -54,7 +54,7 @@ export default function LandingPage() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <ContinueWithReadyXButton />
+          <ContinueWithReadyXButton signedInHref="/home" />
           <Link href="/connector">
             <Button variant="secondary">Earn as a connector</Button>
           </Link>

@@ -83,10 +83,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    try {
-      const storedToken = localStorage.getItem(TOKEN_KEY);
-      const storedUser = localStorage.getItem(USER_KEY);
-      if (storedToken && storedUser) {
+    let cancelled = false;
+
+    async function bootstrap() {
+      try {
+        const storedToken = localStorage.getItem(TOKEN_KEY);
+        const storedUser = localStorage.getItem(USER_KEY);
+        if (!storedToken || !storedUser) return;
+
         const parsed = JSON.parse(storedUser) as User;
         if (
           !parsed?.id ||
@@ -95,26 +99,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ) {
           throw new Error("Saved Ready X session is invalid. Connect Ready X again.");
         }
-        setToken(storedToken);
-        setUser(parsed);
+
         api.setToken(storedToken);
-        api.get<User>("/auth/me").then(applyUser).catch(() => {
-          localStorage.removeItem(TOKEN_KEY);
-          localStorage.removeItem(USER_KEY);
-          setToken(null);
-          setUser(null);
-          api.setToken(null);
-        });
+        const fresh = await api.get<User>("/auth/me");
+        if (cancelled) return;
+        setToken(storedToken);
+        setUser(fresh);
+        applyUser(fresh);
+      } catch {
+        if (cancelled) return;
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+        setToken(null);
+        setUser(null);
+        api.setToken(null);
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
-    } catch {
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
-      setToken(null);
-      setUser(null);
-      api.setToken(null);
-    } finally {
-      setIsLoading(false);
     }
+
+    void bootstrap();
+    return () => {
+      cancelled = true;
+    };
   }, [applyUser]);
 
   const connectWallet = useCallback(async () => {

@@ -51,7 +51,7 @@ export function Shell({
   children: ReactNode;
   wide?: boolean;
 }) {
-  const { user } = useAuth();
+  const { user, token, isLoading } = useAuth();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   /** Content column only; header/nav always use the wide rail. */
@@ -96,7 +96,11 @@ export function Shell({
           )}
 
           <div className="flex items-center gap-2">
-            {user ? (
+            {isLoading ? (
+              <span className="inline-flex min-h-[44px] items-center px-3 text-sm text-muted">
+                …
+              </span>
+            ) : token && user ? (
               <>
                 <NotificationBell />
                 <Link
