@@ -243,7 +243,6 @@ export default function ChatThreadPage() {
           ? "Finishing Send STRK or DAI…"
           : "Ready X is ready to sign. You can Send STRK or DAI now.",
         tone: "info",
-        primaryLabel: "Got it",
       });
     } catch (err) {
       pendingPayRef.current = null;
@@ -304,7 +303,7 @@ export default function ChatThreadPage() {
           title: needsReconnect ? "Ready X session needed" : "Could not send STRK or DAI",
           body: msg,
           tone: "error",
-          primaryLabel: needsReconnect ? "Connect Ready X" : "Got it",
+          primaryLabel: needsReconnect ? "Connect Ready X" : undefined,
         });
         setError(msg);
       } finally {

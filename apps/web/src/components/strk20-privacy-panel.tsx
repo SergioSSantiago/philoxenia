@@ -96,7 +96,6 @@ export function Strk20PrivacyPanel() {
           title: "Shielded STRK or DAI ready for Private Book & pay",
           body: "Ready X reported a privacy-capable session. You can shield and unshield STRK or DAI now.",
           tone: "info",
-          primaryLabel: "Got it",
         });
       } else {
         setNotice({
@@ -155,9 +154,13 @@ export function Strk20PrivacyPanel() {
         title: needsReconnect ? "Ready X session needed" : "Could not shield or unshield STRK or DAI",
         body,
         tone: "error",
-        primaryLabel: needsReconnect ? "Reconnect Ready X" : "Got it",
-        secondaryLabel: needsReconnect ? "Refresh Philoxenia" : "Got it",
-        reloadOnSecondary: needsReconnect,
+        ...(needsReconnect
+          ? {
+              primaryLabel: "Reconnect Ready X" as const,
+              secondaryLabel: "Refresh Philoxenia",
+              reloadOnSecondary: true,
+            }
+          : {}),
       });
     } finally {
       setBusy(false);
@@ -292,7 +295,7 @@ export function Strk20PrivacyPanel() {
         tone={notice?.tone ?? "warn"}
         busy={reconnecting || busy}
         primaryLabel={notice?.primaryLabel}
-        secondaryLabel={notice?.secondaryLabel ?? "Got it"}
+        secondaryLabel={notice?.secondaryLabel}
         onPrimary={() => {
           const label = notice?.primaryLabel;
           if (

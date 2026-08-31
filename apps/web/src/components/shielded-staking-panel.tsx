@@ -145,7 +145,6 @@ export function ShieldedStakingPanel() {
         title: "Ready X connected",
         body: "You can stake STRK on Endur and shield xSTRK when Ready X supports it.",
         tone: "info",
-        primaryLabel: "Got it",
       });
     } catch (err) {
       setNotice({
@@ -179,7 +178,6 @@ export function ShieldedStakingPanel() {
         title: "Could not stake on Endur",
         body: formatWalletError(e),
         tone: "error",
-        primaryLabel: "Got it",
       });
     } finally {
       setBusy(false);
@@ -218,7 +216,6 @@ export function ShieldedStakingPanel() {
         title: "Could not shield xSTRK",
         body: formatWalletError(e),
         tone: "error",
-        primaryLabel: "Got it",
       });
     } finally {
       setBusy(false);
@@ -259,7 +256,6 @@ export function ShieldedStakingPanel() {
         title: "Stake & shield did not finish",
         body: formatWalletError(e),
         tone: "error",
-        primaryLabel: "Got it",
       });
     } finally {
       setBusy(false);
@@ -295,7 +291,6 @@ export function ShieldedStakingPanel() {
         title: "Could not unshield & redeem",
         body: formatWalletError(e),
         tone: "error",
-        primaryLabel: "Got it",
       });
     } finally {
       setBusy(false);
@@ -482,7 +477,7 @@ export function ShieldedStakingPanel() {
         tone={notice?.tone ?? "warn"}
         busy={reconnecting || busy}
         primaryLabel={notice?.primaryLabel}
-        secondaryLabel={notice?.secondaryLabel ?? "Got it"}
+        secondaryLabel={notice?.secondaryLabel}
         onPrimary={() => {
           const label = notice?.primaryLabel;
           if (

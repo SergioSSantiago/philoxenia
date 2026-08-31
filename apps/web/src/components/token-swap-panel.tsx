@@ -131,7 +131,6 @@ export function TokenSwapPanel() {
         title: "Ready X connected",
         body: "You can swap STRK ↔ DAI now.",
         tone: "info",
-        primaryLabel: "Got it",
       });
     } catch (err) {
       setNotice({
@@ -166,7 +165,6 @@ export function TokenSwapPanel() {
           privacyHint ||
           "Shield the sell token on Ready X first (wallet API ≥ 0.10). Or choose Public swap.",
         tone: "warn",
-        primaryLabel: "Got it",
       });
       return;
     }
@@ -198,7 +196,6 @@ export function TokenSwapPanel() {
           title: "Private swap submitted",
           body: `You receive shielded ${buyAsset} inside the pool. Tx ${transactionHash}`,
           tone: "info",
-          primaryLabel: "Got it",
         });
       } else {
         setMsg("Approve in Ready X to swap STRK ↔ DAI…");
@@ -211,7 +208,6 @@ export function TokenSwapPanel() {
           title: "Public swap submitted",
           body: `STRK ↔ DAI swapped on-chain. Tx ${transactionHash}`,
           tone: "info",
-          primaryLabel: "Got it",
         });
       }
 
@@ -241,7 +237,7 @@ export function TokenSwapPanel() {
           ? "Use public swap"
           : needsReconnect
             ? "Connect Ready X"
-            : "Got it",
+            : undefined,
       });
       setMsg(body);
     } finally {

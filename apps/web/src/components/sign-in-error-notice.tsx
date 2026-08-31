@@ -15,7 +15,7 @@ export function SignInErrorNotice() {
       tone="error"
       busy={signingIn}
       primaryLabel="Try Ready X again"
-      secondaryLabel="Dismiss"
+      secondaryLabel="Close"
       onPrimary={() => void startSignIn()}
       onSecondary={clearSignInError}
     />

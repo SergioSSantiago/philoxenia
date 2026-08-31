@@ -3,8 +3,15 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui";
 
+const DISMISS_LABELS = new Set(["Got it", "Close", "Dismiss", "OK"]);
+
+function isDismissLabel(label?: string): boolean {
+  return !label || DISMISS_LABELS.has(label);
+}
+
 /**
  * High-visibility modal for wallet / action prompts (not a tiny inline error).
+ * Dismiss-only notices show a single Close button; action notices pair Close + primary.
  */
 export function ActionNotice({
   open,
@@ -12,7 +19,7 @@ export function ActionNotice({
   body,
   primaryLabel,
   onPrimary,
-  secondaryLabel = "Got it",
+  secondaryLabel = "Close",
   onSecondary,
   busy = false,
   tone = "warn",
@@ -45,6 +52,14 @@ export function ActionNotice({
         ? "border-accent/25 bg-accent-soft/60 text-foreground"
         : "border-amber-200 bg-amber-50 text-amber-950";
 
+  const showActionPrimary = Boolean(
+    primaryLabel && onPrimary && !isDismissLabel(primaryLabel)
+  );
+  const dismissLabel =
+    showActionPrimary && secondaryLabel === primaryLabel
+      ? "Close"
+      : secondaryLabel;
+
   return (
     <div
       className="fixed inset-0 z-[110] flex items-end justify-center bg-foreground/40 p-4 backdrop-blur-sm sm:items-center"
@@ -70,25 +85,36 @@ export function ActionNotice({
           {body}
         </div>
         <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={busy}
-            onClick={onSecondary}
-            className="w-full sm:w-auto"
-          >
-            {secondaryLabel}
-          </Button>
-          {primaryLabel && onPrimary ? (
+          {showActionPrimary ? (
+            <>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={busy}
+                onClick={onSecondary}
+                className="w-full sm:w-auto"
+              >
+                {dismissLabel}
+              </Button>
+              <Button
+                type="button"
+                disabled={busy}
+                onClick={onPrimary}
+                className="w-full sm:w-auto"
+              >
+                {busy ? `${primaryLabel!.replace(/\?$/, "")}…` : primaryLabel}
+              </Button>
+            </>
+          ) : (
             <Button
               type="button"
               disabled={busy}
-              onClick={onPrimary}
-              className="w-full sm:w-auto"
+              onClick={onSecondary}
+              className="w-full sm:w-auto sm:ml-auto"
             >
-              {busy ? `${primaryLabel.replace(/\?$/, "")}…` : primaryLabel}
+              {dismissLabel}
             </Button>
-          ) : null}
+          )}
         </div>
       </div>
     </div>
